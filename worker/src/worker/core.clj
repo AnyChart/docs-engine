@@ -16,8 +16,6 @@
 (def redis-conn {:pool {} :spec {:host (get env "REDIS_PORT_6379_TCP_ADDR")
                                  :port (read-string (get env "REDIS_PORT_6379_TCP_PORT"))}})
 
-(defmacro wcar* [& body] `(car/wcar redis-conn ~@body))
-
 (defn run-sh [& command]
   (with-sh-env env-config
     (apply sh command)))
