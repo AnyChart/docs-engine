@@ -2,6 +2,10 @@
 /wiki/lib
 /wiki/classes
 /wiki/checkouts
+/worker/target
+/worker/lib
+/worker/classes
+/worker/checkouts
 pom.xml
 *.jar
 *.class
@@ -9,3 +13,9 @@ pom.xml
 .lein-failures
 .lein-plugins
 .lein-env
+\#*\#
+\#*
+.#*
+.DS_Store
+*~%
+*~
