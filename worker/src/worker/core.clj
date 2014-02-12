@@ -2,13 +2,21 @@
   (:require [clojure.edn :as edn]
             [clojure.java.shell :refer [sh with-sh-env with-sh-dir]]
             [clojure.string :refer [split trim]]
-            [clojure.java.io :refer [file]])
+            [clojure.java.io :refer [file]]
+            [taoensso.carmine :as car :refer (wcar)])
   (:gen-class))
 
 (def config (:worker (edn/read-string (slurp "/app/config.clj"))))
 (def data-path (str (:out config) "/data"))
 (def repo-path (str (:out config) "/repo"))
 (def env-config {:GIT_SSH (:git_ssh config)})
+
+(def env (System/getenv))
+
+(def redis-conn {:pool {} :spec {:host (get env "REDIS_PORT_6379_TCP_ADDR")
+                                 :port (read-string (get env "REDIS_PORT_6379_TCP_PORT"))}})
+
+(defmacro wcar* [& body] `(car/wcar redis-conn ~@body))
 
 (defn run-sh [& command]
   (with-sh-env env-config
@@ -63,5 +71,8 @@
   (if (not (path-exists data-path))
     (.mkdir (file data-path)))
   (prn "Repository updated")
-  (rebuild-structure))
+  (prn "Listening redis for rebuild signal")
+  (car/with-new-pubsub-listener (:spec redis-conn)
+    {"docs" (fn [msg] (rebuild-structure))}
+    (car/subscribe "docs")))
 
