@@ -37,7 +37,6 @@
                                        (clojure.string/re-quote-replacement
                                         (str data-path version "/"))
                                        "")]
-                (prn relative-path)
                 {:file f
                  :name (clojure.string/replace relative-path #"\.md$" "")}))
        (filter (fn [f] (.endsWith (.getName f) ".md"))
