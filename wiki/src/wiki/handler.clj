@@ -31,9 +31,17 @@
      (file (str data-path version))))
 
 (defn get-wiki-pages [version]
-  (filter (fn [f] (.endsWith (.getName f) ".md")) (get-pages version)))
-
-(prn (get-wiki-pages "master"))
+  (map (fn[f]
+         (let [relative-path
+               (clojure.string/replace (.getAbsolutePath f)
+                                       (clojure.string/re-quote-replacement
+                                        (str data-path version "/"))
+                                       "")]
+                (prn relative-path)
+                {:file f
+                 :name (clojure.string/replace relative-path #"\.md$" "")}))
+       (filter (fn [f] (.endsWith (.getName f) ".md"))
+               (get-pages version))))
 
 (defn page-exists? [path]
   (.exists (file (str data-path path ".md"))))
@@ -43,6 +51,7 @@
                             :version version
                             :path page
                             :raw-path raw-page
+                            :pages (get-wiki-pages version)
                             :content (md-to-html-string (slurp (str data-path path ".md")))}))
 
 (defn check-page [request]

@@ -52,9 +52,9 @@
       <div class="row">
 	<div class="col-md-2">
 	  <ul class="nav nav-pills nav-stacked">
-	    <li class="active"><a href="#">Home</a></li>
-	    <li><a href="#">Profile</a></li>
-	    <li><a href="#">Messages</a></li>
+	    {% for p in pages %}
+	    <li><a href="/{{version}}/{{p.name}}/">{{p.name}}</a></li>
+	    {% endfor %}
 	  </ul>
 	</div>
 	<div class="col-md-10">
