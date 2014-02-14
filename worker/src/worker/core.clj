@@ -23,12 +23,15 @@
 (defn run-git [& command]
   (with-sh-env env-config
     (with-sh-dir repo-path
-      (apply sh "/usr/bin/git" command))))
+      (let [res (apply sh "/usr/bin/git" command)]
+        (prn res)
+        res))))
 
 (defn clone-project []
   (run-sh "/usr/bin/git" "clone" (:repo config) repo-path))
 
 (defn update-project []
+  (run-git "checkout" "master")
   (run-git "pull")
   (run-git "fetch" "--tags"))
 
@@ -52,9 +55,10 @@
 (defn build-ref [ref]
   (prn (str "Building " ref))
   (run-git "checkout" ref)
-  (let [out (str data-path "/")]
+  (run-git "pull" "origin" ref)
+  (let [out (str data-path "/" ref)]
     (run-sh "rm" "-rf" out)
-    (run-sh "cp" "-R" out)))
+    (run-sh "cp" "-R" repo-path out)))
 
 (defn rebuild-structure []
   (prn "Rebuilding wiki...")
