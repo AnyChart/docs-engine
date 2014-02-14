@@ -6,6 +6,7 @@
                  [ring-server "0.3.0"]
                  [selmer "0.5.9"]
                  [markdown-clj "0.9.41"]
+                 [com.taoensso/carmine "2.4.6"]
                  [http-kit "2.1.16"]]
   :plugins [[lein-ring "0.8.7"]]
   :ring {:handler wiki.handler/app
