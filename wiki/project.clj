@@ -8,14 +8,6 @@
                  [markdown-clj "0.9.41"]
                  [com.taoensso/carmine "2.4.6"]
                  [http-kit "2.1.16"]]
-  :plugins [[lein-ring "0.8.7"]]
-  :ring {:handler wiki.handler/app
-         :init wiki.handler/init
-         :destroy wiki.handler/destroy}
-  :aot :all
-  :profiles
-  {:production
-   {:ring
-    {:open-browser? false, :stacktraces? false, :auto-reload? false}}
-   :dev
-   {:dependencies [[ring-mock "0.1.5"] [ring/ring-devel "1.2.0"]]}})
+  :main ^:skip-aot wiki.handler
+  :target-path "target/%s"
+  :profiles {})

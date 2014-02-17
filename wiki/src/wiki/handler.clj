@@ -5,10 +5,11 @@
             [selmer.parser :refer [render-file]]
             [selmer.filters :refer [add-filter!]]
             [markdown.core :refer [md-to-html-string]]
-            [taoensso.carmine :as car :refer (wcar)]
-            [clojure.edn :as edn]))
+            [org.httpkit.server :as server]
+            [taoensso.carmine :as car :refer (wcar)])
+  (:gen-class :main :true))
 
-(def config (:app (edn/read-string (slurp "/app/config.clj"))))
+(def config {:data "/wiki"})
 (def data-path (str (:data config) "/data/"))
 (selmer.parser/set-resource-path! "/app/wiki/src/templates/")
 
@@ -80,4 +81,6 @@
 (def app
   (-> (routes app-routes)))
 
+(defn -main [& args]
+  (server/run-server #'app {:port 9090}))
 

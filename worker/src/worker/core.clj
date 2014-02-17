@@ -1,20 +1,21 @@
 (ns worker.core
-  (:require [clojure.edn :as edn]
-            [clojure.java.shell :refer [sh with-sh-env with-sh-dir]]
+  (:require [clojure.java.shell :refer [sh with-sh-env with-sh-dir]]
             [clojure.string :refer [split trim]]
             [clojure.java.io :refer [file]]
             [taoensso.carmine :as car :refer (wcar)])
-  (:gen-class))
+  (:gen-class :main :true))
 
-(def config (:worker (edn/read-string (slurp "/app/config.clj"))))
+(def config {:repo "git@github.com:AnyChart/docs.git"
+             :git_ssh "/app/keys/git"
+             :out "/wiki"})
+
 (def data-path (str (:out config) "/data"))
 (def repo-path (str (:out config) "/repo"))
 (def env-config {:GIT_SSH (:git_ssh config)})
 
-(def env (System/getenv))
-
-(def redis-conn {:pool {} :spec {:host (get env "REDIS_PORT_6379_TCP_ADDR")
-                                 :port (read-string (get env "REDIS_PORT_6379_TCP_PORT"))}})
+(def redis-conn {:pool {} :spec {:host (System/getenv "REDIS_PORT_6379_TCP_ADDR")
+                                 :port (Integer/parseInt
+                                        (System/getenv "REDIS_PORT_6379_TCP_PORT"))}})
 
 (defn run-sh [& command]
   (with-sh-env env-config

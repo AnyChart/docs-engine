@@ -7,4 +7,4 @@
                  [com.taoensso/carmine "2.4.6"]]
   :main ^:skip-aot worker.core
   :target-path "target/%s"
-  :profiles {:uberjar {:aot :all}})
+  :profiles {})
