@@ -7,6 +7,7 @@
                  [selmer "0.5.9"]
                  [markdown-clj "0.9.41"]
                  [com.taoensso/carmine "2.4.6"]
+                 [sphinxapi "2.0.3"]
                  [http-kit "2.1.16"]]
   :main ^:skip-aot wiki.handler
   :target-path "target/%s"

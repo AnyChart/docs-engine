@@ -6,7 +6,7 @@
   (:gen-class :main :true))
 
 (def config {:repo "git@github.com:AnyChart/docs.git"
-             :git_ssh "/app/keys/git"
+             :git_ssh "/apps/wiki/keys/git"
              :out "/wiki"})
 
 (def data-path (str (:out config) "/data"))
@@ -16,6 +16,8 @@
 (def redis-conn {:pool {} :spec {:host (System/getenv "REDIS_PORT_6379_TCP_ADDR")
                                  :port (Integer/parseInt
                                         (System/getenv "REDIS_PORT_6379_TCP_PORT"))}})
+
+(defmacro wcar* [& body] `(car/wcar redis-conn ~@body))
 
 (defn run-sh [& command]
   (with-sh-env env-config
@@ -62,19 +64,20 @@
     (run-sh "cp" "-R" repo-path out)))
 
 (defn rebuild-structure []
-  (prn "Rebuilding wiki...")
+  (println "Rebuilding wiki...")
   (update-project)
   (doseq [item (concat (get-tags) (get-branches-for-build))]
     (build-ref item))
-  (prn "Done!"))
+  (println "Done!")
+  (wcar* (car/publish "docs" "rebuild")))
 
 (defn -main [& args]
   (if (not (= 0 (:exit (check-repo))))
     (System/exit -1))
   (if (not (path-exists data-path))
     (.mkdir (file data-path)))
-  (prn "Repository updated")
-  (prn "Listening redis for rebuild signal")
+  (println "Repository updated")
+  (println "Listening redis for rebuild signal")
   (car/with-new-pubsub-listener (:spec redis-conn)
     {"docs" (fn [msg] (rebuild-structure))}
     (car/subscribe "docs")))

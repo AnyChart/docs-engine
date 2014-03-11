@@ -6,12 +6,14 @@
             [selmer.filters :refer [add-filter!]]
             [markdown.core :refer [md-to-html-string]]
             [org.httpkit.server :as server]
+            [ring.util.codec :refer [form-decode]]
+            [clojure.walk :refer [keywordize-keys]]
             [taoensso.carmine :as car :refer (wcar)])
   (:gen-class :main :true))
 
 (def config {:data "/wiki"})
 (def data-path (str (:data config) "/data/"))
-(selmer.parser/set-resource-path! "/app/wiki/src/templates/")
+(selmer.parser/set-resource-path! "/apps/wiki/templates/")
 
 (add-filter! :safe (fn [x] [:safe x]))
 
@@ -69,13 +71,56 @@
       (render-page (str version "/index") version "" "index.md"))))
 
 (defn send-rebuild-signal [request]
-  (wcar* (car/publish "docs" "rebuild"))
+  (wcar* (car/publish "reindex" "reindex"))
   (str "rebuilding..."))
 
+(defn process-search-results [sphinx-client docs words version-key version]
+  (map (fn [doc] {:path (clojure.string/replace
+                         (clojure.string/replace
+                          (clojure.string/replace doc #"/wiki/data" "")
+                          #"\.index.md$" "")
+                         #"\.md$" "")
+                  :results (seq (.BuildExcerpts
+                                  sphinx-client
+                                  (into-array String [(md-to-html-string (slurp doc))])
+                                  version-key
+                                  (clojure.string/join words)
+                                  (java.util.HashMap. { })))}) docs))
+  
+(defn search-for [q version-key version]
+  (if (not (clojure.string/blank? q))
+
+    (let [sphinx-client (org.sphx.api.SphinxClient.
+                    (System/getenv "INDEXER_PORT_49005_TCP_ADDR")
+                    (read-string (System/getenv "INDEXER_PORT_49005_TCP_PORT")))]
+      (.Open sphinx-client)
+      (.SetMatchMode sphinx-client 2)
+      (let [res (.Query sphinx-client q version-key)]
+        (println "query result" res)
+        (prn res)
+        (prn (seq (.matches res)))
+        (let [
+              docs (map #(first (.attrValues %)) (seq (.matches res)))
+              words (map #(.word %) (seq (.words res)))]
+          (process-search-results sphinx-client docs words version-key version))))))
+
+(defn search-request [request]
+  (let [version (:version (:route-params request))
+        version-key (str (clojure.string/escape version {\. "_"}) "_index")
+        q (if (:query-string request)
+            (:q (keywordize-keys (form-decode (:query-string request))))
+            "")
+        search-results (search-for q version-key version)]
+    (render-file "search-results.html" {:versions (get-versions)
+                                        :version version
+                                        :results search-results
+                                        :q q})))
+
 (defroutes app-routes
-  (GET "/_pls_/" [] send-rebuild-signal)
-  (GET "/:version/*/" [version path] check-page)
-  (GET "/:version/" [version] check-version-page)
+  (GET "/_pls_" [] send-rebuild-signal)
+  (GET "/:version/search" [version] search-request)
+  (GET "/:version/*" [version path] check-page)
+  (GET "/:version" [version] check-version-page)
   (route/not-found "Not Found"))
 
 (def app

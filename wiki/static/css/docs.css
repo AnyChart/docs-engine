@@ -14,6 +14,6 @@
     border-left: 0px;
 }
 
-.container .col-md-10 h3 {
+.container .col-md-10 > h1:first-child {
     margin-top: 5px;
 }
