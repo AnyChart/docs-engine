@@ -8,11 +8,12 @@
 
 #import <Cocoa/Cocoa.h>
 #import <WebKit/WebKit.h>
+#import <ACEView.h>
 
-@interface Document : NSDocument
+@interface Document : NSDocument <ACEViewDelegate>
 
 @property (weak) IBOutlet WebView *preview;
-@property (unsafe_unretained) IBOutlet NSTextView *textView;
-- (IBAction)reload:(id)sender;
+@property (weak) IBOutlet ACEView *codeView;
+@property (weak) IBOutlet NSProgressIndicator *loadingView;
 
 @end
