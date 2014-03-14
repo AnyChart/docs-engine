@@ -37,6 +37,10 @@
     return @"Document";
 }
 
+- (IBAction)showMarkdownHelp:(id)sender {
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://github.com/yogthos/markdown-clj#supported-syntax"]];
+}
+
 - (void)windowControllerDidLoadNib:(NSWindowController *)aController
 {
     [super windowControllerDidLoadNib:aController];
@@ -60,8 +64,9 @@
     
     self.codeView.delegate = self;
     [self.codeView setMode:ACEModeMarkdown];
-    [self.codeView setTheme:ACEThemeTextmate];
+    [self.codeView setTheme:ACEThemeChrome];
     [self.codeView setShowInvisibles:NO];
+    [self.codeView setFontSize:12];
     
     [self.loadingView startAnimation:nil];
     

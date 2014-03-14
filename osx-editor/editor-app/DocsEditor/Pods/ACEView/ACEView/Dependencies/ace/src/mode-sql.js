@@ -38,41 +38,15 @@ var SqlHighlightRules = require("./sql_highlight_rules").SqlHighlightRules;
 var Range = require("../range").Range;
 
 var Mode = function() {
-    this.$tokenizer = new Tokenizer(new SqlHighlightRules().getRules());
+    this.HighlightRules = SqlHighlightRules;
 };
 oop.inherits(Mode, TextMode);
 
 (function() {
 
-    this.toggleCommentLines = function(state, doc, startRow, endRow) {
-        var outdent = true;
-        var outentedRows = [];
-        var re = /^(\s*)--/;
+    this.lineCommentStart = "--";
 
-        for (var i=startRow; i<= endRow; i++) {
-            if (!re.test(doc.getLine(i))) {
-                outdent = false;
-                break;
-            }
-        }
-
-        if (outdent) {
-            var deleteRange = new Range(0, 0, 0, 0);
-            for (var i=startRow; i<= endRow; i++)
-            {
-                var line = doc.getLine(i);
-                var m = line.match(re);
-                deleteRange.start.row = i;
-                deleteRange.end.row = i;
-                deleteRange.end.column = m[0].length;
-                doc.replace(deleteRange, m[1]);
-            }
-        }
-        else {
-            doc.indentRows(startRow, endRow, "--");
-        }
-    };
-
+    this.$id = "ace/mode/sql";
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
@@ -110,6 +84,10 @@ var SqlHighlightRules = function() {
         "start" : [ {
             token : "comment",
             regex : "--.*$"
+        },  {
+            token : "comment",
+            start : "/\\*",
+            end : "\\*/"
         }, {
             token : "string",           // " string
             regex : '".*?"'
@@ -136,6 +114,7 @@ var SqlHighlightRules = function() {
             regex : "\\s+"
         } ]
     };
+    this.normalizeRules();
 };
 
 oop.inherits(SqlHighlightRules, TextHighlightRules);

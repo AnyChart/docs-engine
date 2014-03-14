@@ -44,6 +44,120 @@
                 },
                 readOnly: true
             }]);
+
+            editor.commands.addCommands([{
+                 name: "ACEMakeLink",
+                 bindKey: {
+                    mac: "Command-Shift-L"
+                 },
+                 exec: function(editor, line) {
+                    var sel = editor.getSelectedText();
+                    editor.session.insert(editor.getSelectionRange().start, '[' + sel + '](');
+                    editor.session.insert(editor.getSelectionRange().end, ')');
+                    editor.session.getSelection().moveCursorLeft();
+                 }
+             }]);
+            editor.commands.addCommands([{
+                 name: "ACEMakeImage",
+                 bindKey: {
+                    mac: "Command-Shift-I"
+                 },
+                 exec: function(editor, line) {
+                    var sel = editor.getSelectedText();
+                    editor.session.insert(editor.getSelectionRange().start, '![alt](');
+                    editor.session.insert(editor.getSelectionRange().end, ')');
+                    editor.session.getSelection().moveCursorLeft();
+                 }
+             }]);
+            editor.commands.addCommands([{
+                 name: "ACEMakeItalic",
+                 bindKey: {
+                    mac: "Command-I"
+                 },
+                 exec: function(editor, line) {
+                    editor.session.insert(editor.getSelectionRange().start, '_');
+                    editor.session.insert(editor.getSelectionRange().end, '_');
+                    editor.session.getSelection().moveCursorLeft();
+                 }
+             }]);
+            editor.commands.addCommands([{
+                 name: "ACEMakeBold",
+                 bindKey: {
+                    mac: "Command-B"
+                 },
+                 exec: function(editor, line) {
+                    editor.session.insert(editor.getSelectionRange().start, '*');
+                    editor.session.insert(editor.getSelectionRange().end, '*');
+                    editor.session.getSelection().moveCursorLeft();
+                 }
+             }]);
+            editor.commands.addCommands([{
+                 name: "ACEMakeHeader1",
+                 bindKey: {
+                    mac: "Command-1"
+                 },
+                 exec: function(editor, line) {
+                    editor.session.insert({
+                        row: editor.getSelectionRange().start.row,
+                        column: 0}, '# ');
+                 }
+             }]);
+            editor.commands.addCommands([{
+                 name: "ACEMakeHeader2",
+                 bindKey: {
+                    mac: "Command-2"
+                 },
+                 exec: function(editor, line) {
+                    editor.session.insert({
+                        row: editor.getSelectionRange().start.row,
+                        column: 0}, '## ');
+                 }
+             }]);
+            editor.commands.addCommands([{
+                 name: "ACEMakeHeader3",
+                 bindKey: {
+                    mac: "Command-3"
+                 },
+                 exec: function(editor, line) {
+                    editor.session.insert({
+                        row: editor.getSelectionRange().start.row,
+                        column: 0}, '### ');
+                 }
+             }]);
+            editor.commands.addCommands([{
+                 name: "ACEMakeHeader4",
+                 bindKey: {
+                    mac: "Command-4"
+                 },
+                 exec: function(editor, line) {
+                    editor.session.insert({
+                        row: editor.getSelectionRange().start.row,
+                        column: 0}, '#### ');
+                 }
+             }]);
+            editor.commands.addCommands([{
+                 name: "ACEMakeHeader5",
+                 bindKey: {
+                    mac: "Command-5"
+                 },
+                 exec: function(editor, line) {
+                    editor.session.insert({
+                        row: editor.getSelectionRange().start.row,
+                        column: 0}, '##### ');
+                 }
+             }]);
+            editor.commands.addCommands([{
+                 name: "ACEMakeHeader6",
+                 bindKey: {
+                    mac: "Command-6"
+                 },
+                 exec: function(editor, line) {
+                    editor.session.insert({
+                        row: editor.getSelectionRange().start.row,
+                        column: 0}, '###### ');
+                 }
+             }]);
+
             var reportChanges = true;
             editor.on('change', function(delta) {
                 if (reportChanges) {

@@ -15,5 +15,6 @@
 @property (weak) IBOutlet WebView *preview;
 @property (weak) IBOutlet ACEView *codeView;
 @property (weak) IBOutlet NSProgressIndicator *loadingView;
+- (IBAction)showMarkdownHelp:(id)sender;
 
 @end

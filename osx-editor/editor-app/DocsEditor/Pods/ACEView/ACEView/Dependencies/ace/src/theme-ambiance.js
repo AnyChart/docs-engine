@@ -55,13 +55,13 @@ border: none;\
 box-shadow: none;\
 }\
 .ace-ambiance .ace_fold-widget.ace_start:after {\
-content: '▾'\
+content: '\u25be'\
 }\
 .ace-ambiance .ace_fold-widget.ace_end:after {\
-content: '▴'\
+content: '\u25b4'\
 }\
 .ace-ambiance .ace_fold-widget.ace_closed:after {\
-content: '‣'\
+content: '\u2023'\
 }\
 .ace-ambiance .ace_print-margin {\
 border-left: 1px dotted #2D2D2D;\
@@ -69,14 +69,14 @@ right: 0;\
 background: #262626;\
 }\
 .ace-ambiance .ace_scroller {\
-background-color: #202020;\
 -webkit-box-shadow: inset 0 0 10px black;\
 -moz-box-shadow: inset 0 0 10px black;\
 -o-box-shadow: inset 0 0 10px black;\
 box-shadow: inset 0 0 10px black;\
 }\
-.ace-ambiance .ace_text-layer {\
+.ace-ambiance {\
 color: #E6E1DC;\
+background-color: #202020;\
 }\
 .ace-ambiance .ace_cursor {\
 border-left: 1px solid #7991E8;\

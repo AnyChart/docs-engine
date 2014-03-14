@@ -39,7 +39,8 @@ var MatchingBraceOutdent = require("./matching_brace_outdent").MatchingBraceOutd
 var Range = require("../range").Range;
 
 var Mode = function() {
-    this.$tokenizer = new Tokenizer(new OcamlHighlightRules().getRules());
+    this.HighlightRules = OcamlHighlightRules;
+    
     this.$outdent   = new MatchingBraceOutdent();
 };
 oop.inherits(Mode, TextMode);
@@ -73,7 +74,7 @@ var indenter = /(?:[({[=:]|[-=]>|\b(?:else|try|with))\s*$/;
 
     this.getNextLineIndent = function(state, line, tab) {
         var indent = this.$getIndent(line);
-        var tokens = this.$tokenizer.getLineTokens(line, state).tokens;
+        var tokens = this.getTokenizer().getLineTokens(line, state).tokens;
 
         if (!(tokens.length && tokens[tokens.length - 1].type === 'comment') &&
             state === 'start' && indenter.test(line))
@@ -89,6 +90,7 @@ var indenter = /(?:[({[=:]|[-=]>|\b(?:else|try|with))\s*$/;
         this.$outdent.autoOutdent(doc, row);
     };
 
+    this.$id = "ace/mode/ocaml";
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
@@ -323,7 +325,6 @@ var OcamlHighlightRules = function() {
             },
             {
                 token : "comment",
-                merge : true,
                 regex : '\\(\\*.*',
                 next : "comment"
             },
@@ -337,7 +338,6 @@ var OcamlHighlightRules = function() {
             },
             {
                 token : "string", // " string
-                merge : true,
                 regex : '"',
                 next  : "qstring"
             },
@@ -382,7 +382,6 @@ var OcamlHighlightRules = function() {
             },
             {
                 token : "comment", // comment spanning whole line
-                merge : true,
                 regex : ".+"
             }
         ],
@@ -394,7 +393,6 @@ var OcamlHighlightRules = function() {
                 next : "start"
             }, {
                 token : "string",
-                merge : true,
                 regex : '.+'
             }
         ]
@@ -438,12 +436,7 @@ var MatchingBraceOutdent = function() {};
     };
 
     this.$getIndent = function(line) {
-        var match = line.match(/^(\s+)/);
-        if (match) {
-            return match[1];
-        }
-
-        return "";
+        return line.match(/^\s*/)[0];
     };
 
 }).call(MatchingBraceOutdent.prototype);

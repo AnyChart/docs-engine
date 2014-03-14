@@ -58,6 +58,7 @@ var startCommands = {
 };
 
 exports.handler = {
+	$id: "ace/keyboard/vim",
     handleMacRepeat: function(data, hashId, key) {
         if (hashId == -1) {
             data.inputChar = key;
@@ -74,15 +75,59 @@ exports.handler = {
             data.lastEvent = "keypress";
         }
     },
+    updateMacCompositionHandlers: function(editor, enable) {
+        var onCompositionUpdateOverride = function(text) {
+            if (util.currentMode !== "insert") {
+                var el = this.textInput.getElement();
+                el.blur();
+                el.focus();
+                el.value = text;
+            } else {
+                this.onCompositionUpdateOrig(text);
+            }
+        };
+        var onCompositionStartOverride = function(text) {
+            if (util.currentMode === "insert") {            
+                this.onCompositionStartOrig(text);
+            }
+        };
+        if (enable) {
+            if (!editor.onCompositionUpdateOrig) {
+                editor.onCompositionUpdateOrig = editor.onCompositionUpdate;
+                editor.onCompositionUpdate = onCompositionUpdateOverride;
+                editor.onCompositionStartOrig = editor.onCompositionStart;
+                editor.onCompositionStart = onCompositionStartOverride;
+            }
+        } else {
+            if (editor.onCompositionUpdateOrig) {
+                editor.onCompositionUpdate = editor.onCompositionUpdateOrig;
+                editor.onCompositionUpdateOrig = null;
+                editor.onCompositionStart = editor.onCompositionStartOrig;
+                editor.onCompositionStartOrig = null;
+            }
+        }
+    },
 
     handleKeyboard: function(data, hashId, key, keyCode, e) {
-        if (hashId != 0 && (key == "" || key == "\x00"))
+        if (hashId !== 0 && (!key || keyCode == -1))
             return null;
-
+        
+        var editor = data.editor;
+        
         if (hashId == 1)
             key = "ctrl-" + key;
-        
-        if ((key == "esc" && hashId == 0) || key == "ctrl-[") {
+        if (key == "ctrl-c") {
+            if (!useragent.isMac && editor.getCopyText()) {
+                editor.once("copy", function() {
+                    if (data.state == "start")
+                        coreCommands.stop.exec(editor);
+                    else
+                        editor.selection.clearSelection();
+                });
+                return {command: "null", passEvent: true};
+            }
+            return {command: coreCommands.stop};            
+        } else if ((key == "esc" && hashId === 0) || key == "ctrl-[") {
             return {command: coreCommands.stop};
         } else if (data.state == "start") {
             if (useragent.isMac && this.handleMacRepeat(data, hashId, key)) {
@@ -90,18 +135,15 @@ exports.handler = {
                 key = data.inputChar;
             }
             
-            if (hashId == -1 || hashId == 1) {
+            if (hashId == -1 || hashId == 1 || hashId === 0 && key.length > 1) {
                 if (cmds.inputBuffer.idle && startCommands[key])
                     return startCommands[key];
-                return {
-                    command: {
-                        exec: function(editor) {cmds.inputBuffer.push(editor, key);}
-                    }
-                };
+                var isHandled = cmds.inputBuffer.push(editor, key);
+                return {command: "null", passEvent: !isHandled}; 
             } // if no modifier || shift: wait for input.
-            else if (key.length == 1 && (hashId == 0 || hashId == 4)) {
+            else if (key.length == 1 && (hashId === 0 || hashId == 4)) {
                 return {command: "null", passEvent: true};
-            } else if (key == "esc" && hashId == 0) {
+            } else if (key == "esc" && hashId === 0) {
                 return {command: coreCommands.stop};
             }
         } else {
@@ -116,12 +158,15 @@ exports.handler = {
         if (util.currentMode !== "insert")
             cmds.coreCommands.stop.exec(editor);
         editor.$vimModeHandler = this;
+        
+        this.updateMacCompositionHandlers(editor, true);
     },
 
     detach: function(editor) {
         editor.removeListener("click", exports.onCursorMove);
         util.noMode(editor);
         util.currentMode = "normal";
+        this.updateMacCompositionHandlers(editor, false);
     },
 
     actions: cmds.actions,
@@ -142,10 +187,11 @@ exports.onCursorMove = function(e) {
 
 });
  
-define('ace/keyboard/vim/commands', ['require', 'exports', 'module' , 'ace/keyboard/vim/maps/util', 'ace/keyboard/vim/maps/motions', 'ace/keyboard/vim/maps/operators', 'ace/keyboard/vim/maps/aliases', 'ace/keyboard/vim/registers'], function(require, exports, module) {
+define('ace/keyboard/vim/commands', ['require', 'exports', 'module' , 'ace/lib/lang', 'ace/keyboard/vim/maps/util', 'ace/keyboard/vim/maps/motions', 'ace/keyboard/vim/maps/operators', 'ace/keyboard/vim/maps/aliases', 'ace/keyboard/vim/registers'], function(require, exports, module) {
 
 "never use strict";
 
+var lang = require("../../lib/lang");
 var util = require("./maps/util");
 var motions = require("./maps/motions");
 var operators = require("./maps/operators");
@@ -196,6 +242,18 @@ var actions = exports.actions = {
                 case "b":
                     editor.renderer.alignCursor(null, 1);
                     break;
+                case "c":
+                    editor.session.onFoldWidgetClick(range.start.row, {domEvent:{target :{}}});
+                    break;
+                case "o":
+                    editor.session.onFoldWidgetClick(range.start.row, {domEvent:{target :{}}});
+                    break;
+                case "C":
+                    editor.session.foldAll();
+                    break;
+                case "O":
+                    editor.session.unfold();
+                    break;
             }
         }
     },
@@ -203,6 +261,8 @@ var actions = exports.actions = {
         param: true,
         fn: function(editor, range, count, param) {
             if (param && param.length) {
+                if (param.length > 1)
+                    param = param == "return" ? "\n" : param == "tab" ? "\t" : param;
                 repeat(function() { editor.insert(param); }, count || 1);
                 editor.navigateLeft();
             }
@@ -247,6 +307,18 @@ var actions = exports.actions = {
             editor.selection.setSelectionRange(r, true);
         }
     },
+    "m": {
+        param: true,
+        fn: function(editor, range, count, param) {
+            var s =  editor.session;
+            var markers = s.vimMarkers || (s.vimMarkers = {});
+            var c = editor.getCursorPosition();
+            if (!markers[param]) {
+                markers[param] = editor.session.doc.createAnchor(c);
+            }
+            markers[param].setPosition(c.row, c.column, true);
+        }
+    },
     "n": {
         fn: function(editor, range, count, param) {
             var options = editor.getLastSearchOptions();
@@ -286,8 +358,7 @@ var actions = exports.actions = {
     "V": {
         fn: function(editor, range, count, param) {
             var row = editor.getCursorPosition().row;
-            editor.selection.clearSelection();
-            editor.selection.moveCursorTo(row, 0);
+            editor.selection.moveTo(row, 0);
             editor.selection.selectLineEnd();
             editor.selection.visualLineStart = row;
 
@@ -307,13 +378,14 @@ var actions = exports.actions = {
             editor.setOverwrite(false);
             if (defaultReg.isLine) {
                 var pos = editor.getCursorPosition();
-                var lines = defaultReg.text.split("\n");
-                editor.session.getDocument().insertLines(pos.row + 1, lines);
+                pos.column = editor.session.getLine(pos.row).length;
+                var text = lang.stringRepeat("\n" + defaultReg.text, count || 1);
+                editor.session.insert(pos, text);
                 editor.moveCursorTo(pos.row + 1, 0);
             }
             else {
                 editor.navigateRight();
-                editor.insert(defaultReg.text);
+                editor.insert(lang.stringRepeat(defaultReg.text, count || 1));
                 editor.navigateLeft();
             }
             editor.setOverwrite(true);
@@ -327,12 +399,13 @@ var actions = exports.actions = {
 
             if (defaultReg.isLine) {
                 var pos = editor.getCursorPosition();
-                var lines = defaultReg.text.split("\n");
-                editor.session.getDocument().insertLines(pos.row, lines);
-                editor.moveCursorTo(pos.row, 0);
+                pos.column = 0;
+                var text = lang.stringRepeat(defaultReg.text + "\n", count || 1);
+                editor.session.insert(pos, text);
+                editor.moveCursorToPosition(pos);
             }
             else {
-                editor.insert(defaultReg.text);
+                editor.insert(lang.stringRepeat(defaultReg.text, count || 1));
             }
             editor.setOverwrite(true);
             editor.selection.clearSelection();
@@ -380,14 +453,23 @@ var actions = exports.actions = {
     },
     ":": {
         fn: function(editor, range, count, param) {
+            var val = ":";
+            if (count > 1)
+                val = ".,.+" + count + val;
+            if (editor.showCommandLine)
+                editor.showCommandLine(val);
         }
     },
     "/": {
         fn: function(editor, range, count, param) {
+            if (editor.showCommandLine)
+                editor.showCommandLine("/");
         }
     },
     "?": {
         fn: function(editor, range, count, param) {
+            if (editor.showCommandLine)
+                editor.showCommandLine("?");
         }
     },
     ".": {
@@ -396,6 +478,16 @@ var actions = exports.actions = {
             var previous = inputBuffer.previous;
             if (previous) // If there is a previous action
                 inputBuffer.exec(editor, previous.action, previous.param);
+        }
+    },
+    "ctrl-x": {
+        fn: function(editor, range, count, param) {
+            editor.modifyNumber(-(count || 1));
+        }
+    },
+    "ctrl-a": {
+        fn: function(editor, range, count, param) {
+            editor.modifyNumber(count || 1);
         }
     }
 };
@@ -411,13 +503,18 @@ var inputBuffer = exports.inputBuffer = {
     lastInsertCommands: [],
 
     push: function(editor, ch, keyId) {
+        var status = this.status;
+        var isKeyHandled = true;
         this.idle = false;
         var wObj = this.waitingForParam;
+        if (/^numpad\d+$/i.test(ch))
+            ch = ch.substr(6);
+            
         if (wObj) {
             this.exec(editor, wObj, ch);
         }
         else if (!(ch === "0" && !this.currentCount.length) &&
-            (ch.match(/^\d+$/) && this.isAccepting(NUMBER))) {
+            (/^\d+$/.test(ch) && this.isAccepting(NUMBER))) {
             this.currentCount += ch;
             this.currentCmd = NUMBER;
             this.accepting = [NUMBER, OPERATOR, MOTION, ACTION];
@@ -470,9 +567,11 @@ var inputBuffer = exports.inputBuffer = {
                 this.idle = false;
         }
         else if (this.operator) {
+            this.operator.count = this.getCount();
             this.exec(editor, { operator: this.operator }, ch);
         }
         else {
+            isKeyHandled = ch.length == 1;
             this.reset();
         }
         
@@ -482,10 +581,10 @@ var inputBuffer = exports.inputBuffer = {
             this.status = this.currentCount;
         } else if (this.status) {
             this.status = "";
-        } else {
-            return;
         }
-        editor._emit("changeStatus");
+        if (this.status != status)
+            editor._emit("changeStatus");
+        return isKeyHandled;
     },
 
     waitForParam: function(cmd) {
@@ -628,13 +727,11 @@ var handleCursorMove = exports.onCursorMove = function(editor, e) {
             var cursorRow = editor.getCursorPosition().row;
             if(originRow <= cursorRow) {
                 var endLine = editor.session.getLine(cursorRow);
-                editor.selection.clearSelection();
-                editor.selection.moveCursorTo(originRow, 0);
+                editor.selection.moveTo(originRow, 0);
                 editor.selection.selectTo(cursorRow, endLine.length);
             } else {
                 var endLine = editor.session.getLine(originRow);
-                editor.selection.clearSelection();
-                editor.selection.moveCursorTo(originRow, endLine.length);
+                editor.selection.moveTo(originRow, endLine.length);
                 editor.selection.selectTo(cursorRow, 0);
             }
         }
@@ -776,13 +873,11 @@ module.exports = {
     },
     copyLine: function(editor) {
         var pos = editor.getCursorPosition();
-        editor.selection.clearSelection();
-        editor.moveCursorTo(pos.row, pos.column);
+        editor.selection.moveTo(pos.row, pos.column);
         editor.selection.selectLine();
         registers._default.isLine = true;
         registers._default.text = editor.getCopyText().replace(/\n$/, "");
-        editor.selection.clearSelection();
-        editor.moveCursorTo(pos.row, pos.column);
+        editor.selection.moveTo(pos.row, pos.column);
     }
 };
 });
@@ -825,8 +920,7 @@ function Motion(m) {
         var a = getPos(editor, range, count, param, false);
         if (!a)
             return;
-        editor.clearSelection();
-        editor.moveCursorTo(a.row, a.column);
+        editor.selection.moveTo(a.row, a.column);
     };
     m.sel = function(editor, range, count, param) {
         var a = getPos(editor, range, count, param, true);
@@ -907,6 +1001,8 @@ function find(editor, needle, dir) {
 }
 
 var Range = require("../../../range").Range;
+
+var LAST_SEARCH_MOTION = {};
 
 module.exports = {
     "w": new Motion(function(editor) {
@@ -992,7 +1088,11 @@ module.exports = {
 
     "l": {
         nav: function(editor) {
-            editor.navigateRight();
+            var pos = editor.getCursorPosition();
+            var col = pos.column;
+            var lineLen = editor.session.getLine(pos.row).length;
+            if (lineLen && col !== lineLen)
+                editor.navigateRight();
         },
         sel: function(editor) {
             var pos = editor.getCursorPosition();
@@ -1144,12 +1244,14 @@ module.exports = {
     "f": new Motion({
         param: true,
         handlesCount: true,
-        getPos: function(editor, range, count, param, isSel) {
+        getPos: function(editor, range, count, param, isSel, isRepeat) {
+            if (!isRepeat)
+                LAST_SEARCH_MOTION = {ch: "f", param: param};
             var cursor = editor.getCursorPosition();
             var column = util.getRightNthChar(editor, cursor, param, count || 1);
 
             if (typeof column === "number") {
-                cursor.column += column + (isSel ? 2 : 1);                
+                cursor.column += column + (isSel ? 2 : 1);
                 return cursor;
             }
         }
@@ -1157,7 +1259,9 @@ module.exports = {
     "F": new Motion({
         param: true,
         handlesCount: true,
-        getPos: function(editor, range, count, param, isSel) {
+        getPos: function(editor, range, count, param, isSel, isRepeat) {
+            if (!isRepeat)
+                LAST_SEARCH_MOTION = {ch: "F", param: param};
             var cursor = editor.getCursorPosition();
             var column = util.getLeftNthChar(editor, cursor, param, count || 1);
 
@@ -1170,10 +1274,15 @@ module.exports = {
     "t": new Motion({
         param: true,
         handlesCount: true,
-        getPos: function(editor, range, count, param, isSel) {
+        getPos: function(editor, range, count, param, isSel, isRepeat) {
+            if (!isRepeat)
+                LAST_SEARCH_MOTION = {ch: "t", param: param};
             var cursor = editor.getCursorPosition();
             var column = util.getRightNthChar(editor, cursor, param, count || 1);
 
+            if (isRepeat && column == 0 && !(count > 1))
+                var column = util.getRightNthChar(editor, cursor, param, 2);
+                
             if (typeof column === "number") {
                 cursor.column += column + (isSel ? 1 : 0);
                 return cursor;
@@ -1183,14 +1292,44 @@ module.exports = {
     "T": new Motion({
         param: true,
         handlesCount: true,
-        getPos: function(editor, range, count, param, isSel) {
+        getPos: function(editor, range, count, param, isSel, isRepeat) {
+            if (!isRepeat)
+                LAST_SEARCH_MOTION = {ch: "T", param: param};
             var cursor = editor.getCursorPosition();
             var column = util.getLeftNthChar(editor, cursor, param, count || 1);
 
+            if (isRepeat && column == 0 && !(count > 1))
+                var column = util.getLeftNthChar(editor, cursor, param, 2);
+            
             if (typeof column === "number") {
                 cursor.column -= column;
                 return cursor;
             }
+        }
+    }),
+    ";": new Motion({
+        handlesCount: true,
+        getPos: function(editor, range, count, param, isSel) {
+            var ch = LAST_SEARCH_MOTION.ch;
+            if (!ch)
+                return;
+            return module.exports[ch].getPos(
+                editor, range, count, LAST_SEARCH_MOTION.param, isSel, true
+            );
+        }
+    }),
+    ",": new Motion({
+        handlesCount: true,
+        getPos: function(editor, range, count, param, isSel) {
+            var ch = LAST_SEARCH_MOTION.ch;
+            if (!ch)
+                return;
+            var up = ch.toUpperCase();
+            ch = ch === up ? ch.toLowerCase() : up;
+            
+            return module.exports[ch].getPos(
+                editor, range, count, LAST_SEARCH_MOTION.param, isSel, true
+            );
         }
     }),
 
@@ -1203,10 +1342,17 @@ module.exports = {
         }
     },
     "$": {
-        nav: function(editor) {
+        handlesCount: true,
+        nav: function(editor, range, count, param) {
+            if (count > 1) {
+                editor.navigateDown(count-1);
+            }
             editor.navigateLineEnd();
         },
-        sel: function(editor) {
+        sel: function(editor, range, count, param) {
+            if (count > 1) {
+                editor.selection.moveCursorBy(count-1, 0);
+            }
             editor.selection.selectLineEnd();
         }
     },
@@ -1326,7 +1472,7 @@ module.exports = {
         while(row < l && !/\S/.test(session.getLine(row)))
             row++;
         while(/\S/.test(session.getLine(row)))
-            row++;        
+            row++;
         return {column: 0, row: row};
     }),
     "ctrl-d": {
@@ -1342,26 +1488,54 @@ module.exports = {
         nav: function(editor, range, count, param) {
             editor.selection.clearSelection();
             keepScrollPosition(editor, editor.gotoPageUp);
-
         },
         sel: function(editor, range, count, param) {
             keepScrollPosition(editor, editor.selectPageUp);
         }
-    }
+    },
+    "`": new Motion({
+        param: true,
+        handlesCount: true,
+        getPos: function(editor, range, count, param, isSel) {
+            var s = editor.session;
+            var marker = s.vimMarkers && s.vimMarkers[param];
+            if (marker) {
+                return marker.getPosition();
+            }
+        }
+    }),
+    "'": new Motion({
+        param: true,
+        handlesCount: true,
+        getPos: function(editor, range, count, param, isSel) {
+            var s = editor.session;
+            var marker = s.vimMarkers && s.vimMarkers[param];
+            if (marker) {
+                var pos = marker.getPosition();
+                var line = editor.session.getLine(pos.row);                
+                pos.column = line.search(/\S/);
+                if (pos.column == -1)
+                    pos.column = line.length;
+                return pos;
+            }
+        }
+    })
 };
 
 module.exports.backspace = module.exports.left = module.exports.h;
-module.exports.right = module.exports.l;
+module.exports.space = module.exports['return'] = module.exports.right = module.exports.l;
 module.exports.up = module.exports.k;
 module.exports.down = module.exports.j;
 module.exports.pagedown = module.exports["ctrl-d"];
 module.exports.pageup = module.exports["ctrl-u"];
+module.exports.home = module.exports["0"];
+module.exports.end = module.exports["$"];
 
 });
  
 define('ace/keyboard/vim/maps/operators', ['require', 'exports', 'module' , 'ace/keyboard/vim/maps/util', 'ace/keyboard/vim/registers'], function(require, exports, module) {
 
-"never use strict";
+
 
 var util = require("./util");
 var registers = require("../registers");
@@ -1388,7 +1562,6 @@ module.exports = {
                         registers._default.text += editor.getCopyText();
                         var selRange = editor.getSelectionRange();
                         if (!selRange.isMultiLine()) {
-                            lastLineReached = true
                             var row = selRange.start.row - 1;
                             var col = editor.session.getLine(row).length
                             selRange.setStart(row, col);
