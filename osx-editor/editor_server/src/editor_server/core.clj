@@ -1,6 +1,8 @@
 (ns editor_server.core
-  (:use markdown.core)
-  (:require [org.httpkit.server :refer [run-server]]
+  (:require [markdown.core :refer :all]
+            [markdown.transformers :refer :all]
+            [clojure.contrib.str-utils2 :as str-utils]
+            [org.httpkit.server :refer [run-server]]
             [ring.util.response :refer [response]]
             [ring.middleware.params :refer [wrap-params]])
   (:import [java.net ServerSocket])
@@ -14,9 +16,22 @@
     (.close socket)
     port))
 
+(defn sample-transformer [text state]
+  [(if (or (:code state) (:codeblock state))
+     text
+     (let [matches (re-matches #".*(\{sample\}(.*)\{sample\}).*" text)
+           sample-path (nth matches 2)
+           source (nth matches 1)]
+       (if sample-path
+         (str-utils/replace text source "zz")
+         text)))
+   state])
+
 (defn handler [request]
   (let [data ((request :form-params) "data")]
-    (response (md-to-html-string data))))
+    (response (md-to-html-string data
+                                 :heading-anchors true
+                                 :custom-transformers [sample-transformer]))))
 
 (defn -main [& args]
   (let [port (get-free-port!)]

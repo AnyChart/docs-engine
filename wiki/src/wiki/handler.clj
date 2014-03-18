@@ -1,5 +1,5 @@
 (ns wiki.handler
-  (:require [compojure.core :refer [defroutes routes GET]]
+  (:require [compojure.core :refer [defroutes routes GET ANY]]
             [compojure.route :as route]
             [clojure.java.io :refer [file]]
             [selmer.parser :refer [render-file]]
@@ -8,6 +8,7 @@
             [org.httpkit.server :as server]
             [ring.util.codec :refer [form-decode]]
             [clojure.walk :refer [keywordize-keys]]
+            [clojure.data.json :as json]
             [taoensso.carmine :as car :refer (wcar)])
   (:gen-class :main :true))
 
@@ -116,9 +117,27 @@
                                         :results search-results
                                         :q q})))
 
+(defn get-samples [version]
+  (map (fn [f] (clojure.string/replace (.getName f) #"\.html$" ""))
+       (filter (fn [f]
+                 (.endsWith (.getName f) ".html"))
+               (.listFiles (file (str data-path "/" version "/samples/"))))))
+
+(defn get-samples-categories-handler [request]
+  "[\"Documentation\"]")
+
+(defn get-samples-handler [request]
+  (let [version (:version (:route-params request))]
+    (json/write-str (map (fn [f]
+                       {:name f
+                        :category "Documentation"
+                        :tags ["docs"]}) (get-samples version)))))
+
 (defroutes app-routes
   (GET "/_pls_" [] send-rebuild-signal)
   (GET "/:version/search" [version] search-request)
+  (ANY "/:version/samples/categories.json" [version] get-samples-categories-handler)
+  (ANY "/:version/samples/samples.json" [version] get-samples-handler)
   (GET "/:version/*" [version path] check-page)
   (GET "/:version" [version] check-version-page)
   (route/not-found "Not Found"))

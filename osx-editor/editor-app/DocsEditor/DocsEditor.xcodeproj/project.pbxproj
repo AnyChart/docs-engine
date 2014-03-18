@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FA46D69818D6927D00D5233A /* ConvertionServer.m in Sources */ = {isa = PBXBuildFile; fileRef = FA46D69718D6927D00D5233A /* ConvertionServer.m */; };
 		FA93E27318CEB388003661A6 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA93E27218CEB388003661A6 /* Cocoa.framework */; };
 		FA93E27D18CEB388003661A6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FA93E27B18CEB388003661A6 /* InfoPlist.strings */; };
 		FA93E27F18CEB388003661A6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FA93E27E18CEB388003661A6 /* main.m */; };
@@ -37,6 +38,8 @@
 /* Begin PBXFileReference section */
 		BA4ECE80CA2C4FA79F9EBCE6 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		F6A5AC09A94B4C37BBB3DB7E /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
+		FA46D69618D6927D00D5233A /* ConvertionServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConvertionServer.h; sourceTree = "<group>"; };
+		FA46D69718D6927D00D5233A /* ConvertionServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConvertionServer.m; sourceTree = "<group>"; };
 		FA93E26F18CEB388003661A6 /* DocsEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DocsEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA93E27218CEB388003661A6 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		FA93E27518CEB388003661A6 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -132,6 +135,8 @@
 			children = (
 				FA93E28418CEB388003661A6 /* Document.h */,
 				FA93E28518CEB388003661A6 /* Document.m */,
+				FA46D69618D6927D00D5233A /* ConvertionServer.h */,
+				FA46D69718D6927D00D5233A /* ConvertionServer.m */,
 				FA93E28718CEB388003661A6 /* Document.xib */,
 				FA93E28A18CEB388003661A6 /* MainMenu.xib */,
 				FA93E28D18CEB388003661A6 /* Images.xcassets */,
@@ -309,6 +314,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA93E28618CEB388003661A6 /* Document.m in Sources */,
+				FA46D69818D6927D00D5233A /* ConvertionServer.m in Sources */,
 				FA93E27F18CEB388003661A6 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

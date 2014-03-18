@@ -86,8 +86,8 @@
                     mac: "Command-B"
                  },
                  exec: function(editor, line) {
-                    editor.session.insert(editor.getSelectionRange().start, '*');
-                    editor.session.insert(editor.getSelectionRange().end, '*');
+                    editor.session.insert(editor.getSelectionRange().start, '**');
+                    editor.session.insert(editor.getSelectionRange().end, '**');
                     editor.session.getSelection().moveCursorLeft();
                  }
              }]);

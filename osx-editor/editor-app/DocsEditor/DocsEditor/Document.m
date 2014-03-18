@@ -7,15 +7,12 @@
 //
 
 #import "Document.h"
+#import "ConvertionServer.h"
 #import <AFNetworking.h>
 
 @interface Document()
 
 @property NSString* loadedDocument;
-@property NSString* tempFilePath;
-@property NSTask* converter;
-@property NSString* port;
-@property NSFileHandle* outFile;
 
 @end
 
@@ -45,23 +42,6 @@
 {
     [super windowControllerDidLoadNib:aController];
         
-    self.converter = [[NSTask alloc] init];
-    [self.converter setLaunchPath:@"/usr/bin/java"];
-    [self.converter setArguments:[NSArray arrayWithObjects:
-                                  @"-jar",
-                                  [[NSBundle mainBundle] pathForResource:@"editor_server-0.1.0-SNAPSHOT-standalone"
-                                                                  ofType:@"jar"], nil]];
-    NSPipe * out = [NSPipe pipe];
-    [self.converter setStandardOutput:out];
-    [self.converter launch];
-    
-    self.outFile = [out fileHandleForReading];
-    [self.outFile waitForDataInBackgroundAndNotify];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(commandNotification:)
-                                                 name:NSFileHandleDataAvailableNotification
-                                               object:nil];
-    
     self.codeView.delegate = self;
     [self.codeView setMode:ACEModeMarkdown];
     [self.codeView setTheme:ACEThemeChrome];
@@ -70,43 +50,18 @@
     
     [self.loadingView startAnimation:nil];
     
-    self.tempFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent: [NSString stringWithFormat: @"%.0f.", [NSDate timeIntervalSinceReferenceDate] * 1000.0]];
-    
     if (self.loadedDocument != nil) {
         self.codeView.string = self.loadedDocument;
     }
 
-    // Add any code here that needs to be executed once the windowController has loaded the document's window.
-}
-
-- (void)commandNotification:(NSNotification *)notification
-{
-    if ([notification.name isEqualToString:@"NSFileHandleDataAvailableNotification"]) {
-        NSData *data = [self.outFile availableData];
-        self.port = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        self.port = [self.port stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-        [self.outFile closeFile];
-        self.outFile = nil;
-        
-        [self checkServerAvailable];
+    if ([ConvertionServer server].serverAvailable) {
+        [self onAvailable:nil];
+    }else {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onAvailable:) name:@"ServerAvailable" object:nil];
     }
 }
 
-- (void)checkServerAvailable {
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    NSDictionary *parameters = @{@"data": @"" };
-    NSString *url = [NSString stringWithFormat:@"http://127.0.0.1:%@/", self.port];
-    NSLog(@"Check server");
-    [manager POST:url parameters:parameters
-          success:^(AFHTTPRequestOperation *operation, id responseObject) {
-              [self onAvailable];
-          } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-              [self checkServerAvailable];
-          }];
-}
-
-- (void)onAvailable {
+- (void)onAvailable:(NSNotification*)notification {
     [self.loadingView stopAnimation:nil];
     [self.loadingView setHidden:YES];
     [self updatePreview];
@@ -114,12 +69,12 @@
 
 
 - (void)updatePreview {
-    if (self.port == nil) return;
+    if ([ConvertionServer server].port == nil) return;
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     NSDictionary *parameters = @{@"data": self.codeView.string };
-    NSString *url = [NSString stringWithFormat:@"http://127.0.0.1:%@/", self.port];
+    NSString *url = [NSString stringWithFormat:@"http://127.0.0.1:%@/", [ConvertionServer server].port];
     
     [manager POST:url parameters:parameters
           success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -137,8 +92,7 @@
                     <script src='http://docs.anychart.com/jquery/jquery.min.js'></script>\
                     <script src='http://docs.anychart.com/bootstrap/js/bootstrap.min.js'></script>\
                         <link href='http://docs.anychart.com/css/docs.css' rel='stylesheet'></head><body><div class='container'>%@</div></body></html>", string];
-              
-              [self.preview.mainFrame loadHTMLString:string baseURL:nil];
+              [self.preview.mainFrame loadHTMLString:string baseURL:self.fileURL];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
