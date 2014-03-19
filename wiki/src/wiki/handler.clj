@@ -1,6 +1,7 @@
 (ns wiki.handler
   (:require [compojure.core :refer [defroutes routes GET ANY]]
             [compojure.route :as route]
+            [clojure.contrib.str-utils2 :as str-utils]
             [clojure.java.io :refer [file]]
             [selmer.parser :refer [render-file]]
             [selmer.filters :refer [add-filter!]]
@@ -49,13 +50,36 @@
 (defn page-exists? [path]
   (.exists (file (str data-path path ".md"))))
 
+(defn build-sample-embed [sample-path]
+  (str
+   "<div class='sample'>
+     <a class='btn btn-primary' target='_blank' href='http://demos.anychart.dev/dp/app/#/samples/Documentation/" sample-path ".html'><i class='glyphicon glyphicon-share-alt'></i> Launch in playground</a>
+     <iframe src='/{{VERSION}}/samples/" sample-path "'></iframe>"))
+
+(defn sample-transformer [text state]
+  [(if (or (:code state) (:codeblock state))
+     text
+     (let [matches (re-matches #".*(\{sample\}(.*)\{sample\}).*" text)
+           sample-path (nth matches 2)
+           source (nth matches 1)]
+       (if sample-path
+         (str-utils/replace text source (build-sample-embed sample-path))
+         text)))
+   state])
+
+(defn convert-markdown [version path]
+  (clojure.string/replace (md-to-html-string (slurp (str data-path path ".md"))
+                                             :heading-anchors true
+                                             :custom-transformers [sample-transformer])
+                          #"\{\{VERSION\}\}" version))
+
 (defn render-page [path version page raw-page]
   (render-file "page.html" {:versions (get-versions)
                             :version version
                             :path page
                             :raw-path raw-page
                             :pages (get-wiki-pages version)
-                            :content (md-to-html-string (slurp (str data-path path ".md")))}))
+                            :content (convert-markdown version path)}))
 
 (defn check-page [request]
   (let [params (:route-params request)
@@ -133,11 +157,20 @@
                         :category "Documentation"
                         :tags ["docs"]}) (get-samples version)))))
 
+(defn get-rendered-sample [request]
+  (let [version (:version (:route-params request))
+        sample (:* (:route-params request))
+        sample-content (slurp (str data-path "/" version "/samples/" sample ".html"))]
+    (render-file "sample.html" {:version version
+                                :content (clojure.string/replace sample-content #"(<sample>|</sample>)" "")
+                                :sample sample})))
+
 (defroutes app-routes
   (GET "/_pls_" [] send-rebuild-signal)
-  (GET "/:version/search" [version] search-request)
   (ANY "/:version/samples/categories.json" [version] get-samples-categories-handler)
   (ANY "/:version/samples/samples.json" [version] get-samples-handler)
+  (GET "/:version/samples/*" [version sample] get-rendered-sample)
+  (GET "/:version/search" [version] search-request)
   (GET "/:version/*" [version path] check-page)
   (GET "/:version" [version] check-version-page)
   (route/not-found "Not Found"))

@@ -67,6 +67,14 @@
     [self updatePreview];
 }
 
+- (NSURL*)projectBase:(NSURL*)url {
+    if ([[url path] isEqualToString:@"/"]) return nil;
+    NSArray *files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[url path] error:nil];
+    for (NSString *file in files) {
+        if ([file isEqualToString:@".git"]) return url;
+    }
+    return [self projectBase:[NSURL URLWithString:url.absoluteString.stringByDeletingLastPathComponent]];
+}
 
 - (void)updatePreview {
     if ([ConvertionServer server].port == nil) return;
@@ -79,7 +87,7 @@
     [manager POST:url parameters:parameters
           success:^(AFHTTPRequestOperation *operation, id responseObject) {
               NSString *string = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
-              
+
               string = [NSString stringWithFormat:@"<!doctype html>\
                 <html lang='en'>\
                 <head>\
@@ -92,6 +100,16 @@
                     <script src='http://docs.anychart.com/jquery/jquery.min.js'></script>\
                     <script src='http://docs.anychart.com/bootstrap/js/bootstrap.min.js'></script>\
                         <link href='http://docs.anychart.com/css/docs.css' rel='stylesheet'></head><body><div class='container'>%@</div></body></html>", string];
+              string = [string stringByReplacingOccurrencesOfString:@"{{SAMPLES_BASE}}" withString:[NSString stringWithFormat:@"http://127.0.0.1:%@", [ConvertionServer server].port]];
+              
+              NSString *dir = [[self.fileURL absoluteString] stringByDeletingLastPathComponent];
+              if (dir) {
+                  NSURL *baseDir = [self projectBase:[NSURL URLWithString:dir]];
+                  if (baseDir)
+                      string = [string stringByReplacingOccurrencesOfString:@"{{BASE}}" withString:[baseDir path]];
+              }
+              NSLog(@"%@", string);
+              
               [self.preview.mainFrame loadHTMLString:string baseURL:self.fileURL];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);

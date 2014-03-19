@@ -1,5 +1,6 @@
 (ns editor_server.core
   (:require [markdown.core :refer :all]
+            [compojure.core :refer [defroutes routes GET POST]]
             [markdown.transformers :refer :all]
             [clojure.contrib.str-utils2 :as str-utils]
             [org.httpkit.server :refer [run-server]]
@@ -23,7 +24,7 @@
            sample-path (nth matches 2)
            source (nth matches 1)]
        (if sample-path
-         (str-utils/replace text source "zz")
+         (str-utils/replace text source (str "<iframe class='sample' src='{{SAMPLES_BASE}}/sample?path=" sample-path ".html&base={{BASE}}'></iframe>"))
          text)))
    state])
 
@@ -33,7 +34,33 @@
                                  :heading-anchors true
                                  :custom-transformers [sample-transformer]))))
 
+(defn sample-handler [request]
+  (let [data ((request :params) "path")
+        base-path ((request :params) "base")]
+    (response (str "<!doctype html>
+<html>
+  <head>
+    <script src='/js?f=graphics.min.js&base=" base-path "'></script>
+    <script src='/js?f=anychart.min.js&base=" base-path "'></script>
+    <style type='text/css'>
+      html, body, #container { width: 100%; height: 100%; margin: 0; padding: 0; }
+    </style>
+  </head>
+  <body>
+    <div id='container'></div>
+    <script>" (clojure.string/replace (slurp (str base-path "/samples/" data)) #"<sample>|</sample>" "") "</script></body></html>"))))
+
+(defn js-handler [request]
+  (let [f ((request :params) "f")
+        base-path ((request :params) "base")]
+    (response (slurp (str base-path "/js/" f)))))
+
+(defroutes app-routes
+  (POST "/" [] handler)
+  (GET "/js" [] js-handler)
+  (GET "/sample" [] sample-handler))
+
 (defn -main [& args]
   (let [port (get-free-port!)]
     (println port)
-    (run-server (wrap-params handler {}) {:port port})))     
+    (run-server (wrap-params app-routes {}) {:port port})))     
