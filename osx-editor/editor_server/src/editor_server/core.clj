@@ -17,6 +17,14 @@
     (.close socket)
     port))
 
+(defn escape-sample-path [sample-path] sample-path)
+
+(defn build-sample-embed [sample-path]
+  (str
+   "<div class='sample'>
+     <a class='btn btn-primary' target='_blank' href='http://demos.anychart.dev/dp/app/#/samples/Documentation/" (escape-sample-path sample-path) ".html'><i class='glyphicon glyphicon-share-alt'></i> Launch in playground</a>
+     <iframe class='sample' src='{{SAMPLES_BASE}}/sample?path=" (escape-sample-path sample-path) ".html&base={{BASE}}'></iframe></div>"))
+
 (defn sample-transformer [text state]
   [(if (or (:code state) (:codeblock state))
      text
@@ -24,7 +32,7 @@
            sample-path (nth matches 2)
            source (nth matches 1)]
        (if sample-path
-         (str-utils/replace text source (str "<iframe class='sample' src='{{SAMPLES_BASE}}/sample?path=" sample-path ".html&base={{BASE}}'></iframe>"))
+         (str-utils/replace text source (build-sample-embed sample-path))
          text)))
    state])
 
@@ -43,7 +51,7 @@
     <script src='/js?f=graphics.min.js&base=" base-path "'></script>
     <script src='/js?f=anychart.min.js&base=" base-path "'></script>
     <style type='text/css'>
-      html, body, #container { width: 100%; height: 100%; margin: 0; padding: 0; }
+      html, body, #container { width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden; }
     </style>
   </head>
   <body>

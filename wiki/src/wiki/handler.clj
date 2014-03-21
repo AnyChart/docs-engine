@@ -54,7 +54,7 @@
   (str
    "<div class='sample'>
      <a class='btn btn-primary' target='_blank' href='http://demos.anychart.dev/dp/app/#/samples/Documentation/" sample-path ".html'><i class='glyphicon glyphicon-share-alt'></i> Launch in playground</a>
-     <iframe src='/{{VERSION}}/samples/" sample-path "'></iframe>"))
+     <iframe src='/{{VERSION}}/samples/" sample-path "'></iframe></div>"))
 
 (defn sample-transformer [text state]
   [(if (or (:code state) (:codeblock state))
