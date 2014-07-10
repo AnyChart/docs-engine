@@ -5,9 +5,8 @@
             [taoensso.carmine :as car :refer (wcar)])
   (:gen-class :main :true))
 
-(def redis-conn {:pool {} :spec {:host (System/getenv "REDIS_PORT_6379_TCP_ADDR")
-                                 :port (Integer/parseInt
-                                        (System/getenv "REDIS_PORT_6379_TCP_PORT"))}})
+(def redis-conn {:pool {} :spec {:host "localhost"
+                                 :port 6379}})
 
 (def config {:data "/wiki"})
 (def data-path (str (:data config) "/data/"))

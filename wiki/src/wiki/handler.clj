@@ -8,20 +8,26 @@
             [markdown.core :refer [md-to-html-string]]
             [org.httpkit.server :as server]
             [ring.util.codec :refer [form-decode]]
+            [ring.util.response :refer [redirect]]
             [clojure.walk :refer [keywordize-keys]]
             [clojure.data.json :as json]
             [taoensso.carmine :as car :refer (wcar)])
   (:gen-class :main :true))
 
-(def config {:data "/wiki"})
+(def config (read-string (slurp "/apps/wiki/config")))
+(def show-branches (:show_branches config))
 (def data-path (str (:data config) "/data/"))
 (selmer.parser/set-resource-path! "/apps/wiki/templates/")
+
+;(def config {:data "/Users/alex/Work/anychart/docs.anychart.com"})
+;(def data-path (str (:data config) "/data/"))
+;(selmer.parser/set-resource-path! "/Users/alex/Work/anychart/docs.anychart.com/wiki/src/templates/")
 
 (add-filter! :safe (fn [x] [:safe x]))
 
 (def env (System/getenv))
-(def redis-conn {:pool {} :spec {:host (get env "REDIS_PORT_6379_TCP_ADDR")
-                                 :port (read-string (get env "REDIS_PORT_6379_TCP_PORT"))}})
+(def redis-conn {:pool {} :spec {:host "localhost"
+                                 :port 6379}})
 (defmacro wcar* [& body] `(car/wcar redis-conn ~@body))
 
 (defn get-versions []
@@ -43,9 +49,28 @@
                                         (str data-path version "/"))
                                        "")]
                 {:file f
-                 :name (clojure.string/replace relative-path #"\.md$" "")}))
+                 :url (str "/" version "/" (clojure.string/replace relative-path #"\.md$" ""))}))
        (filter (fn [f] (.endsWith (.getName f) ".md"))
                (get-pages version))))
+
+(defn get-page-group [version path]
+  (last (re-matches (re-pattern (str "/" version "/(.*)/.*")) path)))
+
+(defn get-pages-for-group [version pages group]
+   {:name group
+    :display_name (if group (clojure.string/replace group "_" " "))
+    :pages (sort-by :name (filter #(= group (:group %)) (map (fn [page]
+                                                               (let [tmp-name (clojure.string/replace (:url page) (str "/" version "/" group "/") "")
+                                                                     name (clojure.string/replace tmp-name (str "/" version "/") "")]
+                                                                 (assoc page
+                                                                   :name
+                                                                   (clojure.string/replace name "_" " "))
+                                                                 )) pages)))})
+
+(defn get-wiki-groups [version]
+  (let [pages (map #(assoc % :group (get-page-group version (:url %))) (get-wiki-pages version))
+        groups (sort-by :name (set (map #(:group %) pages)))]
+    (map #(get-pages-for-group version pages %) groups)))
 
 (defn page-exists? [path]
   (.exists (file (str data-path path ".md"))))
@@ -53,8 +78,8 @@
 (defn build-sample-embed [sample-path]
   (str
    "<div class='sample'>
-     <a class='btn btn-primary' target='_blank' href='http://demos.anychart.dev/dp/app/#/samples/Documentation/" sample-path ".html'><i class='glyphicon glyphicon-share-alt'></i> Launch in playground</a>
-     <iframe src='/{{VERSION}}/samples/" sample-path "'></iframe></div>"))
+     <a class='btn btn-primary' target='_blank' href='//playground.anychart.com/acdvf-docs/{{VERSION}}/samples/" sample-path "'><i class='glyphicon glyphicon-share-alt'></i> Launch in playground</a>
+     <iframe src='//playground.anychart.com/acdvf-docs/{{VERSION}}/samples/" sample-path "-iframe'></iframe></div>"))
 
 (defn sample-transformer [text state]
   [(if (or (:code state) (:codeblock state))
@@ -78,7 +103,7 @@
                             :version version
                             :path page
                             :raw-path raw-page
-                            :pages (get-wiki-pages version)
+                            :groups (get-wiki-groups version)
                             :content (convert-markdown version path)}))
 
 (defn check-page [request]
@@ -93,7 +118,9 @@
 (defn check-version-page [request]
   (let [version (:version (:route-params request))]
     (if (page-exists? (str version "/index"))
-      (render-page (str version "/index") version "" "index.md"))))
+      (render-page (str version "/index") version "" "index.md")
+      (if (page-exists? (str version "/Quick_Start"))
+        (redirect (str "/" version "/Quick_Start"))))))
 
 (defn send-rebuild-signal [request]
   (wcar* (car/publish "reindex" "reindex"))
@@ -114,20 +141,20 @@
   
 (defn search-for [q version-key version]
   (if (not (clojure.string/blank? q))
-
     (let [sphinx-client (org.sphx.api.SphinxClient.
-                    (System/getenv "INDEXER_PORT_49005_TCP_ADDR")
-                    (read-string (System/getenv "INDEXER_PORT_49005_TCP_PORT")))]
+                         "localhost"
+                         49005)]
       (.Open sphinx-client)
       (.SetMatchMode sphinx-client 2)
       (let [res (.Query sphinx-client q version-key)]
         (println "query result" res)
         (prn res)
         (prn (seq (.matches res)))
-        (let [
-              docs (map #(first (.attrValues %)) (seq (.matches res)))
-              words (map #(.word %) (seq (.words res)))]
-          (process-search-results sphinx-client docs words version-key version))))))
+        (let [docs (map #(first (.attrValues %)) (seq (.matches res)))
+              words (map #(.word %) (seq (.words res)))
+              resp (process-search-results sphinx-client docs words version-key version)]
+          (.Close sphinx-client)
+          resp)))))
 
 (defn search-request [request]
   (let [version (:version (:route-params request))
@@ -141,43 +168,17 @@
                                         :results search-results
                                         :q q})))
 
-(defn get-samples [version]
-  (map (fn [f] (clojure.string/replace (.getName f) #"\.html$" ""))
-       (filter (fn [f]
-                 (.endsWith (.getName f) ".html"))
-               (.listFiles (file (str data-path "/" version "/samples/"))))))
-
-(defn get-samples-categories-handler [request]
-  "[\"Documentation\"]")
-
-(defn get-samples-handler [request]
-  (let [version (:version (:route-params request))]
-    (json/write-str (map (fn [f]
-                       {:name f
-                        :category "Documentation"
-                        :tags ["docs"]}) (get-samples version)))))
-
-(defn get-rendered-sample [request]
-  (let [version (:version (:route-params request))
-        sample (:* (:route-params request))
-        sample-content (slurp (str data-path "/" version "/samples/" sample ".html"))]
-    (render-file "sample.html" {:version version
-                                :content (clojure.string/replace sample-content #"(<sample>|</sample>)" "")
-                                :sample sample})))
-
 (defroutes app-routes
   (GET "/_pls_" [] send-rebuild-signal)
-  (ANY "/:version/samples/categories.json" [version] get-samples-categories-handler)
-  (ANY "/:version/samples/samples.json" [version] get-samples-handler)
-  (GET "/:version/samples/*" [version sample] get-rendered-sample)
   (GET "/:version/search" [version] search-request)
   (GET "/:version/*" [version path] check-page)
   (GET "/:version" [version] check-version-page)
+  (GET "/" [] (redirect "/7.0.0"))
   (route/not-found "Not Found"))
 
 (def app
   (-> (routes app-routes)))
 
 (defn -main [& args]
-  (server/run-server #'app {:port 9090}))
+  (server/run-server #'app {:ip "0.0.0.0" :port 9095}))
 

@@ -9,13 +9,15 @@
              :git_ssh "/apps/wiki/keys/git"
              :out "/wiki"})
 
+(def extra-config (read-string (slurp "/apps/wiki/config")))
+(def show-branches (:show_branches extra-config))
+
 (def data-path (str (:out config) "/data"))
 (def repo-path (str (:out config) "/repo"))
 (def env-config {:GIT_SSH (:git_ssh config)})
 
-(def redis-conn {:pool {} :spec {:host (System/getenv "REDIS_PORT_6379_TCP_ADDR")
-                                 :port (Integer/parseInt
-                                        (System/getenv "REDIS_PORT_6379_TCP_PORT"))}})
+(def redis-conn {:pool {} :spec {:host "localhost"
+                                 :port 6379}})
 
 (defmacro wcar* [& body] `(car/wcar redis-conn ~@body))
 
@@ -66,7 +68,9 @@
 (defn rebuild-structure []
   (println "Rebuilding wiki...")
   (update-project)
-  (doseq [item (concat (get-tags) (get-branches-for-build))]
+  (doseq [item (if show-branches
+                 (concat (get-tags) (get-branches-for-build))
+                 (get-tags))]
     (build-ref item))
   (println "Done!")
   (wcar* (car/publish "docs" "rebuild")))
