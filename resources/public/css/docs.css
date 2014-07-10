@@ -20,7 +20,7 @@
 
 .sample {
     width: 450px;
-    height: 250px;
+    height: 280px;
     display: block;
 }
 
@@ -35,4 +35,31 @@
     margin-right: 0;
     width: 450px;
     height: 250px;
+    overfow: hidden;
+}
+
+.container ul.nav {
+    overflow-x: scroll;
+}
+
+.item-list-overlay {
+    font-family: "Trebuchet MS" sans-serif;
+    font-size: 14px;
+}
+
+.nav-tabs>.active>a, .nav-tabs>.active>a:hover, .nav-tabs>.active>a:focus {
+    border-bottom-color: #ddd;
+}
+
+.nav-tabs>li>a {
+    padding-top: 4px;
+    padding-bottom: 3px;
+}
+
+.item-list-overlay{
+    overflow: scroll;
+}
+
+dl.item-list dt span{
+    cursor: pointer;
 }
