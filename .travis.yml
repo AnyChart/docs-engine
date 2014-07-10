@@ -8,7 +8,8 @@ env:
   - secure: HGvDoJwqrTSZ1x6Y6nqHFpStGPAhE4tGETAiN4Ou4r6FYgzuAeU+fTA6Z+Hh4+9DlWpta67mLLpvjXNdcATqT0IZScfzS1uu7wFRdx4/PRMaj1p7NJ6cFcA2bxtP+3joBIT/jWPuvCjVmrKt55s21An00EPhFWi8A0skfrUcyXI=
 
 after_success:
-  - chmod 600 .travis/deploy_key
-  - chmod 600 .travis/deploy_key.pub
-  - scp -i .travis/deploy_key target/wiki-1.0-standalone.jar $DEPLOY_USERNAME@$DEPLOY_HOST:/apps/wiki/wiki-1.0-standalone.jar
+  - chmod 600 .travis/id_rsa
+  - chmod 600 .travis/id_rsa.pub
+  - ssh-add .travis/id_rsa
+  - scp -i .travis/id_rsa target/wiki-1.0-standalone.jar $DEPLOY_USERNAME@$DEPLOY_HOST:/apps/wiki/wiki-1.0-standalone.jar
   - ssh $DEPLOY_USERNAME@$DEPLOY_HOST "supervisorctl restart wiki"
