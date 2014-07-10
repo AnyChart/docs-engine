@@ -1,13 +1,17 @@
 language: clojure
 lein: lein2
 script: lein2 uberjar
+services:
+  - redis-server
 env:
   global:
   - secure: StKfMfT65EvqfbTlPB3tRYzhezrNt1s2ecEjvVRGKXkQSlXkoWnsWRSbiI8IzqHaSd9v5uKuhaLGHtphkbrHHfYaKNSvELxfoZ+kNGfEmCte7jx5CWPHWVuhmg1ULUHg0n2AwcDgrHqOiCygJESEXS/xTAbFK/4WCwy5AKztZHs=
   - secure: OTKe4cs9LX55uHFLxabzopfD0ckCv+e+Czqg37Xq1LkUsyRcTEHWgSfXV0f/Qbmg48gib0s7m3WFS5rBro0c3wOd1NLlxIMYxvX5fFLq9VRoQNQWPzFpwZtCe0W+p5E7+ot5O6Q7LiseykxYBlMx49rCDKxkFqVIc58Fm4kixHY=
   - secure: f5w38/6uww5gVtAdi1jNiA5jOgh5xq2lhQyw3ZN6vFZ1bddYZtW0PZyowVlthrPadJAmdz30zsEKdArdr/OOhum9HWn4K1EUFnZsqmQMCsWjATUlWj5He9adAZbUNbVWsCtG+CC7NXrrWa+SuTfccB4/aeIUuj5LmNZJ0QZxbSE=
   - secure: HGvDoJwqrTSZ1x6Y6nqHFpStGPAhE4tGETAiN4Ou4r6FYgzuAeU+fTA6Z+Hh4+9DlWpta67mLLpvjXNdcATqT0IZScfzS1uu7wFRdx4/PRMaj1p7NJ6cFcA2bxtP+3joBIT/jWPuvCjVmrKt55s21An00EPhFWi8A0skfrUcyXI=
-
+before_script:
+  - mkdir -p /apps/wiki
+  - cp .travis/config /apps/wiki/config
 after_success:
   - cp .travis/known_hosts ~/.ssh/known_hosts
   - chmod 600 ~/.ssh/known_hosts
