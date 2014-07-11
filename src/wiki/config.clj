@@ -4,6 +4,12 @@
                  "/Users/alex/Work/anychart/wiki"
                  "/apps/wiki"))
 (def data-path (str base-path "/data"))
-(def config (read-string (slurp (str base-path "/config"))))
+(def config (if (System/getProperty "dev")
+              {:git "/Users/alex/Work/anychart/wiki/keys/git"
+               :show-branches true
+               :playground "playground.anychart.dev/acdvf-docs/"}
+              {:git "/apps/wiki/keys/git"
+               :show-branches true
+               :playground "playground.anychart.dev/acdvf-docs/"}))
 (def repo-path (str data-path "/repo"))
 (def versions-path (str data-path "/versions"))

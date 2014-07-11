@@ -10,7 +10,7 @@
                  [com.taoensso/carmine "2.4.6"]
                  [sphinxapi "2.0.3"]
                  [http-kit "2.1.16"]]
-  :main ^:skip-aot wiki.handlers
+  :main wiki.handlers
   :target-path "target/%s"
-  :aot []
+  :aot :all
   :profiles {:dev {:jvm-opts ["-Ddev=true"]}})
