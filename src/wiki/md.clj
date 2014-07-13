@@ -9,7 +9,8 @@
 (defn build-sample-embed [sample-path]
   (str
    "<div class='sample'>
-     <a class='btn btn-primary' target='_blank' href='//playground.anychart.com/acdvf-docs/{{VERSION}}/samples/" sample-path "'><i class='glyphicon glyphicon-share-alt'></i> Launch in playground</a>
+     <p>Live sample</p>
+     <a target='_blank' href='//playground.anychart.com/acdvf-docs/{{VERSION}}/samples/" sample-path "'>Launch in playground</a>
      <iframe src='//" (:playground config) "{{VERSION}}/samples/" sample-path "-iframe'></iframe></div>"))
 
 (defn sample-transformer [text state]
