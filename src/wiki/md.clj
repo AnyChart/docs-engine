@@ -10,7 +10,7 @@
   (str
    "<div class='sample'>
      <p>Live sample</p>
-     <a target='_blank' href='//" (:playground config) "/acdvf-docs/{{VERSION}}/samples/" sample-path "'>Launch in playground</a>
+     <a target='_blank' href='//" (:playground config) "{{VERSION}}/samples/" sample-path "'>Launch in playground</a>
      <iframe src='//" (:playground config) "{{VERSION}}/samples/" sample-path "-iframe'></iframe></div>"))
 
 (defn sample-transformer [text state]
