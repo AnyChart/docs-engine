@@ -50,11 +50,11 @@
 (defn get-name [url]
   (last (re-matches #".*/(.+)$" url)))
 
-(defn title [url]
-   (get-document-display-name url))
-
 (defn get-document-display-name [url]
   (clojure.string/replace (get-name (str "/" url)) "_" " "))
+
+(defn title [url]
+   (get-document-display-name url))
 
 (defn get-group-display-name [group]
   (if (not (= nil group))
