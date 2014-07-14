@@ -1,2 +1,2 @@
 #!/bin/sh
-exec /usr/bin/ssh -o StrictHostKeyChecking=no -i /Users/alex/Work/anychart/wiki/keys/id_rsa "$@"
+exec /usr/bin/ssh -o StrictHostKeyChecking=no -i /Users/alex/Work/anychart/docs.anychart.com/keys/id_rsa "$@"
