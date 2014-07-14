@@ -30,6 +30,7 @@
                                         :version version
                                         :groups (docs/grouped-documents version)
                                         :path doc
+                                        :title (docs/title doc)
                                         :content (md/convert-markdown version md-path)})))
 
 (defroutes app-routes
