@@ -22,6 +22,7 @@
 		FA93E2A018CEB388003661A6 /* DocsEditorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FA93E29F18CEB388003661A6 /* DocsEditorTests.m */; };
 		FA93E2AA18CEB48A003661A6 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA93E2A918CEB48A003661A6 /* WebKit.framework */; };
 		FA93E2B018CEED22003661A6 /* editor_server-0.1.0-SNAPSHOT-standalone.jar in Resources */ = {isa = PBXBuildFile; fileRef = FA93E2AE18CEED1A003661A6 /* editor_server-0.1.0-SNAPSHOT-standalone.jar */; };
+		FAE80F0619736827005FB359 /* template.html in Resources */ = {isa = PBXBuildFile; fileRef = FAE80F0519736827005FB359 /* template.html */; };
 		FC65A3740FAE4B48BAD0F3EF /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA4ECE80CA2C4FA79F9EBCE6 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -62,6 +63,7 @@
 		FA93E29F18CEB388003661A6 /* DocsEditorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DocsEditorTests.m; sourceTree = "<group>"; };
 		FA93E2A918CEB48A003661A6 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		FA93E2AE18CEED1A003661A6 /* editor_server-0.1.0-SNAPSHOT-standalone.jar */ = {isa = PBXFileReference; lastKnownFileType = archive.jar; name = "editor_server-0.1.0-SNAPSHOT-standalone.jar"; path = "../../editor_server/target/editor_server-0.1.0-SNAPSHOT-standalone.jar"; sourceTree = "<group>"; };
+		FAE80F0519736827005FB359 /* template.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = template.html; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,6 +155,7 @@
 				FA93E27E18CEB388003661A6 /* main.m */,
 				FA93E28018CEB388003661A6 /* DocsEditor-Prefix.pch */,
 				FA93E28118CEB388003661A6 /* Credits.rtf */,
+				FAE80F0519736827005FB359 /* template.html */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -261,6 +264,7 @@
 				FA93E28E18CEB388003661A6 /* Images.xcassets in Resources */,
 				FA93E27D18CEB388003661A6 /* InfoPlist.strings in Resources */,
 				FA93E28318CEB388003661A6 /* Credits.rtf in Resources */,
+				FAE80F0619736827005FB359 /* template.html in Resources */,
 				FA93E28C18CEB388003661A6 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

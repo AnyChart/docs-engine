@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+  <head>
+    <title> - AnyChart Documentation</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <link rel="icon" href="http://docs.anychart.dev/img/favicon.ico" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="http://docs.anychart.dev/css/reset.css" rel="stylesheet">
+    <link href="http://docs.anychart.dev/css/docs.css" rel="stylesheet">
+    <!-- syntaxhighlighter -->
+    <script type="text/javascript" src="http://docs.anychart.dev/syntaxhighlighter/scripts/shCore.js"></script>
+    <script type="text/javascript" src="http://docs.anychart.dev/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+    <link href="http://docs.anychart.dev/syntaxhighlighter/styles/shCore.css" rel="stylesheet">
+    <link href="http://docs.anychart.dev/syntaxhighlighter/styles/shThemeDefault.css" rel="stylesheet">
+    <script type="text/javascript">
+      SyntaxHighlighter.defaults.toolbar = false;
+    </script>
+    <style type="text/css">
+      .syntaxhighlighter {
+      margin: 2px 0 2px 0 !important
+      }
+    </style>
+    <!-- /syntaxhighlighter -->
+    <script type="text/javascript" src="http://docs.anychart.dev/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="http://docs.anychart.dev/js/docs.js"></script>
+  </head>
+  <body>
+      <div id="content" style="left: 0; top: 0;">
+          <div class="main">
+          {{CONTENT}}
+          </div>
+      </div>
+      
+      <script type="text/javascript">
+          $(".main pre").wrap("<div class='code'></div>");
+          $("<p>Code</p>").insertBefore(".main .code pre");
+          $(".main pre").addClass("brush: js");
+          SyntaxHighlighter.all();
+      </script>
+  </body>
+</html>

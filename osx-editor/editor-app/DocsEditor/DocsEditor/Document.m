@@ -88,18 +88,10 @@
           success:^(AFHTTPRequestOperation *operation, id responseObject) {
               NSString *string = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
 
-              string = [NSString stringWithFormat:@"<!doctype html>\
-                <html lang='en'>\
-                <head>\
-                    <meta charset='utf-8'>\
-                    <meta http-equiv='X-UA-Compatible' content='IE=edge'>\
-                    <meta name='viewport' content='width=device-width, initial-scale=1'>\
-                    <title>anychart documentation</title>\
-                    <!-- Bootstrap -->\
-                    <link href='http://docs.anychart.com/bootstrap/css/bootstrap.min.css' rel='stylesheet'>\
-                    <script src='http://docs.anychart.com/jquery/jquery.min.js'></script>\
-                    <script src='http://docs.anychart.com/bootstrap/js/bootstrap.min.js'></script>\
-                        <link href='http://docs.anychart.com/css/docs.css' rel='stylesheet'></head><body><div class='container'>%@</div></body></html>", string];
+              NSString *template = [NSString stringWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"template" withExtension:@"html"] encoding:NSUTF8StringEncoding error:nil];
+              
+              string = [template stringByReplacingOccurrencesOfString:@"{{CONTENT}}" withString:string];
+              
               string = [string stringByReplacingOccurrencesOfString:@"{{SAMPLES_BASE}}" withString:[NSString stringWithFormat:@"http://127.0.0.1:%@", [ConvertionServer server].port]];
               
               NSString *dir = [[self.fileURL absoluteString] stringByDeletingLastPathComponent];

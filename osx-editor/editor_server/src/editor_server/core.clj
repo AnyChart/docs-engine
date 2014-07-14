@@ -9,21 +9,14 @@
   (:import [java.net ServerSocket])
   (:gen-class :main :true))
 
-(defn get-free-port!
-  "Get a free port on the system."
-  []
-  (let [socket (ServerSocket. 0)
-        port (.getLocalPort socket)]
-    (.close socket)
-    port))
-
 (defn escape-sample-path [sample-path] sample-path)
 
 (defn build-sample-embed [sample-path]
   (str
    "<div class='sample'>
-     <a class='btn btn-primary' target='_blank' href='http://demos.anychart.dev/dp/app/#/samples/Documentation/" (escape-sample-path sample-path) ".html'><i class='glyphicon glyphicon-share-alt'></i> Launch in playground</a>
-     <iframe class='sample' src='{{SAMPLES_BASE}}/sample?path=" (escape-sample-path sample-path) ".html&base={{BASE}}'></iframe></div>"))
+     <p>Live sample</p>
+     <a target='_blank' href='//playground.anychart.com/acdvf-docs/{{VERSION}}/samples/" sample-path "'>Launch in playground</a>
+     <iframe src='{{SAMPLES_BASE}}/sample?path=" (escape-sample-path sample-path) ".html&base={{BASE}}'></iframe></div>"))
 
 (defn sample-transformer [text state]
   [(if (or (:code state) (:codeblock state))
@@ -35,6 +28,14 @@
          (str-utils/replace text source (build-sample-embed sample-path))
          text)))
    state])
+
+(defn get-free-port!
+  "Get a free port on the system."
+  []
+  (let [socket (ServerSocket. 0)
+        port (.getLocalPort socket)]
+    (.close socket)
+    port))
 
 (defn handler [request]
   (let [data ((request :form-params) "data")]
@@ -48,7 +49,6 @@
     (response (str "<!doctype html>
 <html>
   <head>
-    <script src='/js?f=graphics.min.js&base=" base-path "'></script>
     <script src='/js?f=anychart.min.js&base=" base-path "'></script>
     <style type='text/css'>
       html, body, #container { width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden; }
