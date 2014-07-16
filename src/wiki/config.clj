@@ -9,7 +9,7 @@
                :show-branches true
                :playground "playground.anychart.dev/acdvf-docs/"}
               {:git "/apps/wiki/keys/git"
-               :show-branches true
-               :playground "playground.anychart.dev/acdvf-docs/"}))
+               :show-branches false
+               :playground "playground.anychart.com/acdvf-docs/"}))
 (def repo-path (str data-path "/repo"))
 (def versions-path (str data-path "/versions"))
