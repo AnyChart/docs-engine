@@ -1,6 +1,6 @@
 (ns wiki.handlers
   (:require [selmer.parser :refer [render-file]]
-            [compojure.core :refer [defroutes routes GET]]
+            [compojure.core :refer [defroutes routes GET POST]]
             [compojure.route :as route]
             [ring.util.response :refer [redirect]]
             [org.httpkit.server :as server]
@@ -25,7 +25,7 @@
         (route/not-found "Document not found")))))
 
 (defn show-document [request version doc]
-  (let [md-path (docs/md-path version doc)]
+  (let [md-path (docs/md-path version doc)] 
     (render-file "templates/page.html" {:versions (versions/versions)
                                         :version version
                                         :groups (docs/grouped-documents version)
