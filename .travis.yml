@@ -11,3 +11,4 @@ after_success:
   - ssh-add .travis/id_rsa
   - scp -i .travis/id_rsa target/wiki-1.0-standalone.jar root@docs.anychart.com:/apps/wiki/wiki-1.0-standalone.jar
   - ssh root@docs.anychart.com "supervisorctl restart wiki"
+
