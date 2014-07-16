@@ -34,9 +34,9 @@
       <div id="sidebar">
 	<ul>
 	  <li><a href="#"><i class="group open"></i><span>AnyChart Documentation</span></a>
+	    <ul>
 	{% for group in groups %}
         {% if group.name %}
-        <ul>
           <li>
 	    <a href="#"><i class="group open"></i><span>{{group.display_name}}</span></a>
 	    <ul>
