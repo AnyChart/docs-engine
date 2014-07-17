@@ -31,7 +31,7 @@ $(function() {
     });
 
     var updatePage = function(url, data) {
-	$("title").text(data["title"]);
+	$("title").text(data["title"] + " - AnyChart documentation");
 	$("#content>.main").html(data['content']);
 
 	$(".main pre").wrap("<div class='code'></div>");
