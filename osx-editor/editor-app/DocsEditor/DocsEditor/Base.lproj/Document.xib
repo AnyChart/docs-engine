@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment defaultVersion="1080" identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5053"/>
+        <plugIn identifier="com.apple.WebKitIBPlugin" version="5053"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="Document">
+            <connections>
+                <outlet property="codeView" destination="Df7-B7-m5D" id="hct-K1-6g2"/>
+                <outlet property="loadingView" destination="hBl-MQ-ONN" id="cu6-zq-Kd0"/>
+                <outlet property="preview" destination="7VF-Ng-aRG" id="SuP-OL-L1t"/>
+                <outlet property="window" destination="5" id="18"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="5" userLabel="Window">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+            <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="133" y="235" width="900" height="609"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="878"/>
+            <value key="minSize" type="size" width="94" height="86"/>
+            <view key="contentView" id="6">
+                <rect key="frame" x="0.0" y="0.0" width="900" height="609"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <splitView dividerStyle="paneSplitter" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TeR-3J-qgj">
+                        <rect key="frame" x="0.0" y="0.0" width="900" height="609"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <subviews>
+                            <customView id="NeG-JE-MAB">
+                                <rect key="frame" x="0.0" y="0.0" width="452" height="609"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <subviews>
+                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="Df7-B7-m5D" customClass="ACEView">
+                                        <rect key="frame" x="0.0" y="0.0" width="452" height="609"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    </customView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="Df7-B7-m5D" secondAttribute="bottom" id="0VW-9D-tTB"/>
+                                    <constraint firstAttribute="trailing" secondItem="Df7-B7-m5D" secondAttribute="trailing" id="Eqt-ra-ivc"/>
+                                    <constraint firstItem="Df7-B7-m5D" firstAttribute="top" secondItem="NeG-JE-MAB" secondAttribute="top" id="d51-pz-xAx"/>
+                                    <constraint firstItem="Df7-B7-m5D" firstAttribute="leading" secondItem="NeG-JE-MAB" secondAttribute="leading" id="gaa-eg-Eg0"/>
+                                </constraints>
+                            </customView>
+                            <customView id="B0o-ik-Qro">
+                                <rect key="frame" x="462" y="0.0" width="438" height="609"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <subviews>
+                                    <webView translatesAutoresizingMaskIntoConstraints="NO" id="7VF-Ng-aRG">
+                                        <rect key="frame" x="0.0" y="0.0" width="438" height="609"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <webPreferences key="preferences" defaultFontSize="12" defaultFixedFontSize="12">
+                                            <nil key="identifier"/>
+                                        </webPreferences>
+                                    </webView>
+                                    <progressIndicator horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" maxValue="100" bezeled="NO" indeterminate="YES" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="hBl-MQ-ONN">
+                                        <rect key="frame" x="203" y="288" width="32" height="32"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    </progressIndicator>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="7VF-Ng-aRG" secondAttribute="trailing" id="0F8-0D-lo2"/>
+                                    <constraint firstItem="7VF-Ng-aRG" firstAttribute="leading" secondItem="B0o-ik-Qro" secondAttribute="leading" id="M5s-9w-uht"/>
+                                    <constraint firstItem="7VF-Ng-aRG" firstAttribute="top" secondItem="B0o-ik-Qro" secondAttribute="top" id="e3w-HE-gYP"/>
+                                    <constraint firstAttribute="bottom" secondItem="7VF-Ng-aRG" secondAttribute="bottom" id="owy-pC-Fbn"/>
+                                    <constraint firstAttribute="centerX" secondItem="hBl-MQ-ONN" secondAttribute="centerX" id="pej-1T-g79"/>
+                                    <constraint firstAttribute="centerY" secondItem="hBl-MQ-ONN" secondAttribute="centerY" id="zje-15-elQ"/>
+                                </constraints>
+                            </customView>
+                        </subviews>
+                        <holdingPriorities>
+                            <real value="250"/>
+                            <real value="250"/>
+                        </holdingPriorities>
+                    </splitView>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="TeR-3J-qgj" secondAttribute="trailing" id="G4j-Sr-Rqk"/>
+                    <constraint firstAttribute="bottom" secondItem="TeR-3J-qgj" secondAttribute="bottom" id="Jde-nL-XS3"/>
+                    <constraint firstItem="TeR-3J-qgj" firstAttribute="leading" secondItem="6" secondAttribute="leading" id="PuF-Re-h43"/>
+                    <constraint firstItem="TeR-3J-qgj" firstAttribute="top" secondItem="6" secondAttribute="top" id="lez-s5-X5P"/>
+                </constraints>
+            </view>
+            <connections>
+                <outlet property="delegate" destination="-2" id="17"/>
+            </connections>
+        </window>
+        <customObject id="-3" userLabel="Application"/>
+    </objects>
+</document>

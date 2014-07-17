@@ -1,0 +1,104 @@
+<!doctype html>
+<html>
+  <head>
+    <title>{{title}} - AnyChart Documentation</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="/css/reset.css" rel="stylesheet">
+    <link href="/css/docs.css" rel="stylesheet">
+    <!-- syntaxhighlighter -->
+    <script type="text/javascript" src="/syntaxhighlighter/scripts/shCore.js"></script>
+    <script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+    <link href="/syntaxhighlighter/styles/shCore.css" rel="stylesheet">
+    <link href="/syntaxhighlighter/styles/shThemeDefault.css" rel="stylesheet">
+    <script type="text/javascript">
+      SyntaxHighlighter.defaults.toolbar = false;
+    </script>
+    <style type="text/css">
+      .syntaxhighlighter {
+      margin: 2px 0 2px 0 !important
+      }
+    </style>
+    <!-- /syntaxhighlighter -->
+    <script type="text/javascript" src="/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/docs.js"></script>
+  </head>
+  <body>
+    <div id="main">
+      <div id="header">
+	<img src="/img/toplogo.jpg"/>
+	<p>Version: {{version}}<p>
+      </div>
+      <div id="sidebar">
+	<ul>
+	  <li><a href="#"><i class="group open"></i><span>AnyChart Documentation</span></a>
+	    <ul>
+	{% for group in groups %}
+        {% if group.name %}
+          <li>
+	    <a href="#"><i class="group open"></i><span>{{group.display_name}}</span></a>
+	    <ul>
+              {% for page in group.pages %}
+              <li><a title="{{page.name}}" href="/{{version}}/{{page.url}}"><i class="page"></i><span>{{page.name}}</span></a></li>
+              {% endfor %}
+	    </ul>
+	  </li>
+        {% endif %}
+        {% endfor %}
+
+        {% for group in groups %}
+        {% if not group.name %}
+        {% for page in group.pages %}
+          <li><a title="{{page.name}}" href="/{{version}}/{{page.url}}"><i class="page"></i><span>{{page.name}}</span></a></li>
+        {% endfor %}
+        {% endif %}
+        {% endfor %}
+	</ul>
+	  </li>
+	</ul>
+	<div class="resizer"></div>
+      </div>
+      <div id="content">
+	<div class="main">
+	  {{content|safe}}
+	</div>
+
+	<script type="text/javascript">
+	  $(".main pre").wrap("<div class='code'></div>");
+	  $("<p>Code</p>").insertBefore(".main .code pre");
+	  $(".main pre").addClass("brush: js");
+	  SyntaxHighlighter.all();
+	</script>
+	<!-- disqus -->
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'docsanychartcom'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+	  <!-- /disqus -->
+      </div>
+    </div>
+    <div id="locker"></div>
+    <!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5B8NXZ"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5B8NXZ');</script>
+<!-- End Google Tag Manager -->
+  </body>
+</html>

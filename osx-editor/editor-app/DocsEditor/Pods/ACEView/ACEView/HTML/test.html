@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <style type="text/css" media="screen">
+            body, html {
+                padding: 0;
+                margin: 0;
+            }
+            #editor {
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+            }
+            </style>
+    </head>
+    <body>
+        <div id="editor"></div>
+        <script src="../Dependencies/ace/src/ace.js" type="text/javascript" charset="utf-8"></script>
+        <script>
+            var editor = ace.edit("editor");
+            editor.commands.addCommands([{
+                name: "ACEFind",
+                bindKey: {
+                    win: "Ctrl-F",
+                    mac: "Command-F"
+                },
+                exec: function(editor, line) {
+                    //ACEView.showFindInterface();
+                    return false;
+                },
+                readOnly: true
+            }]);
+            editor.commands.addCommands([{
+                 name: "ACEMakeLink",
+                 bindKey: {
+                    mac: "Command-Shift-L"
+                 },
+                 exec: function(editor, line) {
+                    var sel = editor.getSelectedText();
+                    editor.session.insert(editor.getSelectionRange().start, '[' + sel + '](');
+                    editor.session.insert(editor.getSelectionRange().end, ')');
+                    editor.session.getSelection().moveCursorLeft();
+                 }
+             }]);
+            editor.commands.addCommands([{
+                 name: "ACEMakeImage",
+                 bindKey: {
+                    mac: "Command-Shift-I"
+                 },
+                 exec: function(editor, line) {
+                    var sel = editor.getSelectedText();
+                    editor.session.insert(editor.getSelectionRange().start, '![alt](');
+                    editor.session.insert(editor.getSelectionRange().end, ')');
+                    editor.session.getSelection().moveCursorLeft();
+                 }
+             }]);
+            editor.commands.addCommands([{
+                 name: "ACEMakeBold",
+                 bindKey: {
+                    mac: "Command-B"
+                 },
+                 exec: function(editor, line) {
+                    editor.session.insert(editor.getSelectionRange().start, '_');
+                    editor.session.insert(editor.getSelectionRange().end, '_');
+                    editor.session.getSelection().moveCursorLeft();
+                 }
+             }]);
+            editor.commands.addCommands([{
+                 name: "ACEMakeBold",
+                 bindKey: {
+                    mac: "Command-I"
+                 },
+                 exec: function(editor, line) {
+                    editor.session.insert(editor.getSelectionRange().start, '*');
+                    editor.session.insert(editor.getSelectionRange().end, '*');
+                    editor.session.getSelection().moveCursorLeft();
+                 }
+             }]);
+            editor.commands.addCommands([{
+                 name: "ACEMakeHeader1",
+                 bindKey: {
+                    mac: "Command-1"
+                 },
+                 exec: function(editor, line) {
+                    editor.session.insert({
+                        row: editor.getSelectionRange().start.row,
+                        column: 0}, '# ');
+                 }
+             }]);
+            editor.commands.addCommands([{
+                 name: "ACEMakeHeader2",
+                 bindKey: {
+                    mac: "Command-2"
+                 },
+                 exec: function(editor, line) {
+                    editor.session.insert({
+                        row: editor.getSelectionRange().start.row,
+                        column: 0}, '## ');
+                 }
+             }]);
+            editor.commands.addCommands([{
+                 name: "ACEMakeHeader3",
+                 bindKey: {
+                    mac: "Command-3"
+                 },
+                 exec: function(editor, line) {
+                    editor.session.insert({
+                        row: editor.getSelectionRange().start.row,
+                        column: 0}, '### ');
+                 }
+             }]);
+            editor.commands.addCommands([{
+                 name: "ACEMakeHeader4",
+                 bindKey: {
+                    mac: "Command-4"
+                 },
+                 exec: function(editor, line) {
+                    editor.session.insert({
+                        row: editor.getSelectionRange().start.row,
+                        column: 0}, '#### ');
+                 }
+             }]);
+            editor.commands.addCommands([{
+                 name: "ACEMakeHeader5",
+                 bindKey: {
+                    mac: "Command-5"
+                 },
+                 exec: function(editor, line) {
+                    editor.session.insert({
+                        row: editor.getSelectionRange().start.row,
+                        column: 0}, '##### ');
+                 }
+             }]);
+            editor.commands.addCommands([{
+                 name: "ACEMakeHeader6",
+                 bindKey: {
+                    mac: "Command-6"
+                 },
+                 exec: function(editor, line) {
+                    editor.session.insert({
+                        row: editor.getSelectionRange().start.row,
+                        column: 0}, '###### ');
+                 }
+             }]);
+            editor.commands.addCommands([{
+                name: "ACEReplace",
+                bindKey: {
+                    win: "Ctrl-Shift-F",
+                    mac: "Command-Shift-F"
+                },
+                exec: function(editor, line) {
+                    //ACEView.showReplaceInterface();
+                    return false;
+                },
+                readOnly: true
+            }]);
+            var reportChanges = true;
+            editor.on('change', function(delta) {
+                if (reportChanges) {
+                    //ACEView.aceTextDidChange();
+                }
+            });
+            var Range = require('ace/range').Range;
+        </script>
+    </body>
+</html>
