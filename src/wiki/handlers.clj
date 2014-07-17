@@ -6,6 +6,8 @@
             [org.httpkit.server :as server]
             [wiki.versions :as versions]
             [wiki.documents :as docs]
+            [ring.util.response :refer [response]]
+            [ring.middleware.json :refer [wrap-json-response]]
             [wiki.md :as md])
   (:gen-class :main :true))
 
@@ -33,6 +35,12 @@
                                         :title (docs/title doc)
                                         :content (md/convert-markdown version md-path)})))
 
+(defn show-document-json [request version doc]
+  (let [md-path (docs/md-path version doc)]
+    (response {:path doc
+               :title (docs/title doc)
+               :content (md/convert-markdown version md-path)})))
+
 (defroutes app-routes
   (route/resources "/")
   (GET "/" [] (redirect (str (versions/default) "/Quick_Start")))
@@ -40,11 +48,12 @@
   (POST "/_pls_" [] rebuild)
   (GET "/:version" [version] redirect-version)
   (GET "/:version/" [version] redirect-version)
+  (GET "/:version/*-json" [version doc] (check-document-middleware show-document-json))
   (GET "/:version/*" [version doc] (check-document-middleware show-document))
   (route/not-found "Page not found"))
 
 (def app
-  (-> (routes app-routes)))
+  (wrap-json-response (routes app-routes)))
 
 (defn -main [& args]
   (println "starting server @9095")
