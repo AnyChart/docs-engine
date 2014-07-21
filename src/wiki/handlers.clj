@@ -11,6 +11,9 @@
             [wiki.md :as md])
   (:gen-class :main :true))
 
+(defn get-env-from-domain [request]
+  (:server-name request))
+
 (defn rebuild [request]
   (versions/update)
   "Ты пришел и говоришь: движок, мне нужна документация. Но ты просишь без уважения, ты не предлагаешь дружбу, ты даже не сделал мне pull request.<br />Тем не менее я выполню твою просьбу.")
@@ -27,19 +30,26 @@
         (route/not-found "Document not found")))))
 
 (defn show-document [request version doc]
+  (println request)
   (let [md-path (docs/md-path version doc)] 
     (render-file "templates/page.html" {:versions (versions/versions)
                                         :version version
                                         :groups (docs/grouped-documents version)
                                         :path doc
                                         :title (docs/title doc)
-                                        :content (md/convert-markdown version md-path)})))
+                                        :content (md/convert-markdown
+                                                  version
+                                                  md-path
+                                                  (get-env-from-domain request))})))
 
 (defn show-document-json [request version doc]
   (let [md-path (docs/md-path version doc)]
     (response {:path doc
                :title (docs/title doc)
-               :content (md/convert-markdown version md-path)})))
+               :content (md/convert-markdown
+                         version
+                         md-path
+                         (get-env-from-domain request))})))
 
 (defroutes app-routes
   (route/resources "/")
