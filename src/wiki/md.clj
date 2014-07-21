@@ -19,9 +19,8 @@
   (str
    "<div class='sample'>
      <p>Live sample</p>
-     <a target='_blank' href='//" @playground-path "{{VERSION}}/samples/" sample-path "'>Launch in playground</a>
+     <a target='_blank' href='//" @playground-path "{{VERSION}}/samples/" sample-path "-plain'>Launch in playground</a>
      <iframe src='//" @playground-path "{{VERSION}}/samples/" sample-path "-iframe'></iframe></div>"))
-
 (defn sample-transformer [text state]
   [(if (or (:code state) (:codeblock state))
      text
