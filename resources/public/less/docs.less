@@ -14,12 +14,28 @@ html, body {
     border-bottom: 1px solid gray;
 
     p {
-	display: inline-block;
+	display: block;
 	float: right;
-	margin-right: 10px;
-	margin-top: 60px;
+	margin-top: 40px;
 	color: white;
 	font-weight: bold;
+	position: absolute;
+	right: 10px;
+
+	a, a:hover, a:visited {
+			color: white;
+			text-decoration: underline;
+		    }
+
+	&.version { top: -30px; }
+	&.copy {
+	    top: 0px;
+	    font-size: 14px;
+	    a, a:hover, a:visited { text-decoration: none; }
+	}
+	&.help {
+	    top: 20px;
+	}
     }
 }
 
