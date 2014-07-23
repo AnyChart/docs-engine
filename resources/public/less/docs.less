@@ -13,28 +13,35 @@ html, body {
     background-repeat: repeat-x;
     border-bottom: 1px solid gray;
 
-    p {
+    div {
 	display: block;
-	float: right;
 	margin-top: 40px;
 	color: white;
-	font-weight: bold;
 	position: absolute;
-	right: 10px;
+	right: 19px;
+	top: -23px;
+	line-height: 16px;
+	text-align: right;
 
-	a, a:hover, a:visited {
-			color: white;
-			text-decoration: underline;
-		    }
+	font-family: Tahoma, Arial, sans-serif;
+	font-size: 11px;
+    }
 
-	&.version { top: -30px; }
+    p {
+	&.version {
+	    color: rgba(255, 255, 255, 0.6);
+	}
 	&.copy {
-	    top: 0px;
-	    font-size: 14px;
-	    a, a:hover, a:visited { text-decoration: none; }
+	    a, a:hover, a:visited {
+			    color: white;
+			}
+	    a:hover { text-decoration: underline; }
 	}
 	&.help {
-	    top: 20px;
+	    a, a:hover, a:visited {
+			    color: white;
+			    text-decoration: underline;
+			}
 	}
     }
 }
