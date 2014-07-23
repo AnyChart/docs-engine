@@ -30,7 +30,6 @@
         (route/not-found "Document not found")))))
 
 (defn show-document [request version doc]
-  (println request)
   (let [md-path (docs/md-path version doc)] 
     (render-file "templates/page.html" {:versions (versions/versions)
                                         :version version
