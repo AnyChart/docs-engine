@@ -4,10 +4,10 @@
     <title>{{title}} - AnyChart Documentation</title>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
-    <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/img/favicon.ico?v=2" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link href="/css/reset.css" rel="stylesheet">
-    <link href="/css/docs.css" rel="stylesheet">
+    <link href="/css/docs.css?v=2" rel="stylesheet">
     <!-- syntaxhighlighter -->
     <script type="text/javascript" src="/syntaxhighlighter/scripts/shCore.js"></script>
     <script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushJScript.js"></script>
@@ -23,13 +23,17 @@
     </style>
     <!-- /syntaxhighlighter -->
     <script type="text/javascript" src="/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="/js/docs.js"></script>
+    <script type="text/javascript" src="/js/docs.js?v=2"></script>
   </head>
   <body>
     <div id="main">
       <div id="header">
 	<img src="/img/toplogo.jpg"/>
-	<p>Version: {{version}}<p>
+	<div>
+	  <p class="version">Version: {{version}}</p>
+	  <p class="copy"><a href="http://anychart.com">&copy; 2014 AnyChart.Com</a></p>
+	  <p class="help">Still have quetsions? <a href="http://support.anychart.com/" title="Support" target="_blank">Contact us!</a></p>
+	</div>
       </div>
       <div id="sidebar">
 	<ul>
@@ -41,7 +45,7 @@
 	    <a href="#"><i class="group open"></i><span>{{group.display_name}}</span></a>
 	    <ul>
               {% for page in group.pages %}
-              <li><a title="{{page.name}}" href="/{{version}}/{{page.url}}"><i class="page"></i><span>{{page.name}}</span></a></li>
+              <li><a class="page" title="{{page.name}}" href="/{{version}}/{{page.url}}"><i class="page"></i><span>{{page.name}}</span></a></li>
               {% endfor %}
 	    </ul>
 	  </li>
@@ -51,7 +55,7 @@
         {% for group in groups %}
         {% if not group.name %}
         {% for page in group.pages %}
-          <li><a title="{{page.name}}" href="/{{version}}/{{page.url}}"><i class="page"></i><span>{{page.name}}</span></a></li>
+          <li><a class="page" title="{{page.name}}" href="/{{version}}/{{page.url}}"><i class="page"></i><span>{{page.name}}</span></a></li>
         {% endfor %}
         {% endif %}
         {% endfor %}
