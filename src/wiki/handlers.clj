@@ -38,7 +38,7 @@
                                         :title (docs/title doc)
                                         :content (md/convert-markdown
                                                   version
-                                                  md-path
+                                                  (docs/get-content md-path)
                                                   (get-env-from-domain request))})))
 
 (defn show-document-json [request version doc]
@@ -47,7 +47,7 @@
                :title (docs/title doc)
                :content (md/convert-markdown
                          version
-                         md-path
+                         (docs/get-content md-path)
                          (get-env-from-domain request))})))
 
 (defroutes app-routes
