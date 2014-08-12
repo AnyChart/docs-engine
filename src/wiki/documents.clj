@@ -76,6 +76,12 @@
       1000
       p)))
 
+(defn get-group-index [meta]
+  (let [p (:index meta)]
+    (if (= p nil)
+      1000
+      p)))
+
 (defn title [url]
    (get-document-display-name url))
 
@@ -101,9 +107,10 @@
   (= 1 (wcar* (car/exists (redis-document-key version url)))))
 
 (defn get-docs-for-group [docs group]
-  {:name group
-   :display_name (get-group-display-name group)
-   :pages (sort-by (juxt :index :url) (filter #(= group (:group %)) docs))})
+  {:name (:group group)
+   :index (get-group-index group)
+   :display_name (get-group-display-name (:group group))
+   :pages (sort-by (juxt :index :url) (filter #(= (:group group) (:group %)) docs))})
 
 (defn build-grouped-documents [version]
   (log/info "build docs tree for" version)
@@ -113,15 +120,18 @@
                              :group (get-group url)})
                   (wcar* (car/smembers (redis-documents-list-key version))))
         groups (sort-by :group (set (map #(:group %) docs)))
-        grouped-docs (map #(get-docs-for-group docs %) groups)]
-    (log/info "groups" groups)
-    (map (fn [group]
-           (log/info group))
-         groups)
+        groups-with-meta (map (fn [group]
+                                (assoc (if group
+                                         (get-group-info-from-fs version group)
+                                         {}) :group group))
+                              groups)
+        grouped-docs (sort-by (juxt :index :name)
+                              (map #(get-docs-for-group docs %) groups-with-meta))]
+    (map (fn [meta]
+           (wcar* (car/set (redis-group-meta-key version (:group meta)) meta)))
+         groups-with-meta)
     (wcar* (car/set (redis-grouped-documents-key version) grouped-docs)))
   (log/info "done!"))
-
-(build-grouped-documents "develop")
 
 (defn grouped-documents [version]
   (wcar* (car/get (redis-grouped-documents-key version))))
