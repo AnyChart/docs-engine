@@ -21,5 +21,5 @@ after_success:
   - chmod 600 .travis/id_rsa
   - chmod 600 .travis/id_rsa.pub
   - ssh-add .travis/id_rsa
-  - scp -i .travis/id_rsa target/wiki-1.1-standalone.jar root@$SERVER:/apps/wiki/wiki-1.1-standalone.jar
+  - scp -i .travis/id_rsa target/uberjar/wiki-1.1-standalone.jar root@$SERVER:/apps/wiki/wiki-1.1-standalone.jar
   - ssh root@$SERVER "supervisorctl restart wiki"
