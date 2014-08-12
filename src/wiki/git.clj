@@ -55,8 +55,7 @@
 
 (defn actual-branches [path]
   (map (fn [s] (re-find #"master|develop" s))
-       (filter (fn [s] (and (not (.contains s "->"))
-                            (re-matches #"[ ]+origin/(master|develop)" s)))
+       (filter (fn [s] (not (.contains s "->")))
                (split (run-git path "branch" "-r") #"\n"))))
 
 (defn version-branches [path]
