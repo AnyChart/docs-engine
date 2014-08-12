@@ -140,7 +140,7 @@
   (:path (wcar* (car/get (redis-document-key version url)))))
 
 (defn doc-content [doc]
-  (let [code (clojure.string/replace doc #"(?s)(?m)(^\{[^\}]+\})" "")
+  (let [code (clojure.string/replace-first doc #"\A(?s)(?m)(^\{[^\}]+\})" "")
         s (trim-newline code)]
     (loop [index 0]
       (if (= 0 (.length s))
