@@ -42,8 +42,8 @@
 	{% for g in groups %}
         {% if g.name %}
           <li>
-	    <a href="#"><i class="group {% if g.name == group %}open{% else %}close{% endif %}"></i><span>{{g.display_name}}</span></a>
-	    <ul style="display:none">
+	    <a href="#"><i class="group {% ifequal g.name group %}open{% else %}close{% endifequal %}"></i><span>{{g.display_name}}</span></a>
+	    <ul style="display:{% ifequal g.name group %}block{% else %}none{% endifequal %}">
               {% for page in g.pages %}
               <li><a class="page" title="{{page.name}}" href="/{{version}}/{{page.url}}"><i class="page"></i><span>{{page.name}}</span></a></li>
               {% endfor %}
