@@ -35,6 +35,7 @@
                                         :version version
                                         :groups (docs/grouped-documents version)
                                         :path doc
+                                        :group (docs/get-group doc)
                                         :title (docs/title doc)
                                         :content (md/convert-markdown
                                                   version
@@ -52,7 +53,7 @@
 
 (defroutes app-routes
   (route/resources "/")
-  (GET "/" [] (redirect (str (versions/default) "/Quick_Start")))
+  (GET "/" [] (redirect (str (versions/default) "/Quick_Start/Quick_Start")))
   (GET "/_pls_" [] rebuild)
   (POST "/_pls_" [] rebuild)
   (GET "/:version" [version] redirect-version)

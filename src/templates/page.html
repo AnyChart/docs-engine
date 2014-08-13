@@ -39,12 +39,12 @@
 	<ul>
 	  <li><a href="#"><i class="group open"></i><span>AnyChart Documentation</span></a>
 	    <ul>
-	{% for group in groups %}
-        {% if group.name %}
+	{% for g in groups %}
+        {% if g.name %}
           <li>
-	    <a href="#"><i class="group open"></i><span>{{group.display_name}}</span></a>
-	    <ul>
-              {% for page in group.pages %}
+	    <a href="#"><i class="group {% if g.name == group %}open{% else %}close{% endif %}"></i><span>{{g.display_name}}</span></a>
+	    <ul style="display:none">
+              {% for page in g.pages %}
               <li><a class="page" title="{{page.name}}" href="/{{version}}/{{page.url}}"><i class="page"></i><span>{{page.name}}</span></a></li>
               {% endfor %}
 	    </ul>
