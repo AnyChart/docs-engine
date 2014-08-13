@@ -42,8 +42,8 @@
 	{% for group in groups %}
         {% if group.name %}
           <li>
-	    <a href="#"><i class="group open"></i><span>{{group.display_name}}</span></a>
-	    <ul>
+	    <a href="#"><i class="group close"></i><span>{{group.display_name}}</span></a>
+	    <ul style="display:none">
               {% for page in group.pages %}
               <li><a class="page" title="{{page.name}}" href="/{{version}}/{{page.url}}"><i class="page"></i><span>{{page.name}}</span></a></li>
               {% endfor %}
