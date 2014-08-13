@@ -33,8 +33,10 @@ $(function() {
     var updatePage = function(url, data) {
 	if (!data["title"]) return;
 	$(window).scrollTop(0);
+	
 	$("title").text(data["title"] + " - AnyChart documentation");
 	$("#content>.main").html(data['content']);
+	$("#content").scrollTop(0);
 
 	$(".main pre").wrap("<div class='code'></div>");
 	$("<p>Code</p>").insertBefore(".main .code pre");
