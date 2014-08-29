@@ -3,13 +3,17 @@
             [clojure.tools.logging :as log]
             [taoensso.carmine :as car]
             [wiki.data :refer (wcar*)]
-            [clojure.java.io :refer (file)]))
+            [clojure.java.io :refer (file)]
+            [clojure.string :refer (trim-newline)]))
 
 (defn redis-documents-list-key [version]
   (str "docs_v_" version "_documents"))
 
 (defn redis-document-key [version path]
   (str "docs_v_" version "_d_" path))
+
+(defn redis-group-meta-key [version path]
+  (str "docs_v_" version "_g_" path))
 
 (defn redis-grouped-documents-key [version]
   (str "docs_v_" version "_grouped_docs"))
@@ -53,6 +57,31 @@
 (defn get-document-display-name [url]
   (clojure.string/replace (get-name (str "/" url)) "_" " "))
 
+(defn get-document-info-from-fs [path]
+  (let [content (slurp path)
+        matches (re-matches #"(?s)(?m)(^\{[^\}]+\}).*" content)]
+    (if matches
+      (read-string (last matches))
+      {})))
+
+(defn get-group-info-from-fs [version path]
+  (let [f (file (str config/versions-path "/" version "/" path "/group.cfg"))]
+    (if (.exists f)
+      (read-string (slurp f))
+      {})))
+
+(defn get-document-index [version url]
+  (let [p (:index (:info (wcar* (car/get (redis-document-key version url)))))]
+    (if (= p nil)
+      1000
+      p)))
+
+(defn get-group-index [meta]
+  (let [p (:index meta)]
+    (if (= p nil)
+      1000
+      p)))
+
 (defn title [url]
    (get-document-display-name url))
 
@@ -70,24 +99,37 @@
 (defn process-document [version path]
   (let [url (get-url version path)]
     (wcar* (car/sadd (redis-documents-list-key version) url))
-    (wcar* (car/set (redis-document-key version url) (.getAbsolutePath path)))))
+    (wcar* (car/set (redis-document-key version url)
+                    {:info ( get-document-info-from-fs (.getAbsolutePath path))
+                     :path (.getAbsolutePath path)}))))
 
 (defn exists? [version url]
   (= 1 (wcar* (car/exists (redis-document-key version url)))))
 
 (defn get-docs-for-group [docs group]
-  {:name group
-   :display_name (get-group-display-name group)
-   :pages (sort-by :url (filter #(= group (:group %)) docs))})
+  {:name (:group group)
+   :index (get-group-index group)
+   :display_name (get-group-display-name (:group group))
+   :pages (sort-by (juxt :index :url) (filter #(= (:group group) (:group %)) docs))})
 
 (defn build-grouped-documents [version]
-  (log/info "build documents tree for" version)
+  (log/info "build docs tree for" version)
   (let [docs (map (fn [url] {:url url
                              :name (get-document-display-name url)
+                             :index (get-document-index version url)
                              :group (get-group url)})
                   (wcar* (car/smembers (redis-documents-list-key version))))
         groups (sort-by :group (set (map #(:group %) docs)))
-        grouped-docs (map #(get-docs-for-group docs %) groups)]
+        groups-with-meta (map (fn [group]
+                                (assoc (if group
+                                         (get-group-info-from-fs version group)
+                                         {}) :group group))
+                              groups)
+        grouped-docs (sort-by (juxt :index :name)
+                              (map #(get-docs-for-group docs %) groups-with-meta))]
+    (map (fn [meta]
+           (wcar* (car/set (redis-group-meta-key version (:group meta)) meta)))
+         groups-with-meta)
     (wcar* (car/set (redis-grouped-documents-key version) grouped-docs)))
   (log/info "done!"))
 
@@ -95,8 +137,21 @@
   (wcar* (car/get (redis-grouped-documents-key version))))
 
 (defn md-path [version url]
-  (wcar* (car/get (redis-document-key version url))))
+  (:path (wcar* (car/get (redis-document-key version url)))))
 
+(defn doc-content [doc]
+  (let [code (clojure.string/replace-first doc #"\A(?s)(?m)(^\{[^\}]+\})" "")
+        s (trim-newline code)]
+    (loop [index 0]
+      (if (= 0 (.length s))
+        ""
+        (let [ch (.charAt s index)]
+          (if (or (= ch \newline) (= ch \return))
+            (recur (inc index))
+            (.. s (subSequence index (.length s)) toString)))))))
+
+(defn get-content [path]
+  (doc-content (slurp path)))
 
 (defn update [version]
   (log/info "building documents for" version)

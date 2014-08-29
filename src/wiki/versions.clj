@@ -32,8 +32,7 @@
   (git/run-sh "rm" "-rf" (str config/versions-path))
   (git/run-sh "mkdir" (str config/versions-path))
   (let [versions (if (:show-branches config/config)
-                   (concat (git/version-branches config/repo-path)
-                           (git/actual-branches config/repo-path))
+                   (git/actual-branches config/repo-path)
                    (git/version-branches config/repo-path))]
     (log/info "available versions:" versions)
     (doseq [v versions]

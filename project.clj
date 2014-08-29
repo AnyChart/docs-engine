@@ -1,4 +1,4 @@
-(defproject wiki "1.0"
+(defproject wiki "1.1"
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [org.clojure/clojure-contrib "1.2.0"]
                  [org.clojure/tools.logging "0.3.0"]

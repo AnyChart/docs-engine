@@ -32,9 +32,9 @@
          text)))
    state])
 
-(defn convert-markdown [version path env]
+(defn convert-markdown [version content env]
   (set-playground-path env)
-  (clojure.string/replace (md-to-html-string (slurp path)
+  (clojure.string/replace (md-to-html-string content
                                              :heading-anchors true
                                              :custom-transformers [sample-transformer])
                           #"\{\{VERSION\}\}" version))
