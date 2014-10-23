@@ -136,6 +136,12 @@
 (defn grouped-documents [version]
   (wcar* (car/get (redis-grouped-documents-key version))))
 
+
+(defn get-group-first-doc [version path]
+  (let [grouped (grouped-documents version)
+        group (first (filter #(= (:name %) path) grouped))]
+    (:url (first (:pages group)))))
+
 (defn md-path [version url]
   (:path (wcar* (car/get (redis-document-key version url)))))
 

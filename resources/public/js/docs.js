@@ -1,5 +1,6 @@
 $(function() {
-    $("li i.group").parent().click(function() {
+    $("li i.group").parent().click(function(e) {
+	if (e.altClick || e.ctrlClick || e.metaKey) return true;
 	var $li = $(this).parent();
 	var $ul = $li.find("ul");
 	$ul.toggle();
@@ -51,7 +52,8 @@ $(function() {
 	});
     };
 
-    $("#sidebar .page").click(function() {
+    $("#sidebar .page").click(function(e) {
+	if (e.altClick || e.ctrlClick || e.metaKey) return true;
 	if (window.history && window.history.pushState) {
 	    var $this = $(this);
 	    var href = $this.attr('href');

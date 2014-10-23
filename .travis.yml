@@ -20,3 +20,5 @@ after_success:
   - ssh-add .travis/id_rsa
   - scp -i .travis/id_rsa target/uberjar/wiki-1.1-standalone.jar root@$SERVER:/apps/wiki/wiki-1.1-standalone.jar
   - ssh root@$SERVER "supervisorctl restart wiki"
+notifications:
+  slack: anychart-team:sJRPhNn8Ur8yVdhvhgp6EbDM
