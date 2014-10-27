@@ -10,7 +10,8 @@
                  [markdown-clj "0.9.41"]
                  [com.taoensso/carmine "2.4.6"]
                  [sphinxapi "2.0.3"]
-                 [http-kit "2.1.16"]]
+                 [http-kit "2.1.16"]
+                 [version-clj "0.1.0"]]
   :main wiki.handlers
   :target-path "target/%s"
   :aot :all
