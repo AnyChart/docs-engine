@@ -1,4 +1,25 @@
 $(function() {
+
+    var $versions = $("#versions");
+
+    $("#version").click(function(e) {
+	e.stopPropagation();
+	if (!$versions.is(":visible")) {
+	    $versions.show();
+	    $(this).find("i").removeClass("fa-caret-right");
+	    $(this).find("i").addClass("fa-caret-down");
+	}else {
+	    $versions.hide();
+	    $(this).find("i").addClass("fa-caret-right");
+	    $(this).find("i").removeClass("fa-caret-down");
+	}
+	return false;
+    });
+
+    $(window).click(function() {
+	$versions.hide();
+    });
+    
     $("li i.group").parent().click(function(e) {
 	if (e.altClick || e.ctrlClick || e.metaKey) return true;
 	var $li = $(this).parent();
