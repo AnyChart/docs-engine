@@ -4,13 +4,14 @@
             [wiki.git :as git]
             [taoensso.carmine :as car]
             [wiki.data :refer (wcar*)]
+            [version-clj.core :refer [version-compare]]
             [wiki.documents :as docs]))
 
 (def redis-versions-key
   (str "docs_versions"))
 
 (defn versions []
-  (wcar* (car/smembers redis-versions-key)))
+  (reverse (sort version-compare (wcar* (car/smembers redis-versions-key)))))
 
 (defn exists? [version]
   (= 1 (wcar* (car/sismember redis-versions-key version))))
