@@ -10,22 +10,23 @@
             [ring.middleware.json :refer [wrap-json-response]]
             [org.httpkit.client :as http]
             [cheshire.core :refer [generate-string]]
+            [taoensso.carmine.message-queue :as car-mq]
+            [taoensso.carmine :as car]
             [wiki.md :as md])
   (:gen-class :main :true))
 
 (defn get-env-from-domain [request]
   (:server-name request))
 
-(defn notify-slack []
+(defn notify-slack [base-url status]
   (http/post "https://anychart-team.slack.com/services/hooks/incoming-webhook?token=P8Z59E0kpaOqTcOxner4P5jb"
-             {:form-params {:payload (generate-string {:text (str "Documentation deployed")
+             {:form-params {:payload (generate-string {:text (str "http://" base-url " documentation update: " status)
                                                        :channel "#notifications"
                                                        :username "docs-engine"})}}))
 
 (defn rebuild [request]
-  (versions/update)
-  (notify-slack)
-  (str "done"))
+  (wcar* (car-mq/enqueue "docs-queue" "update"))
+  (str "ok"))
 
 (defn redirect-version [request]
   (redirect (str "/" (-> request :route-params :version) "/Quick_Start")))
@@ -85,6 +86,25 @@
 (def app
   (wrap-json-response (routes app-routes)))
 
-(defn -main [& args]
+(defn start-server [base-url]
   (println "starting server @9095")
+
+  (def update-worker
+    (car-mq/worker wiki.data/server-conn "docs-queue"
+                   {:handler (fn [{:keys [message attempt]}]
+                               (try
+                                 (do
+                                   (versions/update)
+                                   (notify-slack base-url "success")
+                                   {:status :success})
+                                 (catch Exception e
+                                   (do
+                                     (println e)
+                                     (notify-slack base-url "failed")
+                                     {:status :success}))))}))
+  
   (server/run-server #'app {:port 9095}))
+
+(defn -main
+  ([] (start-server "dev"))
+  ([base-url] (start-server base-url)))
