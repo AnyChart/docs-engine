@@ -12,11 +12,10 @@ body {
 }
 #header div {
   display: block;
-  margin-top: 51px;
   color: white;
   position: absolute;
   right: 19px;
-  top: -23px;
+  top: 7px;
   line-height: 16px;
   text-align: right;
   font-family: Tahoma, Arial, sans-serif;
@@ -59,6 +58,9 @@ body {
   margin-right: 10px;
   border: 1px solid #c7c7c7;
   text-align: center;
+  margin-bottom: 10px;
+  font-weight: normal;
+  font-size: 12px;
 }
 #sidebar #version i {
   font-size: 14px;
@@ -66,7 +68,7 @@ body {
 #sidebar #versions {
   display: none;
   position: absolute;
-  margin-top: -5px;
+  margin-top: -10px;
   right: 18px;
   left: 8px;
   background-color: white;
