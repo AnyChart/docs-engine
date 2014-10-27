@@ -12,6 +12,7 @@
             [cheshire.core :refer [generate-string]]
             [taoensso.carmine.message-queue :as car-mq]
             [taoensso.carmine :as car]
+            [wiki.data :refer (wcar*)]
             [wiki.md :as md])
   (:gen-class :main :true))
 
