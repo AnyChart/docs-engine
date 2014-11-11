@@ -53,6 +53,13 @@
                                                   (docs/get-content md-path)
                                                   (get-env-from-domain request))})))
 
+(defn redirect-to-document [request]
+  (let [version (-> request :route-params :version)
+        path (-> request :route-params :*)]
+    (if (docs/exists? version path)
+      (redirect (str "/" version "/" path))
+      (redirect (str "/" version)))))
+
 (defn show-document [request]
   (let [version (-> request :route-params :version)
         path (-> request :route-params :*)]
@@ -80,6 +87,7 @@
   (POST "/_pls_" [] rebuild)
   (GET "/:version" [version] redirect-version)
   (GET "/:version/" [version] redirect-version)
+  (GET "/:version/check/*" [version doc] redirect-to-document)
   (GET "/:version/*-json" [version doc] (check-document-middleware show-document-json))
   (GET "/:version/*" [version doc] show-document)
   (route/not-found "Page not found"))

@@ -5,8 +5,7 @@
                  "/apps/wiki"))
 (def data-path (str base-path "/data"))
 (def config (if (System/getProperty "dev")
-              {:git "/Users/alex/Work/anychart/docs-engine/keys/git"
-               :show-branches true
+              {:show-branches true
                :playground "playground.anychart.dev/acdvf-docs/"}
               {:git "/apps/wiki/keys/git"
                :show-branches true

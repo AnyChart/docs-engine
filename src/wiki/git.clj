@@ -5,7 +5,8 @@
             [clojure.string :refer [split trim]]
             [wiki.config :refer [config]]))
 
-(def env-config {:GIT_SSH (:git config)})
+(def env-config (if (:git config)
+                  {:GIT_SSH (:git config)}))
 
 (defn run-sh [& command]
   (with-sh-env env-config

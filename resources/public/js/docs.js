@@ -52,9 +52,22 @@ $(function() {
 	$(window).on("mouseup", stopResizing);
     });
 
+    var updateCurrentPage = function(url) {
+        console.log(url);
+        $(".groups .selected").removeClass("selected");
+        $(".groups a[href='"+url+"']").addClass("selected");
+    };
+
     var updatePage = function(url, data) {
+        updateCurrentPage(url);
+        
 	if (!data["title"]) return;
 	$(window).scrollTop(0);
+
+        $("#versions li a").each(function() {
+            var $this = $(this);
+            $this.attr("href", "/" + $(this).attr("x-version") + "/check/" + data["path"]);
+        });
 	
 	$("title").text(data["title"] + " - AnyChart documentation");
 	$("#content>.main").html(data['content']);
@@ -66,8 +79,14 @@ $(function() {
 	SyntaxHighlighter.highlight();
     };
 
+    var locker = true;
+
     window.onpopstate = function(event) {
-	var href = document.location;
+        if (locker) {
+            locker = false;
+            return;
+        }
+        var href = document.location;
 	$.get(href+"-json", function(data) {
 	    updatePage(href, data);
 	});
@@ -87,4 +106,6 @@ $(function() {
 	    return true;
 	}
     });
+
+    updateCurrentPage(location.pathname);
 });
