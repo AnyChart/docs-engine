@@ -4,14 +4,12 @@ script: lein2 uberjar
 branches:
   only:
   - master
-  - develop
   - staging
 services:
   - redis-server
 after_success:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then export SERVER="docs.anychart.com"; fi
-  - if [ "$TRAVIS_BRANCH" == "staging" ]; then export SERVER="176.9.224.5"; fi
-  - if [ "$TRAVIS_BRANCH" == "develop" ]; then export SERVER="176.9.224.4"; fi
+  - if [ "$TRAVIS_BRANCH" == "staging" ]; then export SERVER="91.239.26.11"; fi
   - echo "Deploying to $SERVER"
   - cp .travis/known_hosts ~/.ssh/known_hosts
   - chmod 600 ~/.ssh/known_hosts
@@ -20,3 +18,5 @@ after_success:
   - ssh-add .travis/id_rsa
   - scp -i .travis/id_rsa target/uberjar/wiki-1.1-standalone.jar root@$SERVER:/apps/wiki/wiki-1.1-standalone.jar
   - ssh root@$SERVER "supervisorctl restart wiki"
+notifications:
+  slack: anychart-team:sJRPhNn8Ur8yVdhvhgp6EbDM

@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link href="/css/reset.css" rel="stylesheet">
     <link href="/css/docs.css?v=2" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- syntaxhighlighter -->
     <script type="text/javascript" src="/syntaxhighlighter/scripts/shCore.js"></script>
     <script type="text/javascript" src="/syntaxhighlighter/scripts/shBrushJScript.js"></script>
@@ -28,21 +29,31 @@
   <body>
     <div id="main">
       <div id="header">
-	<img src="/img/toplogo.jpg"/>
+	<a href="/"><img src="/img/toplogo.jpg"/></a>
 	<div>
-	  <p class="version">Version: {{version}}</p>
-	  <p class="copy"><a href="http://anychart.com">&copy; 2014 AnyChart.Com</a></p>
 	  <p class="help">Still have questions? <a href="http://support.anychart.com/" title="Support" target="_blank">Contact us!</a></p>
+	  <p class="copy"><a href="http://anychart.com">&copy; 2014 AnyChart.Com</a></p>
 	</div>
       </div>
       <div id="sidebar">
-	<ul>
-	  <li><a href="#"><i class="group open"></i><span>AnyChart Documentation</span></a>
+	<a id="version" href="#"><i class="fa fa-caret-right"></i> Version {{version}}</a>
+	<div id="versions">
+	  <ul>
+	  {% for v in versions %}
+	  {% ifequal v version %}
+	  {% else %}
+	    <li><a href="/{{v}}/check/{{path}}" x-version="{{v}}">Version {{v}}</a></li>
+	  {% endifequal %}
+	  {% endfor %}
+	  </ul>
+	</div>
+	<ul class="groups">
+	  <li><a href="/{{version}}"><i class="group open"></i><span>AnyChart Documentation</span></a>
 	    <ul>
 	{% for g in groups %}
         {% if g.name %}
           <li>
-	    <a href="#"><i class="group {% ifequal g.name group %}open{% else %}close{% endifequal %}"></i><span>{{g.display_name}}</span></a>
+	    <a href="/{{version}}/{{g.name}}"><i class="group {% ifequal g.name group %}open{% else %}close{% endifequal %}"></i><span>{{g.display_name}}</span></a>
 	    <ul style="display:{% ifequal g.name group %}block{% else %}none{% endifequal %}">
               {% for page in g.pages %}
               <li><a class="page" title="{{page.name}}" href="/{{version}}/{{page.url}}"><i class="page"></i><span>{{page.name}}</span></a></li>
