@@ -82,6 +82,15 @@ wiki                             BACKOFF    Exited too quickly (process log may 
 `BACKOFF` это нормально - мы еще не выложили приложение.
 
 # nginx configuration
+Правим файл `/etc/nginx/nginx.conf` Заменяем строчку
+```
+#gzip on;
+```
+на
+```
+gzip on;
+```
+
 Создаем `/etc/nginx/conf.d/docs.anychart.com.conf`
 ```
 upstream http_backend {
@@ -240,3 +249,72 @@ payload url: `http://server-ip/_pls_`
 
 # [только для stg] Отключаем отдачу для всех кроме тех, у кого есть правильный /etc/hosts
 # Правим настройки деплоя для travis
+
+# Пароль для хуков
+Создаем `/etc/nginx/conf.d/htpasswd` со следующим содержанием:
+```
+robot:$apr1$uS/pYA8p$YOHNc2Lzy98ozGuNZEUWK1
+```
+
+# [staging only] закрываем хуки
+ip github-а берем отсюда: https://help.github.com/articles/what-ip-addresses-does-github-use-that-i-should-whitelist/
+Правим `/etc/nginx/conf.d/default.conf`:
+```
+server {
+    listen       80;
+    server_name  localhost;
+
+    location / {
+        return 404;
+    }
+
+    location =/_pls_ {
+        satisfy any;
+        allow 192.30.252.0/22;
+        auth_basic "Unauthorized";
+        auth_basic_user_file /etc/nginx/conf.d/htpasswd;
+
+        proxy_pass  http://127.0.0.1:9095;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}
+```
+Не забываем `service nginx restart`
+
+# [production only] закрываем хуки
+Правим файл `/etc/nginx/conf.d/docs.anychart.com.conf`, добавляем location `_pls_`:
+```
+    location =/_pls_ {
+        satisfy any;
+        allow 192.30.252.0/22;
+        auth_basic "Unauthorized";
+        auth_basic_user_file /etc/nginx/conf.d/htpasswd;
+
+        proxy_pass  http://http_backend;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+```
+Не забываем `service nginx restart`
+
+Проверяем хуки в настройках гитхаба (status должен быть 200)
+
+# Правим настройки travis
+В файле `.travis.yml` в проекте правим:
+```
+  - if [ "$TRAVIS_BRANCH" == "staging" ]; then export SERVER="91.239.26.11"; fi
+```
+На актуальный ip staging сервера.
+
+Далее файл `.travis/known_hosts` В нем нам надо держать две записи. 1-я для com домена и деплоя в прод. Береме ее из своих `~/.ssh/known_hosts` И вторая - по ip, для stg. Берем ее из своиз `~/.ssh/known_hosts` но БЕЗ доменного имени. Пример:
+```
+docs.anychart.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDCDBNLKF2sznyBLyEO/TfVh0Fni2WrrEeo4oX784BHu9/mIU8mmYNd5RZhtdX61M0sEKP8vKlZwwjc6dFX6BcIk7saMdc3pRzvuzYpt7+c7dokjFBdR4AIxvNttyVvbZTE7YcpIfgAvUEREDry+FBd8IaUAuPzrVKektZIGgKogA5ai7m+ho0YbQS73v37o3MUPn0D148kdW8arCzcflLta1IFAOmgwAj5W4m7Ktw3rVrGgZt1rRErfA1gv2xFFE+LuFx87osMfWwXgkESjePhNTE0yzkbcwKXD9Xa/xi4ea/5PcfdAMDeIJ/GNpe5+swPq/5/lMzzh9PR2yMc+Nwj
+91.239.26.11 ssh-dss AAAAB3NzaC1kc3MAAACBAJR+Cm+czEdR5tNj2AGNxni73RWzSyoWvyQ2l70zDmkQKeFLC5hsXay7IENLAhXPsZbUteVrI+65c/BYbwOdZ8wWKhD3nOMD2gim5W7kLfMUymffY3j3AtdQgE8U5m6zf5bqJuQYiax/WWbqsnoJd/VGzYCkQIero5kUeWsX4ZslAAAAFQDgs1c1lgTIX+TJFO7bflRkRnZizQAAAIBV7I4ldj2HEINlmIrwGFaF2KrPI3lNjwBGmKbqXFiruCr1ovCGFPLu9FEPsz7SMkbB9Py070WxtmhvlXRqEPKU5Y+9tWSO3ydRcqtREygadaIaCgsp57gf2q/j41gM4BRgExtJBrUPDF2rnfrEBJiLvnLoRFnG6gpE17TTUsurlgAAAIAN4eftSEqhL3uEeAQtTpJb6UjqnjS85djvqNrwyD3f6sXFjO9M/UYz+ejeP0IdKhPHXhc2+Oe1Mt0MGXPtxmrI55YvZarXW2TnCEXTWNJOt3bpYqxAqqs1xbX4Lpo9gKNI4ILGzkqomcEuJzakaLO8AwEGmYXp5If4MPoMq4/8Ug==
+```
+
+Не забываем, что надо вмерджить это и в `master` и в `develop`
+
+Подставляем актуальный ip staging сервера. Не забываем, что изменения должны быть как в master, так и в staging ветках. Проверяем по логу билда в travis что деплой проходит успешно. ВАЖНО: green status значит что все собралось, но не значит что все задеплоилось. Объязательно проверить в логе первые разы что последние команды успешны
+
+Если деплой не проходит с ошибкой авторизации - убедитесь, что в `~/.ssh/authorized_keys` есть ключ anychart large conference room (он же лежит в `.travis/id_rsa.pub`)
