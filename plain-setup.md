@@ -142,7 +142,7 @@ exec /usr/bin/ssh -o StrictHostKeyChecking=no -i /apps/wiki/keys/id_rsa "$@"
 ```
 
 Так же кладем приватный `id_rsa` и публичный `id_rsa.pub` ключи в папку `/apps/wiki/keys`
-Я использую ключи anychart large conference room. По этим ключам должен быть разрешен доступ ко всем проектам, которые есть в playground.
+Я использую ключи anychart-robot. По этим ключам должен быть разрешен доступ к acdvf-docs.
 
 Настраиваем права:
 ```
