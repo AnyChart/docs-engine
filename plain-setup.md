@@ -89,6 +89,7 @@ wiki                             BACKOFF    Exited too quickly (process log may 
 на
 ```
 gzip on;
+gzip_types    text/plain application/javascript application/x-javascript text/javascript text/xml text/css text/html;
 ```
 
 Создаем `/etc/nginx/conf.d/docs.anychart.com.conf`
