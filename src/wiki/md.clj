@@ -54,10 +54,7 @@
    state])
 
 (defn build-reference-link [title link]
-  (let [link (if (re-find #"\#.*" link)
-               (clojure.string/replace link #"\#" ".html#")
-               (str link ".html"))]
-    (str "<a href='" @reference-path "{{VERSION}}/" link "'>" title "</a>")))
+  (str "<a href='" @reference-path "{{VERSION}}/" link "'>" title "</a>"))
 
 (defn api-reference-transformer [text state]
   [(if (or (:code state) (:codeblock state))
