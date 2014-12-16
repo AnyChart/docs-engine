@@ -69,4 +69,5 @@
 
 (defn checkout-to [path branch target]
   (run-sh "cp" "-R" path target)
-  (run-git target "checkout" branch))
+  (run-git target "checkout" branch)
+  (run-git target "pull" "origin" branch))

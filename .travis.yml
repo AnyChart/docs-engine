@@ -9,7 +9,7 @@ services:
   - redis-server
 after_success:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then export SERVER="docs.anychart.com"; fi
-  - if [ "$TRAVIS_BRANCH" == "staging" ]; then export SERVER="91.239.26.11"; fi
+  - if [ "$TRAVIS_BRANCH" == "staging" ]; then export SERVER="104.236.109.246"; fi
   - echo "Deploying to $SERVER"
   - cp .travis/known_hosts ~/.ssh/known_hosts
   - chmod 600 ~/.ssh/known_hosts
