@@ -59,19 +59,27 @@
 (defn api-reference-transformer [text state]
   [(if (or (:code state) (:codeblock state))
      text
-     (let [matches (re-matches #".*(\{api:([^}]+)\}(.*)\{api\}).*" text)
+     (let [matches (re-matches #".*(\{api:([^}]+)\}([^\{]+)\{api\}).*" text)
            source (nth matches 1)
            link (nth matches 2)
            title (last matches)]
+       (if matches
+         (println source))
        (if matches
          (str-utils/replace text source (build-reference-link title link))
          text)))
    state])
 
+(defn- fix-api-links [text]
+  (clojure.string/replace text
+                          #"\{api:([^}]+)\}([^{]+)\{api\}"
+                          (fn [[_ link title]]
+                            (build-reference-link title link))))
+
 (defn convert-markdown [version content env]
   (set-playground-path env)
-  (clojure.string/replace (md-to-html-string content
-                                             :heading-anchors true
-                                             :custom-transformers [sample-transformer
-                                                                   api-reference-transformer])
+  (clojure.string/replace (fix-api-links
+                           (md-to-html-string content
+                                              :heading-anchors true
+                                              :custom-transformers [sample-transformer]))
                           #"\{\{VERSION\}\}" version))
