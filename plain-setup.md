@@ -89,6 +89,7 @@ wiki                             BACKOFF    Exited too quickly (process log may 
 на
 ```
 gzip on;
+gzip_types    text/plain application/javascript application/x-javascript text/javascript text/xml text/css text/html;
 ```
 
 Создаем `/etc/nginx/conf.d/docs.anychart.com.conf`
@@ -142,7 +143,7 @@ exec /usr/bin/ssh -o StrictHostKeyChecking=no -i /apps/wiki/keys/id_rsa "$@"
 ```
 
 Так же кладем приватный `id_rsa` и публичный `id_rsa.pub` ключи в папку `/apps/wiki/keys`
-Я использую ключи anychart large conference room. По этим ключам должен быть разрешен доступ ко всем проектам, которые есть в playground.
+Я использую ключи anychart-robot. По этим ключам должен быть разрешен доступ к acdvf-docs.
 
 Настраиваем права:
 ```
@@ -318,3 +319,6 @@ docs.anychart.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDCDBNLKF2sznyBLyEO/TfVh0
 Подставляем актуальный ip staging сервера. Не забываем, что изменения должны быть как в master, так и в staging ветках. Проверяем по логу билда в travis что деплой проходит успешно. ВАЖНО: green status значит что все собралось, но не значит что все задеплоилось. Объязательно проверить в логе первые разы что последние команды успешны
 
 Если деплой не проходит с ошибкой авторизации - убедитесь, что в `~/.ssh/authorized_keys` есть ключ anychart large conference room (он же лежит в `.travis/id_rsa.pub`)
+
+# только для production - обновляем dns
+Обновляем dns на 1and1

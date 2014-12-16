@@ -53,7 +53,6 @@ $(function() {
     });
 
     var updateCurrentPage = function(url) {
-        console.log(url);
         $(".groups .selected").removeClass("selected");
         $(".groups a[href='"+url+"']").addClass("selected");
     };
