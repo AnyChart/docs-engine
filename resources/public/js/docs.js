@@ -74,7 +74,13 @@ $(function() {
 
 	$(".main pre").wrap("<div class='code'></div>");
 	$("<p>Code</p>").insertBefore(".main .code pre");
-	$(".main pre").addClass("brush: js");
+        $(".main pre").each(function() {
+            var $this = $(this);
+            if ($this.hasClass("brush: highlight_off"))
+                $this.removeClass("brush: highlight_off");
+            else
+                $this.addClass("brush: js");
+        });
 	SyntaxHighlighter.highlight();
     };
 
