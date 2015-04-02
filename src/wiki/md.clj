@@ -20,9 +20,9 @@
   (set-reference-path env)
   (swap! playground-path (fn [val & args]
                            (case env
-                             "docs.anychart.com" "//playground.anychart.com/acdvf-docs"
-                             "docs.anychart.dev" "//playground.anychart.dev/acdvf-docs"
-                             "docs.anychart.stg" "//playground.anychart.stg/acdvf-docs"
+                             "docs.anychart.com" "//playground.anychart.com/docs"
+                             "docs.anychart.dev" "//playground.anychart.dev/docs"
+                             "docs.anychart.stg" "//playground.anychart.stg/docs"
                              "//playground.anychart.stg/acdvf-docs"))))
 
 (defn build-sample-embed [sample-path custom-settings]
