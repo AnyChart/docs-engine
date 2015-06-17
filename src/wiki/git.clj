@@ -45,6 +45,7 @@
   ; or work in main thread, terrible terrible bug
   (let [res (future (str (run-git path "fetch")))]
     @res
+    (run-git path "fetch" "-p")
     (unlock path)
     "Updated"))
 
