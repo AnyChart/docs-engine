@@ -43,9 +43,8 @@
   (lock path)
   ; should test lock. probably not working correctly :(
   ; or work in main thread, terrible terrible bug
-  (let [res (future (str (run-git path "fetch")))]
+  (let [res (future (str (run-git path "fetch" "-p")))]
     @res
-    (run-git path "fetch" "-p")
     (unlock path)
     "Updated"))
 
