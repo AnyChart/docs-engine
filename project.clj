@@ -7,7 +7,7 @@
                  [ring/ring-json "0.3.1"]
                  [selmer "0.5.9"]
                  [org.clojure/data.json "0.2.4"]
-                 [markdown-clj "0.9.67"]
+                 [markdown-clj "0.9.41"]
                  [com.taoensso/carmine "2.4.6"]
                  [sphinxapi "2.0.3"]
                  [http-kit "2.1.16"]
