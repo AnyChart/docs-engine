@@ -32,6 +32,12 @@
 (defn redirect-version [request]
   (redirect (str "/" (-> request :route-params :version) "/Quick_Start")))
 
+(defn redirect-latest [request]
+  (redirect (str "/" (versions/default) "/Quick_Start")))
+
+(defn redirect-latest-doc [request]
+  (redirect (str "/" (versions/default) "/" (-> request :route-params :*))))
+
 (defn check-document-middleware [app]
   (fn [request]
     (let [version (-> request :route-params :version)
@@ -85,6 +91,9 @@
   (GET "/" [] (redirect (str (versions/default) "/Quick_Start/Quick_Start")))
   (GET "/_pls_" [] rebuild)
   (POST "/_pls_" [] rebuild)
+  (GET "/latest" [] redirect-latest)
+  (GET "/latest/" [] redirect-latest)
+  (GET "/latest/*" [] redirect-latest-doc)
   (GET "/:version" [version] redirect-version)
   (GET "/:version/" [version] redirect-version)
   (GET "/:version/check/*" [version doc] redirect-to-document)
