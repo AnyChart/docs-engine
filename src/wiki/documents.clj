@@ -1,6 +1,5 @@
 (ns wiki.documents
   (:require [wiki.config :as config]
-            [clojure.tools.logging :as log]
             [taoensso.carmine :as car]
             [wiki.data :refer (wcar*)]
             [clojure.java.io :refer (file)]
@@ -113,7 +112,7 @@
    :pages (sort-by (juxt :index :url) (filter #(= (:group group) (:group %)) docs))})
 
 (defn build-grouped-documents [version]
-  (log/info "build docs tree for" version)
+  ;;(log/info "build docs tree for" version)
   (let [docs (map (fn [url] {:url url
                              :name (get-document-display-name url)
                              :index (get-document-index version url)
@@ -131,7 +130,7 @@
            (wcar* (car/set (redis-group-meta-key version (:group meta)) meta)))
          groups-with-meta)
     (wcar* (car/set (redis-grouped-documents-key version) grouped-docs)))
-  (log/info "done!"))
+  )
 
 (defn grouped-documents [version]
   (wcar* (car/get (redis-grouped-documents-key version))))
@@ -160,8 +159,6 @@
   (doc-content (slurp path)))
 
 (defn update [version]
-  (log/info "building documents for" version)
   (doseq [path (get-all-documents-from-fs version)]
     (process-document version path))
-  (build-grouped-documents version)
-  (log/info "done!"))
+  (build-grouped-documents version))

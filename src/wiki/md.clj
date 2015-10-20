@@ -1,6 +1,6 @@
 (ns wiki.md
   (:require [selmer.filters :refer [add-filter!]]
-            [clojure.contrib.str-utils2 :as str-utils]
+            [clojure.string :as str-utils]
             [markdown.core :refer [md-to-html-string]]))
 
 (def playground-path (atom ()))
