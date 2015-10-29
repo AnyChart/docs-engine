@@ -2,6 +2,7 @@
   (:require [wiki.generator.versions :as vgen]
             [wiki.generator.documents :as dgen]
             [wiki.generator.struct :refer [get-struct]]
+            [wiki.generator.tree :as tree-gen]
             [wiki.components.notifier :as notifications]
             [wiki.data.versions :as vdata]
             [taoensso.timbre :as timbre :refer [info error]]))
@@ -12,10 +13,11 @@
       (info "building" branch)
       (notifications/start-version-building notifier (:name branch))
       (let [data (get-struct (str data-dir "/versions/" (:name branch)))
+            tree (tree-gen/generate-tree data)
             version-id (vdata/add-version jdbc
                                           (:name branch)
                                           (:commit branch)
-                                          nil)]
+                                          tree)]
         (try
           (do
             (dgen/generate jdbc {:id version-id

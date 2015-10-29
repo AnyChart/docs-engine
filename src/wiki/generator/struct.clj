@@ -9,6 +9,10 @@
 (defn- is-doc [f]
   (re-matches #".*\.md$" (-> f .getName .toLowerCase)))
 
+(defn- get-name [f]
+  (-> f .getName
+      (clojure.string/replace #"\.md$" "")))
+
 (defn- has-docs [f]
   (some #(or (is-doc %)
              (and (.isDirectory %)
@@ -25,7 +29,7 @@
 (defn- create-document [item]
   (let [content (slurp item)
         doc-header (re-matches #"(?s)(?m)(^\{[^\}]+\}).*" content)
-        res {:name (.getName item)
+        res {:name (get-name item)
              :title (title item)
              :content content
              :config {:index 1000}}]
@@ -36,7 +40,7 @@
 (declare build-struct)
 
 (defn- create-folder [item]
-  (let [res {:name (.getName item)
+  (let [res {:name (get-name item)
              :title (title item)
              :config {:index 1000}
              :children (reduce build-struct []
@@ -56,7 +60,29 @@
          (has-docs item)) (conj items {} (create-folder item))
     :else items))
 
+(defn- get-index [item]
+  (if (= (:name item) "index")
+    -1000
+    (or (-> item :config :index)
+        1000)))
+
+(defn- sort-struct [item]
+  (if (seq (:children item))
+    (update item :children #(sort-by (juxt (fn [i] (get-index i))
+                                           :title)
+                                     (map sort-struct %)))
+    item))
+
+(defn- filter-struct [item]
+  (if (seq (:children item))
+    (update item :children #(filter (fn [item]
+                                      (some? (:name item)))
+                                    %))
+    item))
+
 (defn get-struct [path]
   (-> (build-struct [] (file path))
       last
+      filter-struct
+      sort-struct
       :children))

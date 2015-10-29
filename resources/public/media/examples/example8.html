@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+  <script src="anychart.min.js"></script>
+  <style>
+    html, body, #container {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+    <div id="container"></div>
+    <script type="text/javascript">
+anychart.onDocumentReady(function() {
+
+    //data
+    var data = anychart.data.set([
+        {x: 'January', y: 10000},
+        {x: 'February', y: 12000},
+        {x: 'March', y: 18000},
+        {x: 'April', y: 11000},
+        {x: 'May', y: 9000}
+    ]);
+
+    //chart type
+    chart = anychart.areaChart();
+
+    //chart title
+    chart.title().text('Image fill');
+
+    //set axes titles
+    chart.xAxis().title().text('Retail Channel');
+    chart.yAxis().title().text('Sales');
+
+    //adjust chart fill mode and set picture instead of color
+    chart.area(data).fill({
+            src: 'pic.png',
+            mode: acgraph.vector.ImageFillMode.TILE
+        });
+
+    //draw chart
+    chart.container('container').draw();
+});
+    </script>
+</body>
+</html>
