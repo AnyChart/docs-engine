@@ -16,7 +16,6 @@ after_success:
 - if [ "$TRAVIS_BRANCH" == "v2.0" ]; then export APP="docs-stg"; fi
 - echo "Deploying to $SERVER"
 - cp .travis/known_hosts ~/.ssh/known_hosts
-- mv id_rsa .travis/id_rsa
 - chmod 600 ~/.ssh/known_hosts
 - chmod 600 .travis/id_rsa
 - chmod 600 .travis/id_rsa.pub
