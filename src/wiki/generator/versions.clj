@@ -1,5 +1,5 @@
 (ns wiki.generator.versions
-  (:require [wiki.git :as git]
+  (:require [wiki.generator.git :as git]
             [wiki.data.versions :as vdata]
             [wiki.data.pages :as pdata]
             [wiki.data.sitemap :as sitemap]
