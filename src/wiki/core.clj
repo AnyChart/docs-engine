@@ -17,6 +17,22 @@
    :generator (component/using (generator/new-generator (:generator config))
                                [:jdbc :redis :notifier])))
 
+(defn frontend-system [config]
+  (component/system-map
+   :notifier (notifier/new-notifier (:notifications config))
+   :jdbc  (jdbc/new-jdbc (:jdbc config))
+   :redis (redis/new-redis (:redis config))
+   :web   (component/using (web/new-web (:web config))
+                           [:jdbc :redis :notifier])))
+
+(defn generator-system [config]
+  (component/system-map
+   :notifier (notifier/new-notifier (:notifications config))
+   :jdbc  (jdbc/new-jdbc (:jdbc config))
+   :redis (redis/new-redis (:redis config))
+   :generator (component/using (generator/new-generator (:generator config))
+                               [:jdbc :redis :notifier])))
+
 (def base-config
   {:notifications {:token "P8Z59E0kpaOqTcOxner4P5jb"
                    :channel "#notifications"
@@ -39,9 +55,22 @@
                :git-ssh "/Users/alex/Work/anychart/reference-engine/keys/git"
                :data-dir (.getAbsolutePath (clojure.java.io/file "data"))
                :max-processes 8
-               :queue "docs-queue"}})
+               :queue "docs-queue"
+               :reference "api.anychart.stg"
+               :playground "playground.anychart.stg/docs"}})
 
 (def config base-config)
+
+(def stg-config (merge-with merge base-config
+                            {:notifications {:domain "http://docs.anychart.stg/"}}
+                            {:web {:debug false
+                                   :port 8010}}
+                            {:jdbc {:subname "//10.132.9.26:5432/docs_stg"
+                                    :user "docs_stg_user"
+                                    :password "fuckstg"}}
+                            {:redis {:spec {:host "10.132.9.26" :db 1}}}
+                            {:generator {:git-ssh "/apps/keys/git"
+                                         :data-dir "/apps/docs-stg/data"}}))
 
 (def dev (dev-system config))
 
@@ -50,3 +79,15 @@
 
 (defn stop []
   (alter-var-root #'dev component/stop))
+
+(defn -main
+  ([] (println "dev keys-path|stg frontend|stg backend|com frontend|com backend ??"))
+  ([mode]
+   (if (= mode "dev")
+     (component/start (dev-system config))
+     (println "started at http://localhost:8010")))
+  ([domain mode]
+   (cond
+     (= domain "dev") (component/start (dev-system (assoc-in config [:generator :git-ssh] mode)))
+     (and (= domain "stg") (= mode "frontend")) (component/start (frontend-system stg-config))
+     (and (= domain "stg") (= mode "backend")) (component/start (generator-system stg-config)))))

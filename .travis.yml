@@ -3,20 +3,27 @@ lein: lein2
 script: lein2 uberjar
 branches:
   only:
-  - master
-  - staging
+  - v2.0
+cache:
+  directories:
+  - $HOME/.m2
 services:
-  - redis-server
+- redis-server
+before_install:
+  - openssl aes-256-cbc -K $encrypted_831d2a0628ae_key -iv $encrypted_831d2a0628ae_iv -in id_rsa.enc -out id_rsa -d
 after_success:
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then export SERVER="docs.anychart.com"; fi
-  - if [ "$TRAVIS_BRANCH" == "staging" ]; then export SERVER="104.236.109.246"; fi
-  - echo "Deploying to $SERVER"
-  - cp .travis/known_hosts ~/.ssh/known_hosts
-  - chmod 600 ~/.ssh/known_hosts
-  - chmod 600 .travis/id_rsa
-  - chmod 600 .travis/id_rsa.pub
-  - ssh-add .travis/id_rsa
-  - scp -i .travis/id_rsa target/uberjar/wiki-1.1-standalone.jar root@$SERVER:/apps/wiki/wiki-1.1-standalone.jar
-  - ssh root@$SERVER "supervisorctl restart wiki"
+- if [ "$TRAVIS_BRANCH" == "master" ]; then export APP="docs-prod"; fi
+- if [ "$TRAVIS_BRANCH" == "v2.0" ]; then export APP="docs-stg"; fi
+- echo "Deploying to $SERVER"
+- cp .travis/known_hosts ~/.ssh/known_hosts
+- mv id_rsa .travis/id_rsa
+- chmod 600 ~/.ssh/known_hosts
+- chmod 600 .travis/id_rsa
+- chmod 600 .travis/id_rsa.pub
+- ssh-add .travis/id_rsa
+- scp -i .travis/id_rsa target/docs-2.0-standalone.jar root@104.236.66.244:/apps/$APP/docs-2.0-standalone.jar
+- scp -i .travis/id_rsa target/docs-2.0-standalone.jar root@104.131.17.78:/apps/$APP/docs-2.0-standalone.jar
+- ssh root@104.236.66.244 "supervisorctl restart $APP"
+- ssh root@104.131.17.78 "supervisorctl restart $APP"
 notifications:
   slack: anychart-team:sJRPhNn8Ur8yVdhvhgp6EbDM

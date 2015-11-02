@@ -26,6 +26,11 @@
                     (not (.isHidden %))
                     (has-docs %)) #(.listFiles %) dir)))
 
+(defn- fix-document-content [content]
+  (-> content
+      (clojure.string/replace-first #"\A(?s)(?m)(^\{[^\}]+\})" "")
+      (clojure.string/trim-newline)))
+
 (defn- create-document [item]
   (let [content (slurp item)
         doc-header (re-matches #"(?s)(?m)(^\{[^\}]+\}).*" content)
@@ -34,7 +39,9 @@
              :content content
              :config {:index 1000}}]
     (if doc-header
-      (update res :config #(merge % (-> doc-header last read-string)))
+      (-> res
+          (update :config #(merge % (-> doc-header last read-string)))
+          (update :content fix-document-content))
       res)))
 
 (declare build-struct)

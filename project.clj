@@ -6,6 +6,8 @@
                  [clj-time "0.11.0"]
                  ;; templates
                  [selmer "0.8.2"]
+                 ;; html
+                 [enlive "1.1.6"]
                  ;; web
                  [http-kit "2.1.16"]
                  [compojure "1.1.9"]
