@@ -22,4 +22,5 @@ wiki/.nrepl-port
 data/
 .idea
 id_rsa
-
+client/node_modules
+client/bower_components

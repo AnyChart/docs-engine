@@ -1,0 +1,15 @@
+{
+  "version": "0.0.1",
+  "engines": {
+    "node": "~0.10"
+  },
+  "scripts": {
+    "start": "brunch w -s"
+  },
+  "dependencies": {
+    "javascript-brunch": ">= 1.0 < 1.7",
+    "less-brunch": ">= 1.0 < 1.7",
+    "clean-css-brunch": ">= 1.0 < 1.7"
+  },
+  "devDependencies": {}
+}
