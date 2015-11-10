@@ -92,7 +92,6 @@
                                                 (-> request :route-params :version))
           page (pages-data/page-by-url (jdbc request) (:id version)
                                        (-> request :route-params :*))]
-      (println version (-> request :route-params :*) page)
       (if (and version page)
         (app request version page)
         (error-404 request)))))
