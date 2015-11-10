@@ -37,7 +37,7 @@
 (defn filter-for-rebuild [jdbc branches]
   (filter #(vdata/need-rebuild? jdbc (:name %) (:commit %)) branches))
 
-(defn- remove-previous-versions [jdbc actual-id key]
+(defn remove-previous-versions [jdbc actual-id key]
   (let [ids (vdata/version-ids jdbc key)
         outdated-ids (filter #(not= actual-id %) ids)]
     (doall (map (fn [vid]

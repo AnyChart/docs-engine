@@ -13,7 +13,6 @@
     <body>
 	<header>
 	    <div class="container-fluid">
-
 		<a class="sidebar-switcher hidden-md hidden-lg" onclick="$('#bar').show(); $('#shadow').show(); "><i class="fa fa-bars"></i></a>
 		<a class="navbar-brand" href="//anychart.com/">
                     <img src="/i/logo-empty.png" width="300" height="72" alt="AnyChart">
@@ -101,14 +100,14 @@
                 <section class="col-md-15 col-lg-13" id="content">
                     {{page.content|safe}}
                 </section>
+
+                <div class="col-lg-5 visible-lg"></div>
 	    </div>
 	</div>
 
         <script type="text/javascript" src="/main.min.js"></script>
-	<script type="text/javascript" charset="utf-8">
-         $(function(){
-             prettyPrint();
-         });
-        </script>
+        <script type="text/javascript" src="/docs.js"></script>
+        <script type="text/javascript" src="/menu.js"></script>
+        <script type="text/javascript" src="/toc.js"></script>
     </body>
 </html>

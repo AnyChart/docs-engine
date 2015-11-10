@@ -23,7 +23,8 @@
             (dgen/generate jdbc {:id version-id
                                  :key (:name branch)}
                            data api playground)
-            (notifications/complete-version-building notifier (:name branch)))
+            (notifications/complete-version-building notifier (:name branch))
+            (vgen/remove-previous-versions jdbc version-id (:name branch)))
           (catch Exception e
             (do (error e)
                 (error (.getMessage e))

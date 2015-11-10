@@ -16,7 +16,7 @@
     res))
 
 (defn- generate-struct-item [jdbc version base-path item api playground]
-  (info "generating" (dissoc item :content))
+  ;;(info "generating" (dissoc item :content))
   (if-let [content (:content item)]
     (pdata/add-page jdbc (:id version) (fix-url (str base-path "/"
                                                      (:name item)))

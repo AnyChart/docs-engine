@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Documentation | AnyChart </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/i/anychart.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="/main.css"/>
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+  </head>
+  <body>
+  <body>
+    <header>
+      <div class="container-fluid">
+	<a class="sidebar-switcher hidden-md hidden-lg" onclick="$('#bar').show(); $('#shadow').show(); "><i class="fa fa-bars"></i></a>
+	<a class="navbar-brand" href="http://anychart.com/">
+          <img src="media/i/logo-empty.png" width="300" height="72" alt="AnyChart">
+          <div class="chart-row">
+            <span class="chart-col green"></span>
+            <span class="chart-col orange"></span>
+            <span class="chart-col red"></span>
+          </div>
+        </a>
+        <a class="brand hidden-super-small"> Documentation</a>
+        <div class="pull-right helpers  hidden-xs">
+	  <div class="btn-group">
+	    <button type="button" class="btn btn-default btn-blue dropdown-toggle" data-toggle="dropdown">Version {{version}} <span class="caret"></span></button>
+	    <ul class="dropdown-menu" role="menu">
+              {% for v in versions %}
+              <li><a href="/try/{{v}}/{{page}}">Version {{v}}</a></li>
+              {% endfor %}
+	    </ul>
+	  </div>
+          <div class="text-muted questions">
+            <a href="http://support.anychart.com/" class="text-support"><i class="fa fa-life-ring"></i></a>
+            <span class="hidden-super-small">
+              Still have questions?<br/>
+              <a href="//anychart.com/support/"> Contact support</a></span>
+          </div>
+        </div>
+      </div>
+    </header>
+    <div id="shadow" class=""></div>
+    <div id="bar" class="">
+      <div class="helpers visible-xs bordered">
+        <div class="btn-group">
+          <button type="button" class="btn btn-default btn-blue dropdown-toggle" data-toggle="dropdown">Version {{version}} <span class="caret"></span></button>
+          <ul class="dropdown-menu" role="menu">
+              {% for v in versions %}
+              <li><a href="/try/{{v}}/{{page}}">Version {{v}}</a></li>
+              {% endfor %}
+          </ul>
+        </div>
+        <div class="text-muted questions">
+          <a href="http://support.anychart.com/" class="text-support"><i class="fa fa-life-ring"></i></a>
+          <span class="hidden-super-small">
+            Still have questions?<br/>
+            <a href="//anychart.com/support/"> Contact support</a></span>
+        </div>
+      </div>
+      <ul class="menu">
+        <li>
+          <a href="" class="active"><i class="fa fa-folder-open"></i> Quick start</a>
+          <ul>
+            <li><a href=""><i class="fa fa-file"></i> Quick start</a></li>
+            <li><a href=""><i class="fa fa-file"></i> Downloading AnyChart</a></li>
+            <li><a href=""><i class="fa fa-file"></i> Supported chart's types</a></li>
+            <li><a href=""><i class="fa fa-file"></i> Credits</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href=""><i class="fa fa-folder-open"></i> Basic chart types </a>
+          <ul>
+            <li><a href="" class="active"><i class="fa fa-file"></i> Area chart</a></li>
+            <li><a href=""><i class="fa fa-file"></i> Bar chart</a></li>
+            <li><a href=""><i class="fa fa-file"></i> Bubble chart</a></li>
+            <li><a href=""><i class="fa fa-file"></i> Column chart</a></li>
+            <li><a href=""><i class="fa fa-file"></i> Cone chart</a></li>
+            <li><a href=""><i class="fa fa-file"></i> Cylinder chart</a></li>
+            <li><a href=""><i class="fa fa-file"></i> Funnel/Pyramid chart</a></li>
+            <li><a href=""><i class="fa fa-file"></i> HeatMap chart</a></li>
+            <li><a href=""><i class="fa fa-file"></i> Japanese Candlestick chart</a></li>
+            <li><a href=""><i class="fa fa-file"></i> Line/Spline/StepLine charts</a></li>
+            <li><a href=""><i class="fa fa-file"></i> Open-High-Low-Close charts </a></li>
+          </ul>
+        </li>
+        <li><a href=""><i class="fa fa-folder"></i> Working with data </a></li>
+        <li><a href=""><i class="fa fa-folder"></i> Axis, Grid, Scales, Trends, ect </a></li>
+        <li><a href=""><i class="fa fa-folder"></i> General appearance settings </a></li>
+        <li><a href=""><i class="fa fa-folder"></i> Labels and tooltips </a></li>
+        <li><a href=""><i class="fa fa-folder"></i> Templates and styling </a></li>
+        <li><a href=""><i class="fa fa-folder"></i> Animation </a></li>
+
+      </ul>
+    </div>
+
+    <div class="wrapper container-fluid">
+      <div class="row">
+	<div class="col-md-8 col-lg-6 hidden-xs hidden-sm">
+          <div class="row hidden-xs hidden-sm search-large-screen">
+            <div class="col-md-24 col-lg-24">
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="What are you looking for?">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="button"><span
+                                                                   class="glyphicon glyphicon-search form-control-feedback"></span></button>
+                </span>
+              </div>
+            </div>
+          </div>
+
+	  <ul class="menu">
+	    <li>
+	      <a href="" class="active"><i class="fa fa-folder-open"></i> Quick start</a>
+	      <ul>
+		<li><a href=""><i class="fa fa-file"></i> Quick start</a></li>
+		<li><a href=""><i class="fa fa-file"></i> Downloading AnyChart</a></li>
+		<li><a href=""><i class="fa fa-file"></i> Supported chart's types</a></li>
+		<li><a href=""><i class="fa fa-file"></i> Credits</a></li>
+	      </ul>
+	    </li>
+	    <li>
+	      <a href=""><i class="fa fa-folder-open"></i> Basic chart types </a>
+	      <ul>
+		<li><a href="" class="active"><i class="fa fa-file"></i> Area chart</a></li>
+		<li><a href=""><i class="fa fa-file"></i> Bar chart</a></li>
+		<li><a href=""><i class="fa fa-file"></i> Bubble chart</a></li>
+		<li><a href=""><i class="fa fa-file"></i> Column chart</a></li>
+		<li><a href=""><i class="fa fa-file"></i> Cone chart</a></li>
+		<li><a href=""><i class="fa fa-file"></i> Cylinder chart</a></li>
+		<li><a href=""><i class="fa fa-file"></i> Funnel/Pyramid chart</a></li>
+		<li><a href=""><i class="fa fa-file"></i> HeatMap chart</a></li>
+		<li><a href=""><i class="fa fa-file"></i> Japanese Candlestick chart</a></li>
+		<li><a href=""><i class="fa fa-file"></i> Line/Spline/StepLine charts</a></li>
+		<li><a href=""><i class="fa fa-file"></i> Open-High-Low-Close charts </a></li>
+	      </ul>
+	    </li>
+	    <li><a href=""><i class="fa fa-folder"></i> Working with data </a></li>
+	    <li><a href=""><i class="fa fa-folder"></i> Axis, Grid, Scales, Trends, ect </a></li>
+	    <li><a href=""><i class="fa fa-folder"></i> General appearance settings </a></li>
+	    <li><a href=""><i class="fa fa-folder"></i> Labels and tooltips </a></li>
+	    <li><a href=""><i class="fa fa-folder"></i> Templates and styling </a></li>
+	    <li><a href=""><i class="fa fa-folder"></i> Animation </a></li>
+
+	  </ul>
+	</div>
+
+        <div class="row helpers hidden-lg hidden-md">
+          <div class="col-xs-24 col-sm-12">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="What are you looking for?">
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="button"><span
+                                                                 class="glyphicon glyphicon-search form-control-feedback"></span></button>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <section class="col-md-15 col-lg-13" id="content">
+	  <h1>Area chart (h1)</h1>
+
+	  <ul class="table_of_content hidden-lg">
+            <li class="main"><a href="">Overview</a></li>
+            <li class="main"><a href="">Chart</a>
+              <ul>
+                <li class="main"><a href="">Single series Area chart</a></li>
+                <li class="main"><a href="">Single series Spline Area chart</a></li>
+                <li class="main"><a href="">Multi-Series Area chart</a></li>
+              </ul>
+            </li>
+            <li class="main"><a href="">Axes</a>
+              <ul>
+                <li class="main"><a href="">Orientation</a></li>
+                <li class="main"><a href="">Inversion</a></li>
+                <li class="main"><a href="">Minimum and Maximum</a></li>
+              </ul>
+            </li>
+            <li class="main"><a href="">Visualization</a>
+              <ul>
+                <li class="main"><a href="">Basic styles</a></li>
+                <li class="main"><a href="">Image fill</a></li>
+              </ul>
+            </li>
+            <li class="main"><a href="">Labels and Tooltips</a></li>
+            <li class="main"><a href="">Markers</a> </li>
+            <li class="main"><a href="">Hatch Fill</a></li>
+          </ul>
+
+
+
+          <h2>Overview (h2)</h2>
+          <p>Data that is arranged in columns or rows on a worksheet can be plotted in an area chart. <a href='#'> Area charts</a>
+            emphasize the magnitude of change over time, and can be used to draw attention to the total value across a trend.
+            For example, data that represents profit over time can be plotted in an area chart to emphasize the total profit.
+          <p> Consider using a bar chart when (list-default and list-dotted):
+            <ul>
+              <li> The axis labels are long. </li>
+              <li> The values that are shown are durations.
+                <ul>
+                  <li> The axis labels are long.</li>
+                  <li> The values that are shown are durations. </li>
+                  <li> The axis labels are long and are durations. </li>
+                  <li> The values that are shown are durations. </li>
+                </ul>
+              </li>
+            </ul>
+
+          <p>Data that is arranged in columns or rows on a worksheet can be plotted in an area chart.
+          <p> Consider using a bar chart when (list-numbered):
+            <ol>
+              <li> The axis labels are long.</li>
+              <li> The values that are shown are durations.
+                <ol>
+                  <li> The axis labels are long.</li>
+                  <li> The values that are shown are durations. </li>
+                </ol>
+              </li>
+            </ol>
+
+
+
+            <h2>Chart building (h2)</h2>
+          <p> Depending on data model and the visualization purpose the area chart may contain single series or multi series.
+            <h3> Single-series Line Area chart</h3>
+          <p>Let's see single-series area chart created using the following data - sales of ACME Corp. through several months in one year:
+            <h4> Example data (h4) </h4>
+            <table>
+              <thead>
+                <tr>
+                  <th>Month</th>
+                  <th>Sales</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>February</td>
+                  <td>$10000</td>
+                </tr>
+                <tr>
+                  <td>March</td>
+                  <td>$12000</td>
+                </tr>
+                <tr>
+                  <td>April</td>
+                  <td>$18000</td>
+                </tr>
+                <tr>
+                  <td>May</td>
+                  <td>$13000</td>
+                </tr>
+                <tr>
+                  <td>July</td>
+                  <td>$14000</td>
+                </tr>
+              </tbody>
+            </table>
+
+          <p>Now we need to convert this data table into XML, this format will be accepted by AnyChart. In terms of AnyChart data
+            model we have one series of data (Sales) with categories that hold months names. Each point in series represents one month
+            and sales volume. Converted XML Data looks like:
+
+            <pre class="prettyprint linenums:1">&lt;data&gt;
+              &lt;series name="Sales" type="Area"&gt;
+              &lt;point name="January" y="10000"/&gt;
+              &lt;point name="February" y="12000"/&gt;
+              &lt;point name="March" y="18000"/&gt;
+              &lt;point name="April" y="11000"/&gt;
+              &lt;point name="May" y="9000"/&gt;
+              &lt;/series&gt;
+              &lt;/data&gt;</pre>
+          <p> As you can see, we've created a Data Set. Every object is a point, each has some parameters. The first column is as
+            category and the second column is a value.
+          <p> Here it is: AnyChart can now visualize your data. Look at the chart sample below and click on "Launch in playground" to
+            see the full source code, alter and play with the sample or download it.
+            <div class="iframe">
+              <iframe src='media/examples/example1.html'> </iframe>
+              <div class="btns">
+                <a class="btn-playground btn"><i class="fa fa-jsfiddle"></i> JsFiddle</a>
+                <a class="btn-playground btn"><i class="fa fa-play"></i> Playground</a>
+              </div>
+            </div>
+            <h3>Single Series Spline Area Chart</h3>
+          <p>For better look and feel of your charts you can use SplineArea chart type:</p>
+          <pre class="prettyprint linenums:1">&lt;data&gt;
+            &lt;series name="Sales" type="Area"&gt;
+            &lt;point name="January" y="10000"/&gt;
+            &lt;point name="February" y="12000"/&gt;
+            &lt;point name="March" y="18000"/&gt;
+            &lt;point name="April" y="11000"/&gt;
+            &lt;point name="May" y="9000"/&gt;
+            &lt;/series&gt;
+            &lt;/data&gt;</pre>
+          <p>Here is the same chart as shown above, but in Spline mode:</p>
+          <div class="iframe">
+            <iframe src='media/examples/example2.html'> </iframe>
+            <div class="btns">
+              <a class="btn-playground btn"><i class="fa fa-jsfiddle"></i> JsFiddle</a>
+              <a class="btn-playground btn"><i class="fa fa-play"></i> Playground</a>
+            </div>
+
+          </div>
+          <h3>Multi-series</h3>
+          <p>To compare two or more data sets you have to use multi-series area charts as it is shown in the sample below.
+            Let's compare 2003 sales to 2004 sales:</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Month</th>
+                <th>2003 sales</th>
+                <th>2004 sales</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>February</td>
+                <td>$10000</td>
+                <td>$12000</td>
+              </tr>
+              <tr>
+                <td>March</td>
+                <td>$12000</td>
+                <td>$13000</td>
+              </tr>
+              <tr>
+                <td>April</td>
+                <td>$18000</td>
+                <td>$14000</td>
+              </tr>
+              <tr>
+                <td>May</td>
+                <td>$13000</td>
+                <td>$16000</td>
+              </tr>
+              <tr>
+                <td>July</td>
+                <td>$14000</td>
+                <td>$13000</td>
+              </tr>
+            </tbody>
+          </table>
+          <p> As we do in single series area sample above we need to convert this table AnyChart format, the only difference between
+            these two samples is the fact that now we have two series of the data: one series for each year, and we give proper names to each series:
+            <pre class="prettyprint linenums:1">&lt;data&gt;
+              &lt;series name="2003 sales" type="Area"&gt;
+              &lt;point name="January" y="10000"/&gt;
+              &lt;point name="February" y="12000"/&gt;
+              &lt;point name="March" y="18000"/&gt;
+              &lt;point name="April" y="11000"/&gt;
+              &lt;point name="May" y="9000"/&gt;
+              &lt;/series&gt;
+              &lt;series name="2004 sales" type="Area"&gt;
+              &lt;point name="January" y="12000"/&gt;
+              &lt;point name="February" y="13000"/&gt;
+              &lt;point name="March" y="14000"/&gt;
+              &lt;point name="April" y="16000"/&gt;
+              &lt;point name="May" y="13000"/&gt;
+              &lt;/series&gt;
+              &lt;/data&gt;</pre>
+          <p> As we now have multi-series chart we don't want to set <b>type of chart</b> for each series individually (there can be much
+            more than two series in multi-series chart), so we set <span class='method'>chart</span> as <span class='method'>anychart.areaChart()</span>.
+            Now all series in the chart will be of Area type by default.
+            <div class="iframe">
+              <div class="btns">
+                <a class="btn-playground btn"><i class="fa fa-jsfiddle"></i> JsFiddle</a>
+                <a class="btn-playground btn"><i class="fa fa-play"></i> Playground</a>
+              </div>
+              <iframe src='media/examples/example3.html'> </iframe>
+            </div>
+
+            <h2> Axes </h2>
+          <p> In AnyChart axis is an object that allows you to configure chart grid, axis line along with tick marks and labels, axis
+            scale and settings and many more. All axis features are described in Axes tutorial, in this section we will quickly
+            demonstrate how axis orientation can be adjusted, how axis scale can be inverted and how minimum and maximum values can
+            be controlled.
+
+            <h3>Orientation</h3>
+          <p> With AnyChart you can place axes to any side of the chart, all you need to do is to adjust orientation with
+            <a class='method'>.orientation()</a> parameter of <a class='method'>.yAxis()</a> or <a class='method'>.xAxis()</a> method. Positioning depends on plot type and
+            inversion of axes.
+            <pre class="prettyprint linenums:1">chart.xAxis(0).orientation('top');
+              chart.yAxis(0).orientation('right');</pre>
+          <p>And here is the demonstration of this feature on the Single-series sample:
+            <div class="iframe">
+              <div class="btns">
+                <a class="btn-playground btn"><i class="fa fa-jsfiddle"></i> JsFiddle</a>
+                <a class="btn-playground btn"><i class="fa fa-play"></i> Playground</a>
+              </div>
+              <iframe src='media/examples/example4.html'> </iframe>
+            </div>
+
+            <h3>Inversion</h3>
+          <p> AnyChart allows you to invert any axis: Y, X or any extra axis. Inversion is controlled by axis <a class='method'>.inverted()</a>:
+            <pre class="prettyprint">chart.yScale().inverted(true);</pre>
+          <p>And here is the demonstration of Y Axis inversion on the Single-series sample:
+            <div class="iframe">
+              <div class="btns">
+                <a class="btn-playground btn"><i class="fa fa-jsfiddle"></i> JsFiddle</a>
+                <a class="btn-playground btn"><i class="fa fa-play"></i> Playground</a>
+              </div>
+              <iframe src='media/examples/example5.html'> </iframe>
+            </div>
+
+            <h3>Minimum and Maximum</h3>
+          <p> By default AnyChart calculates axis minimum and maximum automatically, you can see this on the scale inversion chart
+            sample above: minimal value on the Y Axis is 8.000, and maximum is 20.000. You can control these values by setting
+            <a class='method' href="#">.maximum()</a> and <a class='method'>.minimum()</a>:
+            <pre class="prettyprint">chart.yScale().minimum('0').maximum('50000');</pre>
+          <p>And here is the demonstration of maximum and minimum values on the Single-series sample:
+            <div class="iframe">
+              <div class="btns">
+                <a class="btn-playground btn"><i class="fa fa-jsfiddle"></i> JsFiddle</a>
+                <a class="btn-playground btn"><i class="fa fa-play"></i> Playground</a>
+              </div>
+              <iframe src='media/examples/example6.html'> </iframe>
+            </div>
+
+            <h2>Visualization</h2>
+          <p>In this section we will describe main parts of area chart visualization and ways to adjust it. Visual appearance of areas
+            is defined using certain methods. For Area chart the main thing is the <a class='method'>.fill()</a> method.</p>
+
+          <h3>Basic sample</h3>
+          <p> Now, let's look how to change the look of an Area. Here is a basic sample:
+            <pre class="prettyprint linenums:1">chart.area(data)
+              .fill('Gold')
+              .hoverFill("darkred")
+              .stroke('#56561a', 4, 0.4)
+              .hatchFill('diagonalbrick', 'gray')
+              .hoverHatchFill('diagonalbrick', 'black');</pre>
+          <p> Using such settings we've created a look that defines area of Gold color, rather thick border line, hatch filled with
+            DiagonalBrick. Also, we've defined that when user will move cursor over the chart it's hatch will be highlighted with a
+            black and chart will be filled with darkred.
+          <p> Now we will apply the style to the chart:
+            <div class="iframe">
+              <div class="btns">
+                <a class="btn-playground btn"><i class="fa fa-jsfiddle"></i> JsFiddle</a>
+                <a class="btn-playground btn"><i class="fa fa-play"></i> Playground</a>
+              </div>
+              <iframe src='media/examples/example7.html'> </iframe>
+            </div>
+
+            <h3>Image fill</h3>
+          <p> Color is not the only way to design a chart. In this sample we will demonstrate how to use picture as a fill:
+            <pre class="prettyprint linenums:1">chart.area(data).fill({
+              src: 'http://static.anychart.com/anychart_site_header.png',
+              mode: acgraph.vector.ImageFillMode.TILE
+              })</pre>
+            <div class="iframe">
+              <div class="btns">
+                <a class="btn-playground btn"><i class="fa fa-jsfiddle"></i> JsFiddle</a>
+                <a class="btn-playground btn"><i class="fa fa-play"></i> Playground</a>
+              </div>
+              <iframe src='media/examples/example8.html'> </iframe>
+            </div>
+
+            <h2>Labels and Tooltips</h2>
+          <p> In this section we will explain how to add and configure data labels and tooltips. Full explanation of formatting and
+            tuning visual appearance for them can be found in Labels and Tooltips.</p>
+          <p> If you want to configure data labels and tooltips for all series - you should do that in
+            <a class='method'>.labels()</a> and <a class='method'>.tooltip()</a> methods. You can tune their visual appearance,
+            positioning and format.</p>
+          <p> When formatting data labels text we will use <a class='method'>.textFormatter</a> to show month name. Otherwise sales will be displayed here.
+
+            <pre class="prettyprint linenums:1">var series= chart.bar(data);
+              series.labels().enabled(true).rotation(90).textFormatter(function(point){
+              return point.x;
+              });
+              series.tooltip().enabled(true).title().enabled(true).text('Your Tooltip Title');</pre>
+            <div class="iframe">
+              <div class="btns">
+                <a class="btn-playground btn"><i class="fa fa-jsfiddle"></i> JsFiddle</a>
+                <a class="btn-playground btn"><i class="fa fa-play"></i> Playground</a>
+              </div>
+              <iframe src='media/examples/example9.html'> </iframe>
+            </div>
+
+            <h2>Markers</h2>
+          <p> Marker is an object with a specified shape, size, and color or an image used to mark and to identify chart elements.
+            AnyChart allows to add markers to any data element including areas.</p>
+          <p> In the sample below we will take single-series data described above and mark the highest point in series with a <b>"Star"</b>
+            of the <b>"Gold"</b> color.</p>
+          <p> To make marker visually appealing we will tell AnyChart to set marker size to 12 pixels.
+
+            <pre class="prettyprint linenums:1">{x: 'March',
+              value: 18000,
+              marker:
+              {type: 'star5', fill: 'gold', size: 12, enabled: true},
+              hoverMarker:
+              {size: 22}
+              }</pre>
+          <p>And here is a result - March is the most successful month and we are showing this on the chart:</p>
+          <div class="iframe">
+            <div class="btns">
+              <a class="btn-playground btn"><i class="fa fa-jsfiddle"></i> JsFiddle</a>
+              <a class="btn-playground btn"><i class="fa fa-play"></i> Playground</a>
+            </div>
+            <iframe src='media/examples/example10.html'> </iframe>
+          </div>
+
+
+          <h2>Hatch fills</h2>
+          <p> AnyChart technology allows printing of charts. Some color printers print colors unpredictable and very often it is hard
+            to identify similar colors. Also it is impossible to identify colors on prints of monochrome printers.
+            AnyChart has very useful feature - hatch fills, ideal for differentiating elements for black and white display
+            or for those who are color blind. Hatch fill is fully-independent structure, it doesn't rely on color fill and
+            it has own settings.</p>
+          <p> To demonstrate hatch fill feature we've prepared the following sample. As you see it is completely monochrome.
+            We have chart with 5 series with 3 data points in each. For every series we've applied different hatch fills by
+            setting hatch type for <a class='method'>.hatchFill()</a> parameter.</p>
+
+          <pre class="prettyprint linenums:1">.hatchFill('soliddiamond');
+            .hatchFill('forwarddiagonal');
+            .hatchFill('backwarddiagonal');</pre>
+          <p>And here is a result - March is the most successful month and we are showing this on the chart:</p>
+          <div class="iframe">
+            <div class="btns">
+              <a class="btn-playground btn"><i class="fa fa-jsfiddle"></i> JsFiddle</a>
+              <a class="btn-playground btn"><i class="fa fa-play"></i> Playground</a>
+            </div>
+            <iframe src='media/examples/example11.html'> </iframe>
+          </div>
+	</section>
+	<div class="col-lg-5 visible-lg">
+	  <ul class="table_of_content">
+            <li class="main"><a href="">Overview</a></li>
+            <li class="main"><a href="">Chart</a>
+              <ul>
+                <li class="main"><a href="">Single series Area chart</a></li>
+                <li class="main"><a href="">Single series Spline Area chart</a></li>
+                <li class="main"><a href="">Multi-Series Area chart</a></li>
+              </ul>
+            </li>
+            <li class="main"><a href="">Axes</a>
+              <ul>
+                <li class="main"><a href="">Orientation</a></li>
+                <li class="main"><a href="">Inversion</a></li>
+                <li class="main"><a href="">Minimum and Maximum</a></li>
+              </ul>
+            </li>
+            <li class="main"><a href="">Visualization</a>
+              <ul>
+                <li class="main"><a href="">Basic styles</a></li>
+                <li class="main"><a href="">Image fill</a></li>
+              </ul>
+            </li>
+            <li class="main"><a href="">Labels and Tooltips</a></li>
+            <li class="main"><a href="">Markers</a> </li>
+            <li class="main"><a href="">Hatch Fill</a></li>
+          </ul>
+	</div>
+      </div>
+    </div>
+
+    <script type="text/javascript" src="/main.min.js"></script>
+	<script type="text/javascript" charset="utf-8">
+         $(function(){
+             prettyPrint();
+         });
+        </script>
+  </body>
+</html>
