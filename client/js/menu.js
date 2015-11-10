@@ -26,3 +26,11 @@ $menu.find('a>i.fa-folder').each(function() {
         return false;
     });
 });
+$menu.find("a").each(function() {
+    if (!$(this).find(">i").length) {
+        $(this).click(function() {
+            loadPage($(this).attr("href"));
+            return false;
+        });
+    }
+});

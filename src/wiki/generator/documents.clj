@@ -11,9 +11,7 @@
       (clojure.string/replace #"index\.md$" "")))
 
 (defn- convert-content [content version-key playground api]
-  (let [res (md/to-html content version-key playground api)
-        html-res (html/html-snippet res)]
-    res))
+  (md/to-html content version-key playground api))
 
 (defn- generate-struct-item [jdbc version base-path item api playground]
   ;;(info "generating" (dissoc item :content))

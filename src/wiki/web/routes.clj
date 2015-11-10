@@ -46,7 +46,9 @@
       (redirect (str "/" (:key version) "/" url))
       (redirect (str "/" (:key version) "/Quick_Start")))))
 
-(defn- show-page-data [request version page])
+(defn- show-page-data [request version page]
+  (response {:url (:url page)
+             :page page}))
 
 (defn- show-page [request version page]
   (render-file "templates/page.selmer" {:version (:key version)
@@ -90,6 +92,7 @@
                                                 (-> request :route-params :version))
           page (pages-data/page-by-url (jdbc request) (:id version)
                                        (-> request :route-params :*))]
+      (println version (-> request :route-params :*) page)
       (if (and version page)
         (app request version page)
         (error-404 request)))))

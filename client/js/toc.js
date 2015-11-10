@@ -1,4 +1,4 @@
-function toc() {
+function fixToc() {
     var $next = $("#content h1").next();
     $("div.wrapper.container-fluid>div.row>div.visible-lg").html('');
     if ($next.prop("tagName").toLowerCase() == "ul") {
@@ -9,4 +9,4 @@ function toc() {
     }
 };
 
-toc();
+fixToc();

@@ -31,7 +31,8 @@ module.exports = function(grunt) {
             build: {
                 src: ['bower_components/jquery/dist/jquery.min.js',
                       'bower_components/bootstrap/dist/bootstrap.min.js',
-                      'bower_components/google-code-prettify/bin/prettify.min.js'],
+                      'bower_components/google-code-prettify/bin/prettify.min.js',
+                      'js/*.js'],
                 dest: '../resources/public/main.min.js'
             }
         },
