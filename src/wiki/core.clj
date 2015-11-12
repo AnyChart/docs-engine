@@ -53,9 +53,7 @@
           :user "docs_user"
           :password "pass"}
    :sphinx {:subprotocol "mysql"
-            :subname "//104.236.66.244:3312"
-            :user "root"
-            :password ""}
+            :subname "//104.236.66.244:3312?characterEncoding=utf8&characterSetResults=utf8&maxAllowedPacket=512000"}
    :redis {:pool {}
            :spec {:host "127.0.0.1" :port 6379 :db 0}}
    :generator {:show-branches true

@@ -1,10 +1,5 @@
 (ns wiki.data.search
-  (:require [yesql.core :refer [defqueries]]
-            [wiki.components.sphinx :as sphinx]))
-
-(defqueries "sql/search.sql")
+  (:require [wiki.components.sphinx :as sphinx]))
 
 (defn search-for [jdbc query version]
-  (sql-search-for {:query query
-                   :version version}
-                  {:connection (sphinx/conn jdbc)}))
+  (sphinx/query jdbc "select url, snippet(content, ?) from docs_stg_index where match(?) and version_id=? limit 100;" [query query version]))

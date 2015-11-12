@@ -3,6 +3,8 @@
             [compojure.core :refer [defroutes routes GET POST]]
             [compojure.route :as route]
             [ring.util.response :refer [redirect response]]
+            [ring.middleware.params :refer [wrap-params]]
+            [ring.middleware.keyword-params :refer [wrap-keyword-params]]
             [ring.middleware.json :refer [wrap-json-response]]
             [wiki.components.redis :as redisca]
             [wiki.data.versions :as versions-data]
@@ -67,6 +69,7 @@
     (redirect (str "/" version "/" (-> request :route-params :*)))))
 
 (defn- search-results [request version]
+  (println (-> request :params))
   (response (search/search-for (sphinx request) (-> request :params :q) (:id version))))
 
 (defn- check-version-middleware [app]
@@ -118,4 +121,6 @@
   (GET "/:version/search" [] (check-version-middleware search-results))
   (GET "/:version/*" [] (check-folder-middleware show-page)))
 
-(def app (routes app-routes))
+(def app (-> (routes app-routes)
+             wrap-keyword-params
+             wrap-params))
