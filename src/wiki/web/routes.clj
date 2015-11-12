@@ -8,6 +8,7 @@
             [wiki.data.versions :as versions-data]
             [wiki.data.pages :as pages-data]
             [wiki.data.folders :as folders-data]
+            [wiki.data.search :as search]
             [wiki.web.tree :refer [tree-view]]))
 
 (add-tag! :tree-view (fn [args context-map]
@@ -16,6 +17,9 @@
 
 (defn- jdbc [request]
   (-> request :component :jdbc))
+
+(defn- sphinx [request]
+  (-> request :component :sphinx))
 
 (defn- redis [request]
   (-> request :component :redis))
@@ -61,6 +65,9 @@
 (defn- try-show-latest-page [request]
   (let [version (versions-data/default (jdbc request))]
     (redirect (str "/" version "/" (-> request :route-params :*)))))
+
+(defn- search-results [request version]
+  (response (search/search-for (sphinx request) (-> request :params :q) (:id version))))
 
 (defn- check-version-middleware [app]
   (fn [request]
@@ -108,6 +115,7 @@
   (GET "/:version/" [] (check-version-middleware show-version))
   (GET "/:version/check/*" [] (check-version-middleware try-show-page))
   (GET "/:version/*-json" [] (check-page-middleware show-page-data))
+  (GET "/:version/search" [] (check-version-middleware search-results))
   (GET "/:version/*" [] (check-folder-middleware show-page)))
 
 (def app (routes app-routes))

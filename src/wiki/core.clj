@@ -3,6 +3,7 @@
             [wiki.components.redis :as redis]
             [wiki.components.notifier :as notifier]
             [wiki.components.generator :as generator]
+            [wiki.components.sphinx :as sphinx]
             [wiki.components.web :as web]
             [com.stuartsierra.component :as component])
   (:gen-class :main :true))
@@ -12,8 +13,9 @@
    :notifier (notifier/new-notifier (:notifications config))
    :jdbc  (jdbc/new-jdbc (:jdbc config))
    :redis (redis/new-redis (:redis config))
+   :sphinx (sphinx/new-sphinx (:sphinx config))
    :web   (component/using (web/new-web (:web config))
-                           [:jdbc :redis :notifier])
+                           [:jdbc :redis :notifier :sphinx])
    :generator (component/using (generator/new-generator (:generator config))
                                [:jdbc :redis :notifier])))
 
@@ -22,8 +24,9 @@
    :notifier (notifier/new-notifier (:notifications config))
    :jdbc  (jdbc/new-jdbc (:jdbc config))
    :redis (redis/new-redis (:redis config))
+   :sphinx (sphinx/new-sphinx (:sphinx config))
    :web   (component/using (web/new-web (:web config))
-                           [:jdbc :redis :notifier])))
+                           [:jdbc :redis :notifier :sphinx])))
 
 (defn generator-system [config]
   (component/system-map
@@ -49,6 +52,10 @@
           :classname "org.postgresql.Driver"
           :user "docs_user"
           :password "pass"}
+   :sphinx {:subprotocol "mysql"
+            :subname "//104.236.66.244:3312"
+            :user "root"
+            :password ""}
    :redis {:pool {}
            :spec {:host "127.0.0.1" :port 6379 :db 0}}
    :generator {:show-branches true

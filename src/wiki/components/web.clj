@@ -15,7 +15,7 @@
     (component-middleware component #'app)
     {:keywords? true})))
 
-(defrecord Web [config web-server jdbc redis]
+(defrecord Web [config web-server jdbc redis shpinx]
   component/Lifecycle
 
   (start [this]
