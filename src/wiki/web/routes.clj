@@ -69,8 +69,8 @@
     (redirect (str "/" version "/" (-> request :route-params :*)))))
 
 (defn- search-results [request version]
-  (response (search/search-for (sphinx request) (-> request :params :q)
-                               (:id version) (:key version))))
+  (search/search-for (sphinx request) (-> request :params :q)
+                     (:id version) (:key version)))
 
 (defn- check-version-middleware [app]
   (fn [request]
