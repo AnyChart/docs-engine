@@ -46,7 +46,7 @@
                    :channel "#notifications"
                    :username "docs-engine"
                    :domain "http://localhost/"}
-   :indexer {:queue "docs-stg-search-index"}
+   :indexer {:queue "docs-stg-search-queue"}
    :web {:debug true
          :static 12
          :port 8080
