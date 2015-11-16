@@ -14,7 +14,7 @@
       (generate-docs comp)
       (redisc/enqueue (-> comp :redis)
                       (-> comp :config :indexer-queue)
-                      "generate"))
+                      "reindex"))
     {:status :success}))
 
 (defrecord Generator [config jdbc redis notifier]
