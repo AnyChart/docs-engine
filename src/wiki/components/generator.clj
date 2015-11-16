@@ -10,8 +10,11 @@
 
 (defn- message-processor [comp]
   (fn [{:keys [message attempt]}]
-    (if (= message "generate")
-      (generate-docs comp))
+    (when (= message "generate")
+      (generate-docs comp)
+      (redisc/enqueue (-> comp :redis)
+                      (-> comp :config :indexer-queue)
+                      "generate"))
     {:status :success}))
 
 (defrecord Generator [config jdbc redis notifier]

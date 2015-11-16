@@ -4,6 +4,7 @@
             [wiki.components.notifier :as notifier]
             [wiki.components.generator :as generator]
             [wiki.components.sphinx :as sphinx]
+            [wiki.components.indexer :as indexer]
             [wiki.components.web :as web]
             [com.stuartsierra.component :as component])
   (:gen-class :main :true))
@@ -17,7 +18,9 @@
    :web   (component/using (web/new-web (:web config))
                            [:jdbc :redis :notifier :sphinx])
    :generator (component/using (generator/new-generator (:generator config))
-                               [:jdbc :redis :notifier])))
+                               [:jdbc :redis :notifier])
+   :indexer (component/using (indexer/new-indexer (:indexer config))
+                             [:redis])))
 
 (defn frontend-system [config]
   (component/system-map
@@ -25,6 +28,7 @@
    :jdbc  (jdbc/new-jdbc (:jdbc config))
    :redis (redis/new-redis (:redis config))
    :sphinx (sphinx/new-sphinx (:sphinx config))
+   :indexer (component/using (indexer/new-indexer (:indexer config)))
    :web   (component/using (web/new-web (:web config))
                            [:jdbc :redis :notifier :sphinx])))
 
@@ -41,6 +45,7 @@
                    :channel "#notifications"
                    :username "docs-engine"
                    :domain "http://localhost/"}
+   :indexer {:queue "docs-stg-search-index"}
    :web {:debug true
          :static 12
          :port 8080
@@ -61,6 +66,7 @@
                :data-dir (.getAbsolutePath (clojure.java.io/file "data"))
                :max-processes 8
                :queue "docs-queue"
+               :indexer-queue "docs-stg-search-queue"
                :reference "api.anychart.stg"
                :playground "playground.anychart.stg/docs"}})
 

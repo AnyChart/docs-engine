@@ -15,9 +15,9 @@
 
 (def formatter (f/formatter "YYYY-MM-dd'T'hh:mm:ss'Z'"))
 
-(defn remove-by-version [jdbc version-id]
-  (exec jdbc (-> (delete-from :sitemap)
-                 (where [:= :version_id version-id]))))
+(defn remove-by-version [jdbc version-id])
+;;  (exec jdbc (-> (delete-from :sitemap)
+;;                 (where [:= :version_id version-id]))))
 
 (defn- create-sitemap-entry [entry version-id]
   {:page_url (:full-name entry)

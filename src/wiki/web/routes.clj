@@ -72,6 +72,8 @@
   (search/search-for (sphinx request) (-> request :params :q)
                      (:id version) (:key version)))
 
+(defn- search-data [request version])
+
 (defn- check-version-middleware [app]
   (fn [request]
     (if-let [version (versions-data/version-by-key (jdbc request)
@@ -119,6 +121,7 @@
   (GET "/:version/check/*" [] (check-version-middleware try-show-page))
   (GET "/:version/*-json" [] (check-page-middleware show-page-data))
   (GET "/:version/search" [] (check-version-middleware search-results))
+  (POST "/:version/search-data" [] (check-version-middleware search-data))
   (GET "/:version/*" [] (check-folder-middleware show-page)))
 
 (def app (-> (routes app-routes)
