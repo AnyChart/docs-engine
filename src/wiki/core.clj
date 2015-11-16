@@ -28,7 +28,8 @@
    :jdbc  (jdbc/new-jdbc (:jdbc config))
    :redis (redis/new-redis (:redis config))
    :sphinx (sphinx/new-sphinx (:sphinx config))
-   :indexer (component/using (indexer/new-indexer (:indexer config)))
+   :indexer (component/using (indexer/new-indexer (:indexer config))
+                             [:redis])
    :web   (component/using (web/new-web (:web config))
                            [:jdbc :redis :notifier :sphinx])))
 
