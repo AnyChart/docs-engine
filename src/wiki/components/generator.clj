@@ -1,7 +1,8 @@
 (ns wiki.components.generator
   (:require [com.stuartsierra.component :as component]
             [wiki.components.redis :as redisc]
-            [wiki.generator.core :as generator]))
+            [wiki.generator.core :as generator]
+            [taoensso.timbre :as timbre :refer [info error]]))
 
 (defn generate-docs [comp]
   (generator/generate (:jdbc comp)
@@ -12,6 +13,7 @@
   (fn [{:keys [message attempt]}]
     (when (= message "generate")
       (generate-docs comp)
+      (info "enqueue in " (-> comp :config :indexer-queue) "with" (-> comp :redis))
       (redisc/enqueue (-> comp :redis)
                       (-> comp :config :indexer-queue)
                       "reindex"))
