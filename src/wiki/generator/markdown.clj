@@ -46,6 +46,3 @@
                          :heading-anchors true
                          :custom-transformers [(sample-transformer version playground)])
       (add-api-links version reference)))
-
-(md-to-html-string "* [A](#a)
- * [B](#b)")
