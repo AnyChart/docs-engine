@@ -7,6 +7,7 @@
             [ring.middleware.keyword-params :refer [wrap-keyword-params]]
             [ring.middleware.json :refer [wrap-json-response]]
             [wiki.components.redis :as redisca]
+            [wiki.components.notifier :refer [notify-404]]
             [wiki.data.versions :as versions-data]
             [wiki.data.pages :as pages-data]
             [wiki.data.folders :as folders-data]
@@ -33,6 +34,12 @@
   (render-file "templates/404.selmer" {}))
 
 (defn- error-404 [request]
+  (let [referrer (get-in request [:headers "referer"])
+        agent (get-in request [:headers "http_user_agent"])]
+    (when (not (.contains agent "Slackbot"))
+      (if referrer
+        (notify-404 (notifier request) (str (request-url request) " from " referrer))
+        (notify-404 (notifier request) (request-url request)))))
   (route/not-found (show-404 request)))
 
 (defn- request-update [request]
