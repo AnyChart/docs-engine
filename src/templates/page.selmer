@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Documentation | AnyChart </title>
+        <title>{{url}} - AnyChart JavaScript Chart Documentation ver. {{version}}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="icon" href="/i/anychart.ico" type="image/x-icon">
 	<link rel="stylesheet" type="text/css" href="/main.css"/>
@@ -13,7 +13,7 @@
     <body>
 	<header>
 	    <div class="container-fluid">
-		<a class="sidebar-switcher hidden-md hidden-lg" onclick="$('#bar').show(); $('#shadow').show(); "><i class="fa fa-bars"></i></a>
+		<a class="sidebar-switcher hidden-md hidden-lg"><i class="fa fa-bars"></i></a>
 		<a class="navbar-brand" href="//anychart.com/">
                     <img src="/i/logo-empty.png" width="300" height="72" alt="AnyChart">
                     <div class="chart-row">

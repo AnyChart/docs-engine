@@ -1,5 +1,10 @@
 var page = location.pathname;
 
+function highlightCode() {
+    $("#content pre").addClass("prettyprint");
+    prettyPrint();
+};
+
 function loadPage(link) {
     if (page == link) return true;
     page = link;
@@ -11,13 +16,17 @@ function loadPage(link) {
         searchFor(query);
         return false;
     }
+    expandMenu(location.pathname);
     $.get(link + "-json", function(res) {
         $("#content").html(res.page.content);
+        document.title = res.url + " - AnyChart JavaScript Chart Documentation ver. " + version;
         $(window).scrollTop(0);
         fixLinks();
         fixToc();
-        prettyPrint();
+        highlightCode();
     });
+    $("#bar").hide();
+    $("#shadow").hide();
     return false;
 };
 
@@ -46,3 +55,4 @@ window.onpopstate = function(e) {
 };
 
 fixLinks();
+highlightCode();

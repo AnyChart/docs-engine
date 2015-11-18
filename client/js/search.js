@@ -32,3 +32,9 @@ $search.find("button").click(function() {
     searchFor(query);
     return false;
 });
+
+$(".404-search").find("button").click(function() {
+    var query = $(this).parent().parent().find("input").val();
+    location.href = "/latest/search?q=" + query;
+    return false;
+});

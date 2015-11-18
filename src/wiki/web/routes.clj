@@ -29,8 +29,11 @@
 (defn- notifier [request]
   (-> request :component :notifier))
 
+(defn- show-404 [request]
+  (render-file "templates/404.selmer" {}))
+
 (defn- error-404 [request]
-  (route/not-found "Document not found"))
+  (route/not-found (show-404 request)))
 
 (defn- request-update [request]
   (redisca/enqueue (redis request)
@@ -42,6 +45,9 @@
 
 (defn- show-latest [request]
   (redirect (str "/" (versions-data/default (jdbc request)) "/Quick_Start")))
+
+(defn- show-latest-search [request]
+  (redirect (str "/" (versions-data/default (jdbc request)) "/search?q=" (-> request :params :q))))
 
 (defn- show-version [request version]
   (redirect (str "/" (:key version) "/Quick_Start")))
@@ -126,6 +132,7 @@
   (GET "/" [] show-landing)
   (GET "/latest" [] show-latest)
   (GET "/latest/" [] show-latest)
+  (GET "/latest/search" [] show-latest-search)
   (GET "/latest/*" [] try-show-latest-page)
   (GET "/:version" [] (check-version-middleware show-version))
   (GET "/:version/" [] (check-version-middleware show-version))
@@ -133,7 +140,8 @@
   (GET "/:version/*-json" [] (check-page-middleware show-page-data))
   (GET "/:version/search" [] (check-version-middleware search-results))
   (POST "/:version/search-data" [] (check-version-middleware search-data))
-  (GET "/:version/*" [] (check-folder-middleware show-page)))
+  (GET "/:version/*" [] (check-folder-middleware show-page))
+  (route/not-found show-404))
 
 (def app (-> (routes app-routes)
              wrap-keyword-params
