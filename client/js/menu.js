@@ -10,6 +10,27 @@ $(window).scroll(function(e) {
     }
 });
 
+var expandMenu = function(target) {
+    target = target.split("/");
+    var path = [];
+    for (var i = target.length - 1; i >= 0; i--) {
+        if (target[i] == version)
+            break;
+        path.push(target[i]);
+    }
+    path = path.reverse();
+    var str = "/" + version;
+    for (var i = 0; i < path.length; i++) {
+        str += "/" + path[i];
+        var $el = $menu.find("a[href='"+str+"']");
+        var $ul = $el.parent().find(">ul");
+        if ($ul.length && !$ul.is(":visible")) {
+            $ul.toggle();
+            $el.find("i").removeClass('fa-folder').addClass('fa-folder-open');
+        }
+    }
+};
+
 $menu.find('ul').hide();
 $menu.find('a>i.fa-folder-open').removeClass('fa-folder-open').addClass('fa-folder');
 $menu.find('a>i.fa-folder').each(function() {
@@ -34,3 +55,5 @@ $menu.find("a").each(function() {
         });
     }
 });
+
+expandMenu(location.pathname);

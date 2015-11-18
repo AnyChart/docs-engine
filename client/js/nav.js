@@ -7,9 +7,11 @@ function loadPage(link) {
     
     $.get(link + "-json", function(res) {
         $("#content").html(res.page.content);
+        $(window).scrollTop(0);
         fixLinks();
         fixToc();
         prettyPrint();
+        
     });
 };
 
@@ -22,6 +24,7 @@ function fixLinks() {
                     var current = location.pathname.split("/");
                     current.pop();
                     loadPage(current.join("/") + "/" + $this.attr("href"));
+                    expandMenu($this.attr("href"));
                 }catch (e) {
                     console.error(e);
                 }
