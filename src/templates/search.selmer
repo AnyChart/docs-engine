@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Documentation | Anychart </title>
+        <title>Documentation | AnyChart </title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="icon" href="/i/anychart.ico" type="image/x-icon">
 	<link rel="stylesheet" type="text/css" href="/main.css"/>
@@ -70,7 +70,7 @@
 		<div class="col-md-8 col-lg-6 hidden-xs hidden-sm">
                     <div class="row hidden-xs hidden-sm search-large-screen">
                         <div class="col-md-24 col-lg-24">
-                            <div class="input-group">
+                            <div class="input-group search">
                                 <input type="text" class="form-control" placeholder="What are you looking for?">
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" type="button"><span
@@ -81,43 +81,13 @@
                     </div>
 
 		    <ul class="menu">
-			<li>
-			    <a href="" class="active"><i class="fa fa-folder-open"></i> Quick start</a>
-			    <ul>
-				<li><a href=""><i class="fa fa-file"></i> Quick start</a></li>
-				<li><a href=""><i class="fa fa-file"></i> Downloading AnyChart</a></li>
-				<li><a href=""><i class="fa fa-file"></i> Supported chart's types</a></li>
-				<li><a href=""><i class="fa fa-file"></i> Credits</a></li>
-			    </ul>
-			</li>
-			<li>
-			    <a href=""><i class="fa fa-folder-open"></i> Basic chart types </a>
-			    <ul>
-				<li><a href="" class="active"><i class="fa fa-file"></i> Area chart</a></li>
-				<li><a href=""><i class="fa fa-file"></i> Bar chart</a></li>
-				<li><a href=""><i class="fa fa-file"></i> Bubble chart</a></li>
-				<li><a href=""><i class="fa fa-file"></i> Column chart</a></li>
-				<li><a href=""><i class="fa fa-file"></i> Cone chart</a></li>
-				<li><a href=""><i class="fa fa-file"></i> Cylinder chart</a></li>
-				<li><a href=""><i class="fa fa-file"></i> Funnel/Pyramid chart</a></li>
-				<li><a href=""><i class="fa fa-file"></i> HeatMap chart</a></li>
-				<li><a href=""><i class="fa fa-file"></i> Japanese Candlestick chart</a></li>
-				<li><a href=""><i class="fa fa-file"></i> Line/Spline/StepLine charts</a></li>
-				<li><a href=""><i class="fa fa-file"></i> Open-High-Low-Close charts </a></li>
-			    </ul>
-			</li>
-			<li><a href=""><i class="fa fa-folder"></i> Working with data </a></li>
-			<li><a href=""><i class="fa fa-folder"></i> Axis, Grid, Scales, Trends, ect </a></li>
-			<li><a href=""><i class="fa fa-folder"></i> General appearance settings </a></li>
-			<li><a href=""><i class="fa fa-folder"></i> Labels and tooltips </a></li>
-			<li><a href=""><i class="fa fa-folder"></i> Templates and styling </a></li>
-			<li><a href=""><i class="fa fa-folder"></i> Animation </a></li>
-
+                        {% tree-view tree %}
 		    </ul>
 		</div>
-                <div class="row helpers search hidden-lg hidden-md">
+
+                <div class="row helpers hidden-lg hidden-md">
                     <div class="col-xs-24 col-sm-12">
-                        <div class="input-group">
+                        <div class="input-group search">
                             <input type="text" class="form-control" placeholder="What are you looking for?">
                             <span class="input-group-btn">
                                 <button class="btn btn-default" type="button"><span
@@ -130,25 +100,27 @@
                 <section class="col-md-15 col-lg-18" id="content">
                     <button type="button" class="btn btn-default btn-blue visible-xs"> <i class="glyphicon glyphicon-arrow-left"></i> Back</button>
                     <h1 class="search"><button type="button" class="btn btn-default btn-blue hidden-xs"> <i class="glyphicon glyphicon-arrow-left"></i> Back</button>
-                        Search results for <span>Axis</span> </h1>
+                        Search results for <span>{{query}}</span> </h1>
 
+                    {% for r in results %}
                     <div class="result-block">
-                        <h2> <span class="match">Axis</span> and Grids / <a href="#"> <span class="match">Axis</span> Basics</a></h2>
-                        <p> Orientation depends on plot type and inversion of <span class="match">axes</span>, below you will find all possible axes orientation and inverting JS Settings with demonstration preview.
+                        <h2><a href="./{{r.url}}"> {{r.url}}</a></h2>
+                        <p>{{r.sn|safe}}</p>
                     </div>
-                    <div class="result-block">
-                        <h2> <span class="match">Axis</span> and Grids / <a href="#"> <span class="match">Axis</span> Orientation</a></h2>
-                        <p> Orientation depends on plot type and inversion of <span class="match">axes</span>, below you will find all possible axes orientation and inverting JS Settings with demonstration preview.
-                    </div>
+                    {% empty %}
+                    Nothing found
+                    {% endfor %}
 
 		</section>
 	    </div>
 	</div>
 
-	<script type="text/javascript">
+        <script type="text/javascript">
          window['version'] = '{{version}}';
         </script>
         <script type="text/javascript" src="/main.min.js"></script>
+        <script type="text/javascript">
+         initSearch();
+        </script>
     </body>
 </html>
-

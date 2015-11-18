@@ -69,10 +69,21 @@
     (redirect (str "/" version "/" (-> request :route-params :*)))))
 
 (defn- search-results [request version]
-  (search/search-for (sphinx request) (-> request :params :q)
-                     (:id version) (:key version)))
+  (render-file "templates/search.selmer" {:version (:key version)
+                                          :tree (versions-data/tree-data (jdbc request)
+                                                                         (:id version))
+                                          :query (-> request :params :q)
+                                          :versions (versions-data/versions (jdbc request))
+                                          :results (search/search-for (sphinx request)
+                                                                      (-> request :params :q)
+                                                                      (:id version)
+                                                                      (:key version))}))
 
-(defn- search-data [request version])
+(defn- search-data [request version]
+  (response (search/search-for (sphinx request)
+                               (-> request :params :q)
+                               (:id version)
+                               (:key version))))
 
 (defn- check-version-middleware [app]
   (fn [request]

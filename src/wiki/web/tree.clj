@@ -6,4 +6,4 @@
            "<a href='/" version (:url el) "'><i class='fa fa-folder-open'></i> " (:title el) "</a>"
            "<ul>" (reduce str (map #(tree-view % version) (:children el))) "</ul>"
          "</li>")
-    (str "<li> <a href='/" version (:url el) "'>" (:title el) "</a></li>")))
+    (str "<li> <a href='/" version (:url el) "'><i class='fa fa-file'></i> " (:title el) "</a></li>")))
