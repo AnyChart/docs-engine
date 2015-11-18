@@ -67,7 +67,7 @@
 
         <div class="wrapper container-fluid">
 	    <div class="row">
-		<div class="col-md-8 col-lg-6 hidden-xs hidden-sm">
+		<div class="col-md-8 col-lg-6 hidden-xs hidden-sm" id="bar-side">
                     <div class="row hidden-xs hidden-sm search-large-screen">
                         <div class="col-md-24 col-lg-24">
                             <div class="input-group search">
@@ -97,7 +97,7 @@
                     </div>
                 </div>
 
-                <section class="col-md-15 col-lg-13" id="content">
+                <section class="col-md-15 col-lg-13 col-lg-offset-6 col-md-offset-8" id="content">
                     {{page.content|safe}}
                 </section>
 

@@ -12,7 +12,7 @@
     }
 }
 .container-fluid {
-    max-width: 1500px;
+    max-width: 1400px;
 }
 
 header{
@@ -23,10 +23,7 @@ header{
   z-index: 20;
 }
 .wrapper{
-  padding-top: 70px;
-}
-.search-large-screen{
-    margin-bottom: 30px;
+  padding-top: 80px;
 }
 .navbar-brand{
     position: relative;
@@ -100,7 +97,7 @@ a.brand{
 }
 .helpers .questions{
     float: right;
-    margin-left: 10px;
+    margin-left: 0;
     color: #929292;
     line-height: 16px;
     font-size: 13px;
@@ -170,7 +167,7 @@ section{
     position: fixed;
     top: 50px;
     bottom: 0;
-    width: 300px;
+    width: 330px;
     -webkit-box-shadow: 2px 2px 4px -1px rgba(0,0,0,0.75);
     -moz-box-shadow: 2px 2px 4px -1px rgba(0,0,0,0.75);
     box-shadow: 2px 2px 4px -1px rgba(0,0,0,0.75);
@@ -189,7 +186,6 @@ section{
     z-index: 19;
     display: none;
 }
-
 ul.menu{
     background: #f6f6f6;
     color: #fff;
@@ -201,6 +197,8 @@ ul.menu{
 ul.menu a {
     color: #474747;
     padding: 1px 5px 2px 5px;
+    text-decoration: none;
+    display: inline-block;
 }
 ul.menu a:hover{
     text-decoration: none;
@@ -209,6 +207,21 @@ ul.menu a:hover{
     text-shadow: none;
     border-radius: 2px;
 }
+ul.menu a.active{
+    text-decoration: none;
+    color: #f1f1f1;
+    background: #2E618D;
+    text-shadow: none;
+    border-radius: 2px;
+    cursor: default;
+}
+
+ul.menu a.active .fa.fa-file{
+    color: #f1f1f1;
+    font-weight: normal;
+    padding-right: 5px;
+}
+
 ul.menu li ul {
     list-style: none;
     padding-top: 5px;
@@ -254,7 +267,7 @@ ul.menu a:hover .fa.fa-file{
 }
 #content ul.table_of_content ul a{
     border-left: 3px solid #ddd;
-    padding-left: 30px;
+    padding: 5px 0 5px 20px;
     margin-left: 10px;
     text-decoration: none;
 }
@@ -264,9 +277,20 @@ ul.menu a:hover .fa.fa-file{
     color: #2E618D
 }
 
+#content ul.table_of_content a.active{
+    border-left: 3px solid #929292;
+    text-decoration: none;
+    color: #2E618D
+}
+
+#content ul.table_of_content a.active:hover{
+    border-left: 3px solid #929292;
+    text-decoration: underline;
+    color: #2E618D
+}
 
 #content {
-    padding: 0 20px 20px 20px;
+    padding: 20px;
 }
 #content h1, #content h2, #content h3, #content h4{
     color: #474747;
@@ -358,18 +382,21 @@ ul.menu a:hover .fa.fa-file{
     line-height: 1.428571429;
     text-align: left;
 }
-#content table>thead>tr>th {
+#content table tr th {
     vertical-align: bottom;
     border-bottom: 2px solid #ddd;
     padding: 8px;
     line-height: 1.428571429;
     text-align: left;
 }
-#content table>tbody>tr>td{
+#content table tbody tr td{
     padding: 8px;
     line-height: 1.428571429;
     vertical-align: top;
     border-top: 1px solid #ddd;
+}
+#content table tbody tr td.center{
+    text-align: center;
 }
 .iframe{
     border: 1px solid #D2D2D2;
@@ -459,29 +486,64 @@ pre{
 @media (min-width: 1200px) {
     ul.table_of_content{
         position: fixed;
-        top: 110px;
+        top: 120px;
     }
     ul.table_of_content a{
+        display: block;
         border-left: 3px solid #ddd;
-        padding-left: 10px;
+        padding: 2px 0 2px 10px;
         margin-left: 10px;
     }
     ul.table_of_content ul a{
         border-left: 3px solid #ddd;
-        padding-left: 30px;
+        padding: 1px 0 1px 20px;
         margin-left: 10px;
     }
     ul.table_of_content a:hover{
         border-left: 3px solid #929292;
     }
-}
-@media (min-width: 992px) {
-
-    .search-large-screen{
-        margin-bottom: 10px;
+    ul.table_of_content a.active{
+        border-left: 3px solid #929292;
+        text-decoration: none;
+        color: #2E618D
     }
+    ul.table_of_content a.active:hover{
+        border-left: 3px solid #929292;
+        text-decoration: underline;
+        color: #2E618D
+    }
+}
+
+@media (min-width: 992px) {
+    #bar-side{
+        position: fixed;
+        z-index: 900;
+        top: 70px;
+        bottom: 20px;
+    }
+    .search-large-screen{
+        position: absolute;
+    }
+    .menu {
+        position: absolute;
+        top: 50px;
+        bottom: 20px;
+        left: 15px;
+        right: 0;
+        overflow-y: scroll;
+    }
+
     #content{
-        padding-top: 40px;
+        padding: 40px 20px 20px 40px;
+    }
+    #table_of_content_place{
+        float: right;
+    }
+    #bar{
+        display: none !important;
+    }
+    #shadow{
+        display: none !important;
     }
 }
 @media (min-width: 768px) {
@@ -490,9 +552,6 @@ pre{
     }
     .helpers.bordered{
          border-bottom: none;
-    }
-    #content h1.search{
-        margin: 20px 0 20px 0;
     }
     .helpers .questions {
         float: right;
