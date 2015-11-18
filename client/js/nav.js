@@ -3,6 +3,11 @@ var page = location.pathname;
 function highlightCode() {
     $("#content pre").addClass("prettyprint");
     prettyPrint();
+
+    $("div.iframe .btns").each(function() {
+        var href = $(this).find(".btn-playground:not(.jsfiddle-btn)").attr("href").replace(/-plain$/, "");
+        $(this).find(".jsfiddle-btn").attr("href", href + "-jsfiddle");
+    });
 };
 
 function loadPage(link) {
