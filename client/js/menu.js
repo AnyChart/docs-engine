@@ -11,6 +11,7 @@ $(window).scroll(function(e) {
 });
 
 var expandMenu = function(target) {
+    $menu.find(".active").removeClass("active");
     target = target.split("/");
     var path = [];
     for (var i = target.length - 1; i >= 0; i--) {
@@ -19,16 +20,18 @@ var expandMenu = function(target) {
         path.push(target[i]);
     }
     path = path.reverse();
+    var $el;
     var str = "/" + version;
     for (var i = 0; i < path.length; i++) {
         str += "/" + path[i];
-        var $el = $menu.find("a[href='"+str+"']");
+        $el = $menu.find("a[href='"+str+"']");
         var $ul = $el.parent().find(">ul");
         if ($ul.length && !$ul.is(":visible")) {
             $ul.toggle();
             $el.find("i").removeClass('fa-folder').addClass('fa-folder-open');
         }
     }
+    $el.addClass("active");
 };
 
 $menu.find('ul').hide();
@@ -48,10 +51,9 @@ $menu.find('a>i.fa-folder').each(function() {
     });
 });
 $menu.find("a").each(function() {
-    if (!$(this).find(">i").length) {
+    if ($(this).find(">i.fa-file").length) {
         $(this).click(function() {
-            loadPage($(this).attr("href"));
-            return false;
+            return loadPage($(this).attr("href"));
         });
     }
 });

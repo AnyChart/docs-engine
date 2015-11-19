@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Documentation | AnyChart </title>
+        <title>{{url}} - AnyChart JavaScript Chart Documentation ver. {{version}}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="icon" href="/i/anychart.ico" type="image/x-icon">
 	<link rel="stylesheet" type="text/css" href="/main.css"/>
@@ -13,7 +13,7 @@
     <body>
 	<header>
 	    <div class="container-fluid">
-		<a class="sidebar-switcher hidden-md hidden-lg" onclick="$('#bar').show(); $('#shadow').show(); "><i class="fa fa-bars"></i></a>
+		<a class="sidebar-switcher hidden-md hidden-lg"><i class="fa fa-bars"></i></a>
 		<a class="navbar-brand" href="//anychart.com/">
                     <img src="/i/logo-empty.png" width="300" height="72" alt="AnyChart">
                     <div class="chart-row">
@@ -70,7 +70,7 @@
 		<div class="col-md-8 col-lg-6 hidden-xs hidden-sm" id="bar-side">
                     <div class="row hidden-xs hidden-sm search-large-screen">
                         <div class="col-md-24 col-lg-24">
-                            <div class="input-group">
+                            <div class="input-group search">
                                 <input type="text" class="form-control" placeholder="What are you looking for?">
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" type="button"><span
@@ -87,7 +87,7 @@
 
                 <div class="row helpers hidden-lg hidden-md">
                     <div class="col-xs-24 col-sm-12">
-                        <div class="input-group">
+                        <div class="input-group search">
                             <input type="text" class="form-control" placeholder="What are you looking for?">
                             <span class="input-group-btn">
                                 <button class="btn btn-default" type="button"><span
@@ -109,5 +109,15 @@
          window['version'] = '{{version}}';
         </script>
         <script type="text/javascript" src="/main.min.js"></script>
+
+        <!-- Google Tag Manager -->
+        <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5B8NXZ"
+                          height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                                                              new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+                                                                                                        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+         })(window,document,'script','dataLayer','GTM-5B8NXZ');</script>
+        <!-- End Google Tag Manager -->
     </body>
 </html>
