@@ -101,7 +101,7 @@
                     {{page.content|safe}}
                 </section>
 
-                <div class="col-lg-5 visible-lg"></div>
+                <div class="col-lg-5 visible-lg col-lg-offset-19"></div>
 	    </div>
 	</div>
 
