@@ -6356,9 +6356,6 @@ body {
   font-family: 'AnyChart';
   src: url('../fonts/AnyChart-font/AnyChart.eot?-x72mzv'), url('../fonts/AnyChart-font/AnyChart.eot?#iefix-x72mzv') format('embedded-opentyp'), url('../fonts/AnyChart-font/AnyChart.woff?-x72mzv') format('woff'), url('../fonts/AnyChart-font/AnyChart.ttf?-x72mzv') format('truetype'), url('../fonts/AnyChart-font/AnyChart.svg?-x72mzv#AnyChart') format('svg');
 }
-.container-fluid {
-  max-width: 1400px;
-}
 header {
   background: #2485d0;
   height: 50px;
@@ -6437,6 +6434,7 @@ a.brand {
 }
 .helpers {
   padding: 20px 10px 20px 10px;
+  max-width: 90%;
 }
 .helpers.bordered {
   border-bottom: 1px solid #ddd;
@@ -6554,7 +6552,7 @@ ul.menu a:hover {
 ul.menu a.active {
   text-decoration: none;
   color: #f1f1f1;
-  background: #2E618D;
+  background: #999999;
   text-shadow: none;
   border-radius: 2px;
   cursor: default;
@@ -6592,10 +6590,13 @@ ul.table_of_content {
   font-size: 14px;
   line-height: normal;
 }
+#content ul.table_of_content li {
+  margin-left: 0;
+}
 #content ul.table_of_content a {
   border-left: 3px solid #ddd;
   padding-left: 10px;
-  margin-left: 10px;
+  margin-left: 0;
   text-decoration: none;
 }
 #content ul.table_of_content ul,
@@ -6611,7 +6612,7 @@ ul.table_of_content ul {
 #content ul.table_of_content ul a {
   border-left: 3px solid #ddd;
   padding: 5px 0 5px 20px;
-  margin-left: 10px;
+  margin-left: 0;
   text-decoration: none;
 }
 #content ul.table_of_content a:hover {
@@ -6811,9 +6812,6 @@ pre {
   font-size: 22px;
   font-weight: normal;
 }
-#content .result-block h2 a {
-  text-decoration: underline;
-}
 #content .result-block .match {
   font-weight: bold;
 }
@@ -6831,6 +6829,7 @@ pre {
   ul.table_of_content {
     position: fixed;
     top: 120px;
+    max-width: 270px;
   }
   ul.table_of_content a {
     display: block;
@@ -6863,7 +6862,6 @@ pre {
     z-index: 900;
     top: 70px;
     bottom: 20px;
-    max-width: 350px;
   }
   .search-large-screen {
     position: absolute;
@@ -6877,9 +6875,9 @@ pre {
     overflow-y: scroll;
   }
   #content {
-    padding: 0 20px 0 40px;
+    padding: 70px 20px 40px 40px;
     overflow-y: scroll;
-    top: 120px;
+    top: 50px;
     bottom: 0;
     position: absolute;
     margin-bottom: 0;
