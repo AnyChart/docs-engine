@@ -2,7 +2,6 @@
   (:require [wiki.generator.git :as git]
             [wiki.data.versions :as vdata]
             [wiki.data.pages :as pdata]
-            [wiki.data.sitemap :as sitemap]
             [wiki.data.folders :as fdata]
             [wiki.components.notifier :as notifications]
             [taoensso.timbre :as timbre :refer [info error]]))
@@ -21,7 +20,6 @@
   (let [version-id (:id (vdata/version-by-key jdbc branch-key))]
     (pdata/delete-version-pages jdbc version-id)
     (fdata/delete-version-folders jdbc version-id)
-    (sitemap/remove-by-version jdbc version-id)
     (vdata/delete-by-id jdbc version-id)))
 
 (defn remove-branches [jdbc actual-branches]
@@ -43,6 +41,5 @@
     (doall (map (fn [vid]
                   (pdata/delete-version-pages jdbc vid)
                   (fdata/delete-version-folders jdbc vid)
-                  (sitemap/remove-by-version jdbc vid)
                   (vdata/delete-by-id jdbc vid))
                 outdated-ids))))
