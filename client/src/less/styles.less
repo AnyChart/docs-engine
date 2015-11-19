@@ -16,10 +16,6 @@ html, body {
   }
 }
 
-.container-fluid {
-  max-width: 1400px;
-}
-
 header {
   background: #2485d0;
   height: 50px;
@@ -111,6 +107,7 @@ a.brand {
 
 .helpers {
   padding: 20px 10px 20px 10px;
+  max-width: 90%;
 }
 
 .helpers.bordered {
@@ -286,10 +283,14 @@ ul.menu a:hover .fa.fa-file {
   line-height: normal;
 }
 
+#content ul.table_of_content li {
+  margin-left: 0;
+}
+
 #content ul.table_of_content a {
   border-left: 3px solid #ddd;
   padding-left: 10px;
-  margin-left: 10px;
+  margin-left: 0;
   text-decoration: none;
 }
 
@@ -307,7 +308,7 @@ ul.menu a:hover .fa.fa-file {
 #content ul.table_of_content ul a {
   border-left: 3px solid #ddd;
   padding: 5px 0 5px 20px;
-  margin-left: 10px;
+  margin-left: 0;
   text-decoration: none;
 }
 
@@ -566,6 +567,7 @@ pre {
   ul.table_of_content {
     position: fixed;
     top: 120px;
+    max-width: 270px;
   }
 
   ul.table_of_content a {
@@ -604,7 +606,6 @@ pre {
     z-index: 900;
     top: 70px;
     bottom: 20px;
-    max-width: 350px;
   }
 
   .search-large-screen {
@@ -621,9 +622,9 @@ pre {
   }
 
   #content {
-    padding: 0 20px 0 40px;
+    padding: 70px 20px 40px 40px;
     overflow-y: scroll;
-    top: 120px;
+    top: 50px;
     bottom: 0;
     position: absolute;
     margin-bottom: 0;

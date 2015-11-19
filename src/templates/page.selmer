@@ -13,32 +13,37 @@
     <body>
 	<header>
 	    <div class="container-fluid">
-		<a class="sidebar-switcher hidden-md hidden-lg"><i class="fa fa-bars"></i></a>
-		<a class="navbar-brand" href="//anychart.com/">
-                    <img src="/i/logo-empty.png" width="300" height="72" alt="AnyChart">
-                    <div class="chart-row">
-                        <span class="chart-col green"></span>
-                        <span class="chart-col orange"></span>
-                        <span class="chart-col red"></span>
-                    </div>
-                </a>
-                <a class="brand hidden-super-small"> Documentation</a>
-                <div class="pull-right helpers  hidden-xs">
-		    <div class="btn-group">
-			<button type="button" class="btn btn-default btn-blue dropdown-toggle" data-toggle="dropdown">Version {{version}} <span class="caret"></span></button>
-			<ul class="dropdown-menu" role="menu">
-                            {% for v in versions %}
-			    <li><a href="/{{v}}/{{url}}">Version {{v}}</a></li>
-                            {% endfor %}
-			</ul>
-		    </div>
-                    <div class="text-muted questions">
-                        <a href="http://support.anychart.com/" class="text-support"><i class="fa fa-life-ring"></i></a>
-                        <span class="hidden-super-small">
-                            Still have questions?<br/>
-                            <a href="//anychart.com/support/"> Contact support</a></span>
+	        <div class="row">
+	            <div class="col-lg-22 col-lg-offset-1">
+                    <a class="sidebar-switcher hidden-md hidden-lg"><i class="fa fa-bars"></i></a>
+                    <a class="navbar-brand" href="//anychart.com/">
+                        <img src="/i/logo-empty.png" width="300" height="72" alt="AnyChart">
+                        <div class="chart-row">
+                            <span class="chart-col green"></span>
+                            <span class="chart-col orange"></span>
+                            <span class="chart-col red"></span>
+                        </div>
+                    </a>
+
+                    <a class="brand hidden-super-small"> Documentation</a>
+                    <div class="pull-right helpers  hidden-xs">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default btn-blue dropdown-toggle" data-toggle="dropdown">Version {{version}} <span class="caret"></span></button>
+                            <ul class="dropdown-menu" role="menu">
+                                {% for v in versions %}
+                                    <li><a href="/{{v}}/{{url}}">Version {{v}}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="text-muted questions">
+                            <a href="http://support.anychart.com/" class="text-support"><i class="fa fa-life-ring"></i></a>
+                            <span class="hidden-super-small">
+                                Still have questions?<br/>
+                                <a href="//anychart.com/support/"> Contact support</a></span>
+                        </div>
                     </div>
                 </div>
+            </div>
 	    </div>
 	</header>
         <div id="shadow" class=""></div>
@@ -67,41 +72,35 @@
 
         <div class="wrapper container-fluid">
 	    <div class="row">
-		<div class="col-md-8 col-lg-6 hidden-xs hidden-sm" id="bar-side">
-                    <div class="row hidden-xs hidden-sm search-large-screen">
-                        <div class="col-md-24 col-lg-24">
-                            <div class="input-group search">
-                                <input type="text" class="form-control" placeholder="What are you looking for?">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button"><span
-                                                                                      class="glyphicon glyphicon-search form-control-feedback"></span></button>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-		    <ul class="menu">
-                        {% tree-view tree %}
-		    </ul>
-		</div>
-
-                <div class="row helpers hidden-lg hidden-md">
-                    <div class="col-xs-24 col-sm-12">
+            <div class="col-md-8 col-lg-5 col-lg-offset-1 hidden-xs hidden-sm" id="bar-side">
+                <div class="row hidden-xs hidden-sm search-large-screen">
+                    <div class="col-md-24 col-lg-24">
                         <div class="input-group search">
                             <input type="text" class="form-control" placeholder="What are you looking for?">
-                            <span class="input-group-btn">
-                                <button class="btn btn-default" type="button"><span
-                                                                                  class="glyphicon glyphicon-search form-control-feedback"></span></button>
-                            </span>
+                            <span class="input-group-btn"><button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search form-control-feedback"></span></button></span>
                         </div>
                     </div>
                 </div>
+                <ul class="menu">{% tree-view tree %}</ul>
+            </div>
+            <div class="row helpers hidden-lg hidden-md">
+                <div class="col-xs-24 col-sm-12">
+                    <div class="input-group search">
+                        <input type="text" class="form-control" placeholder="What are you looking for?">
+                        <span class="input-group-btn"><button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search form-control-feedback"></span></button></span>
+                    </div>
+                </div>
+            </div>
 
-                <section class="col-md-15 col-lg-13 col-lg-offset-6 col-md-offset-8" id="content">
-                    {{page.content|safe}}
-                </section>
+            <section class="col-md-16 col-lg-18 col-lg-offset-6 col-md-offset-8" id="content">
 
-                <div class="col-lg-5 visible-lg col-lg-offset-19"></div>
+                <div id="table-of-content-small" class="hidden-lg"></div>
+                <div class="row">
+                    <div class="col-lg-17">
+                        {{page.content|safe}}
+                    </div>
+                <div id="table-of-content-large" class="col-lg-6 hidden-sm hidden-xs hidden-md visible-lg"></div>
+            </section>
 	    </div>
 	</div>
 
