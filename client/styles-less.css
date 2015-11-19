@@ -6714,13 +6714,10 @@ ul.table_of_content ul {
 #content ul li {
   margin: 0 0 0 20px;
 }
-#content table.table {
-  width: 100%;
-  margin-bottom: 20px;
-}
 #content table {
   width: 100%;
   margin-bottom: 20px;
+  border: #ddd;
 }
 #content table > thead > tr > th {
   vertical-align: bottom;
@@ -6735,12 +6732,14 @@ ul.table_of_content ul {
   padding: 8px;
   line-height: 1.428571429;
   text-align: left;
+  border-color: #ddd;
 }
 #content table tbody tr td {
   padding: 8px;
   line-height: 1.428571429;
   vertical-align: top;
   border-top: 1px solid #ddd;
+  border-color: #ddd;
 }
 #content table tbody tr td.center {
   text-align: center;
