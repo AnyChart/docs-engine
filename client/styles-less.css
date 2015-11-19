@@ -6348,6 +6348,10 @@ button.close {
     display: none !important;
   }
 }
+html,
+body {
+  height: 100%;
+}
 @font-face {
   font-family: 'AnyChart';
   src: url('../fonts/AnyChart-font/AnyChart.eot?-x72mzv'), url('../fonts/AnyChart-font/AnyChart.eot?#iefix-x72mzv') format('embedded-opentyp'), url('../fonts/AnyChart-font/AnyChart.woff?-x72mzv') format('woff'), url('../fonts/AnyChart-font/AnyChart.ttf?-x72mzv') format('truetype'), url('../fonts/AnyChart-font/AnyChart.svg?-x72mzv#AnyChart') format('svg');
@@ -6364,6 +6368,8 @@ header {
 }
 .wrapper {
   padding-top: 80px;
+  position: relative;
+  height: 100%;
 }
 .navbar-brand {
   position: relative;
@@ -6857,6 +6863,7 @@ pre {
     z-index: 900;
     top: 70px;
     bottom: 20px;
+    max-width: 350px;
   }
   .search-large-screen {
     position: absolute;
@@ -6864,13 +6871,18 @@ pre {
   .menu {
     position: absolute;
     top: 50px;
-    bottom: 20px;
+    bottom: 0;
     left: 15px;
     right: 0;
     overflow-y: scroll;
   }
   #content {
-    padding: 40px 20px 20px 40px;
+    padding: 0 20px 0 40px;
+    overflow-y: scroll;
+    top: 120px;
+    bottom: 0;
+    position: absolute;
+    margin-bottom: 0;
   }
   #table_of_content_place {
     float: right;
