@@ -36,8 +36,8 @@
 
 (defn- error-404 [request]
   (let [referrer (get-in request [:headers "referer"])
-        agent (get-in request [:headers "http_user_agent"])]
-    (when (not (.contains agent "Slackbot"))
+        ua (get-in request [:headers "user-agent"])]
+    (when (not (.contains ua "Slackbot"))
       (if referrer
         (notify-404 (notifier request) (str (request-url request) " from " referrer))
         (notify-404 (notifier request) (request-url request)))))
