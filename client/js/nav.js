@@ -23,11 +23,16 @@ function loadPage(link) {
     }
     expandMenu(location.pathname);
     $.get(link + "-json", function(res) {
-        $("#content").html(res.page.content);
+        $("#content").html('<div id="table-of-content-small" class="hidden-lg"></div>'+
+                           '<div class="row">'+
+                           '  <div class="col-lg-17">'+res.page.content+'</div>'+
+                           '  <div id="table-of-content-large" class="col-lg-6 hidden-sm hidden-xs hidden-md visible-lg"></div>'+
+                           '</div>');
         document.title = res.url + " - AnyChart JavaScript Chart Documentation ver. " + version;
         $(window).scrollTop(0);
         fixLinks();
         fixToc();
+        fixHeaders();
         highlightCode();
     });
     $("#bar").hide();

@@ -39,7 +39,7 @@
   (clojure.string/replace text
                           #"\{api:([^}]+)\}([^{]+)\{api\}"
                           (fn [[_ link title]]
-                            (str "<a href='//" reference "/" version "/" link "'>" title "</a>"))))
+                            (str "<a class='method' href='//" reference "/" version "/" link "'>" title "</a>"))))
 
 (defn to-html [source version playground reference]
   (-> (md-to-html-string source
