@@ -1,10 +1,17 @@
 function fixToc() {
+
+    var idx = 0;
+    var $items = $("#content .col-lg-17 > *");
+    while ($items.get(idx).tagName.toLowerCase() == "br")
+        idx++;
+
+    if ($items.get(idx).tagName.toLowerCase() == "h1")
+        idx++;
+
+    while ($items.get(idx).tagName.toLowerCase() == "br")
+        idx++;
     
-    var $next = $("#content h1").next();
-    while ($next.prop("tagName").toLowerCase() == "br") {
-        $next = $next.next();
-    }
-    $next = $next.first();
+    var $next = $($items.get(idx));
     
     $("div.wrapper.container-fluid>div.row>div.visible-lg").html('');
     if ($next.prop("tagName").toLowerCase() == "ul") {
