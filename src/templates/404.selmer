@@ -14,27 +14,29 @@
     <body>
         <header>
             <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-22 col-lg-offset-1">
+                        <a class="sidebar-switcher hidden-md hidden-lg"><i class="fa fa-bars"></i></a>
+                        <a class="navbar-brand" href="//anychart.com/">
+                            <img src="/i/logo-empty.png" width="300" height="72" alt="AnyChart">
 
-                <a class="sidebar-switcher hidden-md hidden-lg"><i
-                                                                                                                      class="fa fa-bars"></i></a>
-                <a class="navbar-brand" href="//anychart.com/">
-                    <img src="/i/logo-empty.png" width="300" height="72" alt="AnyChart">
+                            <div class="chart-row">
+                                <span class="chart-col green"></span>
+                                <span class="chart-col orange"></span>
+                                <span class="chart-col red"></span>
+                            </div>
+                        </a>
 
-                    <div class="chart-row">
-                        <span class="chart-col green"></span>
-                        <span class="chart-col orange"></span>
-                        <span class="chart-col red"></span>
-                    </div>
-                </a>
-                <a class="brand hidden-super-small"> Documentation</a>
+                        <a class="brand hidden-super-small"> Documentation</a>
 
-                <div class="pull-right helpers  hidden-xs">
-
-                    <div class="text-muted questions">
-                        <a href="//support.anychart.com/" class="text-support"><i class="fa fa-life-ring"></i></a>
-                        <span class="hidden-super-small">
-                            Still have questions?<br/>
-                            <a href="http://anychart.com/support/"> Contact support</a></span>
+                        <div class="pull-right helpers hidden-xs">
+                            <div class="text-muted questions">
+                                <a href="http://support.anychart.com/" class="text-support"><i class="fa fa-life-ring"></i></a>
+                                    <span class="hidden-super-small">
+                                        Still have questions?<br/>
+                                <a href="//anychart.com/support/"> Contact support</a></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
