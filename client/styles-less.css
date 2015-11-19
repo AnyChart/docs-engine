@@ -6812,9 +6812,6 @@ pre {
   font-size: 22px;
   font-weight: normal;
 }
-#content .result-block h2 a {
-  text-decoration: underline;
-}
 #content .result-block .match {
   font-weight: bold;
 }
