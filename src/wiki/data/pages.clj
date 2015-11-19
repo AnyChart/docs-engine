@@ -1,5 +1,5 @@
 (ns wiki.data.pages
-  (:require [wiki.components.jdbc :refer [one exec insert!]]
+  (:require [wiki.components.jdbc :refer [one exec query insert!]]
             [honeysql.helpers :refer :all]))
 
 ;; CREATE SEQUENCE page_id_seq;
@@ -18,16 +18,21 @@
                   (where [:= :version_id version-id]
                          [:= :url page-url])))))
     
+(defn pages-urls [jdbc version-id]
+  (query jdbc (-> (select :url :last_modified)
+                  (from :pages)
+                  (where [:= :version_id version-id]))))
 
 (defn delete-version-pages [jdbc version-id]
   (exec jdbc (-> (delete-from :pages)
                  (where [:= :version_id version-id]))))
 
-(defn add-page [jdbc version-id url title content]
+(defn add-page [jdbc version-id url title content last-modified]
   (insert! jdbc :pages {:url url
                         :content content
                         :full_name title
-                        :version_id version-id}))
+                        :version_id version-id
+                        :last_modified last-modified}))
 
 (defn page-exists? [jdbc version-id url]
   (not (nil? (one jdbc (-> (select :id)

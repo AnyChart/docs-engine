@@ -2,7 +2,7 @@
   (:require [selmer.parser :refer [render-file add-tag!]]
             [compojure.core :refer [defroutes routes GET POST]]
             [compojure.route :as route]
-            [ring.util.response :refer [redirect response]]
+            [ring.util.response :refer [redirect response content-type]]
             [ring.util.request :refer [request-url]]
             [ring.middleware.params :refer [wrap-params]]
             [ring.middleware.keyword-params :refer [wrap-keyword-params]]
@@ -12,6 +12,7 @@
             [wiki.data.versions :as versions-data]
             [wiki.data.pages :as pages-data]
             [wiki.data.folders :as folders-data]
+            [wiki.data.sitemap :as sitemap]
             [wiki.data.search :as search]
             [wiki.web.tree :refer [tree-view]]))
 
@@ -106,6 +107,10 @@
       (app request version)
       (error-404 request))))
 
+(defn- show-sitemap [request]
+  (-> (response (sitemap/generate-sitemap (jdbc request)))
+      (content-type "text/xml")))
+
 (defn- check-folder-middleware [app]
   (fn [request]
     (let [version (versions-data/version-by-key (jdbc request)
@@ -138,6 +143,7 @@
   (GET "/_update_" [] request-update)
   (POST "/_update_" [] request-update)
   (GET "/" [] show-landing)
+  (GET "/sitemap" [] show-sitemap)
   (GET "/latest" [] show-latest)
   (GET "/latest/" [] show-latest)
   (GET "/latest/search" [] show-latest-search)

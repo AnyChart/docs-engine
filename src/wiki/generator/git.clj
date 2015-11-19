@@ -7,7 +7,7 @@
 
 (defn file-last-commit-date [base-path path]
   (with-sh-dir base-path
-    (let [res (sh "git" "--no-pager" "log" "-1" "--format=%ct" "--" (str base-path path))]
+    (let [res (sh "git" "--no-pager" "log" "-1" "--format=%ct" "--" path)]
       (-> res
           :out
           (clojure.string/trim)

@@ -19,7 +19,8 @@
     (pdata/add-page jdbc (:id version) (fix-url (str base-path "/"
                                                      (:name item)))
                     (:title item)
-                    (convert-content content (:key version) playground api))
+                    (convert-content content (:key version) playground api)
+                    (:last-modified item))
     (let [items (:children item)]
       (when (seq items)
         (fdata/add-folder jdbc (:id version) (fix-url (str base-path "/" (:name item)))

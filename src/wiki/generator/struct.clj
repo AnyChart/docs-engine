@@ -1,5 +1,6 @@
 (ns wiki.generator.struct
-  (:require [clojure.java.io :refer [file]]))
+  (:require [clojure.java.io :refer [file]]
+            [wiki.generator.git :refer [file-last-commit-date]]))
 
 (defn- title [f]
   (-> f .getName
@@ -31,13 +32,14 @@
       (clojure.string/replace-first #"\A(?s)(?m)(^\{[^\}]+\})" "")
       (clojure.string/trim-newline)))
 
-(defn- create-document [item]
+(defn- create-document [base-path item]
   (let [content (slurp item)
         doc-header (re-matches #"(?s)(?m)(^\{[^\}]+\}).*" content)
         res {:name (get-name item)
              :title (title item)
              :content content
-             :config {:index 1000}}]
+             :config {:index 1000}
+             :last-modified (file-last-commit-date base-path (.getAbsolutePath item))}]
     (if doc-header
       (-> res
           (update :config #(merge % (-> doc-header last read-string)))
@@ -46,11 +48,12 @@
 
 (declare build-struct)
 
-(defn- create-folder [item]
+(defn- create-folder [base-path item]
   (let [res {:name (get-name item)
              :title (title item)
              :config {:index 1000}
-             :children (reduce build-struct []
+             :children (reduce (fn [res item]
+                                 (build-struct res item base-path)) []
                                (.listFiles item))}]
     (if (.exists (file (str (.getAbsolutePath item) "/group.cfg")))
       (update res :config #(merge % (-> (str (.getAbsolutePath item) "/group.cfg")
@@ -58,13 +61,13 @@
                                         read-string)))
       res)))
 
-(defn- build-struct [items item]
+(defn- build-struct [items item base-path]
   (cond
     (.isHidden item) items
     (and (not (.isDirectory item))
-         (is-doc item)) (conj items (create-document item))
+         (is-doc item)) (conj items (create-document base-path item))
     (and (.isDirectory item)
-         (has-docs item)) (conj items {} (create-folder item))
+         (has-docs item)) (conj items {} (create-folder base-path item))
     :else items))
 
 (defn- get-index [item]
@@ -88,7 +91,7 @@
     item))
 
 (defn get-struct [path]
-  (-> (build-struct [] (file path))
+  (-> (build-struct [] (file path) path)
       last
       filter-struct
       sort-struct
