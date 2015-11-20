@@ -112,7 +112,7 @@
 
                     {% for r in results %}
                     <div class="result-block">
-                        <h2>{{r.title}}</h2>
+                        <h2>{{r.title|safe}}</h2>
                         <p>{{r.sn|safe}}</p>
                     </div>
                     {% empty %}
