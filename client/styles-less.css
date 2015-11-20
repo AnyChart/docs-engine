@@ -6433,7 +6433,7 @@ a.brand {
   font-weight: 500;
 }
 .helpers {
-  padding: 20px 10px 20px 10px;
+  padding: 0 10px 20px;
   max-width: 90%;
 }
 .helpers.bordered {
@@ -6581,6 +6581,14 @@ ul.menu a:hover .fa.fa-file {
   font-weight: normal;
   padding-right: 5px;
 }
+#content {
+  padding: 20px;
+  overflow-y: scroll;
+  top: 130px;
+  bottom: 0;
+  position: absolute;
+  margin-bottom: 0;
+}
 #content ul.table_of_content,
 ul.table_of_content {
   list-style: none;
@@ -6611,7 +6619,7 @@ ul.table_of_content ul {
 }
 #content ul.table_of_content ul a {
   border-left: 3px solid #ddd;
-  padding: 5px 0 5px 20px;
+  padding: 2px 0 2px 20px;
   margin-left: 0;
   text-decoration: none;
 }
@@ -6629,9 +6637,6 @@ ul.table_of_content ul {
   border-left: 3px solid #929292;
   text-decoration: underline;
   color: #2e618d;
-}
-#content {
-  padding: 20px;
 }
 #content h1,
 #content h2,
@@ -6718,6 +6723,10 @@ ul.table_of_content ul {
   width: 100%;
   margin-bottom: 20px;
   border: #ddd;
+}
+#article-content ul.table_of_content,
+#article-content ul:first-child {
+  display: none;
 }
 #content table > thead > tr > th {
   vertical-align: bottom;
@@ -6839,7 +6848,7 @@ pre {
     padding: 2px 0 2px 10px;
     margin-left: 10px;
   }
-  ul.table_of_content ul a {
+  ul.table_of_content ul li a {
     border-left: 3px solid #ddd;
     padding: 1px 0 1px 20px;
     margin-left: 10px;
