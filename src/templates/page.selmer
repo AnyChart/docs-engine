@@ -103,7 +103,7 @@
 
             <div id="table-of-content-small" class="hidden-lg"></div>
             <div class="row">
-                <div class="col-lg-17">
+                <div class="col-lg-17" id="article-content">
                     {{page.content|safe}}
                 </div>
                 <div id="table-of-content-large" class="col-lg-6 hidden-sm hidden-xs hidden-md visible-lg"></div>
