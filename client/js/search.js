@@ -45,6 +45,8 @@ $(".404-search").find("button").click(function() {
 });
 
 $(".404-search").find('input').keypress(function (e) {
-    if (e.which == 13)
-        searchFor($(this).val());
+    if (e.which == 13) {
+        var query = $(this).parent().parent().find("input").val();
+        location.href = "/latest/search?q=" + query;
+    }
 });
