@@ -38,7 +38,7 @@
 
 (defn generate
   [jdbc notifier
-   {:keys [show-branches git-ssh data-dir api playground]}]
+   {:keys [show-branches git-ssh data-dir reference playground]}]
   (notifications/start-building notifier)
   (let [actual-branches (vgen/update-branches show-branches git-ssh data-dir)
         removed-branches (vgen/remove-branches jdbc (map :name actual-branches))
@@ -52,7 +52,7 @@
                                    notifier
                                    git-ssh
                                    data-dir
-                                   api
+                                   reference
                                    playground)
                 branches))
     (notifications/complete-building notifier)))
