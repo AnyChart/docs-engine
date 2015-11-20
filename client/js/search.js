@@ -16,7 +16,7 @@ function searchFor(query) {
              $("#content").html('<div class="row"><div class="col-lg-17"><button type="button" class="btn btn-default btn-blue visible-xs"> <i class="glyphicon glyphicon-arrow-left"></i> Back</button><h1 class="search"><button type="button" class="btn btn-default btn-blue hidden-xs"> <i class="glyphicon glyphicon-arrow-left"></i> Back</button>Search results for <span>' + query + '</span> </div></div></h1>');
              if (res.length) {
                  $(res).each(function() {
-                     $("#content .col-lg-17").append('<div class="result-block"><h2><a href="./' + this.url + '"> ' + this.url + '</a></h2><p>' + this.sn + '</p></div>');
+                     $("#content .col-lg-17").append('<div class="result-block"><h2>' + this.title + '</a></h2><p>' + this.sn + '</p></div>');
                  });
              }else {
                  $("#content").append('Nothing found');

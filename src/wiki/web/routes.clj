@@ -83,22 +83,51 @@
   (let [version (versions-data/default (jdbc request))]
     (redirect (str "/" version "/" (-> request :route-params :*)))))
 
+(defn- format-search-result [result query version]
+  (let [words (clojure.string/split query #" ")
+        url (:url result)
+        title (reduce (fn [res q]
+                        (clojure.string/replace res
+                                                (re-pattern (str "(?i)"
+                                                     (clojure.string/re-quote-replacement
+                                                      q)))
+                                                #(str "{b}" % "{eb}")))
+                      (:url result) words)
+        title (-> title
+                  (clojure.string/replace #"_" " ")
+                  (clojure.string/split #"/"))
+        title (map #(-> %
+                        (clojure.string/replace #"\{b\}" "<span class='match'>")
+                        (clojure.string/replace #"\{eb\}" "</span>"))
+                   title)]
+    (assoc result
+           :title (str (clojure.string/join " / " (drop-last 1 title))
+                       " / <a href='/" version "/" url "'>" (first (take-last 1 title)) "</a>"))))
+
 (defn- search-results [request version]
   (render-file "templates/search.selmer" {:version (:key version)
                                           :tree (versions-data/tree-data (jdbc request)
                                                                          (:id version))
                                           :query (-> request :params :q)
                                           :versions (versions-data/versions (jdbc request))
-                                          :results (search/search-for (sphinx request)
-                                                                      (-> request :params :q)
-                                                                      (:id version)
-                                                                      (:key version))}))
+                                          :results (map #(format-search-result
+                                                          %
+                                                          (-> request :params :q)
+                                                          (:key version))
+                                                        (search/search-for (sphinx request)
+                                                                           (-> request
+                                                                               :params :q)
+                                                                           (:id version)
+                                                                           (:key version)))}))
 
 (defn- search-data [request version]
-  (response (search/search-for (sphinx request)
-                               (-> request :params :q)
-                               (:id version)
-                               (:key version))))
+  (map #(format-search-result
+         % (-> request :params :q) (:key version))
+       (search/search-for (sphinx request)
+                          (-> request
+                              :params :q)
+                          (:id version)
+                          (:key version))))
 
 (defn- check-version-middleware [app]
   (fn [request]
