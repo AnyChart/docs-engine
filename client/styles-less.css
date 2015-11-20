@@ -6724,10 +6724,6 @@ ul.table_of_content ul {
   margin-bottom: 20px;
   border: #ddd;
 }
-#article-content ul.table_of_content,
-#article-content h1 + ul:first-child {
-  display: none;
-}
 #content table > thead > tr > th {
   vertical-align: bottom;
   border-bottom: 2px solid #ddd;
@@ -6832,6 +6828,10 @@ pre {
   height: 32px;
   margin-top: -7px;
   margin-right: 10px;
+}
+#article-content ul.table_of_content,
+#article-content ul:first-child {
+  display: none;
 }
 @media (min-width: 1200px) {
   ul.table_of_content {
