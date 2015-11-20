@@ -6724,7 +6724,8 @@ ul.table_of_content ul {
   margin-bottom: 20px;
   border: #ddd;
 }
-#article-content ul.table_of_content {
+#article-content ul.table_of_content,
+#article-content ul:first-child {
   display: none;
 }
 #content table > thead > tr > th {
