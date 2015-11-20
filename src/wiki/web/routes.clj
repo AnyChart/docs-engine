@@ -121,13 +121,13 @@
                                                                            (:key version)))}))
 
 (defn- search-data [request version]
-  (map #(format-search-result
-         % (-> request :params :q) (:key version))
-       (search/search-for (sphinx request)
-                          (-> request
-                              :params :q)
-                          (:id version)
-                          (:key version))))
+  (response (map #(format-search-result
+                   % (-> request :params :q) (:key version))
+                 (search/search-for (sphinx request)
+                                    (-> request
+                                        :params :q)
+                                    (:id version)
+                                    (:key version)))))
 
 (defn- check-version-middleware [app]
   (fn [request]
