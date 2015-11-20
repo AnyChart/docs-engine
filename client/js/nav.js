@@ -29,7 +29,7 @@ function loadPage(link) {
                            '  <div id="table-of-content-large" class="col-lg-6 hidden-sm hidden-xs hidden-md visible-lg"></div>'+
                            '</div>');
         document.title = res.url + " - AnyChart JavaScript Chart Documentation ver. " + version;
-        $(window).scrollTop(0);
+        $("#content").scrollTop(0);
         fixLinks();
         fixToc();
         fixHeaders();
