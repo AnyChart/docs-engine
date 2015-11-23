@@ -35,14 +35,16 @@
            text)))
      state]))
 
-(defn- add-api-links [text version reference]
-  (clojure.string/replace text
-                          #"\{api:([^}]+)\}([^{]+)\{api\}"
-                          (fn [[_ link title]]
-                            (str "<a class='method' href='//" reference "/" version "/" link "'>" title "</a>"))))
+(defn- add-api-links [text version reference api-versions api-default-version]
+  (let [real-version (if (some #{version} api-versions)
+                       version api-default-version)]
+    (clojure.string/replace text
+                            #"\{api:([^}]+)\}([^{]+)\{api\}"
+                            (fn [[_ link title]]
+                              (str "<a class='method' href='//" reference "/" api-default-version "/" link "'>" title "</a>")))))
 
-(defn to-html [source version playground reference]
+(defn to-html [source version playground reference api-versions api-default-version]
   (-> (md-to-html-string source
                          :heading-anchors true
                          :custom-transformers [(sample-transformer version playground)])
-      (add-api-links version reference)))
+      (add-api-links version reference api-versions api-default-version)))

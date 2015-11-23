@@ -69,6 +69,8 @@
                :queue "docs-queue"
                :indexer-queue "docs-stg-search-queue"
                :reference "api.anychart.stg"
+               :reference-versions "http://api.anychart.stg/versions"
+               :reference-default-version "develop"
                :playground "playground.anychart.stg/docs"}})
 
 (def config base-config)
