@@ -36,6 +36,7 @@
   (let [content (slurp item)
         doc-header (re-matches #"(?s)(?m)(^\{[^\}]+\}).*" content)
         res {:name (get-name item)
+             :kind :doc
              :title (title item)
              :content content
              :config {:index 1000}
@@ -50,6 +51,7 @@
 
 (defn- create-folder [base-path item]
   (let [res {:name (get-name item)
+             :kind :folder
              :title (title item)
              :config {:index 1000}
              :children (reduce (fn [res item]
@@ -79,9 +81,14 @@
 
 (defn- sort-struct [item]
   (if (seq (:children item))
-    (update item :children #(sort-by (juxt (fn [i] (get-index i))
-                                           :title)
-                                     (map sort-struct %)))
+    (let [folders (filter #(= (:kind %) :folder) (:children item))
+          docs (filter #(= (:kind %) :doc) (:children item))]
+      (assoc item :children (concat (sort-by (juxt (fn [i] (get-index i))
+                                                   :title)
+                                             (map sort-struct folders))
+                                    (sort-by (juxt (fn [i] (get-index i))
+                                                   :title)
+                                             (map sort-struct docs)))))
     item))
 
 (defn- filter-struct [item]
