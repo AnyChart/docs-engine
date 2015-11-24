@@ -67,6 +67,7 @@
     (and (not (.isDirectory item))
          (is-doc item)) (conj items (create-document base-path item))
     (and (.isDirectory item)
+         (get-name item)
          (has-docs item)) (conj items {} (create-folder base-path item))
     :else items))
 
