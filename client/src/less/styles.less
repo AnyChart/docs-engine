@@ -106,8 +106,8 @@ a.brand {
 }
 
 .helpers {
-  padding: 0 10px 20px;
-  max-width: 90%;
+  padding: 20px 10px;
+  max-width: 100%;
 }
 
 .helpers.bordered {
@@ -275,12 +275,14 @@ ul.menu a:hover .fa.fa-file {
 }
 
 #content {
-  padding: 20px;
-  overflow-y: scroll;
-  top: 130px;
+  padding: 30px;
+  top: 134px;
   bottom: 0;
-  position: absolute;
   margin-bottom: 0;
+  position: absolute;
+  left: 0;
+  right: 0;
+  overflow-y: scroll;
 }
 
 #content ul.table_of_content, ul.table_of_content {
@@ -470,6 +472,7 @@ ul.menu a:hover .fa.fa-file {
   border: 1px solid #D2D2D2;
   margin: 20px 0 40px 0;
   position: relative;
+  max-width: 100%;
 }
 
 .iframe .btns {
@@ -491,6 +494,7 @@ iframe {
   width: 100%;
   margin: 0 auto;
   height: 400px;
+  overflow: hidden;
 }
 
 pre {
@@ -560,6 +564,13 @@ pre {
   height: 32px;
   margin-top: -7px;
   margin-right: 10px;
+}
+.content404 {
+  max-width: 720px;
+  margin: 0 auto;
+}
+.no-overflow{
+  overflow: hidden;
 }
 
 #article-content ul.table_of_content, #article-content ul:first-child{
