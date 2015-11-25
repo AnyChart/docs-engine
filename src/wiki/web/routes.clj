@@ -122,6 +122,7 @@
                                                                            (-> request
                                                                                :component
                                                                                :sphinx
+                                                                               :config
                                                                                :table)))}))
 
 (defn- search-data [request version]
@@ -135,6 +136,7 @@
                                     (-> request
                                         :component
                                         :sphinx
+                                        :config
                                         :table)))))
 
 (defn- check-version-middleware [app]
