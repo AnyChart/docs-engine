@@ -86,6 +86,17 @@
                             {:generator {:git-ssh "/apps/keys/git"
                                          :data-dir "/apps/docs-stg/data"}}))
 
+(def prod-config (merge-with merge base-config
+                             {:notifications {:domain "http://docs.anychart.com/"}}
+                             {:web {:debug false
+                                    :port 9011
+                                    :queue "docs-prod-queue"
+                                    :reference "api.anychart.com"
+                                    :playground "playground.anychart.com"}}
+                             {:jdbc {:subname "//10.132.9.26:5432/docs_prod"
+                                     :user "docs_prod_user"
+                                     :password "fuckprod"}}))
+
 (def dev (dev-system config))
 
 (defn start []
