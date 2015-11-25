@@ -66,6 +66,7 @@ function fixLinks() {
 };
 
 window.onpopstate = function(e) {
+    if (location.pathname == page) return;
     loadPage(location.href);
 };
 
