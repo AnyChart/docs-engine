@@ -6756,7 +6756,6 @@ ul.table_of_content ul {
   margin: 20px 0 40px 0;
   position: relative;
   max-width: 100%;
-  overflow: hidden;
 }
 .iframe .btns {
   position: absolute;
@@ -6775,6 +6774,7 @@ iframe {
   width: 100%;
   margin: 0 auto;
   height: 400px;
+  overflow: hidden;
 }
 pre {
   border-radius: 0;
@@ -6836,6 +6836,9 @@ pre {
 .content404 {
   max-width: 720px;
   margin: 0 auto;
+}
+.no-overflow {
+  overflow: hidden;
 }
 #article-content ul.table_of_content,
 #article-content ul:first-child {
