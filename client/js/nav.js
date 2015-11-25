@@ -12,6 +12,7 @@ function highlightCode() {
 
 function loadPage(link) {
     if (page == link) return true;
+    
     page = link;
     window.history.pushState(null, null, link);
 
@@ -44,6 +45,10 @@ function fixLinks() {
     $("#content a").each(function() {
         var $this = $(this);
         if ($this.attr("href") && $this.attr("href").match(/^[a-zA-Z]/gi)) {
+            if ($this.attr("href").indexOf("#") == 0) return;
+            if ($this.attr("href").indexOf("http://") == 0) return;
+            if ($this.attr("href").indexOf("https://") == 0) return;
+    
             $this.click(function() {
                 var res = false;
                 try {
