@@ -59,7 +59,8 @@
           :user "docs_user"
           :password "pass"}
    :sphinx {:subprotocol "mysql"
-            :subname "//104.236.66.244:3312?characterEncoding=utf8&characterSetResults=utf8&maxAllowedPacket=512000"}
+            :subname "//104.236.66.244:3312?characterEncoding=utf8&characterSetResults=utf8&maxAllowedPacket=512000"
+            :table "docs_stg_index"}
    :redis {:pool {}
            :spec {:host "127.0.0.1" :port 6379 :db 0}}
    :generator {:show-branches true
@@ -95,7 +96,18 @@
                                     :playground "playground.anychart.com"}}
                              {:jdbc {:subname "//10.132.9.26:5432/docs_prod"
                                      :user "docs_prod_user"
-                                     :password "fuckprod"}}))
+                                     :password "fuckprod"}}
+                             {:redis {:spec {:host "10.132.9.26" :db 1}}}
+                             {:sphinx {:table "docs_prod_index"}}
+                             {:generator {:show-branches false
+                                          :git-ssh "/apps/keys/git"
+                                          :data-dir "/apps/docs-prod/data"
+                                          :queue "docs-prod-queue"
+                                          :indexer-queue "docs-prod-search-queue"
+                                          :reference "api.anychart.com"
+                                          :reference-versions "http://api.anychart.com/versions"
+                                          :reference-default-version "latest"
+                                          :playground "playground.anychart.com/docs"}}))
 
 (def dev (dev-system config))
 

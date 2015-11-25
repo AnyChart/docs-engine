@@ -2,5 +2,5 @@
   (:require [wiki.components.sphinx :as sphinx]
             [ring.util.response :refer [content-type response]]))
 
-(defn search-for [jdbc query version-id version-key]
-  (sphinx/query jdbc "select url,snippet(content, ?) as sn from docs_stg_index where match(?) and version_id = ? limit 100;" [query query version-id]))
+(defn search-for [jdbc query version-id version-key table]
+  (sphinx/query jdbc (str "select url,snippet(content, ?) as sn from " table " where match(?) and version_id = ? limit 100;") [query query version-id]))
