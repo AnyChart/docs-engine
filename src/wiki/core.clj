@@ -127,4 +127,6 @@
    (cond
      (= domain "dev") (component/start (dev-system (assoc-in config [:generator :git-ssh] mode)))
      (and (= domain "stg") (= mode "frontend")) (component/start (frontend-system stg-config))
-     (and (= domain "stg") (= mode "backend")) (component/start (generator-system stg-config)))))
+     (and (= domain "stg") (= mode "backend")) (component/start (generator-system stg-config))
+     (and (= domain "prod") (= mode "frontend")) (component/start (frontend-system prod-config))
+     (and (= domain "prod") (= mode "backend")) (component/start (generator-system prod-config)))))
