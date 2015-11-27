@@ -69,13 +69,15 @@
 
 (defn- show-page-data [request version page]
   (response {:url (:url page)
-             :page page}))
+             :page page
+             :title (:full_name page)}))
 
 (defn- show-page [request version page]
   (render-file "templates/page.selmer" {:version (:key version)
                                         :tree (versions-data/tree-data (jdbc request)
                                                                        (:id version))
                                         :url (:url page)
+                                        :title (:full_name page)
                                         :page page
                                         :versions (versions-data/versions (jdbc request))}))
 
