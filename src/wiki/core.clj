@@ -88,7 +88,7 @@
                                          :data-dir "/apps/docs-stg/data"}}))
 
 (def prod-config (merge-with merge base-config
-                             {:notifications {:domain "http://docs.anychart.com/"}}
+                             {:notifications {:domain "https://docs.anychart.com/"}}
                              {:web {:debug false
                                     :port 9011
                                     :queue "docs-prod-queue"
@@ -105,7 +105,7 @@
                                           :queue "docs-prod-queue"
                                           :indexer-queue "docs-prod-search-queue"
                                           :reference "api.anychart.com"
-                                          :reference-versions "http://api.anychart.com/versions"
+                                          :reference-versions "https://api.anychart.com/versions"
                                           :reference-default-version "latest"
                                           :playground "playground.anychart.com/docs"}}))
 
