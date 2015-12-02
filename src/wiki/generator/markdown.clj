@@ -38,10 +38,10 @@
 
 (defn- code-transformer [text state]
   (if (or (:code state) (:codeblock state))
-    (-> text
+    [(-> text
         (clojure.string/replace #"(?m)^\t" "")
-        (clojure.string/replace #"(?m)^\s{4}" ""))
-    text))
+        (clojure.string/replace #"(?m)^\s{4}" "")) state]
+    [text state]))
 
 (defn- add-api-links [text version reference api-versions api-default-version]
   (let [real-version (if (some #{version} api-versions)
