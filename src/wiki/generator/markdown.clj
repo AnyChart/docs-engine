@@ -36,6 +36,13 @@
            text)))
      state]))
 
+(defn- code-transformer [text state]
+  (if (or (:code state) (:codeblock state))
+    (-> text
+        (clojure.string/replace #"(?m)^\t" "")
+        (clojure.string/replace #"(?m)^\s{4}" ""))
+    text))
+
 (defn- add-api-links [text version reference api-versions api-default-version]
   (let [real-version (if (some #{version} api-versions)
                        version api-default-version)]
@@ -47,5 +54,6 @@
 (defn to-html [source version playground reference api-versions api-default-version]
   (-> (md-to-html-string source
                          :heading-anchors true
-                         :custom-transformers [(sample-transformer version playground)])
+                         :custom-transformers [(sample-transformer version playground)
+                                               code-transformer])
       (add-api-links version reference api-versions api-default-version)))
