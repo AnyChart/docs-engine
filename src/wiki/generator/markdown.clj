@@ -36,8 +36,13 @@
            text)))
      state]))
 
+(defn- code-shifted? [text]
+  (every? #(re-find #"(^\t\S)|(^\s{4}\S)" %)
+          (clojure.string/split-lines text)))
+
 (defn- code-transformer [text state]
-  (if (or (:code state) (:codeblock state))
+  (if (and (or (:code state) (:codeblock state))
+           (code-shifted? text))
     [(-> text
         (clojure.string/replace #"(?m)^\t" "")
         (clojure.string/replace #"(?m)^\s{4}" "")) state]
