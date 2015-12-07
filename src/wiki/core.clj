@@ -43,7 +43,7 @@
 
 (def base-config
   {:notifications {:token "P8Z59E0kpaOqTcOxner4P5jb"
-                   :channel "#notifications"
+                   :channel "#notifications-local"
                    :username "docs-engine"
                    :domain "http://localhost/"}
    :indexer {:queue "docs-stg-search-queue"}
@@ -77,7 +77,7 @@
 (def config base-config)
 
 (def stg-config (merge-with merge base-config
-                            {:notifications {:domain "http://docs.anychart.stg/"}}
+                            {:notifications {:domain "http://docs.anychart.stg/" :channel "#notifications-stg"}}
                             {:web {:debug false
                                    :port 9010}}
                             {:jdbc {:subname "//10.132.9.26:5432/docs_stg"
@@ -88,7 +88,7 @@
                                          :data-dir "/apps/docs-stg/data"}}))
 
 (def prod-config (merge-with merge base-config
-                             {:notifications {:domain "https://docs.anychart.com/"}}
+                             {:notifications {:domain "https://docs.anychart.com/" :channel "#notifications-prod"}}
                              {:web {:debug false
                                     :port 9011
                                     :queue "docs-prod-queue"
