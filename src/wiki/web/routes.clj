@@ -73,13 +73,16 @@
              :title (:full_name page)}))
 
 (defn- show-page [request version page]
-  (render-file "templates/page.selmer" {:version (:key version)
-                                        :tree (versions-data/tree-data (jdbc request)
-                                                                       (:id version))
-                                        :url (:url page)
-                                        :title (:full_name page)
-                                        :page page
-                                        :versions (versions-data/versions (jdbc request))}))
+  (let [versions (versions-data/versions (jdbc request))]
+    (render-file "templates/page.selmer" {:version (:key version)
+                                          :actual-version (last versions)
+                                          :old (not= (last versions) (:key version))
+                                          :tree (versions-data/tree-data (jdbc request)
+                                                                         (:id version))
+                                          :url (:url page)
+                                          :title (:full_name page)
+                                          :page page
+                                          :versions versions})))
 
 (defn- try-show-latest-page [request]
   (let [version (versions-data/default (jdbc request))]
