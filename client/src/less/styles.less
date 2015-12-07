@@ -25,7 +25,7 @@ header {
 }
 
 .wrapper {
-  padding-top: 80px;
+  padding-top: 60px;
   position: relative;
   height: 100%;
 }
@@ -106,8 +106,11 @@ a.brand {
 }
 
 .helpers {
-  padding: 20px 10px;
+  padding: 20px 0 0 20px;
   max-width: 100%;
+}
+#bar .helpers{
+    padding: 8px 20px 8px;
 }
 
 .helpers.bordered {
@@ -140,8 +143,7 @@ a.brand {
 
 .btn-playground.btn {
   color: #1f74b6;
-  background: none
-  border: 0;
+  background: none border: 0;
 }
 
 .icon {
@@ -214,6 +216,31 @@ section {
   display: none;
 }
 
+.warning-version {
+  position: fixed;
+  z-index: 6;
+  right: 30px;
+  top: 125px;
+  width: 270px;
+  line-height: 18px;
+  padding: 10px;
+  color: #323c44;
+  -webkit-box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.5);
+  border-radius: 2px;
+  background: #fff;
+  border: 1px solid #e9e9e9;
+}
+
+.warning-version .fa {
+  color: #ff6c00;
+}
+
+.warning-version a {
+  color: #ff6c00;
+  text-decoration: underline;
+}
+
 ul.menu {
   background: #f6f6f6;
   color: #fff;
@@ -276,8 +303,8 @@ ul.menu a:hover .fa.fa-file {
 }
 
 #content {
-  padding: 30px;
-  top: 134px;
+  padding: 10px 30px;
+  top: 114px;
   bottom: 0;
   margin-bottom: 0;
   position: absolute;
@@ -478,7 +505,7 @@ ul.menu a:hover .fa.fa-file {
 
 .iframe .btns {
   position: absolute;
-  bottom: -34px;
+  bottom: -36px;
   right: -1px;
   background-color: #f5f5f5;
   border: 1px solid #ccc;
@@ -566,63 +593,63 @@ pre {
   margin-top: -7px;
   margin-right: 10px;
 }
+
 .content404 {
   max-width: 720px;
   margin: 0 auto;
 }
-.no-overflow{
+
+.no-overflow {
   overflow: hidden;
 }
 
-#article-content ul.table_of_content, #article-content ul:first-child{
+#article-content ul.table_of_content, #article-content ul:first-child {
   display: none;
 }
 
-@media (min-width: 1200px) {
-  ul.table_of_content {
-    position: fixed;
-    top: 120px;
-    max-width: 270px;
+@media (min-width: 768px) {
+  .warning-version {
+    top: 80px;
+    right: 20px;
   }
-  #content h1{
-    width: 70%;
+  .pull-right.helpers{
+    padding: 8px 20px 8px;
   }
-  ul.table_of_content a {
-    display: block;
-    border-left: 3px solid #ddd;
-    padding: 2px 0 2px 10px;
+  .helpers.bordered {
+    border-bottom: none;
+  }
+
+  .helpers .questions {
+    float: right;
     margin-left: 10px;
+    color: #d5edff;
+    line-height: 16px;
+    font-size: 13px;
+    font-weight: lighter;
   }
 
-  ul.table_of_content ul li a {
-    border-left: 3px solid #ddd;
-    padding: 1px 0 1px 20px;
-    margin-left: 10px;
-  }
-
-  ul.table_of_content a:hover {
-    border-left: 3px solid #929292;
-  }
-
-  ul.table_of_content a.active {
-    border-left: 3px solid #929292;
+  .helpers .questions a {
+    color: #fff;
     text-decoration: none;
-    color: #2E618D
-  }
-
-  ul.table_of_content a.active:hover {
-    border-left: 3px solid #929292;
-    text-decoration: underline;
-    color: #2E618D
   }
 }
 
 @media (min-width: 992px) {
+  .helpers {
+    padding: 8px 20px 8px;
+    max-width: 100%;
+  }
   #bar-side {
     position: fixed;
     z-index: 900;
     top: 70px;
     bottom: 20px;
+  }
+  .wrapper {
+    padding-top: 80px;
+  }
+  .warning-version {
+    top: 120px;
   }
 
   .search-large-screen {
@@ -660,26 +687,51 @@ pre {
   }
 }
 
-@media (min-width: 768px) {
-  .helpers {
-    padding: 8px 20px 8px;
+@media (min-width: 1200px) {
+  ul.table_of_content {
+    position: fixed;
+    top: 120px;
+    max-width: 270px;
   }
 
-  .helpers.bordered {
-    border-bottom: none;
+  #content h1 {
+    width: 70%;
   }
 
-  .helpers .questions {
-    float: right;
+  .warning-version {
+    right: 23%;
+  }
+
+  ul.table_of_content a {
+    display: block;
+    border-left: 3px solid #ddd;
+    padding: 2px 0 2px 10px;
     margin-left: 10px;
-    color: #d5edff;
-    line-height: 16px;
-    font-size: 13px;
-    font-weight: lighter;
   }
 
-  .helpers .questions a {
-    color: #fff;
+  ul.table_of_content ul li a {
+    border-left: 3px solid #ddd;
+    padding: 1px 0 1px 20px;
+    margin-left: 10px;
+  }
+
+  ul.table_of_content a:hover {
+    border-left: 3px solid #929292;
+  }
+
+  ul.table_of_content a.active {
+    border-left: 3px solid #929292;
     text-decoration: none;
+    color: #2E618D
+  }
+
+  ul.table_of_content a.active:hover {
+    border-left: 3px solid #929292;
+    text-decoration: underline;
+    color: #2E618D
   }
 }
+
+
+
+

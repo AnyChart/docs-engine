@@ -107,6 +107,11 @@
 
         <section class="col-md-16 col-lg-18 col-lg-offset-6 col-md-offset-8" id="content">
 
+            <div id="warning" class="warning-version alert alert-default fade in">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <i class="fa fa-exclamation-triangle"></i> You are looking old product version 7.3.1. See for actual information <a data-last-version="7.8.0" href="#">7.8.0</a>.
+            </div>
+
             <div id="table-of-content-small" class="hidden-lg"></div>
             <div class="row">
                 <div class="col-lg-17" id="article-content">
