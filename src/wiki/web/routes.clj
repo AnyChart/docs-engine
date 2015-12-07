@@ -75,8 +75,8 @@
 (defn- show-page [request version page]
   (let [versions (versions-data/versions (jdbc request))]
     (render-file "templates/page.selmer" {:version (:key version)
-                                          :actual-version (last versions)
-                                          :old (not= (last versions) (:key version))
+                                          :actual-version (first versions)
+                                          :old (not= (first versions) (:key version))
                                           :tree (versions-data/tree-data (jdbc request)
                                                                          (:id version))
                                           :url (:url page)
