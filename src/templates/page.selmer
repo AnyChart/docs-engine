@@ -45,7 +45,7 @@
                         </ul>
                     </div>
                     <div class="text-muted questions">
-                        <a href="http://support.anychart.com/" class="text-support"><i class="fa fa-life-ring"></i></a>
+                        <a href="http://support.anychart.com/" class="text-support"><i class="icon icon-ring icon-data"></i></a>
                             <span class="hidden-super-small">
                                 Still have questions?<br/>
                                 <a href="//anychart.com/support/"> Contact support</a></span>
@@ -70,7 +70,7 @@
         </div>
 
         <div class="text-muted questions">
-            <a href="//support.anychart.com/" class="text-support"><i class="fa fa-life-ring"></i></a>
+            <a href="//support.anychart.com/" class="text-support"><i class="icon icon-ring icon-data"></i></a>
             <span class="hidden-super-small"> Still have questions?<br/> <a href="http://anychart.com/support/"> Contact
                 support</a></span>
         </div>
@@ -79,6 +79,20 @@
     <ul class="menu">
         {% tree-view tree %}
     </ul>
+    <div class="footer">
+        <div class="footer-inner">
+            <a href="https://www.facebook.com/AnyCharts" class="soc-network" target="_blank">
+                <span class="soc-network-icon fb"><i class="icon icon-fb"></i></span>
+            </a>
+            <a href="https://twitter.com/AnyChart" class="soc-network" target="_blank">
+                <span class="soc-network-icon tw"><i class="icon icon-tw"></i></span>
+            </a>
+            <a href="https://www.linkedin.com/company/386660" class="soc-network" target="_blank">
+                <span class="soc-network-icon in"><i class="icon icon-in"></i></span>
+            </a>
+            <p> © 2015 AnyChart.Com All rights reserved.</p>
+        </div>
+    </div>
 </div>
 
 <div class="wrapper container-fluid">
@@ -94,6 +108,20 @@
                 </div>
             </div>
             <ul class="menu">{% tree-view tree %}</ul>
+            <div class="footer">
+                <div class="footer-inner">
+                    <a href="https://www.facebook.com/AnyCharts" class="soc-network" target="_blank">
+                        <span class="soc-network-icon fb"><i class="icon icon-fb"></i></span>
+                    </a>
+                    <a href="https://twitter.com/AnyChart" class="soc-network" target="_blank">
+                        <span class="soc-network-icon tw"><i class="icon icon-tw"></i></span>
+                    </a>
+                    <a href="https://www.linkedin.com/company/386660" class="soc-network" target="_blank">
+                        <span class="soc-network-icon in"><i class="icon icon-in"></i></span>
+                    </a>
+                    <p> © 2015 AnyChart.Com All rights reserved.</p>
+                </div>
+            </div>
         </div>
         <div class="row helpers hidden-lg hidden-md">
             <div class="col-xs-24 col-sm-12">
@@ -105,15 +133,14 @@
             </div>
         </div>
 
-        <section class="col-md-16 col-lg-18 col-lg-offset-6 col-md-offset-8" id="content">
-
-            {% if old %}
+        {% if old %}
             <div id="warning" class="warning-version alert alert-default fade in">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                 <i class="fa fa-exclamation-triangle"></i> You are looking old product version {{version}}. See for actual information <a data-last-version="latest" href="/latest/{{url}}">{{actual-version}}</a>.
             </div>
-            {% endif %}
+        {% endif %}
 
+        <section class="col-md-16 col-lg-18 col-lg-offset-6 col-md-offset-8" id="content">
             <div id="table-of-content-small" class="hidden-lg"></div>
             <div class="row">
                 <div class="col-lg-17" id="article-content">
