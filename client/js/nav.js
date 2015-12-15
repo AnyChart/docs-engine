@@ -35,6 +35,9 @@ function loadPage(link) {
         fixToc();
         fixHeaders();
         highlightCode();
+
+        var url = res.url;
+        $("#warning a[data-last-version=latest]").attr("href", "/latest/" + url);
     });
     $("#bar").hide();
     $("#shadow").hide();
