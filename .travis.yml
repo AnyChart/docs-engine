@@ -15,7 +15,7 @@ before_install:
   - openssl aes-256-cbc -K $encrypted_831d2a0628ae_key -iv $encrypted_831d2a0628ae_iv -in id_rsa.enc -out id_rsa -d
 after_success:
 - if [ "$TRAVIS_BRANCH" == "master" ]; then export APP="docs-prod"; fi
-- if [ "$TRAVIS_BRANCH" == "v2.0" ]; then export APP="docs-stg"; fi
+- if [ "$TRAVIS_BRANCH" == "staging" ]; then export APP="docs-stg"; fi
 - echo "Deploying to $SERVER"
 - cp .travis/known_hosts ~/.ssh/known_hosts
 - chmod 600 ~/.ssh/known_hosts
