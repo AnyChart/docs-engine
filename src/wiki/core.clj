@@ -6,6 +6,7 @@
             [wiki.components.sphinx :as sphinx]
             [wiki.components.indexer :as indexer]
             [wiki.components.web :as web]
+            [wiki.components.offline-generator :as offline-generator]
             [com.stuartsierra.component :as component])
   (:gen-class :main :true))
 
@@ -16,9 +17,11 @@
    :redis (redis/new-redis (:redis config))
    :sphinx (sphinx/new-sphinx (:sphinx config))
    :web   (component/using (web/new-web (:web config))
-                           [:jdbc :redis :notifier :sphinx])
+                           [:jdbc :redis :notifier :sphinx :offline-generator])
    :generator (component/using (generator/new-generator (:generator config))
                                [:jdbc :redis :notifier])
+   :offline-generator (component/using (offline-generator/new-offline-generator {})
+                                       [:jdbc])
    :indexer (component/using (indexer/new-indexer (:indexer config))
                              [:redis])))
 

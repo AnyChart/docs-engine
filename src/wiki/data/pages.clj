@@ -8,7 +8,8 @@
 ;;   version_id integer references versions(id),
 ;;   url varchar(255) not null,
 ;;   full_name varchar(255),
-;;   content text
+;;   content text,
+;;   last_modified bigint
 ;; );
 
 (defn page-by-url [jdbc version-id page-url]
@@ -39,3 +40,8 @@
                            (from :pages)
                            (where [:= :url url]
                                   [:= :version_id version-id]))))))
+
+(defn all-pages-by-version [jdbc version-id]
+  (query jdbc (-> (select :url :full_name :content)
+                  (from :pages)
+                  (where [:= :version-id version-id]))))

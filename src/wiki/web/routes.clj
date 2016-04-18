@@ -2,7 +2,7 @@
   (:require [selmer.parser :refer [render-file add-tag!]]
             [compojure.core :refer [defroutes routes GET POST]]
             [compojure.route :as route]
-            [ring.util.response :refer [redirect response content-type]]
+            [ring.util.response :refer [redirect response content-type file-response header]]
             [ring.util.request :refer [request-url]]
             [ring.middleware.params :refer [wrap-params]]
             [ring.middleware.keyword-params :refer [wrap-keyword-params]]
@@ -14,11 +14,17 @@
             [wiki.data.folders :as folders-data]
             [wiki.data.sitemap :as sitemap]
             [wiki.data.search :as search]
-            [wiki.web.tree :refer [tree-view]]))
+            [wiki.web.tree :refer [tree-view tree-view-local]]
+            [wiki.components.offline-generator :as offline-generator-com]))
 
 (add-tag! :tree-view (fn [args context-map]
                        (let [entries (get context-map (keyword (first args)))]
                          (reduce str (map #(tree-view % (:version context-map)) entries)))))
+
+(add-tag! :tree-view-local (fn [args context-map]
+                       (let [entries (get context-map (keyword (first args)))
+                             path (get context-map (keyword (second args)))]
+                         (reduce str (map #(tree-view-local % (:version context-map) path) entries)))))
 
 (defn- jdbc [request]
   (-> request :component :jdbc))
@@ -31,6 +37,9 @@
 
 (defn- notifier [request]
   (-> request :component :notifier))
+
+(defn offline-generator [request]
+  (-> request :component :offline-generator))
 
 (defn- show-404 [request]
   (render-file "templates/404.selmer" {}))
@@ -63,7 +72,7 @@
 
 (defn- try-show-page [request version]
   (let [url (-> request :route-params :*)]
-    (if (pages-data/page-exists? (jdbc request) (:id version))
+    (if (pages-data/page-exists? (jdbc request) (:id version) url)
       (redirect (str "/" (:key version) "/" url))
       (redirect (str "/" (:key version) "/Quick_Start")))))
 
@@ -83,6 +92,18 @@
                                           :title (:full_name page)
                                           :page page
                                           :versions versions})))
+
+(defn download-zip [request version]
+  (let [offline-generator (offline-generator request)
+        zip-path (offline-generator-com/generate-zip offline-generator version)]
+    (if zip-path
+      (-> zip-path
+          file-response
+          (header "Content-Disposition" (str "attachment; filename=\"" (:key version) ".zip\"" ))
+          (header "Content-Type" "application/zip, application/octet-stream")
+          (header "Content-Description" "File Transfer")
+          (header "Content-Transfer-Encoding" "binary"))
+      (response (str "Docs for version " (:key version) " are generating...")))))
 
 (defn- try-show-latest-page [request]
   (let [version (versions-data/default (jdbc request))]
@@ -198,6 +219,7 @@
   (GET "/:version/*-json" [] (check-page-middleware show-page-data))
   (GET "/:version/search" [] (check-version-middleware search-results))
   (POST "/:version/search-data" [] (check-version-middleware search-data))
+  (GET "/:version/download" [] (check-version-middleware download-zip))
   (GET "/:version/*" [] (check-folder-middleware show-page))
   (route/not-found show-404))
 
