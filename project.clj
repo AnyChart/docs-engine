@@ -28,7 +28,6 @@
                  [me.raynes/fs "1.4.6"]
                  [cpath-clj "0.1.2"]]
   :main wiki.core
-  :resource-paths ["resources"]
   :target-path "target/%s"
   :aot :all
   :profiles {:dev {:jvm-opts ["-Ddev=true"]}

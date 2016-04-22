@@ -33,8 +33,10 @@
    :sphinx (sphinx/new-sphinx (:sphinx config))
    :indexer (component/using (indexer/new-indexer (:indexer config))
                              [:redis])
+   :offline-generator (component/using (offline-generator/new-offline-generator {})
+                                       [:jdbc])
    :web   (component/using (web/new-web (:web config))
-                           [:jdbc :redis :notifier :sphinx])))
+                           [:jdbc :redis :notifier :sphinx :offline-generator])))
 
 (defn generator-system [config]
   (component/system-map
