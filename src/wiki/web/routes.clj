@@ -95,7 +95,7 @@
 
 (defn download-zip [request version]
   (let [offline-generator (offline-generator request)
-        zip-path (offline-generator-com/generate-zip offline-generator version)]
+        zip-path (offline-generator-com/download-zip offline-generator version)]
     (if zip-path
       (-> zip-path
           file-response
@@ -103,7 +103,15 @@
           (header "Content-Type" "application/zip, application/octet-stream")
           (header "Content-Description" "File Transfer")
           (header "Content-Transfer-Encoding" "binary"))
-      (response (str "Docs for version " (:key version) " are generating...")))))
+      (response (str "Docs for version " (:key version) " aren't ready.")))))
+
+(defn generate-zip [request version]
+  (let [offline-generator (offline-generator request)
+        is-start-generate (offline-generator-com/generate-zip offline-generator version)]
+    (if is-start-generate
+      (response (str "Docs for version " (:key version) " have been started generating!"))
+      (response (str "Docs for version " (:key version) " are still being generated...")))))
+
 
 (defn- try-show-latest-page [request]
   (let [version (versions-data/default (jdbc request))]
@@ -219,6 +227,7 @@
   (GET "/:version/*-json" [] (check-page-middleware show-page-data))
   (GET "/:version/search" [] (check-version-middleware search-results))
   (POST "/:version/search-data" [] (check-version-middleware search-data))
+  (GET "/:version/_generate-zip_" [] (check-version-middleware generate-zip))
   (GET "/:version/download" [] (check-version-middleware download-zip))
   (GET "/:version/*" [] (check-folder-middleware show-page))
   (route/not-found show-404))
