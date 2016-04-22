@@ -10,6 +10,7 @@
             [net.cgrand.enlive-html :as html]
             [org.httpkit.client :as http]
             [me.raynes.fs :as fs]
+            [cpath-clj.core :as cp]
             [wiki.offline.zip :as zip]
             [taoensso.timbre :as timbre :refer [info error]]))
 
@@ -32,24 +33,28 @@
 
 (defn copy-style [main-path]
   "replace paths in main.css: ../fonts -> fonts"
-  (let [data (slurp (io/resource "./public/main.css"))
+  (let [data (slurp (io/resource "public/main.css"))
         replaced-data (clojure.string/replace data #"../fonts" "fonts")]
     (spit (str main-path "/deps/main.css") replaced-data)))
+
+(defn copy-from-resource [resource-dir output-dir]
+  (doseq [[path uris] (cp/resources (io/resource resource-dir))
+          :let [uri (first uris)]]
+    (make-parents (str output-dir path))
+    (with-open [in (io/input-stream uri)]
+      (io/copy in (io/file (str output-dir path))))))
 
 (defn create-dependencies [main-path]
   (fs/delete-dir main-path)
   (fs/mkdirs main-path)
   (fs/mkdirs (str main-path "/samples/js"))
   (fs/mkdir (str main-path "/deps"))
-  (io/copy (io/file (io/resource "./public/main.min.js"))
-           (io/file (str main-path "/deps/main.min.js")))
+  (spit (str main-path "/deps/main.min.js")
+        (slurp (io/resource "public/main.min.js")))
   (copy-style main-path)
-  (fs/copy-dir (io/file (io/resource "./public/fonts"))
-               (io/file (str main-path "/deps/fonts")))
-  (fs/copy-dir (io/file (io/resource "./public/icons"))
-               (io/file (str main-path "/deps/icons")))
-  (fs/copy-dir (io/file (io/resource "./public/i"))
-               (io/file (str main-path "/deps/i"))))
+  (copy-from-resource "public/fonts" (str main-path "/deps/fonts"))
+  (copy-from-resource "public/icons" (str main-path "/deps/icons"))
+  (copy-from-resource "public/i" (str main-path "/deps/i")))
 
 (defn download-file [url absolute-name]
   (info "Load file: " url absolute-name)
