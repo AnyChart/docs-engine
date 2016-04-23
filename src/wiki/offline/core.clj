@@ -181,12 +181,13 @@
     (make-parents file-name)
     (spit file-name processed-html)))
 
-(defn generate-zip [jdbc version]
+(defn generate-zip [config jdbc version]
   (let [tree (versions-data/tree-data jdbc (:id version))
         pages (pages-data/all-pages-by-version jdbc (:id version))
         test-pages (take 5 pages)
         versions (versions-data/versions jdbc)
-        main-path (str (.getAbsolutePath (clojure.java.io/file "data")) "/zip/" (:key version))
+        zip-dir (:zip-dir config)
+        main-path (str zip-dir "/" (:key version))
         zip-path (str main-path ".zip")
         links (atom {})]
     (info "Start generating offline docs: " main-path version)

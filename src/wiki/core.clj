@@ -20,7 +20,7 @@
                            [:jdbc :redis :notifier :sphinx :offline-generator])
    :generator (component/using (generator/new-generator (:generator config))
                                [:jdbc :redis :notifier])
-   :offline-generator (component/using (offline-generator/new-offline-generator {})
+   :offline-generator (component/using (offline-generator/new-offline-generator (:offline-generator config))
                                        [:jdbc])
    :indexer (component/using (indexer/new-indexer (:indexer config))
                              [:redis])))
@@ -33,7 +33,7 @@
    :sphinx (sphinx/new-sphinx (:sphinx config))
    :indexer (component/using (indexer/new-indexer (:indexer config))
                              [:redis])
-   :offline-generator (component/using (offline-generator/new-offline-generator {})
+   :offline-generator (component/using (offline-generator/new-offline-generator (:offline-generator config))
                                        [:jdbc])
    :web   (component/using (web/new-web (:web config))
                            [:jdbc :redis :notifier :sphinx :offline-generator])))
@@ -77,7 +77,8 @@
                :reference "api.anychart.stg"
                :reference-versions "http://api.anychart.stg/versions"
                :reference-default-version "develop"
-               :playground "playground.anychart.stg/docs"}})
+               :playground "playground.anychart.stg/docs"}
+   :offline-generator {:zip-dir (.getAbsolutePath (clojure.java.io/file "data/zip"))}})
 
 (def config base-config)
 
@@ -90,7 +91,8 @@
                                     :password "fuckstg"}}
                             {:redis {:spec {:host "10.132.9.26" :db 1}}}
                             {:generator {:git-ssh "/apps/keys/git"
-                                         :data-dir "/apps/docs-stg/data"}}))
+                                         :data-dir "/apps/docs-stg/data"}}
+                            {:offline-generator {:zip-dir "/apps/docs-stg/data/zip"}}))
 
 (def prod-config (merge-with merge base-config
                              {:notifications {:domain "https://docs.anychart.com/" :channel "#notifications-prod"}}
@@ -112,7 +114,8 @@
                                           :reference "api.anychart.com"
                                           :reference-versions "https://api.anychart.com/versions"
                                           :reference-default-version "latest"
-                                          :playground "playground.anychart.com/docs"}}))
+                                          :playground "playground.anychart.com/docs"}}
+                             {:offline-generator {:zip-dir "/apps/docs-prod/data/zip"}}))
 
 (def dev (dev-system config))
 
