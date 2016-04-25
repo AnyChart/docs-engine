@@ -31,6 +31,9 @@
 (defn html2node [html]
   (first (html/html-resource (java.io.StringReader. html))))
 
+(defn get-file-name [url]
+  (str (clojure.string/replace url #"[:\./]" "_") (fs/extension url)))
+
 (defn copy-style [main-path]
   "replace paths in main.css: ../fonts -> fonts"
   (let [data (slurp (io/resource "public/main.css"))
@@ -58,7 +61,9 @@
 
 (defn download-file [url absolute-name]
   (info "Load file: " url absolute-name)
-  (spit absolute-name (slurp url)))
+  (with-open [in (io/input-stream url)
+              out (io/output-stream absolute-name )]
+    (io/copy in out)))
 
 (defn start-load-link-if-need [url absolute-name links]
   (swap! links (fn [links] (if (nil? (get links url))
@@ -76,7 +81,7 @@
 (defn replace-iframe-dep [samples-path links node]
   (if-let [src (-> node :attrs :src)]
     (let [url (get-url src)
-          name (fs/base-name src)
+          name (get-file-name url)
           absolute-name (str samples-path "js/" name)]
       (start-load-link-if-need url absolute-name links)
       (assoc-in node [:attrs :src] (str "js/" name)))
@@ -108,26 +113,12 @@
      :name name
      :url  url}))
 
-(defn find-iframes [data]
-  (let [tags (-> data (html/select [:div.iframe :iframe]))
-        iframes (map #(-> % :attrs :src iframe-data) tags)]
-    iframes))
-
-(defn replace-iframes-paths [page iframes]
-  (reduce #(clojure.string/replace %1
-                                   (re-pattern (:path %2))
-                                   (str "../samples/" (:name %2)))
-          page iframes))
-
 (defn replace-iframe-node [main-path path links node]
   (let [iframe (iframe-data (-> node :attrs :src))]
     (load-iframe iframe (str main-path "/samples/") links)
     {:tag     :iframe
      :attrs   {:src (str path "samples/" (:name iframe) ".html")}
      :content nil}))
-
-(defn replace-content [tree main-path path links]
-  (html/at tree [:div.iframe :iframe] (partial replace-iframe-node main-path path links)))
 
 (defn replace-external-links [html]
   (-> html (clojure.string/replace #"href=\"//" "href=\"http://")))
@@ -138,7 +129,7 @@
       (str (first parts) ".html#" (second parts))
       (str path ".html"))))
 
-(defn replace-local-link [node]
+(defn replace-a-node [node]
   "add .html to relative paths"
   (let [href (-> node :attrs :href)]
     (if (and href
@@ -148,8 +139,23 @@
       (assoc-in node [:attrs :href] (add-html href))
       node)))
 
-(defn replace-local-links [tree]
-  (html/at tree [:a] replace-local-link))
+(defn replace-img-node [main-path path links node]
+  (let [url (-> node :attrs :src)]
+    (if (and url
+             (or (.startsWith url "http://")
+                 (.startsWith url "//")))
+      (let [url (get-url url)
+            name (get-file-name url)
+            absolute-name (str main-path "/deps/" name)]
+        (start-load-link-if-need url absolute-name links)
+        (assoc-in node [:attrs :src] (str path "deps/" name)))
+      node)))
+
+(defn replace-tags [tree main-path path links]
+  (html/at tree
+           [:div.iframe :iframe] (partial replace-iframe-node main-path path links)
+           [:a] replace-a-node
+           [:img] (partial replace-img-node main-path path links)))
 
 (defn get-relative-prefix-path [page-url]
   (let [parts (clojure.string/split page-url (re-pattern "/"))]
@@ -172,8 +178,7 @@
                                                          :path     path})
         processed-html (-> html
                            html2node
-                           (replace-content main-path path links)
-                           replace-local-links
+                           (replace-tags main-path path links)
                            node2html
                            replace-external-links
                            add-doctype)]
