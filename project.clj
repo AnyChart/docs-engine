@@ -21,7 +21,7 @@
                  [postgresql/postgresql "8.4-702.jdbc4"]
                  [mysql/mysql-connector-java "5.1.36"]
                  [clojure.jdbc/clojure.jdbc-c3p0 "0.3.2"]
-                 [honeysql "0.5.2"]
+                 [honeysql "0.6.3"]
                  ;; markdown
                  [markdown-clj "0.9.74"]]
   :main wiki.core

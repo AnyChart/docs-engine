@@ -11,17 +11,21 @@
       (clojure.string/replace #"index\.md$" "")))
 
 (defn- convert-content [content version-key playground api api-versions api-default-version]
+  ;todo: test: (md/to-html (str "aa{tags} tag1, tag2 {tags}bb\n" content)  version-key playground api api-versions api-default-version)
   (md/to-html content version-key playground api api-versions api-default-version))
 
 (defn- generate-struct-item
   [jdbc version base-path item api playground api-versions api-default-version]
   ;;(info "generating" (dissoc item :content))
   (if-let [content (:content item)]
-    (pdata/add-page jdbc (:id version) (fix-url (str base-path "/"
-                                                     (:name item)))
-                    (:title item)
-                    (convert-content content (:key version) playground api api-versions api-default-version)
-                    (:last-modified item))
+    (let [{html :html tags :tags}
+          (convert-content content (:key version) playground api api-versions api-default-version)]
+      (pdata/add-page jdbc (:id version) (fix-url (str base-path "/"
+                                                       (:name item)))
+                      (:title item)
+                      html
+                      (:last-modified item)
+                      tags))
     (let [items (:children item)]
       (when (seq items)
         (fdata/add-folder jdbc (:id version) (fix-url (str base-path "/" (:name item)))
