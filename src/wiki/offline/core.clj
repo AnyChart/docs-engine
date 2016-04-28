@@ -116,9 +116,7 @@
 (defn replace-iframe-node [main-path path links node]
   (let [iframe (iframe-data (-> node :attrs :src))]
     (load-iframe iframe (str main-path "/samples/") links)
-    {:tag     :iframe
-     :attrs   {:src (str path "samples/" (:name iframe) ".html")}
-     :content nil}))
+    (assoc-in node [:attrs :src] (str path "samples/" (:name iframe) ".html"))))
 
 (defn replace-external-links [html]
   (-> html (clojure.string/replace #"href=\"//" "href=\"http://")))
