@@ -88,7 +88,9 @@
     node))
 
 (defn replace-iframe-js [tree samples-path links]
-  (html/at tree [:script] (partial replace-iframe-dep samples-path links)))
+  (html/at tree
+           [:script] (partial replace-iframe-dep samples-path links)
+           [:head] (html/prepend (html/html [:meta {:charset "utf-8"}]))))
 
 (defn process-iframe [html samples-path links]
   (-> html
