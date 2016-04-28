@@ -146,6 +146,22 @@
                 <div class="col-lg-17" id="article-content">
                     {{page.content|safe}}
                 </div>
+                <div id="disqus_thread" class="col-lg-17"></div>
+                <script>
+                    var disqus_config = function () {
+                        this.page.url = window.location.href.split('?')[0];
+                        this.page.identifier = "{{url}}";
+                        this.page.title = "{{title}}";
+                    };
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                        var d = document, s = d.createElement('script');
+                        s.src = '//anychart-docs.disqus.com/embed.js';
+                        s.setAttribute('data-timestamp', +new Date());
+                        (d.head || d.body).appendChild(s);
+                    })();
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
+                </noscript>
                 <div id="table-of-content-large" class="col-lg-6 hidden-sm hidden-xs hidden-md visible-lg"></div>
             </div>
         </section>
