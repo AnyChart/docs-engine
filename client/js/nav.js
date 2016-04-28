@@ -27,7 +27,23 @@ function loadPage(link) {
         $("#content").html('<div id="table-of-content-small" class="hidden-lg"></div>'+
                            '<div class="row">'+
                            '  <div class="col-lg-17">'+res.page.content+'</div>'+
-                           '  <div id="table-of-content-large" class="col-lg-6 hidden-sm hidden-xs hidden-md visible-lg"></div>'+
+                            '<div id="disqus_thread" class="col-lg-17"></div>'+
+                            '<script>'+
+                            'var disqus_config = function () {'+
+                                'this.page.url = window.location.href.split("?")[0];'+
+                                'this.page.identifier = "' + res.page.url + '";'+
+                                'this.page.title = "' + res.page.full_name + '";'+
+                            '};'+
+                            '(function() { '+
+                                "var d = document, s = d.createElement('script');"+
+                                "s.src = '//anychart-docs.disqus.com/embed.js';"+
+                                "s.setAttribute('data-timestamp', +new Date());"+
+                                '(d.head || d.body).appendChild(s);'+
+                            '})();'+
+                            '</script>'+
+                            '<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>'+
+                            '</noscript>'+
+                            '  <div id="table-of-content-large" class="col-lg-6 hidden-sm hidden-xs hidden-md visible-lg"></div>'+
                            '</div>');
         document.title = res.title + " - AnyChart JavaScript Chart Documentation ver. " + version;
         $("#content").scrollTop(0);
