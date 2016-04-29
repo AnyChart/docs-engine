@@ -14,7 +14,7 @@
     (str
      "<div class='iframe' " div-style ">
        <div class='no-overflow'>
-       <iframe " style " src='//" playground "/" version "/samples/" sample-path "-iframe''></iframe></div>
+       <iframe " style " src='//" playground "/" version "/samples/" sample-path "-iframe'></iframe></div>
        <div class='btns'>
          <a class='btn-playground btn jsfiddle-btn' target='_blank'><i class='fa fa-jsfiddle'></i> JsFiddle</a> 
          <a class='btn-playground btn' target='_blank' href='//" playground "/" version "/samples/" sample-path "-plain'><i class='fa fa-play'></i> Playground</a>

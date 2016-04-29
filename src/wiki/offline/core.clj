@@ -88,7 +88,9 @@
     node))
 
 (defn replace-iframe-js [tree samples-path links]
-  (html/at tree [:script] (partial replace-iframe-dep samples-path links)))
+  (html/at tree
+           [:script] (partial replace-iframe-dep samples-path links)
+           [:head] (html/prepend (html/html [:meta {:charset "utf-8"}]))))
 
 (defn process-iframe [html samples-path links]
   (-> html
@@ -116,9 +118,7 @@
 (defn replace-iframe-node [main-path path links node]
   (let [iframe (iframe-data (-> node :attrs :src))]
     (load-iframe iframe (str main-path "/samples/") links)
-    {:tag     :iframe
-     :attrs   {:src (str path "samples/" (:name iframe) ".html")}
-     :content nil}))
+    (assoc-in node [:attrs :src] (str path "samples/" (:name iframe) ".html"))))
 
 (defn replace-external-links [html]
   (-> html (clojure.string/replace #"href=\"//" "href=\"http://")))
