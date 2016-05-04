@@ -81,8 +81,7 @@
 
 (defn- sort-struct [item]
   (if (seq (:children item))
-    (assoc item :children (sort-by (juxt (fn [i] (get-index i))
-                                         :title)
+    (assoc item :children (sort-by (juxt get-index :title)
                                    (map sort-struct (:children item))))
     item))
 
