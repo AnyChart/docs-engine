@@ -13,7 +13,7 @@
   (let [local-path (str path (subs (:url el) 1))]
     (if (contains? el :children)
       (str "<li>"
-           "<a href='" local-path ".html'><i class='fa fa-folder-open'></i> " (:title el) "</a>"
+           "<a href='" local-path ".html'><i class='fa fa-folder'></i> " (:title el) "</a>"
            "<ul>" (reduce str (map #(tree-view-local % version path) (:children el))) "</ul>"
            "</li>")
       (str "<li> <a href='" local-path ".html'><i class='fa fa-file'></i> " (:title el) "</a></li>"))))

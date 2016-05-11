@@ -54,6 +54,8 @@
   (fs/mkdir (str main-path "/deps"))
   (spit (str main-path "/deps/main.min.js")
         (slurp (io/resource "public/main.min.js")))
+  (spit (str main-path "/deps/local.js")
+        (slurp (io/resource "local/local.js")))
   (copy-style main-path)
   (copy-from-resource "public/fonts" (str main-path "/deps/fonts"))
   (copy-from-resource "public/icons" (str main-path "/deps/icons"))
