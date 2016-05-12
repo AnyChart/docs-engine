@@ -33,19 +33,22 @@
                 <div class="pull-right helpers  hidden-xs">
                     <div class="btn-group">
                         <!--<button type="button" class="btn btn-default btn-blue dropdown-toggle" data-toggle="dropdown">-->
-                            <!--Version {{version}} <span class="caret"></span></button>-->
+                        <!--Version {{version}} <span class="caret"></span></button>-->
                         <!--<ul class="dropdown-menu" role="menu">-->
-                            <!--{% for v in versions %}-->
-                            <!--<li><a href="/{{v}}/{{url}}">Version {{v}}</a></li>-->
-                            <!--{% endfor %}-->
+                        <!--{% for v in versions %}-->
+                        <!--<li><a href="/{{v}}/{{url}}">Version {{v}}</a></li>-->
+                        <!--{% endfor %}-->
                         <!--</ul>-->
                         <span style="color: white; line-height: 30px;">Version {{version}}</span>
                     </div>
                     <div class="text-muted questions">
-                        <a href="http://support.anychart.com/" class="text-support"><i class="icon icon-ring icon-data"></i></a>
-                            <span class="hidden-super-small">
-                                Still have questions?<br/>
-                                <a href="http://anychart.com/support/"> Contact support</a></span>
+                        <a href="http://support.anychart.com/" class="text-support">
+                            <i class="icon icon-ring icon-data"></i>
+                        </a>
+                        <span class="hidden-super-small">
+                            Still have questions?<br/>
+                            <a href="http://anychart.com/support/"> Contact support</a>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -97,7 +100,7 @@
 <div class="wrapper container-fluid">
     <div class="row">
         <div class="col-md-8 col-lg-5 col-lg-offset-1 hidden-xs hidden-sm" id="bar-side" style="top: 30px;">
-        <!--<div class="col-md-8 col-lg-5 col-lg-offset-1 hidden-xs hidden-sm" id="bar-side">-->
+            <!--<div class="col-md-8 col-lg-5 col-lg-offset-1 hidden-xs hidden-sm" id="bar-side">-->
 
             <ul class="menu">{% tree-view-local tree path %}</ul>
             <div class="footer">
@@ -147,20 +150,18 @@
     </div>
 </div>
 
-
 <script type="text/javascript">
-    window['version'] = '7.9.1';
+    window['version'] = '{{version}}';
 </script>
-<!--<script type="text/javascript" src="../deps/main.min.js"></script>-->
 <script type="text/javascript" src="{{path|add:deps/main.min.js}}"></script>
+<script type="text/javascript" src="{{path|add:deps/local.js}}"></script>
 <script type="text/javascript">
-    //expandMenu('{{path}}');
+    //$(".table_of_content").css("top", "80px");
+    addListeners('{{path}}');
+    initFolders();
+    expandCurrentMenu('{{path}}', '{{url}}');
+    openFolders('{{path}}', open_folders);
 </script>
 
-<!--<style>-->
-    <!--.table-of-content{-->
-        <!--top: 80px !important;-->
-    <!--}-->
-<!--</style>-->
 </body>
 </html>

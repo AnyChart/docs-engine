@@ -54,6 +54,8 @@
   (fs/mkdir (str main-path "/deps"))
   (spit (str main-path "/deps/main.min.js")
         (slurp (io/resource "public/main.min.js")))
+  (spit (str main-path "/deps/local.js")
+        (slurp (io/resource "local/local.js")))
   (copy-style main-path)
   (copy-from-resource "public/fonts" (str main-path "/deps/fonts"))
   (copy-from-resource "public/icons" (str main-path "/deps/icons"))
@@ -78,7 +80,7 @@
             (info "get-url: unknown src:" src)
             src)))
 
-(defn replace-iframe-dep [samples-path links node]
+(defn replace-iframe-script [samples-path links node]
   (if-let [src (-> node :attrs :src)]
     (let [url (get-url src)
           name (get-file-name url)
@@ -87,9 +89,19 @@
       (assoc-in node [:attrs :src] (str "js/" name)))
     node))
 
+(defn replace-iframe-link [samples-path links node]
+  (if-let [src (-> node :attrs :href)]
+    (let [url (get-url src)
+          name (get-file-name url)
+          absolute-name (str samples-path "js/" name)]
+      (start-load-link-if-need url absolute-name links)
+      (assoc-in node [:attrs :href] (str "js/" name)))
+    node))
+
 (defn replace-iframe-js [tree samples-path links]
   (html/at tree
-           [:script] (partial replace-iframe-dep samples-path links)
+           [:script] (partial replace-iframe-script samples-path links)
+           [:link] (partial replace-iframe-link samples-path links)
            [:head] (html/prepend (html/html [:meta {:charset "utf-8"}]))))
 
 (defn process-iframe [html samples-path links]
@@ -133,8 +145,8 @@
   "add .html to relative paths"
   (let [href (-> node :attrs :href)]
     (if (and href
-             (or (= 0 (.indexOf href "./"))
-                 (= 0 (.indexOf href "../")))
+             (or (.startsWith href "./")
+                 (.startsWith href "../"))
              (not (re-find #"\.(\w+)" href)))
       (assoc-in node [:attrs :href] (add-html href))
       node)))

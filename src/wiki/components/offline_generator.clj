@@ -34,10 +34,3 @@
         new-state (generate-if-need state config jdbc version)
         is-start-generate (get new-state (is-start-key version))]
     is-start-generate))
-
-(defn download-zip [offline-generator version]
-  (let [state (:state offline-generator)
-        future-task (get @state (:key version))]
-    (when (and (not (nil? future-task))
-               (realized? future-task))
-      @future-task)))

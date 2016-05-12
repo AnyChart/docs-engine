@@ -6,10 +6,11 @@
             [wiki.components.notifier :as notifications]
             [wiki.data.versions :as vdata]
             [wiki.generator.api-versions :as api-versions]
+            [wiki.components.offline-generator :refer [generate-zip]]
             [taoensso.timbre :as timbre :refer [info error]]))
 
 (defn- generate-version
-  [branch jdbc notifier git-ssh data-dir api playground api-versions api-default-version]
+  [branch jdbc notifier offline-generator data-dir api playground api-versions api-default-version]
   (try
     (do
       (info "building" branch)
@@ -26,7 +27,9 @@
                                  :key (:name branch)}
                            data api playground api-versions api-default-version)
             (notifications/complete-version-building notifier (:name branch))
-            (vgen/remove-previous-versions jdbc version-id (:name branch)))
+            (vgen/remove-previous-versions jdbc version-id (:name branch))
+            (generate-zip offline-generator {:id version-id
+                                             :key (:name branch)}))
           (catch Exception e
             (do (error e)
                 (error (.getMessage e))
@@ -39,7 +42,7 @@
           (notifications/build-failed notifier (:name branch))))))
 
 (defn generate
-  [jdbc notifier
+  [jdbc notifier offline-generator
    {:keys [show-branches git-ssh data-dir reference playground
            reference-versions reference-default-version]}]
   (notifications/start-building notifier)
@@ -56,7 +59,7 @@
     (doall (map #(generate-version %
                                    jdbc
                                    notifier
-                                   git-ssh
+                                   offline-generator
                                    data-dir
                                    reference
                                    playground
