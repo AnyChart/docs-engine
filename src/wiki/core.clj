@@ -19,7 +19,7 @@
    :web   (component/using (web/new-web (:web config))
                            [:jdbc :redis :notifier :sphinx :offline-generator])
    :generator (component/using (generator/new-generator (:generator config))
-                               [:jdbc :redis :notifier])
+                               [:jdbc :redis :notifier :offline-generator])
    :offline-generator (component/using (offline-generator/new-offline-generator (:offline-generator config))
                                        [:jdbc])
    :indexer (component/using (indexer/new-indexer (:indexer config))
@@ -43,8 +43,10 @@
    :notifier (notifier/new-notifier (:notifications config))
    :jdbc  (jdbc/new-jdbc (:jdbc config))
    :redis (redis/new-redis (:redis config))
+   :offline-generator (component/using (offline-generator/new-offline-generator (:offline-generator config))
+                                       [:jdbc])
    :generator (component/using (generator/new-generator (:generator config))
-                               [:jdbc :redis :notifier])))
+                               [:jdbc :redis :notifier :offline-generator])))
 
 (def base-config
   {:notifications {:token "P8Z59E0kpaOqTcOxner4P5jb"

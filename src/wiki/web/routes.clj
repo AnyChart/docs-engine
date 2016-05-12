@@ -94,16 +94,16 @@
                                           :versions versions})))
 
 (defn download-zip [request version]
-  (let [offline-generator (offline-generator request)
-        zip-path (offline-generator-com/download-zip offline-generator version)]
-    (if zip-path
+  (let [zip-dir (-> request offline-generator :config :zip-dir)
+        zip-path (str zip-dir "/" (:key version) ".zip")]
+    (if (-> zip-path clojure.java.io/as-file .exists)
       (-> zip-path
           file-response
           (header "Content-Disposition" (str "attachment; filename=\"" (:key version) ".zip\"" ))
           (header "Content-Type" "application/zip, application/octet-stream")
           (header "Content-Description" "File Transfer")
           (header "Content-Transfer-Encoding" "binary"))
-      (response (str "Docs for version " (:key version) " aren't ready.")))))
+      (error-404 request))))
 
 (defn generate-zip [request version]
   (let [offline-generator (offline-generator request)
