@@ -66,8 +66,8 @@
   ;(info "Load file: " url absolute-name)
   (try
     (with-open [in (io/input-stream url)
-                   out (io/output-stream absolute-name )]
-         (io/copy in out))
+                out (io/output-stream absolute-name)]
+      (io/copy in out))
     (catch Exception e
       (error "Download file failed: " url e))))
 
@@ -138,7 +138,9 @@
 
 (defn replace-iframe-node [main-path path links node]
   (let [iframe (iframe-data (-> node :attrs :src))]
-    (load-iframe iframe (str main-path "/samples/") links)
+    (try
+      (load-iframe iframe (str main-path "/samples/") links)
+      (catch Exception e (error "replace iframe node error: " e)))
     (assoc-in node [:attrs :src] (str path "samples/" (:name iframe) ".html"))))
 
 (defn replace-external-links [html]
