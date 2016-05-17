@@ -82,7 +82,8 @@
                :reference-default-version "develop"
                :playground "playground.anychart.stg/docs"}
    :offline-generator {:queue "docs-zip-queue"
-                       :zip-dir (.getAbsolutePath (clojure.java.io/file "data/zip"))}})
+                       :zip-dir (.getAbsolutePath (clojure.java.io/file "data/zip"))}
+   :log {:file (.getAbsolutePath (clojure.java.io/file "log.txt"))}})
 
 (def config base-config)
 
@@ -96,7 +97,8 @@
                             {:redis {:spec {:host "10.132.9.26" :db 1}}}
                             {:generator {:git-ssh "/apps/keys/git"
                                          :data-dir "/apps/docs-stg/data"}}
-                            {:offline-generator {:zip-dir "/apps/docs-stg/data/zip"}}))
+                            {:offline-generator {:zip-dir "/apps/docs-stg/data/zip"}}
+                            {:log {:file "/apps/docs-stg/log.txt"}}))
 
 (def prod-config (merge-with merge base-config
                              {:notifications {:domain "https://docs.anychart.com/" :channel "#notifications-prod"}}
@@ -121,10 +123,11 @@
                                           :reference-default-version "latest"
                                           :playground "playground.anychart.com/docs"}}
                              {:offline-generator {:queue "docs-zip-prod-queue"
-                                                  :zip-dir "/apps/docs-prod/data/zip"}}))
+                                                  :zip-dir "/apps/docs-prod/data/zip"}}
+                             {:log {:file "/apps/docs-prod/log.txt"}}))
 
-(defn init-logger []
-  (let [log-file-name "log.txt"]
+(defn init-logger [config]
+  (let [log-file-name (:file config)]
     (clojure.java.io/delete-file log-file-name :quiet)
     (timbre/merge-config!
       {:appenders {:spit (appenders/spit-appender {:fname log-file-name})}})
@@ -150,10 +153,18 @@
      (component/start (dev-system config))
      (println "started at http://localhost:8010")))
   ([domain mode]
-   (init-logger)
    (cond
-     (= domain "dev") (component/start (dev-system (assoc-in config [:generator :git-ssh] mode)))
-     (and (= domain "stg") (= mode "frontend")) (component/start (frontend-system stg-config))
-     (and (= domain "stg") (= mode "backend")) (component/start (generator-system stg-config))
-     (and (= domain "prod") (= mode "frontend")) (component/start (frontend-system prod-config))
-     (and (= domain "prod") (= mode "backend")) (component/start (generator-system prod-config)))))
+     (= domain "dev") (do (init-logger (:log config))
+                          (component/start (dev-system (assoc-in config [:generator :git-ssh] mode))))
+
+     (and (= domain "stg") (= mode "frontend")) (do (init-logger (:log stg-config))
+                                                    (component/start (frontend-system stg-config)))
+
+     (and (= domain "stg") (= mode "backend")) (do (init-logger (:log stg-config))
+                                                   (component/start (generator-system stg-config)))
+
+     (and (= domain "prod") (= mode "frontend")) (do (init-logger (:log prod-config))
+                                                     (component/start (frontend-system prod-config)))
+
+     (and (= domain "prod") (= mode "backend")) (do (init-logger (:log prod-config))
+                                                    (component/start (generator-system prod-config))))))
