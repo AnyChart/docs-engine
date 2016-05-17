@@ -117,12 +117,9 @@
       add-doctype))
 
 (defn load-iframe [iframe samples-path links]
-  (let [{:keys [body error]}
-        (try @(http/get (:url iframe))
-             (catch Exception e
-               {:error e :body nil}))]
+  (let [{:keys [body error]} @(http/get (:url iframe))]
     (if error
-      (error "Error loading iframe " (:url iframe) error)
+      (timbre/error "Error loading iframe " (:url iframe) error)
       (let [prepared-html (process-iframe body samples-path links)
             file-name (str samples-path (:name iframe) ".html")]
         (make-parents file-name)
@@ -138,9 +135,7 @@
 
 (defn replace-iframe-node [main-path path links node]
   (let [iframe (iframe-data (-> node :attrs :src))]
-    (try
-      (load-iframe iframe (str main-path "/samples/") links)
-      (catch Exception e (error "replace iframe node error: " e)))
+    (load-iframe iframe (str main-path "/samples/") links)
     (assoc-in node [:attrs :src] (str path "samples/" (:name iframe) ".html"))))
 
 (defn replace-external-links [html]
