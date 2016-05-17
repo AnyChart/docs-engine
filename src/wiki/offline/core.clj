@@ -117,11 +117,13 @@
       add-doctype))
 
 (defn load-iframe [iframe samples-path links]
-  (let [html (-> @(http/get (:url iframe)) :body)
-        prepared-html (process-iframe html samples-path links)
-        file-name (str samples-path (:name iframe) ".html")]
-    (make-parents file-name)
-    (spit file-name prepared-html)))
+  (let [{:keys [status headers body error] :as resp} @(http/get (:url iframe))]
+    (if error
+      (error "Error loading iframe " (:url iframe) error)
+      (let [prepared-html (process-iframe body samples-path links)
+            file-name (str samples-path (:name iframe) ".html")]
+        (make-parents file-name)
+        (spit file-name prepared-html)))))
 
 (defn iframe-data [path]
   (let [index (.lastIndexOf path "/")
