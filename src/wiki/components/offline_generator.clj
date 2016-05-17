@@ -1,15 +1,29 @@
 (ns wiki.components.offline-generator
   (:require [com.stuartsierra.component :as component]
             [wiki.offline.core :as offline]
-            [ring.util.response :refer [file-response header]]
+            [wiki.components.redis :as redisc]
             [taoensso.timbre :as timbre :refer [info error]]))
 
-(defrecord OfflineGenerator [config state jdbc]
+(declare generate-zip)
+
+(defn- message-processor [comp]
+  (fn [{:keys [message attempt]}]
+    (info "receive : " message)
+    (when (= (:command message) "generate")
+      (generate-zip comp (:version message)))
+    {:status :success}))
+
+(defrecord OfflineGenerator [config state jdbc redis]
   component/Lifecycle
 
-  (start [this] this)
+  (start [this]
+    (assoc this :engine (redisc/create-worker redis
+                                              (-> this :config :queue)
+                                              (message-processor this))))
 
-  (stop [this] this))
+  (stop [this]
+    (redisc/delete-worker (:engine this))
+    (dissoc this :engine)))
 
 (defn new-offline-generator [config]
   (map->OfflineGenerator {:config config :state (atom {})}))
@@ -33,4 +47,5 @@
         jdbc (:jdbc offline-generator)
         new-state (generate-if-need state config jdbc version)
         is-start-generate (get new-state (is-start-key version))]
+    (info "Is start generate for " version  ": " is-start-generate)
     is-start-generate))

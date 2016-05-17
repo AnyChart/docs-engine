@@ -2,6 +2,7 @@
   (:require [wiki.components.jdbc :refer [query one insert! exec]]
             [version-clj.core :refer [version-compare]]
             [honeysql.helpers :refer :all]
+            [clojure.java.jdbc :as clj-jdbc]
             [cheshire.core :refer [generate-string parse-string]]))
 
 ;; CREATE SEQUENCE version_id_seq;
@@ -10,13 +11,14 @@
 ;;    key varchar(255) not NULL,
 ;;    commit varchar(40) not NULL,
 ;;    hidden BOOLEAN DEFAULT FALSE,
-;;    tree TEXT
+;;    tree TEXT,
+;;    zip BYTEA
 ;; );
 
 (defn add-version [jdbc key commit tree]
-  (:id (first (insert! jdbc :versions {:key key
+  (:id (first (insert! jdbc :versions {:key    key
                                        :commit commit
-                                       :tree (generate-string tree)}))))
+                                       :tree   (generate-string tree)}))))
 
 (defn version-by-key [jdbc key]
   (one jdbc (-> (select :key :id)
@@ -51,17 +53,17 @@
 
 (defn versions [jdbc]
   (reverse
-   (sort version-compare
-         (map :key (query jdbc (-> (select :key)
-                                   (from :versions)
-                                   (where [:= :hidden false])))))))
+    (sort version-compare
+          (map :key (query jdbc (-> (select :key)
+                                    (from :versions)
+                                    (where [:= :hidden false])))))))
 
 (defn versions-full-info [jdbc]
   (reverse
-   (sort #(version-compare (:key %1) (:key %2))
-         (query jdbc (-> (select :id :key)
-                         (from :versions)
-                         (where [:= :hidden false]))))))
+    (sort #(version-compare (:key %1) (:key %2))
+          (query jdbc (-> (select :id :key)
+                          (from :versions)
+                          (where [:= :hidden false]))))))
 
 (defn outdated-versions-ids [jdbc actual-ids]
   (map :id (query jdbc (-> (select :id)
@@ -88,3 +90,19 @@
                                      (where [:= :id version-id]
                                             [:= :hidden false]))))
                 true))
+
+(defn update-zip [jdbc version-id fis]
+  (let [conn (-> jdbc :conn :datasource .getConnection)
+        stmt (clj-jdbc/prepare-statement conn "UPDATE versions SET zip=? WHERE id=?")]
+    (.setBinaryStream stmt 1 fis (.available fis))
+    (.setInt stmt 2 version-id)
+    (.executeUpdate stmt)
+    (.close stmt)
+    (.close conn)))
+
+(defn get-zip [jdbc version-id]
+  (when-let [hex (:zip (one jdbc (-> (select (honeysql.types/raw "encode(zip, 'hex') as zip"))
+                                     (from :versions)
+                                     (where [:= :id version-id]
+                                            [:= :hidden false]))))]
+    (javax.xml.bind.DatatypeConverter/parseHexBinary hex)))
