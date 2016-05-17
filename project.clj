@@ -14,7 +14,7 @@
                  [ring/ring-json "0.3.1"]
                  [ring/ring-core "1.3.1"]
                  ;; logging
-                 [com.taoensso/timbre "4.0.1"]
+                 [com.taoensso/timbre "4.3.1"]
                  ;; databases
                  [com.taoensso/carmine "2.11.1"]
                  [org.clojure/java.jdbc "0.3.6"]

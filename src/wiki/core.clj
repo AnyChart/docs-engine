@@ -7,7 +7,9 @@
             [wiki.components.indexer :as indexer]
             [wiki.components.web :as web]
             [wiki.components.offline-generator :as offline-generator]
-            [com.stuartsierra.component :as component])
+            [com.stuartsierra.component :as component]
+            [taoensso.timbre :as timbre]
+            [taoensso.timbre.appenders.core :as appenders])
   (:gen-class :main :true))
 
 (defn dev-system [config]
@@ -121,6 +123,18 @@
                              {:offline-generator {:queue "docs-zip-prod-queue"
                                                   :zip-dir "/apps/docs-prod/data/zip"}}))
 
+(defn init-logger []
+  (let [log-file-name "log.txt"]
+    (clojure.java.io/delete-file log-file-name :quiet)
+    (timbre/merge-config!
+      {:appenders {:spit (appenders/spit-appender {:fname log-file-name})}})
+    ; Set the lowest-level to output as :debug
+    (timbre/set-level! :debug)
+    (Thread/setDefaultUncaughtExceptionHandler
+      (reify Thread$UncaughtExceptionHandler
+        (uncaughtException [_ thread ex]
+          (timbre/error ex "Uncaught exception on" (.getName thread)))))))
+
 (def dev (dev-system config))
 
 (defn start []
@@ -136,6 +150,7 @@
      (component/start (dev-system config))
      (println "started at http://localhost:8010")))
   ([domain mode]
+   (init-logger)
    (cond
      (= domain "dev") (component/start (dev-system (assoc-in config [:generator :git-ssh] mode)))
      (and (= domain "stg") (= mode "frontend")) (component/start (frontend-system stg-config))
