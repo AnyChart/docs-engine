@@ -21,7 +21,7 @@
    :generator (component/using (generator/new-generator (:generator config))
                                [:jdbc :redis :notifier :offline-generator])
    :offline-generator (component/using (offline-generator/new-offline-generator (:offline-generator config))
-                                       [:jdbc])
+                                       [:jdbc :redis])
    :indexer (component/using (indexer/new-indexer (:indexer config))
                              [:redis])))
 
@@ -33,8 +33,6 @@
    :sphinx (sphinx/new-sphinx (:sphinx config))
    :indexer (component/using (indexer/new-indexer (:indexer config))
                              [:redis])
-   :offline-generator (component/using (offline-generator/new-offline-generator (:offline-generator config))
-                                       [:jdbc])
    :web   (component/using (web/new-web (:web config))
                            [:jdbc :redis :notifier :sphinx :offline-generator])))
 
@@ -44,7 +42,7 @@
    :jdbc  (jdbc/new-jdbc (:jdbc config))
    :redis (redis/new-redis (:redis config))
    :offline-generator (component/using (offline-generator/new-offline-generator (:offline-generator config))
-                                       [:jdbc])
+                                       [:jdbc :redis])
    :generator (component/using (generator/new-generator (:generator config))
                                [:jdbc :redis :notifier :offline-generator])))
 
@@ -58,6 +56,7 @@
          :static 12
          :port 8080
          :queue "docs-queue"
+         :zip-queue "docs-zip-queue"
          :reference "api.anychart.stg"
          :playground "playground.anychart.stg"}
    :jdbc {:subprotocol "postgresql"
@@ -80,7 +79,8 @@
                :reference-versions "http://api.anychart.stg/versions"
                :reference-default-version "develop"
                :playground "playground.anychart.stg/docs"}
-   :offline-generator {:zip-dir (.getAbsolutePath (clojure.java.io/file "data/zip"))}})
+   :offline-generator {:queue "docs-zip-queue"
+                       :zip-dir (.getAbsolutePath (clojure.java.io/file "data/zip"))}})
 
 (def config base-config)
 
@@ -101,6 +101,7 @@
                              {:web {:debug false
                                     :port 9011
                                     :queue "docs-prod-queue"
+                                    :zip-queue "docs-zip-prod-queue"
                                     :reference "api.anychart.com"
                                     :playground "playground.anychart.com"}}
                              {:jdbc {:subname "//10.132.9.26:5432/docs_prod"
@@ -117,7 +118,8 @@
                                           :reference-versions "https://api.anychart.com/versions"
                                           :reference-default-version "latest"
                                           :playground "playground.anychart.com/docs"}}
-                             {:offline-generator {:zip-dir "/apps/docs-prod/data/zip"}}))
+                             {:offline-generator {:queue "docs-zip-prod-queue"
+                                                  :zip-dir "/apps/docs-prod/data/zip"}}))
 
 (def dev (dev-system config))
 

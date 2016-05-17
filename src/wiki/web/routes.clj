@@ -22,9 +22,9 @@
                          (reduce str (map #(tree-view % (:version context-map)) entries)))))
 
 (add-tag! :tree-view-local (fn [args context-map]
-                       (let [entries (get context-map (keyword (first args)))
-                             path (get context-map (keyword (second args)))]
-                         (reduce str (map #(tree-view-local % (:version context-map) path) entries)))))
+                             (let [entries (get context-map (keyword (first args)))
+                                   path (get context-map (keyword (second args)))]
+                               (reduce str (map #(tree-view-local % (:version context-map) path) entries)))))
 
 (defn- jdbc [request]
   (-> request :component :jdbc))
@@ -77,41 +77,38 @@
       (redirect (str "/" (:key version) "/Quick_Start")))))
 
 (defn- show-page-data [request version page]
-  (response {:url (:url page)
-             :page page
+  (response {:url   (:url page)
+             :page  page
              :title (:full_name page)}))
 
 (defn- show-page [request version page]
   (let [versions (versions-data/versions (jdbc request))]
-    (render-file "templates/page.selmer" {:version (:key version)
+    (render-file "templates/page.selmer" {:version        (:key version)
                                           :actual-version (first versions)
-                                          :old (not= (first versions) (:key version))
-                                          :tree (versions-data/tree-data (jdbc request)
-                                                                         (:id version))
-                                          :url (:url page)
-                                          :title (:full_name page)
-                                          :page page
-                                          :versions versions})))
+                                          :old            (not= (first versions) (:key version))
+                                          :tree           (versions-data/tree-data (jdbc request)
+                                                                                   (:id version))
+                                          :url            (:url page)
+                                          :title          (:full_name page)
+                                          :page           page
+                                          :versions       versions})))
 
 (defn download-zip [request version]
-  (let [zip-dir (-> request offline-generator :config :zip-dir)
-        zip-path (str zip-dir "/" (:key version) ".zip")]
-    (if (-> zip-path clojure.java.io/as-file .exists)
-      (-> zip-path
-          file-response
-          (header "Content-Disposition" (str "attachment; filename=\"" (:key version) ".zip\"" ))
-          (header "Content-Type" "application/zip, application/octet-stream")
-          (header "Content-Description" "File Transfer")
-          (header "Content-Transfer-Encoding" "binary"))
-      (error-404 request))))
+  (if-let [zip (versions-data/get-zip (jdbc request) (:id version))]
+    (-> zip
+        clojure.java.io/input-stream
+        response
+        (header "Content-Length" (alength zip))
+        (header "Content-Disposition" (str "attachment; filename=\"" (:key version) ".zip\""))
+        (header "Content-Type" "application/zip, application/octet-stream")
+        (header "Content-Description" "File Transfer")
+        (header "Content-Transfer-Encoding" "binary"))
+    (error-404 request)))
 
 (defn generate-zip [request version]
-  (let [offline-generator (offline-generator request)
-        is-start-generate (offline-generator-com/generate-zip offline-generator version)]
-    (if is-start-generate
-      (response (str "Docs for version " (:key version) " have been started generating!"))
-      (response (str "Docs for version " (:key version) " are still being generated...")))))
-
+  (redisca/enqueue (redis request)
+                   (-> request :component :config :zip-queue)
+                   {:command "generate" :version version}))
 
 (defn- try-show-latest-page [request]
   (let [version (versions-data/default (jdbc request))]
@@ -123,8 +120,8 @@
         title (reduce (fn [res q]
                         (clojure.string/replace res
                                                 (re-pattern (str "(?i)"
-                                                     (clojure.string/re-quote-replacement
-                                                      q)))
+                                                                 (clojure.string/re-quote-replacement
+                                                                   q)))
                                                 #(str "{b}" % "{eb}")))
                       (:url result) words)
         title (-> title
@@ -135,29 +132,29 @@
                         (clojure.string/replace #"\{eb\}" "</span>"))
                    title)]
     (assoc result
-           :title (str (clojure.string/join " / " (drop-last 1 title))
-                       " / <a href='/" version "/" url "'>" (first (take-last 1 title)) "</a>"))))
+      :title (str (clojure.string/join " / " (drop-last 1 title))
+                  " / <a href='/" version "/" url "'>" (first (take-last 1 title)) "</a>"))))
 
 (defn- search-results [request version]
-  (render-file "templates/search.selmer" {:version (:key version)
-                                          :tree (versions-data/tree-data (jdbc request)
-                                                                         (:id version))
-                                          :query (-> request :params :q)
+  (render-file "templates/search.selmer" {:version  (:key version)
+                                          :tree     (versions-data/tree-data (jdbc request)
+                                                                             (:id version))
+                                          :query    (-> request :params :q)
                                           :versions (versions-data/versions (jdbc request))
-                                          :results (map #(format-search-result
-                                                          %
-                                                          (-> request :params :q)
-                                                          (:key version))
-                                                        (search/search-for (sphinx request)
-                                                                           (-> request
-                                                                               :params :q)
-                                                                           (:id version)
-                                                                           (:key version)
-                                                                           (-> request
-                                                                               :component
-                                                                               :sphinx
-                                                                               :config
-                                                                               :table)))}))
+                                          :results  (map #(format-search-result
+                                                           %
+                                                           (-> request :params :q)
+                                                           (:key version))
+                                                         (search/search-for (sphinx request)
+                                                                            (-> request
+                                                                                :params :q)
+                                                                            (:id version)
+                                                                            (:key version)
+                                                                            (-> request
+                                                                                :component
+                                                                                :sphinx
+                                                                                :config
+                                                                                :table)))}))
 
 (defn- search-data [request version]
   (response (map #(format-search-result
@@ -212,25 +209,25 @@
         (error-404 request)))))
 
 (defroutes app-routes
-  (route/resources "/")
-  (GET "/_update_" [] request-update)
-  (POST "/_update_" [] request-update)
-  (GET "/" [] show-landing)
-  (GET "/sitemap" [] show-sitemap)
-  (GET "/latest" [] show-latest)
-  (GET "/latest/" [] show-latest)
-  (GET "/latest/search" [] show-latest-search)
-  (GET "/latest/*" [] try-show-latest-page)
-  (GET "/:version" [] (check-version-middleware show-version))
-  (GET "/:version/" [] (check-version-middleware show-version))
-  (GET "/:version/check/*" [] (check-version-middleware try-show-page))
-  (GET "/:version/*-json" [] (check-page-middleware show-page-data))
-  (GET "/:version/search" [] (check-version-middleware search-results))
-  (POST "/:version/search-data" [] (check-version-middleware search-data))
-  (GET "/:version/_generate-zip_" [] (check-version-middleware generate-zip))
-  (GET "/:version/download" [] (check-version-middleware download-zip))
-  (GET "/:version/*" [] (check-folder-middleware show-page))
-  (route/not-found show-404))
+           (route/resources "/")
+           (GET "/_update_" [] request-update)
+           (POST "/_update_" [] request-update)
+           (GET "/" [] show-landing)
+           (GET "/sitemap" [] show-sitemap)
+           (GET "/latest" [] show-latest)
+           (GET "/latest/" [] show-latest)
+           (GET "/latest/search" [] show-latest-search)
+           (GET "/latest/*" [] try-show-latest-page)
+           (GET "/:version" [] (check-version-middleware show-version))
+           (GET "/:version/" [] (check-version-middleware show-version))
+           (GET "/:version/check/*" [] (check-version-middleware try-show-page))
+           (GET "/:version/*-json" [] (check-page-middleware show-page-data))
+           (GET "/:version/search" [] (check-version-middleware search-results))
+           (POST "/:version/search-data" [] (check-version-middleware search-data))
+           (GET "/:version/_generate-zip_" [] (check-version-middleware generate-zip))
+           (GET "/:version/download" [] (check-version-middleware download-zip))
+           (GET "/:version/*" [] (check-folder-middleware show-page))
+           (route/not-found show-404))
 
 (def app (-> (routes app-routes)
              wrap-keyword-params

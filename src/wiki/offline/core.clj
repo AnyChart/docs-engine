@@ -1,4 +1,5 @@
 (ns wiki.offline.core
+  (:import [java.io FileInputStream])
   (:require [clojure.java.io :refer [make-parents] :as io]
             [selmer.parser :refer [render-file add-tag!]]
             [wiki.components.redis :as redisca]
@@ -62,10 +63,13 @@
   (copy-from-resource "public/i" (str main-path "/deps/i")))
 
 (defn download-file [url absolute-name]
-  (info "Load file: " url absolute-name)
-  (with-open [in (io/input-stream url)
-              out (io/output-stream absolute-name )]
-    (io/copy in out)))
+  ;(info "Load file: " url absolute-name)
+  (try
+    (with-open [in (io/input-stream url)
+                   out (io/output-stream absolute-name )]
+         (io/copy in out))
+    (catch Exception e
+      (error "Download file failed: " url e))))
 
 (defn start-load-link-if-need [url absolute-name links]
   (swap! links (fn [links] (if (nil? (get links url))
@@ -172,6 +176,7 @@
 (defn get-relative-prefix-path [page-url]
   (let [parts (clojure.string/split page-url (re-pattern "/"))]
     (condp = (count parts)
+      1 "./"
       2 "../"
       3 "../../"
       4 "../../../")))
@@ -201,13 +206,13 @@
 (defn generate-zip [config jdbc version]
   (let [tree (versions-data/tree-data jdbc (:id version))
         pages (pages-data/all-pages-by-version jdbc (:id version))
-        test-pages (take 5 pages)
+        ;test-pages (take 5 pages)
         versions (versions-data/versions jdbc)
         zip-dir (:zip-dir config)
         main-path (str zip-dir "/" (:key version))
         zip-path (str main-path ".zip")
         links (atom {})]
-    (info "Start generating offline docs: " main-path version)
+    (info "Start generating offline docs: " version main-path)
     (create-dependencies main-path)
     (doall (pmap #(save-page % tree version versions main-path links) pages))
     (doseq [key-val @links] (-> key-val val deref))
@@ -215,6 +220,7 @@
                     zip-path
                     (str "/" (:key version)))
     (info "End generating offline docs: " zip-path)
+    (versions-data/update-zip jdbc (:id version) (FileInputStream. zip-path))
     zip-path))
 
 
