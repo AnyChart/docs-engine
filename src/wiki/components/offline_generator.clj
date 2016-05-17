@@ -40,8 +40,7 @@
                                       (catch Exception e
                                         (error "Error generating zip " (:key version) e
                                                (.printStackTrace e)
-                                               (.getMessage e)
-                                               (.getCause e)))))
+                                               (.getMessage e)))))
                    (is-start-key version) true)
       (assoc state (is-start-key version) false))))
 
