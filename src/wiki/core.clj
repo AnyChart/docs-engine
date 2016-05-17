@@ -34,7 +34,7 @@
    :indexer (component/using (indexer/new-indexer (:indexer config))
                              [:redis])
    :web   (component/using (web/new-web (:web config))
-                           [:jdbc :redis :notifier :sphinx :offline-generator])))
+                           [:jdbc :redis :notifier :sphinx])))
 
 (defn generator-system [config]
   (component/system-map
