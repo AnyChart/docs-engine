@@ -34,7 +34,11 @@
 (defn- start-if-not-started [state config jdbc version]
   (let [status (get state (:key version))]
     (if (or (nil? status) (realized? status))
-      (assoc state (:key version) (future (offline/generate-zip config jdbc version))
+      (assoc state (:key version) (future
+                                    (try
+                                      (offline/generate-zip config jdbc version)
+                                      (catch Exception e
+                                        (error "Error generating zip " (:key version) e))))
                    (is-start-key version) true)
       (assoc state (is-start-key version) false))))
 
