@@ -117,7 +117,10 @@
       add-doctype))
 
 (defn load-iframe [iframe samples-path links]
-  (let [{:keys [status headers body error] :as resp} @(http/get (:url iframe))]
+  (let [{:keys [body error]}
+        (try @(http/get (:url iframe))
+             (catch Exception e
+               {:error e :body nil}))]
     (if error
       (error "Error loading iframe " (:url iframe) error)
       (let [prepared-html (process-iframe body samples-path links)
