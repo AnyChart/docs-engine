@@ -8,9 +8,9 @@
 
 (defn- message-processor [comp]
   (fn [{:keys [message attempt]}]
-    (info "receive : " message)
     (when (= (:command message) "generate")
-      (generate-zip comp (:version message)))
+      (generate-zip comp (:version message))
+      (System/gc))
     {:status :success}))
 
 (defrecord OfflineGenerator [config state jdbc redis]
