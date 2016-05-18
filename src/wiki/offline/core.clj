@@ -201,7 +201,7 @@
                            node2html
                            replace-external-links
                            add-doctype)]
-    (info "Page: " file-name)
+    ;(info "Page: " file-name)
     (make-parents file-name)
     (spit file-name processed-html)))
 

@@ -8,7 +8,8 @@
   (generator/generate (:jdbc comp)
                       (:notifier comp)
                       (:offline-generator comp)
-                      (:config comp)))
+                      (:config comp))
+  (System/gc))
 
 (defn- message-processor [comp]
   (fn [{:keys [message attempt]}]
