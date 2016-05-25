@@ -2,8 +2,9 @@
   (:import [org.apache.commons.lang3 StringEscapeUtils])
   (:require [markdown.core :refer [md-to-html-string]]
             [selmer.parser :refer [render-file]]
-            [wiki.data.pg :as pg-data]
-            [taoensso.timbre :as timbre :refer [info error]]))
+            [taoensso.timbre :as timbre :refer [info error]]
+    ;[wiki.data.pg :as pg-data]
+            ))
 
 (defn- build-sample-embed [version playground sample-path custom-settings]
   (let [width (:width custom-settings)
@@ -46,7 +47,7 @@
                 (str "style='position:relative;margin:0px;width:" width "px;height:" height "px;'")
                 "style='position:relative;margin:0px;'")
         url (str "/samples/" (StringEscapeUtils/unescapeHtml4 sample-path))
-        sample (pg-data/sample-by-url pg-jdbc (:id pg-version) url)
+        sample {}                                             ;(pg-data/sample-by-url pg-jdbc (:id pg-version) url)
         id (rand-int (Integer/MAX_VALUE))
         full-id (str "container" id)]
     (if (some? sample)
