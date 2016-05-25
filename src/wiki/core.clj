@@ -49,7 +49,7 @@
    :offline-generator (component/using (offline-generator/new-offline-generator (:offline-generator config))
                                        [:jdbc :redis])
    :generator (component/using (generator/new-generator (:generator config))
-                               [:jdbc :redis :notifier :offline-generator])))
+                               [:jdbc :pg-jdbc :redis :notifier :offline-generator])))
 
 (def base-config
   {:notifications {:token "P8Z59E0kpaOqTcOxner4P5jb"
