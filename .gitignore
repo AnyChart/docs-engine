@@ -19,7 +19,7 @@ pom.xml.asc
 *~%
 *~
 wiki/.nrepl-port
-data/
+/data
 .idea
 wiki.iml
 id_rsa
