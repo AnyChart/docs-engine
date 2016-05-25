@@ -169,8 +169,20 @@
         (assoc-in node [:attrs :src] (str path "deps/" name)))
       node)))
 
+(defn replace-page-script [main-path path links node]
+  (if-let [src (-> node :attrs :src)]
+    (if (not (.startsWith src "."))
+      (let [url (get-url src)
+            name (get-file-name url)
+            absolute-name (str main-path "/deps/" name)]
+        (start-load-link-if-need url absolute-name links)
+        (assoc-in node [:attrs :src] (str path "deps/" name)))
+      node)
+    node))
+
 (defn replace-tags [tree main-path path links]
   (html/at tree
+           [:script] (partial replace-page-script main-path path links)
            [:div.iframe :iframe] (partial replace-iframe-node main-path path links)
            [:a] replace-a-node
            [:img] (partial replace-img-node main-path path links)))

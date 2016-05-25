@@ -8,6 +8,7 @@
                  [selmer "0.8.2"]
                  ;; html
                  [enlive "1.1.6"]
+                 [org.apache.commons/commons-lang3 "3.4"]
                  ;; web
                  [http-kit "2.1.16"]
                  [compojure "1.1.9"]

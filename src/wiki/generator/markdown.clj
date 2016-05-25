@@ -1,5 +1,9 @@
 (ns wiki.generator.markdown
-  (:require [markdown.core :refer [md-to-html-string]]))
+  (:import [org.apache.commons.lang3 StringEscapeUtils])
+  (:require [markdown.core :refer [md-to-html-string]]
+            [selmer.parser :refer [render-file]]
+            [wiki.data.pg :as pg]
+            [taoensso.timbre :as timbre :refer [info error]]))
 
 (defn- build-sample-embed [version playground sample-path custom-settings]
   (let [width (:width custom-settings)
@@ -20,7 +24,60 @@
          <a class='btn-playground btn' target='_blank' href='//" playground "/" version "/samples/" sample-path "-plain'><i class='fa fa-play'></i> Playground</a>
        </div></div>")))
 
-(defn- sample-transformer [version playground]
+(defn get-code [code scripts]
+  (condp = (count scripts)
+    0 (str "(function(){
+          anychart.theme(null);
+          var chart;"
+           code
+          "})();")
+   (str "$.getScript('" (first scripts) "', function(data, status, jqxhr){
+      " (get-code code (drop 1 scripts)) "
+   });")))
+
+(defn build-sample-div [version pg-jdbc pg-version playground sample-path custom-settings]
+  (let [width (:width custom-settings)
+        height (:height custom-settings)
+        div-style (if (not (= width nil))
+                    (str "style='width:" (+ width 10) "px;'")
+                    "")
+        style (if (and (not (= width nil))
+                       (not (= height nil)))
+                (str "style='position:relative;margin:0px;width:" width "px;height:" height "px;'")
+                "style='position:relative;margin:0px;'")
+        url (str "/samples/" (StringEscapeUtils/unescapeHtml4 sample-path))
+        sample (pg/sample-by-url pg-jdbc (:id pg-version) url)
+        id (rand-int (Integer/MAX_VALUE))
+        full-id (str "container" id)]
+    (if (some? sample)
+      (let [code
+            (-> (:code sample)
+                (clojure.string/replace #"\(\s*\"container\"" (str "(\"" full-id "\""))
+                (clojure.string/replace #"\(\s*'container'\s*\)" (str "('" full-id "')"))
+                (clojure.string/replace #":\s*\"container\"" (str ": \"" full-id "\""))
+                (clojure.string/replace #" container\." (str " " full-id "."))
+                (clojure.string/replace #"=\s*\"container\"" (str "=\"" full-id "\""))
+                (clojure.string/replace #"=\s*'container'" (str "='" full-id "'"))
+                (clojure.string/replace #"getElementsByTagName\(.body.\)\[0\]" (str "getElementById('iframe" id "')"))
+                (clojure.string/replace #"\$\(.body.\)" "\\$('.iframe-tag')")
+                (clojure.string/replace #"var\s+chart\s*=" "chart =")
+                (clojure.string/replace #"\"fixed\"" "\"absolute\"")
+                (clojure.string/replace #"anychart\.onDocumentReady" "setTimeout"))]
+        (render-file "templates/sample.selmer" (assoc sample
+                                                 :div-style div-style
+                                                 :style style
+                                                 :id id
+                                                 :code (get-code code (:scripts sample))
+                                                 :version (:key pg-version)
+                                                 :playground playground
+                                                 :version version
+                                                 :sample-path sample-path
+                                                 :engine-version (or (:engine_version pg-version)
+                                                                     (:key pg-version)))))
+      (do (info "Sample isn't available:  " pg-version url id full-id)
+        ""))))
+
+(defn- sample-transformer [version pg-jdbc pg-version playground]
   (fn [text state]
     [(if (or (:code state) (:codeblock state))
        text
@@ -31,7 +88,8 @@
          (if sample-path
            (clojure.string/replace text
                                    source
-                                   (build-sample-embed version playground
+                                   ;(build-sample-embed version playground sample-path custom-settings)
+                                   (build-sample-div version pg-jdbc pg-version playground
                                                        sample-path custom-settings))
            text)))
      state]))
@@ -56,9 +114,9 @@
                             (fn [[_ link title]]
                               (str "<a class='method' href='//" reference "/" api-default-version "/" link "'>" title "</a>")))))
 
-(defn to-html [source version playground reference api-versions api-default-version]
+(defn to-html [source version pg-jdbc pg-version  playground reference api-versions api-default-version]
   (-> (md-to-html-string source
                          :heading-anchors true
-                         :custom-transformers [(sample-transformer version playground)
+                         :custom-transformers [(sample-transformer version pg-jdbc pg-version playground)
                                                code-transformer])
       (add-api-links version reference api-versions api-default-version)))

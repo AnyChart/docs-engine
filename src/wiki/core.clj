@@ -16,12 +16,13 @@
   (component/system-map
    :notifier (notifier/new-notifier (:notifications config))
    :jdbc  (jdbc/new-jdbc (:jdbc config))
+   :pg-jdbc (jdbc/new-jdbc (:pg-jdbc config))
    :redis (redis/new-redis (:redis config))
    :sphinx (sphinx/new-sphinx (:sphinx config))
    :web   (component/using (web/new-web (:web config))
-                           [:jdbc :redis :notifier :sphinx :offline-generator])
+                           [:jdbc :redis :notifier :sphinx :offline-generator :pg-jdbc])
    :generator (component/using (generator/new-generator (:generator config))
-                               [:jdbc :redis :notifier :offline-generator])
+                               [:jdbc :pg-jdbc :redis :notifier :offline-generator])
    :offline-generator (component/using (offline-generator/new-offline-generator (:offline-generator config))
                                        [:jdbc :redis])
    :indexer (component/using (indexer/new-indexer (:indexer config))
@@ -31,17 +32,19 @@
   (component/system-map
    :notifier (notifier/new-notifier (:notifications config))
    :jdbc  (jdbc/new-jdbc (:jdbc config))
+   :pg-jdbc (jdbc/new-jdbc (:pg-jdbc config))
    :redis (redis/new-redis (:redis config))
    :sphinx (sphinx/new-sphinx (:sphinx config))
    :indexer (component/using (indexer/new-indexer (:indexer config))
                              [:redis])
    :web   (component/using (web/new-web (:web config))
-                           [:jdbc :redis :notifier :sphinx])))
+                           [:jdbc :redis :notifier :sphinx :pg-jdbc])))
 
 (defn generator-system [config]
   (component/system-map
    :notifier (notifier/new-notifier (:notifications config))
    :jdbc  (jdbc/new-jdbc (:jdbc config))
+   :pg-jdbc (jdbc/new-jdbc (:pg-jdbc config))
    :redis (redis/new-redis (:redis config))
    :offline-generator (component/using (offline-generator/new-offline-generator (:offline-generator config))
                                        [:jdbc :redis])
@@ -66,6 +69,11 @@
           :classname "org.postgresql.Driver"
           :user "docs_user"
           :password "pass"}
+   :pg-jdbc {:subprotocol "postgresql"
+             :subname "//localhost:5432/playground_db"
+             :classname "org.postgresql.Driver"
+             :user "playground_user"
+             :password "pass"}
    :sphinx {:subprotocol "mysql"
             :subname "//104.236.66.244:3312?characterEncoding=utf8&characterSetResults=utf8&maxAllowedPacket=512000"
             :table "docs_stg_index"}
@@ -94,6 +102,9 @@
                             {:jdbc {:subname "//10.132.9.26:5432/docs_stg"
                                     :user "docs_stg_user"
                                     :password "fuckstg"}}
+                            {:pg-jdbc {:subname "//10.132.9.26:5432/pg_stg"
+                                    :user "pg_stg_user"
+                                    :password "fuckstg"}}
                             {:redis {:spec {:host "10.132.9.26" :db 1}}}
                             {:generator {:git-ssh "/apps/keys/git"
                                          :data-dir "/apps/docs-stg/data"}}
@@ -110,6 +121,9 @@
                                     :playground "playground.anychart.com"}}
                              {:jdbc {:subname "//10.132.9.26:5432/docs_prod"
                                      :user "docs_prod_user"
+                                     :password "fuckprod"}}
+                             {:pg-jdbc {:subname "//10.132.9.26:5432/pg_prod"
+                                     :user "pg_prod_user"
                                      :password "fuckprod"}}
                              {:redis {:spec {:host "10.132.9.26" :db 1}}}
                              {:sphinx {:table "docs_prod_index"}}

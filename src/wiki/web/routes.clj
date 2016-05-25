@@ -14,8 +14,7 @@
             [wiki.data.folders :as folders-data]
             [wiki.data.sitemap :as sitemap]
             [wiki.data.search :as search]
-            [wiki.web.tree :refer [tree-view tree-view-local]]
-            [wiki.components.offline-generator :as offline-generator-com]))
+            [wiki.web.tree :refer [tree-view tree-view-local]]))
 
 (add-tag! :tree-view (fn [args context-map]
                        (let [entries (get context-map (keyword (first args)))]
