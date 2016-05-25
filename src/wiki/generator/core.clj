@@ -5,7 +5,7 @@
             [wiki.generator.tree :as tree-gen]
             [wiki.components.notifier :as notifications]
             [wiki.data.versions :as vdata]
-    ;[wiki.data.pg :as pg-data]
+            [wiki.data.pg :as pg-data]
             [wiki.generator.api-versions :as api-versions]
             [wiki.components.offline-generator :refer [generate-zip]]
             [taoensso.timbre :as timbre :refer [info error]]))
