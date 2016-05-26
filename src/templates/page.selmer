@@ -47,9 +47,9 @@
                         </ul>
                     </div>
                     <div class="btn-group" style="padding-left: 15px;">
-                        <a href="/{{version}}/download" role="button" type="button" class="btn btn-default btn-blue" style="background: #42a5f5">
+                        <button onclick="location.href='/{{version}}/download'" role="button" type="button" class="btn btn-default btn-zip">
                             <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
-                            Download .zip</a>
+                            Download .zip</button>
                     </div>
                     <div class="text-muted questions">
                         <a href="http://support.anychart.com/" class="text-support"><i class="icon icon-ring icon-data"></i></a>
