@@ -24,18 +24,22 @@
          <a class='btn-playground btn' target='_blank' href='//" playground "/" version "/samples/" sample-path "-plain'><i class='fa fa-play'></i> Playground</a>
        </div></div>")))
 
-(defn get-code [code scripts]
+(defn get-code [id code scripts sample]
   (condp = (count scripts)
     0 (str "(function(){
-          anychart.theme(null);
-          var chart;"
+           anychart.theme(null);\n"
+           (when (= id 1) "anychart.utils.hideTooltips(true);\n")
+           (let [export (:exports sample)]
+             (if (= export "chart")
+               "var chart;\n"
+               (str "var chart;\n" (when export (str "var " export ";\n")))))
            code
           "})();")
    (str "$.getScript('" (first scripts) "', function(data, status, jqxhr){
-      " (get-code code (drop 1 scripts)) "
+      " (get-code id code (drop 1 scripts) sample) "
    });")))
 
-(defn build-sample-div [version pg-jdbc pg-version playground sample-path custom-settings]
+(defn build-sample-div [id version pg-jdbc pg-version playground sample-path custom-settings]
   (let [width (:width custom-settings)
         height (:height custom-settings)
         div-style (if (not (= width nil))
@@ -47,7 +51,6 @@
                 "style='position:relative;margin:0px;'")
         url (str "/samples/" (StringEscapeUtils/unescapeHtml4 sample-path))
         sample (pg-data/sample-by-url pg-jdbc (:id pg-version) url)
-        id (rand-int (Integer/MAX_VALUE))
         full-id (str "container" id)]
     (if (some? sample)
       (let [code
@@ -67,7 +70,7 @@
                                                  :div-style div-style
                                                  :style style
                                                  :id id
-                                                 :code (get-code code (:scripts sample))
+                                                 :code (get-code id code (:scripts sample) sample)
                                                  :version (:key pg-version)
                                                  :playground playground
                                                  :version version
@@ -77,7 +80,7 @@
       (do (info "Sample isn't available:  " pg-version url id full-id)
         ""))))
 
-(defn- sample-transformer [version pg-jdbc pg-version playground]
+(defn- sample-transformer [id-counter version pg-jdbc pg-version playground]
   (fn [text state]
     [(if (or (:code state) (:codeblock state))
        text
@@ -89,7 +92,7 @@
            (clojure.string/replace text
                                    source
                                    ;(build-sample-embed version playground sample-path custom-settings)
-                                   (build-sample-div version pg-jdbc pg-version playground
+                                   (build-sample-div (swap! id-counter inc) version pg-jdbc pg-version playground
                                                        sample-path custom-settings))
            text)))
      state]))
@@ -117,6 +120,6 @@
 (defn to-html [source version pg-jdbc pg-version  playground reference api-versions api-default-version]
   (-> (md-to-html-string source
                          :heading-anchors true
-                         :custom-transformers [(sample-transformer version pg-jdbc pg-version playground)
+                         :custom-transformers [(sample-transformer (atom 0) version pg-jdbc pg-version playground)
                                                code-transformer])
       (add-api-links version reference api-versions api-default-version)))
