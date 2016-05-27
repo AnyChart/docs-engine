@@ -6354,7 +6354,8 @@ body {
 }
 @font-face {
   font-family: 'AnyChart';
-  src: url('../fonts/AnyChart-font/AnyChart.eot?-x72mzv'), url('../fonts/AnyChart-font/AnyChart.eot?#iefix-x72mzv') format('embedded-opentyp'), url('../fonts/AnyChart-font/AnyChart.woff?-x72mzv') format('woff'), url('../fonts/AnyChart-font/AnyChart.ttf?-x72mzv') format('truetype'), url('../fonts/AnyChart-font/AnyChart.svg?-x72mzv#AnyChart') format('svg');
+  src: url('../fonts/AnyChart-font/AnyChart.eot');
+  src: url('../fonts/AnyChart-font/AnyChart.eot?#iefix') format('embedded-opentyp'), url('../fonts/AnyChart-font/AnyChart.woff') format('woff'), url('../fonts/AnyChart-font/AnyChart.ttf') format('truetype'), url('../fonts/AnyChart-font/AnyChart.svg#AnyChart') format('svg');
 }
 header {
   background: #2485d0;
@@ -6468,7 +6469,7 @@ a.brand {
   background: none border: 0;
 }
 button.btn-zip {
-  color: #fff;
+  color: #fff !important;
   background: #42a5f5;
   border: 0;
   -webkit-box-shadow: 2px 2px 4px -1px rgba(0, 0, 0, 0.75);
