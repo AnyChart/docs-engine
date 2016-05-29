@@ -6469,7 +6469,7 @@ a.brand {
   background: none border: 0;
 }
 button.btn-zip {
-  color: #fff !important;
+  color: #fff;
   background: #42a5f5;
   border: 0;
   -webkit-box-shadow: 2px 2px 4px -1px rgba(0, 0, 0, 0.75);
