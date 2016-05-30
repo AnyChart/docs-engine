@@ -3,7 +3,9 @@
 <head>
     <title>{{title}} - AnyChart JavaScript Chart Documentation ver. {{version}}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% if page.tags %}
     <meta name="keywords" content="{{page.tags|join:", "}}">
+    {% endif %}
     <link rel="icon" href="/i/anychart.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="/main.css"/>
     <!--[if lt IE 9]>

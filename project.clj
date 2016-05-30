@@ -5,7 +5,7 @@
                  [com.stuartsierra/component "0.2.3"]
                  [clj-time "0.11.0"]
                  ;; templates
-                 [selmer "0.8.2"]
+                 [selmer "1.0.4"]
                  ;; html
                  [enlive "1.1.6"]
                  ;; web

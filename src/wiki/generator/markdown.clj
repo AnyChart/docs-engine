@@ -1,10 +1,6 @@
 (ns wiki.generator.markdown
   (:require [markdown.core :refer [md-to-html-string]]))
 
-(defn- build-tags-embed [tags]
-  ;todo: put here tags' design
-  (str "<div>" (clojure.string/join ", " tags) "</div>"))
-
 (defn tags-transformer [all-tags]
   (fn [text state]
     [(if (or (:code state) (:codeblock state))
@@ -15,7 +11,7 @@
                tags (re-seq #"[^\s,]+" tags-str)]
            (swap! all-tags concat tags)
            (if source
-             (clojure.string/replace text source (build-tags-embed tags))
+             (clojure.string/replace text source "")
              text))
          text))
      state]))
@@ -75,6 +71,12 @@
                             (fn [[_ link title]]
                               (str "<a class='method' href='//" reference "/" api-default-version "/" link "'>" title "</a>")))))
 
+(defn- add-tags [html tags]
+  (let [tags-html  (str "<div class='tags'>" (apply str (map #(str "<span>" % "</span>") tags)) "</div>")
+        h1 "</h1>"
+        index (+ (.indexOf html h1) (count h1))]
+    (str (subs html 0 index) tags-html (subs html index))))
+
 (defn to-html [source version playground reference api-versions api-default-version]
   (let [tags (atom [])
         html (-> (md-to-html-string source
@@ -82,5 +84,7 @@
                                     :custom-transformers [(sample-transformer version playground)
                                                           code-transformer
                                                           (tags-transformer tags)])
-                 (add-api-links version reference api-versions api-default-version))]
-    {:html html :tags @tags}))
+                 (add-api-links version reference api-versions api-default-version))
+        html-tags (if (empty? @tags) html
+                                     (add-tags html @tags))]
+    {:html html-tags :tags @tags}))
