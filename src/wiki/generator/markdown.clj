@@ -5,6 +5,21 @@
             [taoensso.timbre :as timbre :refer [info error]]
             [wiki.data.playground :as pg-data]))
 
+(defn tags-transformer [all-tags]
+  (fn [text state]
+    [(if (or (:code state) (:codeblock state))
+       text
+       (if-let [matches (re-matches #".*(\{tags\}(.*)\{tags\}).*" text)]
+         (let [source (second matches)
+               tags-str (last matches)
+               tags (re-seq #"[^\s,]+" tags-str)]
+           (swap! all-tags concat tags)
+           (if source
+             (clojure.string/replace text source "")
+             text))
+         text))
+     state]))
+
 (defn- build-sample-embed [version playground sample-path custom-settings]
   (let [width (:width custom-settings)
         height (:height custom-settings)
@@ -16,7 +31,7 @@
                 (str "style='width:" width "px;height:" height "px;'")
                 "")]
     (str
-     "<div class='iframe' " div-style ">
+      "<div class='iframe' " div-style ">
        <div class='no-overflow'>
        <iframe " style " src='//" playground "/" version "/samples/" sample-path "-iframe'></iframe></div>
        <div class='btns'>
@@ -105,8 +120,8 @@
   (if (and (or (:code state) (:codeblock state))
            (code-shifted? text))
     [(-> text
-        (clojure.string/replace #"(?m)^\t" "")
-        (clojure.string/replace #"(?m)^\s{4}" "")) state]
+         (clojure.string/replace #"(?m)^\t" "")
+         (clojure.string/replace #"(?m)^\s{4}" "")) state]
     [text state]))
 
 (defn- add-api-links [text version reference api-versions api-default-version]
@@ -117,9 +132,20 @@
                             (fn [[_ link title]]
                               (str "<a class='method' href='//" reference "/" api-default-version "/" link "'>" title "</a>")))))
 
-(defn to-html [source version pg-jdbc pg-version  playground reference api-versions api-default-version]
-  (-> (md-to-html-string source
-                         :heading-anchors true
-                         :custom-transformers [(sample-transformer (atom 0) version pg-jdbc pg-version playground)
-                                               code-transformer])
-      (add-api-links version reference api-versions api-default-version)))
+(defn- add-tags [html tags]
+  (let [tags-html  (str "<div class='tags'>" (apply str (map #(str "<span>" % "</span>") tags)) "</div>")
+        h1 "</h1>"
+        index (+ (.indexOf html h1) (count h1))]
+    (str (subs html 0 index) tags-html (subs html index))))
+
+(defn to-html [source version pg-jdbc pg-version playground reference api-versions api-default-version]
+  (let [tags (atom [])
+        html (-> (md-to-html-string source
+                                    :heading-anchors true
+                                    :custom-transformers [(sample-transformer (atom 0) version pg-jdbc pg-version playground)
+                                                          code-transformer
+                                                          (tags-transformer tags)])
+                 (add-api-links version reference api-versions api-default-version))
+        html-tags (if (empty? @tags) html
+                                     (add-tags html @tags))]
+    {:html html-tags :tags @tags}))

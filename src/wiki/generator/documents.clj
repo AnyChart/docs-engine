@@ -17,11 +17,14 @@
   [jdbc version pg-jdbc pg-version base-path item api playground api-versions api-default-version]
   ;;(info "generating" (dissoc item :content))
   (if-let [content (:content item)]
-    (pdata/add-page jdbc (:id version) (fix-url (str base-path "/"
-                                                     (:name item)))
-                    (:title item)
-                    (convert-content content (:key version) pg-jdbc pg-version playground api api-versions api-default-version)
-                    (:last-modified item))
+    (let [{html :html tags :tags}
+          (convert-content content (:key version) pg-jdbc pg-version playground api api-versions api-default-version)]
+      (pdata/add-page jdbc (:id version) (fix-url (str base-path "/"
+                                                       (:name item)))
+                      (:title item)
+                      html
+                      (:last-modified item)
+                      tags))
     (let [items (:children item)]
       (when (seq items)
         (fdata/add-folder jdbc (:id version) (fix-url (str base-path "/" (:name item)))

@@ -10,7 +10,13 @@ function fixToc() {
 
     while ($items.get(idx).tagName.toLowerCase() == "br")
         idx++;
-    
+
+    if ($items.get(idx).tagName.toLowerCase() == "div")
+        idx++;
+
+    while ($items.get(idx).tagName.toLowerCase() == "br")
+        idx++;
+
     var $next = $($items.get(idx));
     
     $("div.wrapper.container-fluid>div.row>div.visible-lg").html('');

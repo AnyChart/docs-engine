@@ -5,7 +5,7 @@
                  [com.stuartsierra/component "0.2.3"]
                  [clj-time "0.11.0"]
                  ;; templates
-                 [selmer "0.8.2"]
+                 [selmer "1.0.4"]
                  ;; html
                  [enlive "1.1.6"]
                  [org.apache.commons/commons-lang3 "3.4"]
@@ -22,7 +22,7 @@
                  [postgresql/postgresql "8.4-702.jdbc4"]
                  [mysql/mysql-connector-java "5.1.36"]
                  [clojure.jdbc/clojure.jdbc-c3p0 "0.3.2"]
-                 [honeysql "0.5.2"]
+                 [honeysql "0.6.3"]
                  ;; markdown
                  [markdown-clj "0.9.74"]
                  ;; filesystem
