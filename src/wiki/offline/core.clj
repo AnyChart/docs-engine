@@ -195,6 +195,15 @@
       3 "../../"
       4 "../../../")))
 
+(defn replace-ajax [code main-path path links]
+  (clojure.string/replace code  #"\$\.ajax\(\{url: '([-a-zA-Z0-9\/\._:\(\)]+)'"
+                          #(let [url (get-url (% 1))
+                                name (get-file-name url)
+                                absolute-name (str main-path "/deps/" name)]
+                            (prn url name absolute-name)
+                            (start-load-link-if-need url absolute-name links)
+                            (str "$.ajax({url: '" path "deps/" name "'"))))
+
 (defn save-page [page tree version versions main-path links]
   (let [path (get-relative-prefix-path (:url page))
         file-name (str main-path "/" (:url page) ".html")
@@ -208,6 +217,7 @@
                                                          :versions versions
                                                          :path     path})
         processed-html (-> html
+                           (replace-ajax main-path path links)
                            html2node
                            (replace-tags main-path path links)
                            node2html
