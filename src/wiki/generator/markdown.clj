@@ -35,9 +35,9 @@
                (str "var chart;\n" (when export (str "var " export ";\n")))))
            code
           "})();")
-   (str "$.getScript('" (first scripts) "', function(data, status, jqxhr){
+    (str "$.ajax({url: '" (first scripts) "', dataType: 'script', crossDomain: true, success:function(data, status, jqxhr){
       " (get-code id code (drop 1 scripts) sample) "
-   });")))
+      }});")))
 
 (defn build-sample-div [id version pg-jdbc pg-version playground sample-path custom-settings]
   (let [width (:width custom-settings)
