@@ -1,20 +1,13 @@
 (ns wiki.generator.markdown
   (:require [markdown.core :refer [md-to-html-string]]))
 
-(defn tags-transformer [all-tags]
-  (fn [text state]
-    [(if (or (:code state) (:codeblock state))
-       text
-       (if-let [matches (re-matches #".*(\{tags\}(.*)\{tags\}).*" text)]
-         (let [source (second matches)
-               tags-str (last matches)
-               tags (re-seq #"[^\s,]+" tags-str)]
-           (swap! all-tags concat tags)
-           (if source
-             (clojure.string/replace text source "")
-             text))
-         text))
-     state]))
+(defn get-tags [text]
+  (if-let [matches (re-matches #"(?s).*(\{tags\}(.*)\{tags\}[\r\n]?).*" text)]
+    (let [source (second matches)
+          tags-str (last matches)
+          tags (re-seq #"[^\s,]+" tags-str)]
+      {:html (clojure.string/replace text source "") :tags tags})
+    {:html text :tags []}))
 
 (defn- build-sample-embed [version playground sample-path custom-settings]
   (let [width (:width custom-settings)
@@ -78,13 +71,12 @@
     (str (subs html 0 index) tags-html (subs html index))))
 
 (defn to-html [source version playground reference api-versions api-default-version]
-  (let [tags (atom [])
-        html (-> (md-to-html-string source
+  (let [{tags :tags html-without-tags :html} (get-tags source)
+        html (-> (md-to-html-string html-without-tags
                                     :heading-anchors true
                                     :custom-transformers [(sample-transformer version playground)
-                                                          code-transformer
-                                                          (tags-transformer tags)])
+                                                          code-transformer])
                  (add-api-links version reference api-versions api-default-version))
-        html-tags (if (empty? @tags) html
-                                     (add-tags html @tags))]
-    {:html html-tags :tags @tags}))
+        html-tags (if (empty? tags) html
+                                     (add-tags html tags))]
+    {:html html-tags :tags tags}))
