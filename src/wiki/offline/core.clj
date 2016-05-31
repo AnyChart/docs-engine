@@ -6,7 +6,6 @@
             [wiki.components.notifier :refer [notify-404]]
             [wiki.data.versions :as versions-data]
             [wiki.data.pages :as pages-data]
-            [wiki.data.folders :as folders-data]
             [wiki.web.tree :refer [tree-view]]
             [net.cgrand.enlive-html :as html]
             [org.httpkit.client :as http]
@@ -200,7 +199,6 @@
                           #(let [url (get-url (% 1))
                                 name (get-file-name url)
                                 absolute-name (str main-path "/deps/" name)]
-                            (prn url name absolute-name)
                             (start-load-link-if-need url absolute-name links)
                             (str "$.ajax({url: '" path "deps/" name "'"))))
 
@@ -223,14 +221,12 @@
                            node2html
                            replace-external-links
                            add-doctype)]
-    ;(info "Page: " file-name)
     (make-parents file-name)
     (spit file-name processed-html)))
 
 (defn generate-zip [config jdbc version]
   (let [tree (versions-data/tree-data jdbc (:id version))
         pages (pages-data/all-pages-by-version jdbc (:id version))
-        ;test-pages (take 5 pages)
         versions (versions-data/versions jdbc)
         zip-dir (:zip-dir config)
         main-path (str zip-dir "/" (:key version))
