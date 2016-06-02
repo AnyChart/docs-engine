@@ -36,6 +36,7 @@ function loadPage(link) {
                                     'this.page.url = window.location.href.split("?")[0];'+
                                     'this.page.identifier = "' + res.page.url + '";'+
                                     'this.page.title = "' + res.page.full_name + '";'+
+                                    'this.language = "en";'+
                                 '}});'+
                             '})();'+
                             '</script>'+
