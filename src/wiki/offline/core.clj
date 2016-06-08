@@ -52,10 +52,8 @@
   (fs/mkdirs main-path)
   (fs/mkdirs (str main-path "/samples/js"))
   (fs/mkdir (str main-path "/deps"))
-  (spit (str main-path "/deps/main.min.js")
-        (slurp (io/resource "public/main.min.js")))
-  (spit (str main-path "/deps/local.js")
-        (slurp (io/resource "local/local.js")))
+  (spit (str main-path "/deps/local_main.min.js")
+        (slurp (io/resource "public/local_main.min.js")))
   (copy-style main-path)
   (copy-from-resource "public/fonts" (str main-path "/deps/fonts"))
   (copy-from-resource "public/icons" (str main-path "/deps/icons"))
@@ -151,7 +149,9 @@
   (let [href (-> node :attrs :href)]
     (if (and href
              (or (.startsWith href "./")
-                 (.startsWith href "../"))
+                 (.startsWith href "../")
+                 (and (not (.startsWith href "http"))
+                      (not (.startsWith href "//"))))
              (not (re-find #"\.(\w+)" href)))
       (assoc-in node [:attrs :href] (add-html href))
       node)))
@@ -168,7 +168,7 @@
         (assoc-in node [:attrs :src] (str path "deps/" name)))
       node)))
 
-(defn replace-page-script [main-path path links node]
+(defn- replace-page-script [main-path path links node]
   (if-let [src (-> node :attrs :src)]
     (if (not (.startsWith src "."))
       (let [url (get-url src)
@@ -179,9 +179,21 @@
       node)
     node))
 
+(defn- replace-page-link [main-path path links node]
+  (if-let [src (-> node :attrs :href)]
+    (if (not (.startsWith src "."))
+      (let [url (get-url src)
+            name (get-file-name url)
+            absolute-name (str main-path "/deps/" name)]
+        (start-load-link-if-need url absolute-name links)
+        (assoc-in node [:attrs :href] (str path "deps/" name)))
+      node)
+    node))
+
 (defn replace-tags [tree main-path path links]
   (html/at tree
            [:script] (partial replace-page-script main-path path links)
+           [:link] (partial replace-page-link main-path path links)
            [:div.iframe :iframe] (partial replace-iframe-node main-path path links)
            [:a] replace-a-node
            [:img] (partial replace-img-node main-path path links)))

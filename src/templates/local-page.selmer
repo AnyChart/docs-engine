@@ -155,8 +155,7 @@
 <script type="text/javascript">
     window['version'] = '{{version}}';
 </script>
-<script type="text/javascript" src="{{path|add:deps/main.min.js}}"></script>
-<script type="text/javascript" src="{{path|add:deps/local.js}}"></script>
+<script type="text/javascript" src="{{path|add:deps/local_main.min.js}}"></script>
 <script type="text/javascript">
     //$(".table_of_content").css("top", "80px");
     addListeners('{{path}}');

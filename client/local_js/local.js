@@ -75,10 +75,10 @@ Object.defineProperty(window, "cookieStorage", new (function () {
 })());
 
 if (navigator.userAgent.indexOf("Firefox") > -1) {
-    console.log("cookieStorage");
+    //console.log("cookieStorage");
     window["storage"] = window["cookieStorage"];
 } else {
-    console.log("localStorage");
+    //console.log("localStorage");
     window["storage"] = window["localStorage"];
 }
 
@@ -135,7 +135,7 @@ function expandCurrentMenu(prefix_path, target) {
 function addFolder(href) {
     if (open_folders.indexOf(href) == -1) {
         open_folders.push(href);
-        console.log("add folder: " + href + " " + open_folders);
+        //console.log("add folder: " + href + " " + open_folders);
         saveOpenFolders(open_folders);
     }
 }
@@ -146,7 +146,7 @@ function removeFolder(href) {
         open_folders.splice(ind, 1);
         removeFolder(href); //if there are two
     } else {
-        console.log("remove folder: " + href + " " + open_folders);
+        //console.log("remove folder: " + href + " " + open_folders);
         saveOpenFolders(open_folders);
     }
 }
@@ -166,7 +166,6 @@ function addListeners(prefix_path) {
             return false;
         });
     });
-
 }
 
 function openFolders(prefix_path, folders) {
@@ -186,5 +185,5 @@ function initFolders() {
     if (open_folders === null) {
         open_folders = [];
     }
-    console.log("init folders: " + open_folders);
+    //console.log("init folders: " + open_folders);
 }
