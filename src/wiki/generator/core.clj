@@ -5,11 +5,13 @@
             [wiki.generator.tree :as tree-gen]
             [wiki.components.notifier :as notifications]
             [wiki.data.versions :as vdata]
+            [wiki.data.playground :as pg-data]
             [wiki.generator.api-versions :as api-versions]
+            [wiki.components.offline-generator :refer [generate-zip]]
             [taoensso.timbre :as timbre :refer [info error]]))
 
 (defn- generate-version
-  [branch jdbc notifier git-ssh data-dir api playground api-versions api-default-version]
+  [branch jdbc pg-jdbc notifier offline-generator data-dir api playground api-versions api-default-version]
   (try
     (do
       (info "building" branch)
@@ -19,14 +21,19 @@
             version-id (vdata/add-version jdbc
                                           (:name branch)
                                           (:commit branch)
-                                          tree)]
+                                          tree)
+            pg-project (pg-data/project-by-key pg-jdbc "docs")
+            pg-version (pg-data/version-by-key pg-jdbc (:id pg-project) (:name branch))]
         (try
           (do
             (dgen/generate jdbc {:id version-id
                                  :key (:name branch)}
+                           pg-jdbc pg-version
                            data api playground api-versions api-default-version)
             (notifications/complete-version-building notifier (:name branch))
-            (vgen/remove-previous-versions jdbc version-id (:name branch)))
+            (vgen/remove-previous-versions jdbc version-id (:name branch))
+            (generate-zip offline-generator {:id  version-id
+                                             :key (:name branch)}))
           (catch Exception e
             (do (error e)
                 (error (.getMessage e))
@@ -39,7 +46,7 @@
           (notifications/build-failed notifier (:name branch))))))
 
 (defn generate
-  [jdbc notifier
+  [jdbc pg-jdbc notifier offline-generator
    {:keys [show-branches git-ssh data-dir reference playground
            reference-versions reference-default-version]}]
   (notifications/start-building notifier)
@@ -55,8 +62,9 @@
     (info "api default version:" reference-default-version)
     (doall (map #(generate-version %
                                    jdbc
+                                   pg-jdbc
                                    notifier
-                                   git-ssh
+                                   offline-generator
                                    data-dir
                                    reference
                                    playground

@@ -29,11 +29,17 @@ module.exports = function(grunt) {
         },
         uglify: {
             build: {
-                src: ['bower_components/jquery/dist/jquery.min.js',
-                      'bower_components/bootstrap/dist/js/bootstrap.min.js',
-                      'bower_components/google-code-prettify/bin/prettify.min.js',
-                      'js/*.js'],
-                dest: '../resources/public/main.min.js'
+                files: [{
+                    src: ['bower_components/bootstrap/dist/js/bootstrap.min.js',
+                        'bower_components/google-code-prettify/bin/prettify.min.js',
+                        'js/*.js'],
+                    dest: '../resources/public/main.min.js'
+                }, {
+                    src: ['bower_components/bootstrap/dist/js/bootstrap.min.js',
+                        'bower_components/google-code-prettify/bin/prettify.min.js',
+                        'local_js/*.js'],
+                    dest: '../resources/public/local_main.min.js'
+                }]
             }
         },
         copy: {
@@ -46,5 +52,5 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.registerTask('default',['less', 'cssmin', 'copy', 'uglify'])
+    grunt.registerTask('default',['less', 'cssmin', 'copy', 'uglify', 'uglify_local'])
 };

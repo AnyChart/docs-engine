@@ -20,7 +20,7 @@
                   (not (.isHidden %))
                   (has-docs %)))
         (.listFiles f)))
-  
+
 (defn- get-struct-as-list [path]
   (let [dir (file path)]
     (tree-seq #(and (.isDirectory %)
@@ -35,11 +35,11 @@
 (defn- create-document [base-path item]
   (let [content (slurp item)
         doc-header (re-matches #"(?s)(?m)(^\{[^\}]+\}).*" content)
-        res {:name (get-name item)
-             :kind :doc
-             :title (title item)
-             :content content
-             :config {:index 1000}
+        res {:name          (get-name item)
+             :kind          :doc
+             :title         (title item)
+             :content       content
+             :config        {:index 1000}
              :last-modified (file-last-commit-date base-path (.getAbsolutePath item))}]
     (if doc-header
       (-> res
@@ -50,10 +50,10 @@
 (declare build-struct)
 
 (defn- create-folder [base-path item]
-  (let [res {:name (get-name item)
-             :kind :folder
-             :title (title item)
-             :config {:index 1000}
+  (let [res {:name     (get-name item)
+             :kind     :folder
+             :title    (title item)
+             :config   {:index 1000}
              :children (reduce (fn [res item]
                                  (build-struct res item base-path)) []
                                (.listFiles item))}]
@@ -81,14 +81,8 @@
 
 (defn- sort-struct [item]
   (if (seq (:children item))
-    (let [folders (filter #(= (:kind %) :folder) (:children item))
-          docs (filter #(= (:kind %) :doc) (:children item))]
-      (assoc item :children (concat (sort-by (juxt (fn [i] (get-index i))
-                                                   :title)
-                                             (map sort-struct folders))
-                                    (sort-by (juxt (fn [i] (get-index i))
-                                                   :title)
-                                             (map sort-struct docs)))))
+    (assoc item :children (sort-by (juxt get-index :title)
+                                   (map sort-struct (:children item))))
     item))
 
 (defn- filter-struct [item]

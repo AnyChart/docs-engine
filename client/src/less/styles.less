@@ -8,11 +8,11 @@ html, body {
 .font-names {
   @font-face {
     font-family: 'AnyChart';
-    src: url('@{path-fonts}/AnyChart-font/AnyChart.eot?-x72mzv'),
-    url('@{path-fonts}/AnyChart-font/AnyChart.eot?#iefix-x72mzv') format('embedded-opentyp'),
-    url('@{path-fonts}/AnyChart-font/AnyChart.woff?-x72mzv') format('woff'),
-    url('@{path-fonts}/AnyChart-font/AnyChart.ttf?-x72mzv') format('truetype'),
-    url('@{path-fonts}/AnyChart-font/AnyChart.svg?-x72mzv#AnyChart') format('svg');
+    src: url('@{path-fonts}/AnyChart-font/AnyChart.eot');
+    src: url('@{path-fonts}/AnyChart-font/AnyChart.eot?#iefix') format('embedded-opentyp'),
+    url('@{path-fonts}/AnyChart-font/AnyChart.woff') format('woff'),
+    url('@{path-fonts}/AnyChart-font/AnyChart.ttf') format('truetype'),
+    url('@{path-fonts}/AnyChart-font/AnyChart.svg#AnyChart') format('svg');
   }
 }
 
@@ -144,6 +144,20 @@ a.brand {
 .btn-playground.btn {
   color: #1f74b6;
   background: none border: 0;
+}
+
+button.btn-zip{
+  color: #fff;
+  background: #42a5f5;
+  border: 0;
+  -webkit-box-shadow: 2px 2px 4px -1px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 2px 2px 4px -1px rgba(0, 0, 0, 0.75);
+  box-shadow: 2px 2px 4px -1px rgba(0, 0, 0, 0.75);
+}
+button.btn-zip:hover{
+  color: #333;
+  background-color: #ebebeb;
+  border-color: #adadad;
 }
 
 .icon {
@@ -525,6 +539,13 @@ iframe {
   height: 400px;
   overflow: hidden;
 }
+.iframe-tag{
+  border: none;
+  width: 100%;
+  margin: 0 auto;
+  height: 400px;
+  overflow: hidden;
+}
 
 pre {
   border-radius: 0;
@@ -566,6 +587,24 @@ pre {
   margin-top: -1.5px;
   background: #bfbfbf;
 }
+
+#content .tags {
+  margin-top: -20px;
+}
+#content .tags span{
+  line-height: 30px;
+  color: #929292;
+  display: inline;
+  padding: .2em .6em .2em 0;
+  font-size: 12px;
+  font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+  text-decoration: underline;
+  /*cursor: pointer*/
+}
+/*#content .tags span:hover{
+  color: #474747;
+  text-decoration: none;
+}*/
 
 #content .result-block {
   padding-bottom: 10px;

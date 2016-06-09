@@ -6,8 +6,11 @@
 
 (defn generate-docs [comp]
   (generator/generate (:jdbc comp)
+                      (:pg-jdbc comp)
                       (:notifier comp)
-                      (:config comp)))
+                      (:offline-generator comp)
+                      (:config comp))
+  (System/gc))
 
 (defn- message-processor [comp]
   (fn [{:keys [message attempt]}]
@@ -19,7 +22,7 @@
                       "reindex"))
     {:status :success}))
 
-(defrecord Generator [config jdbc redis notifier]
+(defrecord Generator [config jdbc pg-jdbc redis notifier offline-generator]
   component/Lifecycle
 
   (start [this]

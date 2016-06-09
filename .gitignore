@@ -19,8 +19,10 @@ pom.xml.asc
 *~%
 *~
 wiki/.nrepl-port
-data/
+/data
 .idea
+wiki.iml
 id_rsa
 client/node_modules
 client/bower_components
+log.txt

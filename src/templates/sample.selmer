@@ -1,0 +1,19 @@
+<div id="iframe{{id|safe}}" class='iframe' {{div-style|safe}} >
+    <div class='no-overflow'>
+        <div class="iframe-tag" {{style|safe}}>
+            {% for css in css_libs %}
+            <link rel="stylesheet" href="{{css|safe}}" />
+            {% endfor %}
+            <div id="container{{id|safe}}" style="width: 100%; height: 100%; margin: 0; padding: 0;"></div>
+            <script type="text/javascript">
+                {{code|safe}}
+            </script>
+        </div>
+    </div>
+    <div class='btns'>
+        <a class='btn-playground btn jsfiddle-btn' target='_blank'><i class='fa fa-jsfiddle'></i> JsFiddle</a>
+        <a class='btn-playground btn' target='_blank' href='//{{playground|safe}}/{{version|safe}}/samples/{{sample-path|safe}}-plain'>
+            <i class='fa fa-play'></i> Playground
+        </a>
+    </div>
+</div>

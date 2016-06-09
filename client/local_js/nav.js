@@ -14,7 +14,7 @@ function loadPage(link) {
     if (page == link) return true;
     
     page = link;
-    window.history.pushState(null, null, link);
+    //window.history.pushState(null, null, link);
 
     if (link.indexOf("search?q=") != -1) {
         var query = link.substr(link.indexOf("search?q=") + "search?q=".length);
@@ -23,7 +23,7 @@ function loadPage(link) {
         return false;
     }
     expandMenu(location.pathname);
-    $.get(link + "-json", function(res) {
+    /*$.get(link + "-json", function(res) {
         $("#content").html('<div id="table-of-content-small" class="hidden-lg"></div>'+
                            '<div class="row">'+
                            '  <div class="col-lg-17">'+res.page.content+'</div>'+
@@ -53,7 +53,7 @@ function loadPage(link) {
 
         var url = res.url;
         $("#warning a[data-last-version=latest]").attr("href", "/latest/" + url);
-    });
+    });*/
     $("#bar").hide();
     $("#shadow").hide();
     return false;
@@ -67,7 +67,7 @@ function fixLinks() {
             if ($this.attr("href").indexOf("http://") == 0) return;
             if ($this.attr("href").indexOf("https://") == 0) return;
     
-            $this.click(function() {
+            /*$this.click(function() {
                 var res = false;
                 try {
                     var current = location.pathname.split("/");
@@ -78,7 +78,7 @@ function fixLinks() {
                     console.error(e);
                 }
                 return res;
-            });
+            });*/
         }
     });
 };

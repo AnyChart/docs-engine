@@ -3,6 +3,9 @@
 <head>
     <title>{{title}} - AnyChart JavaScript Chart Documentation ver. {{version}}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% if page.tags %}
+    <meta name="keywords" content="{{page.tags|join:", "}}">
+    {% endif %}
     <link rel="icon" href="/i/anychart.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="/main.css"/>
     <!--[if lt IE 9]>
@@ -15,6 +18,8 @@
     <link rel="apple-touch-icon" sizes="152x152" href="/icons/152.png">
     <link rel="apple-touch-icon" sizes="167x167" href="/icons/167.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/icons/180.png">
+    <script id="anychart_script" src="//static.anychart.com/js/{{version}}/anychart-bundle.min.js"></script>
+    <script type="text/javascript" language="JavaScript" src="//code.jquery.com/jquery-2.2.4.min.js"></script>
 </head>
 <body>
 <header>
@@ -43,6 +48,11 @@
                             <li><a href="/{{v}}/{{url}}">Version {{v}}</a></li>
                             {% endfor %}
                         </ul>
+                    </div>
+                    <div class="btn-group" style="padding-left: 15px;">
+                        <button onclick="location.href='/{{version}}/download'" role="button" type="button" class="btn btn-default btn-zip">
+                            <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+                            Download .zip</button>
                     </div>
                     <div class="text-muted questions">
                         <a href="http://support.anychart.com/" class="text-support"><i class="icon icon-ring icon-data"></i></a>
@@ -146,6 +156,22 @@
                 <div class="col-lg-17" id="article-content">
                     {{page.content|safe}}
                 </div>
+                <div id="disqus_thread" class="col-lg-17"></div>
+                <script>
+                    var disqus_config = function () {
+                        this.page.url = window.location.href.split('?')[0];
+                        this.page.identifier = "{{url}}";
+                        this.page.title = "{{title}}";
+                    };
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                        var d = document, s = d.createElement('script');
+                        s.src = '//anychart-docs.disqus.com/embed.js';
+                        s.setAttribute('data-timestamp', +new Date());
+                        (d.head || d.body).appendChild(s);
+                    })();
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
+                </noscript>
                 <div id="table-of-content-large" class="col-lg-6 hidden-sm hidden-xs hidden-md visible-lg"></div>
             </div>
         </section>
