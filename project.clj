@@ -1,6 +1,6 @@
 (defproject wiki "2.0"
   :dependencies [[org.clojure/clojure "1.7.0"]
-                 [version-clj "0.1.0"]
+                 [version-clj "0.1.2"]
                  ;; general
                  [com.stuartsierra/component "0.2.3"]
                  [clj-time "0.11.0"]

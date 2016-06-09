@@ -3,7 +3,8 @@
   (:require [markdown.core :refer [md-to-html-string]]
             [selmer.parser :refer [render-file]]
             [taoensso.timbre :as timbre :refer [info error]]
-            [wiki.data.playground :as pg-data]))
+            [wiki.data.playground :as pg-data]
+            [version-clj.core :as version-clj]))
 
 (defn get-tags [text]
   (if-let [matches (re-matches #"(?s).*(\{tags\}(.*)\{tags\}[\r\n]?).*" text)]
@@ -32,11 +33,13 @@
          <a class='btn-playground btn' target='_blank' href='//" playground "/" version "/samples/" sample-path "-plain'><i class='fa fa-play'></i> Playground</a>
        </div></div>")))
 
-(defn get-code [id code scripts sample]
+(defn get-code [id code scripts sample version-key]
   (condp = (count scripts)
     0 (str "(function(){
            anychart.theme(null);\n"
-           (when (= id 1) "anychart.utils.hideTooltips(true);\n")
+           (when (and (= id 1)
+                      (> (version-clj/version-compare version-key "7.9.1") 0))
+             "anychart.utils.hideTooltips(true);\n")
            (let [export (:exports sample)]
              (if (= export "chart")
                "var chart;\n"
@@ -44,7 +47,7 @@
            code
           "})();")
     (str "$.ajax({url: '" (first scripts) "', dataType: 'script', crossDomain: true, success:function(data, status, jqxhr){
-      " (get-code id code (drop 1 scripts) sample) "
+      " (get-code id code (drop 1 scripts) sample version-key) "
       }});")))
 
 (defn build-sample-div [id version pg-jdbc pg-version playground sample-path custom-settings]
@@ -78,7 +81,7 @@
                                                  :div-style div-style
                                                  :style style
                                                  :id id
-                                                 :code (get-code id code (:scripts sample) sample)
+                                                 :code (get-code id code (:scripts sample) sample version)
                                                  :version (:key pg-version)
                                                  :playground playground
                                                  :version version
