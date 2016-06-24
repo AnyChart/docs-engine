@@ -39,7 +39,7 @@
 
                 <a class="brand hidden-super-small"> Documentation</a>
 
-                <div class="pull-right helpers  hidden-xs">
+                <div class="pull-right helpers hidden-830">
                     <div class="btn-group">
                         <button type="button" class="btn btn-default btn-blue dropdown-toggle" data-toggle="dropdown">
                             Version {{version}} <span class="caret"></span></button>
@@ -68,7 +68,7 @@
 
 <div id="shadow" class=""></div>
 <div id="bar" class="">
-    <div class="helpers visible-xs bordered">
+    <div class="helpers visible-830 bordered">
         <div class="btn-group">
             <button type="button" class="btn btn-default btn-blue dropdown-toggle" data-toggle="dropdown">Version
                 {{version}} <span class="caret"></span></button>
