@@ -51,7 +51,7 @@
            reference-versions reference-default-version]}]
   (notifications/start-building notifier)
   (let [actual-branches (vgen/update-branches show-branches git-ssh data-dir)
-        removed-branches (vgen/remove-branches jdbc (map :name actual-branches))
+        removed-branches (vgen/remove-branches jdbc (map :name actual-branches) data-dir)
         branches (vgen/filter-for-rebuild jdbc actual-branches)
         api-versions (api-versions/get-versions reference-versions)]
     (if (seq branches)
