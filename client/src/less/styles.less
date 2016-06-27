@@ -110,7 +110,7 @@ a.brand {
   max-width: 100%;
 }
 #bar .helpers{
-    padding: 15px 20px 15px;
+    padding: 15px 15px 15px;
 }
 
 .helpers.bordered {
@@ -209,7 +209,7 @@ section {
   position: fixed;
   top: 50px;
   bottom: 0;
-  width: 330px;
+  width: 340px;
   -webkit-box-shadow: 2px 2px 4px -1px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: 2px 2px 4px -1px rgba(0, 0, 0, 0.75);
   box-shadow: 2px 2px 4px -1px rgba(0, 0, 0, 0.75);
@@ -913,7 +913,7 @@ a.soc-network:hover .soc-network-icon.in {
   content: "\ea3e";
 }
 
-@media (min-width: 768px) {
+@media (min-width: 831px) {
   .warning-version {
     top: 80px;
     right: 20px;
@@ -1038,6 +1038,14 @@ a.soc-network:hover .soc-network-icon.in {
   }
 }
 
-
-
-
+.visible-830 {
+  display: none;
+}
+@media (max-width: 830px) {
+  .hidden-830 {
+    display:none !important;
+  }
+  .visible-830 {
+    display: block !important;
+  }
+}
