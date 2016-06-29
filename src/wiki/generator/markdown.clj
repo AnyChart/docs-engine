@@ -52,7 +52,7 @@
 
 (defn get-wrapped-code [id code scripts sample version-key]
   (str "sampleInit" id " = function(){"
-       (get-code2 id code scripts sample version-key )
+       (get-code id code scripts sample version-key )
        "}"))
 
 (defn build-sample-div [id version pg-jdbc pg-version playground sample-path custom-settings]
