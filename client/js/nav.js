@@ -39,6 +39,7 @@ function loadPage(link) {
                                     'this.language = "en";'+
                                 '}});'+
                             '})();'+
+                            'tryUpdateSampleInit();' +
                             '</script>'+
                             '<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>'+
                             '</noscript>'+

@@ -30,12 +30,14 @@ module.exports = function(grunt) {
         uglify: {
             build: {
                 files: [{
-                    src: ['bower_components/bootstrap/dist/js/bootstrap.min.js',
+                    src: ['bower_components/jquery/dist/jquery.min.js',
+                        'bower_components/bootstrap/dist/js/bootstrap.min.js',
                         'bower_components/google-code-prettify/bin/prettify.min.js',
                         'js/*.js'],
                     dest: '../resources/public/main.min.js'
                 }, {
-                    src: ['bower_components/bootstrap/dist/js/bootstrap.min.js',
+                    src: ['bower_components/jquery/dist/jquery.min.js',
+                        'bower_components/bootstrap/dist/js/bootstrap.min.js',
                         'bower_components/google-code-prettify/bin/prettify.min.js',
                         'local_js/*.js'],
                     dest: '../resources/public/local_main.min.js'

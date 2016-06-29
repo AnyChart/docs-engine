@@ -45,10 +45,15 @@
                "var chart;\n"
                (str "var chart;\n" (when export (str "var " export ";\n")))))
            code
-          "})();")
+           "})();")
     (str "$.ajax({url: '" (first scripts) "', dataType: 'script', crossDomain: true, success:function(data, status, jqxhr){
       " (get-code id code (drop 1 scripts) sample version-key) "
       }});")))
+
+(defn get-wrapped-code [id code scripts sample version-key]
+  (str "sampleInit" id " = function(){"
+       (get-code2 id code scripts sample version-key )
+       "}"))
 
 (defn build-sample-div [id version pg-jdbc pg-version playground sample-path custom-settings]
   (let [width (:width custom-settings)
@@ -81,7 +86,7 @@
                                                  :div-style div-style
                                                  :style style
                                                  :id id
-                                                 :code (get-code id code (:scripts sample) sample version)
+                                                 :code (get-wrapped-code id code (:scripts sample) sample version)
                                                  :version (:key pg-version)
                                                  :playground playground
                                                  :version version

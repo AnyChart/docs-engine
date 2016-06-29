@@ -5,15 +5,13 @@
     <meta charset="utf-8">
     <link rel="icon" href="{{path|add:deps/i/anychart.ico}}" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="{{path|add:deps/main.css}}"/>
-
     <link rel="apple-touch-icon" sizes="57x57" href="{{path|add:deps/icons/57.png}}">
     <link rel="apple-touch-icon" sizes="76x76" href="{{path|add:deps/icons/76.png}}">
     <link rel="apple-touch-icon" sizes="120x120" href="{{path|add:deps/icons/120.png}}">
     <link rel="apple-touch-icon" sizes="152x152" href="{{path|add:deps/icons/152.png}}">
     <link rel="apple-touch-icon" sizes="167x167" href="{{path|add:deps/icons/167.png}}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{path|add:deps/icons/180.png}}">
-    <script id="anychart_script" src="http://static.anychart.com/js/{{version}}/anychart-bundle.min.js"></script>
-    <script type="text/javascript" language="JavaScript" src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script id="anychart_script" src="http://static.anychart.com/js/{{version}}/anychart-bundle.min.js" async></script>
 </head>
 <body>
 <header>
@@ -151,18 +149,45 @@
         </section>
     </div>
 </div>
-
 <script type="text/javascript">
     window['version'] = '{{version}}';
 </script>
-<script type="text/javascript" src="{{path|add:deps/local_main.min.js}}"></script>
+<script id="main_script" type="text/javascript" src="{{path|add:deps/local_main.min.js}}" async></script>
 <script type="text/javascript">
-    //$(".table_of_content").css("top", "80px");
-    addListeners('{{path}}');
-    initFolders();
-    expandCurrentMenu('{{path}}', '{{url}}');
-    openFolders('{{path}}', open_folders);
+    var tryUpdateSampleInit = function(){
+        var anychartScriptIsLoad;
+        var mainScriptIsLoad;
+        var updateSampleInit = function(){
+            if( anychartScriptIsLoad == false) return;
+            if( mainScriptIsLoad == false) return;
+            console.log("Init main");
+            for( var i = 1; typeof window["sampleInit" + i] !== 'undefined'; i++){
+                window["sampleInit" + i]();
+                delete window["sampleInit" + i];
+            }
+            // settings for local (zip) version
+            //$(".table_of_content").css("top", "80px");
+            addListeners('{{path}}');
+            initFolders();
+            expandCurrentMenu('{{path}}', '{{url}}');
+            openFolders('{{path}}', open_folders);
+        };
+        anychartScriptIsLoad = typeof anychart !== 'undefined';
+        mainScriptIsLoad = typeof $ !== 'undefined';
+        if (anychartScriptIsLoad && mainScriptIsLoad){
+            updateSampleInit();
+        }else{
+            anychart_script.onload = function(){
+                anychartScriptIsLoad = true;
+                updateSampleInit();
+            };
+            main_script.onload = function(){
+                mainScriptIsLoad = true;
+                updateSampleInit();
+            };
+        }
+    };
+    tryUpdateSampleInit();
 </script>
-
 </body>
 </html>
