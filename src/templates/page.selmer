@@ -189,6 +189,10 @@
     </div>
 </div>
 <script type="text/javascript">
+    var currentUrl = "/{{version}}/" + '{{url}}';
+    if (location.pathname != currentUrl && window.history){
+        window.history.replaceState(null, null, currentUrl);
+    }
     window['version'] = '{{version}}';
 </script>
 <script id="main_script" type="text/javascript" src="/main.min.js" async></script>
@@ -199,7 +203,6 @@
         var updateSampleInit = function(){
             if( anychartScriptIsLoad == false) return;
             if( mainScriptIsLoad == false) return;
-            console.log("Init main");
             for( var i = 1; typeof window["sampleInit" + i] !== 'undefined'; i++){
                 window["sampleInit" + i]();
                 delete window["sampleInit" + i];

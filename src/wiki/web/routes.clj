@@ -57,9 +57,6 @@
                    (-> request :component :config :queue)
                    "generate"))
 
-(defn- show-landing [request]
-  (redirect (str "/" (versions-data/default (jdbc request)) "/Quick_Start")))
-
 (defn- show-latest [request]
   (redirect (str "/" (versions-data/default (jdbc request)) "/Quick_Start")))
 
@@ -91,6 +88,15 @@
                                           :title          (:full_name page)
                                           :page           page
                                           :versions       versions})))
+
+(defn- show-landing [request]
+  (let [version (first (versions-data/versions-full-info (jdbc request)))
+        folder (folders-data/get-folder-by-url (jdbc request)
+                                               (:id version)
+                                               "Quick_Start")
+        page (pages-data/page-by-url (jdbc request) (:id version)
+                                     (str "Quick_Start/" (:default_page folder)))]
+    (show-page request version page)))
 
 (defn download-zip [request version]
   (if-let [zip (versions-data/get-zip (jdbc request) (:id version))]
