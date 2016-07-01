@@ -8,6 +8,7 @@
             [wiki.data.playground :as pg-data]
             [wiki.generator.api-versions :as api-versions]
             [wiki.components.offline-generator :refer [generate-zip]]
+            [me.raynes.fs :as fs]
             [taoensso.timbre :as timbre :refer [info error]]))
 
 (defn- generate-version
@@ -16,7 +17,8 @@
     (do
       (info "building" branch)
       (notifications/start-version-building notifier (:name branch))
-      (let [data (get-struct (str data-dir "/versions/" (:name branch)))
+      (let [branch-path (str data-dir "/versions/" (:name branch))
+            data (get-struct branch-path)
             tree (tree-gen/generate-tree data)
             version-id (vdata/add-version jdbc
                                           (:name branch)
@@ -50,6 +52,7 @@
    {:keys [show-branches git-ssh data-dir reference playground
            reference-versions reference-default-version]}]
   (notifications/start-building notifier)
+  (fs/mkdirs (str data-dir "/versions"))
   (let [actual-branches (vgen/update-branches show-branches git-ssh data-dir)
         removed-branches (vgen/remove-branches jdbc (map :name actual-branches) data-dir)
         branches (vgen/filter-for-rebuild jdbc actual-branches)
@@ -71,4 +74,5 @@
                                    api-versions
                                    reference-default-version)
                 branches))
+    (fs/delete-dir (str data-dir "/versions"))
     (notifications/complete-building notifier)))

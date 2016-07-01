@@ -253,7 +253,8 @@
                     (str "/" (:key version)))
     (info "End generating offline docs: " zip-path)
     (versions-data/update-zip jdbc (:id version) (FileInputStream. zip-path))
-    zip-path))
+    (fs/delete-dir main-path)
+    (fs/delete zip-path)))
 
 
 
