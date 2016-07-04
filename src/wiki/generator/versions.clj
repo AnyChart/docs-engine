@@ -31,8 +31,7 @@
     (info "removed branches" (vec removed-branches))
     (if (seq removed-branches)
       (doseq [branch-key removed-branches]
-        (remove-branch jdbc branch-key)
-        (git/run-sh "rm" "-rf" (str data-dir "/versions/" branch-key))))
+        (remove-branch jdbc branch-key)))
     removed-branches))
 
 (defn filter-for-rebuild [jdbc branches]
