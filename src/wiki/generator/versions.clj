@@ -4,6 +4,7 @@
             [wiki.data.pages :as pdata]
             [wiki.data.folders :as fdata]
             [wiki.components.notifier :as notifications]
+            [clojure.java.shell :refer [sh]]
             [taoensso.timbre :as timbre :refer [info error]]))
 
 (defn update-branches [show-branches git-ssh data-dir]
@@ -22,14 +23,15 @@
     (fdata/delete-version-folders jdbc version-id)
     (vdata/delete-by-id jdbc version-id)))
 
-(defn remove-branches [jdbc actual-branches]
+(defn remove-branches [jdbc actual-branches data-dir]
   (info "actual branches" (vec actual-branches))
   (let [current-branches (vdata/versions jdbc)
         removed-branches (filter #(not (some #{%} actual-branches)) current-branches)]
     (info "current branches" (vec current-branches))
     (info "removed branches" (vec removed-branches))
     (if (seq removed-branches)
-      (doall (map #(remove-branch jdbc %) removed-branches)))
+      (doseq [branch-key removed-branches]
+        (remove-branch jdbc branch-key)))
     removed-branches))
 
 (defn filter-for-rebuild [jdbc branches]
