@@ -25,6 +25,9 @@ function loadPage(link) {
     expandMenu(location.pathname);
     $.get(link + "-json", function(res) {
         $("#content").html('<div id="table-of-content-small" class="hidden-lg"></div>'+
+                            '<a class="btn btn-default btn-small github-fork pull-right" id="github-edit" href="https://github.com/AnyChart/docs.anychart.com">' +
+                            '<span><i class="fa fa-code-fork"></i></span> Improve this Doc' +
+                            '</a>' +
                            '<div class="row">'+
                            '  <div class="col-lg-17">'+res.page.content+'</div>'+
                             '<div id="disqus_thread" class="col-lg-17"></div>'+
