@@ -6731,7 +6731,7 @@ ul.table_of_content ul {
 #content a.btn.github-fork {
   z-index: 100;
   position: absolute;
-  top: 35px;
+  top: 3px;
   right: 15px;
   color: #444444;
   background-color: #f3f3f3;
@@ -6960,9 +6960,17 @@ pre {
 .no-overflow {
   overflow: hidden;
 }
-#article-content ul.table_of_content,
-#article-content ul:first-child {
-  display: none;
+@media (min-width: 1200px) {
+  #article-content ul.table_of_content,
+  #article-content ul:first-child {
+    display: none;
+  }
+}
+@media (max-width: 1199px) {
+  #article-content ul.table_of_content,
+  #article-content ul:first-child {
+    display: block;
+  }
 }
 .footer {
   height: 70px;
@@ -7300,14 +7308,16 @@ a.soc-network:hover .soc-network-icon.in {
     display: none !important;
   }
 }
+@media (min-width: 768px) {
+  #content h1 {
+    width: 70%;
+  }
+}
 @media (min-width: 1200px) {
   ul.table_of_content {
     position: fixed;
     top: 120px;
     max-width: 270px;
-  }
-  #content h1 {
-    width: 70%;
   }
   .warning-version {
     right: 23%;
