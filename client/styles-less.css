@@ -6729,7 +6729,6 @@ ul.table_of_content ul {
   color: #2E618D;
 }
 #content a.btn.github-fork {
-  z-index: 100;
   position: absolute;
   top: 3px;
   right: 15px;
