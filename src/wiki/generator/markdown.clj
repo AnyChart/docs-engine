@@ -56,15 +56,18 @@
        "}"))
 
 (defn build-sample-div [id version pg-jdbc pg-version playground sample-path custom-settings]
-  (let [width (:width custom-settings)
-        height (:height custom-settings)
-        div-style (if (not (= width nil))
-                    (str "style='width:" (+ width 10) "px;'")
-                    "")
-        style (if (and (not (= width nil))
-                       (not (= height nil)))
-                (str "style='position:relative;margin:0px;width:" width "px;height:" height "px;'")
-                "style='position:relative;margin:0px;'")
+  (let [width (if (:width custom-settings)
+                (if (string? (:width custom-settings))
+                  (:width custom-settings)
+                  (str (:width custom-settings) "px"))
+                "100%")
+        height (if (:height custom-settings)
+                 (if (string? (:height custom-settings))
+                   (:height custom-settings)
+                   (str (:height custom-settings) "px"))
+                 "400px")
+        div-style  (str "style='width:" width ";'")
+        style (str "style='position:relative;margin:0px;height:" height ";'")
         url (str "/samples/" (StringEscapeUtils/unescapeHtml4 sample-path))
         sample (pg-data/sample-by-url pg-jdbc (:id pg-version) url)
         full-id (str "container" id)]
@@ -103,7 +106,9 @@
        (let [matches (re-matches #".*(\{sample([^}]*)\}(.*)\{sample\}).*" text)
              sample-path (last matches)
              source (nth matches 1)
-             custom-settings (read-string (str "{" (nth matches 2) "}"))]
+             custom-settings (read-string
+                               (clojure.string/replace (str "{" ":width 50% :height 450" "}")
+                                                       #"(\d+%)" "\"$1\"" ))]
          (if sample-path
            (clojure.string/replace text
                                    source
