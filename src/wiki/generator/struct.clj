@@ -8,7 +8,8 @@
       (clojure.string/replace #"\.md$" "")))
 
 (defn- is-doc [f]
-  (re-matches #".*\.md$" (-> f .getName .toLowerCase)))
+  (and (re-matches #".*\.md$" (-> f .getName .toLowerCase))
+       (not= (-> f .getName .toLowerCase) "readme.md")))
 
 (defn- get-name [f]
   (-> f .getName
