@@ -107,7 +107,7 @@
              sample-path (last matches)
              source (nth matches 1)
              custom-settings (read-string
-                               (clojure.string/replace (str "{" ":width 50% :height 450" "}")
+                               (clojure.string/replace (str "{" (nth matches 2) "}")
                                                        #"(\d+%)" "\"$1\"" ))]
          (if sample-path
            (clojure.string/replace text
