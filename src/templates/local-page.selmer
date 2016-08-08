@@ -11,7 +11,7 @@
     <link rel="apple-touch-icon" sizes="152x152" href="{{path|add:deps/icons/152.png}}">
     <link rel="apple-touch-icon" sizes="167x167" href="{{path|add:deps/icons/167.png}}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{path|add:deps/icons/180.png}}">
-    <script id="anychart_script" src="http://static.anychart.com/js/{{version}}/anychart-bundle.min.js" async></script>
+    <script id="anychart_script" src="{{anychart-url}}" async></script>
 </head>
 <body>
 <header>

@@ -14,6 +14,7 @@
             [wiki.data.folders :as folders-data]
             [wiki.data.sitemap :as sitemap]
             [wiki.data.search :as search]
+            [wiki.util.utils :as utils]
             [wiki.web.tree :refer [tree-view tree-view-local]]))
 
 (add-tag! :tree-view (fn [args context-map]
@@ -81,6 +82,7 @@
   (let [versions (versions-data/versions (jdbc request))]
     (render-file "templates/page.selmer" {:version        (:key version)
                                           :actual-version (first versions)
+                                          :anychart-url   (utils/anychart-bundle-path (:key version))
                                           :old            (not= (first versions) (:key version))
                                           :tree           (versions-data/tree-data (jdbc request)
                                                                                    (:id version))

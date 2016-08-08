@@ -7,6 +7,7 @@
             [wiki.data.versions :as versions-data]
             [wiki.data.pages :as pages-data]
             [wiki.web.tree :refer [tree-view]]
+            [wiki.util.utils :as utils]
             [net.cgrand.enlive-html :as html]
             [org.httpkit.client :as http]
             [me.raynes.fs :as fs]
@@ -220,6 +221,7 @@
         html (render-file "templates/local-page.selmer" {:version  (:key version)
                                                          ;:actual-version (first versions)
                                                          ;:old            (not= (first versions) (:key version))
+                                                         :anychart-url (utils/anychart-bundle-path (:key version))
                                                          :tree     tree
                                                          :url      (:url page)
                                                          :title    (:full_name page)
