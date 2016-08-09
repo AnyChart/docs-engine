@@ -2,6 +2,7 @@
   (:require [wiki.generator.markdown :as md]
             [wiki.data.pages :as pdata]
             [wiki.data.folders :as fdata]
+            [com.climate.claypoole :as cp]
             [taoensso.timbre :as timbre :refer [info]]
             [net.cgrand.enlive-html :as html]))
 
@@ -29,14 +30,15 @@
       (when (seq items)
         (fdata/add-folder jdbc (:id version) (fix-url (str base-path "/" (:name item)))
                           (-> items first :name))
-        (doall (pmap #(generate-struct-item jdbc version pg-jdbc pg-version
+        (doall (map #(generate-struct-item jdbc version pg-jdbc pg-version
                                             (str base-path "/" (:name item))
                                             % api playground api-versions api-default-version)
                      items))))))
 
 (defn generate [jdbc version pg-jdbc pg-version data api playground api-versions api-default-version]
-  (doall (pmap #(generate-struct-item jdbc version
-                                      pg-jdbc pg-version
-                                      nil % api
-                                      playground api-versions api-default-version)
-              data)))
+  (cp/with-shutdown! [pool (+ 2 (cp/ncpus))]
+                     (doall (cp/pmap pool #(generate-struct-item jdbc version
+                                       pg-jdbc pg-version
+                                       nil % api
+                                       playground api-versions api-default-version)
+                data))))

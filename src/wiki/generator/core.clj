@@ -4,11 +4,14 @@
             [wiki.generator.struct :refer [get-struct]]
             [wiki.generator.tree :as tree-gen]
             [wiki.components.notifier :as notifications]
+            [wiki.data.pages :as pdata]
+            [wiki.data.folders :as fdata]
             [wiki.data.versions :as vdata]
             [wiki.data.playground :as pg-data]
             [wiki.generator.api-versions :as api-versions]
             [wiki.components.offline-generator :refer [generate-zip]]
             [me.raynes.fs :as fs]
+            [com.climate.claypoole :as cp]
             [taoensso.timbre :as timbre :refer [info error]]))
 
 (defn- generate-version
@@ -39,7 +42,11 @@
           (catch Exception e
             (do (error e)
                 (error (.getMessage e))
-                (if version-id
+                (when version-id
+                  ; wait for pmap threads terminated
+                  (Thread/sleep 500)
+                  (pdata/delete-version-pages jdbc version-id)
+                  (fdata/delete-version-folders jdbc version-id)
                   (vdata/delete-by-id jdbc version-id))
                 (notifications/build-failed notifier (:name branch)))))))
     (catch Exception e
