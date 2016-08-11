@@ -5,6 +5,7 @@
             [wiki.data.folders :as fdata]
             [wiki.components.notifier :as notifications]
             [clojure.java.shell :refer [sh]]
+            [me.raynes.fs :as fs]
             [taoensso.timbre :as timbre :refer [info error]]))
 
 (defn update-branches [show-branches git-ssh data-dir]
@@ -31,6 +32,7 @@
     (info "removed branches" (vec removed-branches))
     (if (seq removed-branches)
       (doseq [branch-key removed-branches]
+        (fs/delete-dir (str data-dir "/static/" branch-key))
         (remove-branch jdbc branch-key)))
     removed-branches))
 

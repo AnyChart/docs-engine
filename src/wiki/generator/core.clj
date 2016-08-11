@@ -30,6 +30,11 @@
             pg-project (pg-data/project-by-key pg-jdbc "docs")
             pg-version (pg-data/version-by-key pg-jdbc (:id pg-project) (:name branch))]
         (try
+          (let [static-branch-dir (str data-dir "/static/" (:name branch))
+                images-branch-dir (str branch-path "/images")]
+            (when (fs/exists? images-branch-dir)
+              (fs/mkdirs static-branch-dir)
+              (fs/copy-dir-into images-branch-dir static-branch-dir)))
           (do
             (dgen/generate jdbc {:id version-id
                                  :key (:name branch)}
