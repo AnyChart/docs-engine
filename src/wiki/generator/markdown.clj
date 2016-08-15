@@ -4,6 +4,7 @@
             [selmer.parser :refer [render-file]]
             [taoensso.timbre :as timbre :refer [info error]]
             [wiki.data.playground :as pg-data]
+            [wiki.components.notifier :as notifications]
             [version-clj.core :as version-clj]))
 
 (defn get-tags [text]
@@ -55,7 +56,7 @@
        (get-code id code scripts sample version-key )
        "}"))
 
-(defn build-sample-div [id version pg-jdbc pg-version playground sample-path custom-settings]
+(defn build-sample-div [notifier page-url id version pg-jdbc pg-version playground sample-path custom-settings]
   (let [width (if (:width custom-settings)
                 (if (string? (:width custom-settings))
                   (:width custom-settings)
@@ -96,26 +97,33 @@
                                                  :sample-path sample-path
                                                  :engine-version (or (:engine_version pg-version)
                                                                      (:key pg-version)))))
-      (do (info "Sample isn't available:  " pg-version url id full-id)
-        ""))))
+      (do
+        (notifications/sample-not-available notifier version page-url url)
+        (info "Sample isn't available:  " page-url pg-version url id full-id)
+        (format "<div class=\"alert alert-warning\"><strong>Sample not available!</strong><p>%s</p></div>" url)))))
 
-(defn- sample-transformer [id-counter version pg-jdbc pg-version playground]
+(defn- sample-transformer [id-counter notifier page-url version pg-jdbc pg-version playground]
   (fn [text state]
     [(if (or (:code state) (:codeblock state))
        text
-       (let [matches (re-matches #".*(\{sample([^}]*)\}(.*)\{sample\}).*" text)
-             sample-path (last matches)
-             source (nth matches 1)
-             custom-settings (read-string
-                               (clojure.string/replace (str "{" (nth matches 2) "}")
-                                                       #"(\d+%)" "\"$1\"" ))]
-         (if sample-path
-           (clojure.string/replace text
-                                   source
-                                   ;(build-sample-embed version playground sample-path custom-settings)
-                                   (build-sample-div (swap! id-counter inc) version pg-jdbc pg-version playground
-                                                       sample-path custom-settings))
-           text)))
+       (if-let [matches (re-matches #".*(\{sample([^}]*)\}(.*)\{sample\}).*" text)]
+         (try
+           (let [sample-path (last matches)
+                source (nth matches 1)
+                custom-settings (read-string
+                                  (clojure.string/replace (str "{" (nth matches 2) "}")
+                                                          #"(\d+%)" "\"$1\""))]
+            (clojure.string/replace text
+                                    source
+                                    ;(build-sample-embed version playground sample-path custom-settings)
+                                    (build-sample-div notifier page-url (swap! id-counter inc) version pg-jdbc pg-version playground
+                                                      sample-path custom-settings)))
+           (catch Exception _
+             (do
+               (notifications/sample-parsing-error notifier version page-url)
+               (format "<div class=\"alert alert-danger\"><strong>Sample parsing error!</strong><p>%s</p></div>"
+                       (clojure.string/trim text)))))
+         text))
      state]))
 
 (defn- code-shifted? [text]
@@ -144,11 +152,11 @@
         index (+ (.indexOf html h1) (count h1))]
     (str (subs html 0 index) tags-html (subs html index))))
 
-(defn to-html [source version pg-jdbc pg-version playground reference api-versions api-default-version]
+(defn to-html [notifier page-url source version pg-jdbc pg-version playground reference api-versions api-default-version]
   (let [{tags :tags html-without-tags :html} (get-tags source)
         html (-> (md-to-html-string html-without-tags
                                     :heading-anchors true
-                                    :custom-transformers [(sample-transformer (atom 0) version pg-jdbc pg-version playground)
+                                    :custom-transformers [(sample-transformer (atom 0) notifier page-url version pg-jdbc pg-version playground)
                                                           code-transformer])
                  (add-api-links version reference api-versions api-default-version))
         html-tags (if (empty? tags) html

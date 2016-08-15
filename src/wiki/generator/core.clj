@@ -36,7 +36,8 @@
               (fs/mkdirs static-branch-dir)
               (fs/copy-dir-into images-branch-dir static-branch-dir)))
           (do
-            (dgen/generate jdbc {:id version-id
+            (dgen/generate notifier
+                           jdbc {:id version-id
                                  :key (:name branch)}
                            pg-jdbc pg-version
                            data api playground api-versions api-default-version)
