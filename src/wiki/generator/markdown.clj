@@ -181,10 +181,11 @@
         html (-> (md-to-html-string html-without-tags
                                     :heading-anchors true
                                     :reference-links? true
-                                    :replacement-transformers (cons (image-checker notifier page-url version) transformer-vector)
+                                    :replacement-transformers (list* (branch-name-transformer version)
+                                                                     (image-checker notifier page-url version)
+                                                                     transformer-vector)
                                     :custom-transformers [(sample-transformer (atom 0) notifier page-url version pg-jdbc pg-version playground)
-                                                          code-transformer
-                                                          (branch-name-transformer version)])
+                                                          code-transformer])
                  (add-api-links version reference api-versions api-default-version))
         html-tags (if (empty? tags) html
                                     (add-tags html tags))]
