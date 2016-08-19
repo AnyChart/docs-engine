@@ -61,6 +61,9 @@
 (defn sample-parsing-error [notifier version page-url]
   (notify-delay notifier (str version " sample parsing error: " page-url)))
 
+(defn image-format-error [notifier version page-url]
+  (notify-delay notifier (str version " image format error: " page-url)))
+
 (defn sample-not-available [notifier version page-url url]
   (notify-delay notifier (str version " sample not available " page-url " - " url)))
 

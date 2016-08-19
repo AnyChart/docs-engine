@@ -25,10 +25,11 @@
                  [clojure.jdbc/clojure.jdbc-c3p0 "0.3.2"]
                  [honeysql "0.6.3"]
                  ;; markdown
-                 [markdown-clj "0.9.74"]
+                 [markdown-clj "0.9.89"]
                  ;; filesystem
                  [me.raynes/fs "1.4.6"]
                  [cpath-clj "0.1.2"]]
+  :plugins [[lein-ancient "0.6.10"]]
   :main wiki.core
   :target-path "target/%s"
   :aot :all

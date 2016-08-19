@@ -1,6 +1,7 @@
 (ns wiki.generator.markdown
   (:import [org.apache.commons.lang3 StringEscapeUtils])
   (:require [markdown.core :refer [md-to-html-string]]
+            [markdown.transformers :refer [transformer-vector]]
             [selmer.parser :refer [render-file]]
             [taoensso.timbre :as timbre :refer [info error]]
             [wiki.data.playground :as pg-data]
@@ -152,12 +153,38 @@
         index (+ (.indexOf html h1) (count h1))]
     (str (subs html 0 index) tags-html (subs html index))))
 
+(defn branch-name-transformer [version]
+  (fn [text state]
+    [(clojure.string/replace text #"branch_name" version) state]))
+
+(defn- image-format-error [notifier version page-url text]
+  (info "image error:" page-url text)
+  (notifications/image-format-error notifier version page-url)
+  (format "<div class=\"alert alert-danger\"><strong>Image format error!</strong><p>%s</p></div>"
+          (clojure.string/trim text)))
+
+(defn- image-checker [notifier page-url version]
+  (fn [text state]
+    [(if (or (:code state) (:codeblock state))
+       text
+       (try
+         (if-let [[_ _ params] (re-matches #".*(!\[[^\]]*\]\s*\(([^\)]*)\)).*" text)]
+           (if (re-matches #"[^\s]+\s*(\"[^\"]+\")?\s*(\w+\s*=\s*[\w\"]+\s*)*" params)
+             text
+             (image-format-error notifier version page-url params))
+           text)
+         (catch Exception _ (image-format-error notifier version page-url "exception caught"))))
+     state]))
+
 (defn to-html [notifier page-url source version pg-jdbc pg-version playground reference api-versions api-default-version]
   (let [{tags :tags html-without-tags :html} (get-tags source)
         html (-> (md-to-html-string html-without-tags
                                     :heading-anchors true
+                                    :reference-links? true
+                                    :replacement-transformers (cons (image-checker notifier page-url version) transformer-vector)
                                     :custom-transformers [(sample-transformer (atom 0) notifier page-url version pg-jdbc pg-version playground)
-                                                          code-transformer])
+                                                          code-transformer
+                                                          (branch-name-transformer version)])
                  (add-api-links version reference api-versions api-default-version))
         html-tags (if (empty? tags) html
                                     (add-tags html tags))]
