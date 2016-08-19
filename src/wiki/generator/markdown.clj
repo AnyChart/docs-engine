@@ -155,7 +155,7 @@
 
 (defn branch-name-transformer [version]
   (fn [text state]
-    [(clojure.string/replace text #"branch_name" version) state]))
+    [(clojure.string/replace text #"\{branch_name\}" version) state]))
 
 (defn- image-format-error [notifier version page-url text]
   (info "image error:" page-url text)
@@ -181,11 +181,11 @@
         html (-> (md-to-html-string html-without-tags
                                     :heading-anchors true
                                     :reference-links? true
-                                    :replacement-transformers (list* (branch-name-transformer version)
-                                                                     (image-checker notifier page-url version)
-                                                                     transformer-vector)
-                                    :custom-transformers [(sample-transformer (atom 0) notifier page-url version pg-jdbc pg-version playground)
-                                                          code-transformer])
+                                    :replacement-transformers (concat [(branch-name-transformer version)
+                                                                       (image-checker notifier page-url version)]
+                                                                      transformer-vector
+                                                                      [(sample-transformer (atom 0) notifier page-url version pg-jdbc pg-version playground)
+                                                                       code-transformer]))
                  (add-api-links version reference api-versions api-default-version))
         html-tags (if (empty? tags) html
                                     (add-tags html tags))]
