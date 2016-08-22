@@ -9,7 +9,8 @@
                       (:pg-jdbc comp)
                       (:notifier comp)
                       (:offline-generator comp)
-                      (:config comp))
+                      (:config comp)
+                      (swap! (:queue-index (:config comp)) inc))
   (System/gc))
 
 (defn- message-processor [comp]
@@ -35,4 +36,4 @@
     (dissoc this :engine)))
 
 (defn new-generator [config]
-  (map->Generator {:config config}))
+  (map->Generator {:config (assoc config :queue-index (atom 0))}))

@@ -15,11 +15,11 @@
             [taoensso.timbre :as timbre :refer [info error]]))
 
 (defn- generate-version
-  [branch jdbc pg-jdbc notifier offline-generator data-dir api playground api-versions api-default-version]
+  [branch jdbc pg-jdbc notifier offline-generator data-dir api playground api-versions api-default-version queue-index]
   (try
     (do
       (info "building" branch)
-      (notifications/start-version-building notifier (:name branch))
+      (notifications/start-version-building notifier (:name branch) queue-index)
       (let [branch-path (str data-dir "/versions/" (:name branch))
             data (get-struct branch-path)
             tree (tree-gen/generate-tree data)
@@ -41,10 +41,11 @@
                                  :key (:name branch)}
                            pg-jdbc pg-version
                            data api playground api-versions api-default-version)
-            (notifications/complete-version-building notifier (:name branch))
             (vgen/remove-previous-versions jdbc version-id (:name branch))
             (generate-zip offline-generator {:id  version-id
-                                             :key (:name branch)}))
+                                             :key (:name branch)})
+            (notifications/complete-version-building notifier (:name branch) queue-index)
+            version-id)
           (catch Exception e
             (do (error e)
                 (error (.getMessage e))
@@ -54,38 +55,40 @@
                   (pdata/delete-version-pages jdbc version-id)
                   (fdata/delete-version-folders jdbc version-id)
                   (vdata/delete-by-id jdbc version-id))
-                (notifications/build-failed notifier (:name branch)))))))
+                (notifications/build-failed notifier (:name branch) queue-index)
+                nil)))))
     (catch Exception e
       (do (error e)
           (error (.getMessage e))
-          (notifications/build-failed notifier (:name branch))))))
+          (notifications/build-failed notifier (:name branch) queue-index)
+          nil))))
 
 (defn generate
   [jdbc pg-jdbc notifier offline-generator
    {:keys [show-branches git-ssh data-dir reference playground
-           reference-versions reference-default-version]}]
-  (notifications/start-building notifier)
+           reference-versions reference-default-version]} queue-index]
   (fs/mkdirs (str data-dir "/versions"))
   (let [actual-branches (vgen/update-branches show-branches git-ssh data-dir)
         removed-branches (vgen/remove-branches jdbc (map :name actual-branches) data-dir)
         branches (vgen/filter-for-rebuild jdbc actual-branches)
+        name-branches (map :name branches)
         api-versions (api-versions/get-versions reference-versions)]
-    (if (seq branches)
-      (notifications/versions-for-build notifier (map :name branches)))
-    (if (seq removed-branches)
-      (notifications/delete-branches notifier removed-branches))
+    (notifications/start-building notifier name-branches removed-branches queue-index)
     (info "api versions:" api-versions)
     (info "api default version:" reference-default-version)
-    (doall (map #(generate-version %
-                                   jdbc
-                                   pg-jdbc
-                                   notifier
-                                   offline-generator
-                                   data-dir
-                                   reference
-                                   playground
-                                   api-versions
-                                   reference-default-version)
-                branches))
-    (fs/delete-dir (str data-dir "/versions"))
-    (notifications/complete-building notifier)))
+    (let [result (doall (map #(generate-version %
+                                                    jdbc
+                                                    pg-jdbc
+                                                    notifier
+                                                    offline-generator
+                                                    data-dir
+                                                    reference
+                                                    playground
+                                                    api-versions
+                                                    reference-default-version
+                                                    queue-index)
+                                 branches))]
+      (fs/delete-dir (str data-dir "/versions"))
+      (if (some nil? result)
+        (notifications/complete-building-with-errors notifier name-branches queue-index)
+        (notifications/complete-building notifier name-branches removed-branches queue-index)))))

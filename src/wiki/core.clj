@@ -55,7 +55,8 @@
   {:notifications {:token "P8Z59E0kpaOqTcOxner4P5jb"
                    :channel "#notifications-local"
                    :username "docs-engine"
-                   :domain "http://localhost/"}
+                   :domain "http://localhost/"
+                   :prefix "local"}
    :indexer {:queue "docs-stg-search-queue"}
    :web {:debug true
          :static 12
@@ -96,7 +97,7 @@
 (def config base-config)
 
 (def stg-config (merge-with merge base-config
-                            {:notifications {:domain "http://docs.anychart.stg/" :channel "#notifications-stg"}}
+                            {:notifications {:domain "http://docs.anychart.stg/" :channel "#notifications-stg" :prefix "stg"}}
                             {:web {:debug false
                                    :port 9010}}
                             {:jdbc {:subname "//10.132.9.26:5432/docs_stg"
@@ -112,7 +113,7 @@
                             {:log {:file "/apps/docs-stg/log.txt"}}))
 
 (def prod-config (merge-with merge base-config
-                             {:notifications {:domain "https://docs.anychart.com/" :channel "#notifications-prod"}}
+                             {:notifications {:domain "https://docs.anychart.com/" :channel "#notifications-prod" :prefix "prod"}}
                              {:web {:debug false
                                     :port 9011
                                     :queue "docs-prod-queue"
