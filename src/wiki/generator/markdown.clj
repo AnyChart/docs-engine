@@ -169,7 +169,7 @@
        text
        (try
          (if-let [[_ _ params] (re-matches #".*(!\[[^\]]*\]\s*\(([^\)]*)\)).*" text)]
-           (if (re-matches #"[^\s]+\s*(\"[^\"]+\")?\s*(\w+\s*=\s*[\w\"]+\s*)*" params)
+           (if (re-matches #"[^\s]+\s*(\"[^\"]+\")?\s*(\w+\s*=\s*[\w\"%]+\s*)*" params)
              text
              (image-format-error notifier version page-url params))
            text)
