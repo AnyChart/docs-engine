@@ -9,6 +9,7 @@
     <!--[if IE]>
     <link rel="icon" href="/i/anychart.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="/main.css"/>
+    <link rel="stylesheet" href="https://cdn.anychart.com/fonts/2.0.0/anychart.css">
     <link rel="apple-touch-icon" sizes="57x57" href="/icons/57.png">
     <link rel="apple-touch-icon" sizes="76x76" href="/icons/76.png">
     <link rel="apple-touch-icon" sizes="120x120" href="/icons/120.png">
@@ -26,6 +27,7 @@
 <!--[if !IE]> -->
 <link rel="icon" href="/i/anychart.ico" type="image/x-icon">
 <link rel="stylesheet" type="text/css" href="/main.css"/>
+<link rel="stylesheet" href="https://cdn.anychart.com/fonts/2.0.0/anychart.css">
 <link rel="apple-touch-icon" sizes="57x57" href="/icons/57.png">
 <link rel="apple-touch-icon" sizes="76x76" href="/icons/76.png">
 <link rel="apple-touch-icon" sizes="120x120" href="/icons/120.png">
@@ -66,7 +68,7 @@
                             Download .zip</button>
                     </div>
                     <div class="text-muted questions">
-                        <a href="http://support.anychart.com/" class="text-support"><i class="icon icon-ring icon-data"></i></a>
+                        <a href="http://support.anychart.com/" class="text-support"><i class="ac ac-support"></i></a>
                             <span class="hidden-super-small">
                                 Still have questions?<br/>
                                 <a href="//anychart.com/support/"> Contact support</a></span>
@@ -124,7 +126,7 @@
                     <div class="input-group search">
                         <input type="text" class="form-control" placeholder="What are you looking for?">
                         <span class="input-group-btn"><button class="btn btn-default" type="button"><span
-                                class="glyphicon glyphicon-search form-control-feedback"></span></button></span>
+                                class="ac ac-search form-control-feedback"></span></button></span>
                     </div>
                 </div>
             </div>
@@ -165,7 +167,7 @@
             <div class="row">
                 <div class="col-lg-17" id="article-content">
                     <a class="btn btn-default btn-small github-fork pull-right hidden-xs" id="github-edit" href="https://github.com/AnyChart/docs.anychart.com">
-                        <span><i class="fa fa-code-fork"></i></span> Improve this Doc
+                        <span><i class="ac ac-andrews-pitchfork"></i></span> Improve this Doc
                     </a>
                     {{page.content|safe}}
                 </div>

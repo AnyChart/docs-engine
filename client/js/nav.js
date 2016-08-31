@@ -44,7 +44,7 @@ function loadPage(link) {
                             '})();'+
                             'tryUpdateSampleInit();' +
                             '</script>'+
-                            '<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>'+
+                            '<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="noclilow">comments powered by Disqus.</a>'+
                             '</noscript>'+
                             '  <div id="table-of-content-large" class="col-lg-6 hidden-sm hidden-xs hidden-md visible-lg"></div>'+
                            '</div>');

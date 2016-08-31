@@ -6481,28 +6481,6 @@ button.btn-zip:hover {
   background-color: #ebebeb;
   border-color: #adadad;
 }
-.icon {
-  font-family: 'AnyChart';
-  speak: none;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-}
-a.text-support {
-  display: block;
-  float: left;
-  width: 40px;
-  height: 40px;
-  line-height: 40px;
-  text-align: center;
-  border-radius: 50%;
-  color: #929292;
-  margin-top: -5px;
-  font-size: 30px;
-}
 a.sidebar-switcher {
   display: block;
   float: left;
@@ -7022,12 +7000,15 @@ a.text-support {
   display: block;
   float: left;
   width: 50px;
-  height: 50px;
-  line-height: 50px;
+  height: 43px;
+  line-height: 43px;
   text-align: center;
   border-radius: 50%;
   color: #929292;
   margin-top: -5px;
+  font-size: 35px;
+}
+a.text-support i {
   font-size: 35px;
 }
 a.soc-network:hover {
