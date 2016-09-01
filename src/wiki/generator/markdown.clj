@@ -31,8 +31,8 @@
        <div class='no-overflow'>
        <iframe " style " src='//" playground "/" version "/samples/" sample-path "-iframe'></iframe></div>
        <div class='btns'>
-         <a class='btn-playground btn jsfiddle-btn' target='_blank'><i class='fa fa-jsfiddle'></i> JsFiddle</a> 
-         <a class='btn-playground btn' target='_blank' href='//" playground "/" version "/samples/" sample-path "-plain'><i class='fa fa-play'></i> Playground</a>
+         <a class='btn-playground btn jsfiddle-btn' target='_blank'><i class='ac ac-jsfiddle'></i> JsFiddle</a>
+         <a class='btn-playground btn' target='_blank' href='//" playground "/" version "/samples/" sample-path "-plain'><i class='ac ac-play'></i> Playground</a>
        </div></div>")))
 
 (defn get-code [id code scripts sample version-key]
@@ -99,7 +99,7 @@
                                                  :engine-version (or (:engine_version pg-version)
                                                                      (:key pg-version)))))
       (do
-        (notifications/sample-not-available notifier version page-url url)
+        (notifications/sample-not-available notifier version page-url)
         (info "Sample isn't available:  " page-url pg-version url id full-id)
         (format "<div class=\"alert alert-warning\"><strong>Sample not available!</strong><p>%s</p></div>" url)))))
 

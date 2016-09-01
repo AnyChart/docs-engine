@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="/i/anychart.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="/main.css"/>
+    <link rel="stylesheet" href="https://cdn.anychart.com/fonts/2.0.0/anychart.css">
     <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
@@ -37,7 +38,7 @@
 
                 <div class="pull-right helpers hidden-xs">
                     <div class="text-muted questions">
-                        <a href="http://support.anychart.com/" class="text-support"><i class="fa fa-life-ring"></i></a>
+                        <a href="http://support.anychart.com/" class="text-support"><i class="ac ac-support"></i></a>
                                     <span class="hidden-super-small">
                                         Still have questions?<br/>
                                 <a href="//anychart.com/support/"> Contact support</a></span>
@@ -66,7 +67,7 @@
                             <input type="text" class="form-control" placeholder="What were you looking for?">
                             <span class="input-group-btn">
                                 <button class="btn btn-default" type="button">
-                                    <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                                    <span class="ac ac-search form-control-feedback"></span>
                                 </button>
                             </span>
                         </div>

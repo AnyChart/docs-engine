@@ -56,7 +56,7 @@
   (spit (str main-path "/deps/local_main.min.js")
         (slurp (io/resource "public/local_main.min.js")))
   (copy-style main-path)
-  (copy-from-resource "public/fonts" (str main-path "/deps/fonts"))
+  (copy-from-resource "public/fonts-local" (str main-path "/deps/fonts"))
   (copy-from-resource "public/icons" (str main-path "/deps/icons"))
   (copy-from-resource "public/i" (str main-path "/deps/i")))
 
