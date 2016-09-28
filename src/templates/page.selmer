@@ -9,7 +9,7 @@
     <!--[if IE]>
     <link rel="icon" href="/i/anychart.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="/main.css"/>
-    <link rel="stylesheet" href="https://cdn.anychart.com/fonts/2.0.0/anychart.css">
+    <link rel="stylesheet" href="https://cdn.anychart.com/fonts/2.5.0/anychart.css">
     <link rel="apple-touch-icon" sizes="57x57" href="/icons/57.png">
     <link rel="apple-touch-icon" sizes="76x76" href="/icons/76.png">
     <link rel="apple-touch-icon" sizes="120x120" href="/icons/120.png">
@@ -27,7 +27,7 @@
 <!--[if !IE]> -->
 <link rel="icon" href="/i/anychart.ico" type="image/x-icon">
 <link rel="stylesheet" type="text/css" href="/main.css"/>
-<link rel="stylesheet" href="https://cdn.anychart.com/fonts/2.0.0/anychart.css">
+<link rel="stylesheet" href="https://cdn.anychart.com/fonts/2.5.0/anychart.css">
 <link rel="apple-touch-icon" sizes="57x57" href="/icons/57.png">
 <link rel="apple-touch-icon" sizes="76x76" href="/icons/76.png">
 <link rel="apple-touch-icon" sizes="120x120" href="/icons/120.png">
@@ -39,7 +39,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-22 col-lg-offset-1">
-                <a class="sidebar-switcher hidden-md hidden-lg"><i class="fa fa-bars"></i></a>
+                <a class="sidebar-switcher hidden-md hidden-lg"><i class="ac ac-bars"></i></a>
                 <a class="navbar-brand" href="//anychart.com/">
                     <img src="/i/logo-empty.png" width="300" height="72" alt="AnyChart">
 
@@ -64,7 +64,7 @@
                     </div>
                     <div class="btn-group" style="padding-left: 15px;">
                         <button onclick="location.href='/{{version}}/download'" role="button" type="button" class="btn btn-default btn-zip">
-                            <span class="ac ac-download-picture" aria-hidden="true"></span>
+                            <span class="ac ac-download-zip" aria-hidden="true"></span>
                             Download .zip</button>
                     </div>
                     <div class="text-muted questions">
