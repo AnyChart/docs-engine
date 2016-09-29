@@ -10,6 +10,7 @@
                  ;; html
                  [enlive "1.1.6"]
                  [org.apache.commons/commons-lang3 "3.4"]
+                 [com.anychart/playground-samples-parser "0.1.2"]
                  ;; web
                  [http-kit "2.1.16"]
                  [compojure "1.1.9"]

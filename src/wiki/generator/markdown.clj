@@ -57,7 +57,7 @@
        (get-code id code scripts sample version-key )
        "}"))
 
-(defn build-sample-div [notifier page-url id version pg-jdbc pg-version playground sample-path custom-settings]
+(defn build-sample-div [notifier page-url id version samples playground sample-path custom-settings]
   (let [width (if (:width custom-settings)
                 (if (string? (:width custom-settings))
                   (:width custom-settings)
@@ -71,7 +71,8 @@
         div-style  (str "style='width:" width ";'")
         style (str "style='position:relative;margin:0px;height:" height ";'")
         url (str "/samples/" (StringEscapeUtils/unescapeHtml4 sample-path))
-        sample (pg-data/sample-by-url pg-jdbc (:id pg-version) url)
+        ;sample (pg-data/sample-by-url pg-jdbc (:id pg-version) url)
+        sample (first (filter #(= url (:url %)) samples))
         full-id (str "container" id)]
     (if (some? sample)
       (let [code
@@ -92,18 +93,16 @@
                                                  :style style
                                                  :id id
                                                  :code (get-wrapped-code id code (:scripts sample) sample version)
-                                                 :version (:key pg-version)
                                                  :playground playground
                                                  :version version
                                                  :sample-path sample-path
-                                                 :engine-version (or (:engine_version pg-version)
-                                                                     (:key pg-version)))))
+                                                 :engine-version version)))
       (do
         (notifications/sample-not-available notifier version page-url)
-        (info "Sample isn't available:  " page-url pg-version url id full-id)
+        (info "Sample isn't available:  " page-url url id full-id)
         (format "<div class=\"alert alert-warning\"><strong>Sample not available!</strong><p>%s</p></div>" url)))))
 
-(defn- sample-transformer [id-counter notifier page-url version pg-jdbc pg-version playground]
+(defn- sample-transformer [id-counter notifier page-url version samples playground]
   (fn [text state]
     [(if (or (:code state) (:codeblock state))
        text
@@ -117,7 +116,7 @@
             (clojure.string/replace text
                                     source
                                     ;(build-sample-embed version playground sample-path custom-settings)
-                                    (build-sample-div notifier page-url (swap! id-counter inc) version pg-jdbc pg-version playground
+                                    (build-sample-div notifier page-url (swap! id-counter inc) version samples playground
                                                       sample-path custom-settings)))
            (catch Exception _
              (do
@@ -176,7 +175,7 @@
          (catch Exception _ (image-format-error notifier version page-url "exception caught"))))
      state]))
 
-(defn to-html [notifier page-url source version pg-jdbc pg-version playground reference api-versions api-default-version]
+(defn to-html [notifier page-url source version samples playground reference api-versions api-default-version]
   (let [{tags :tags html-without-tags :html} (get-tags source)
         html (-> (md-to-html-string html-without-tags
                                     :heading-anchors true
@@ -184,7 +183,7 @@
                                     :replacement-transformers (concat [(branch-name-transformer version)
                                                                        (image-checker notifier page-url version)]
                                                                       transformer-vector
-                                                                      [(sample-transformer (atom 0) notifier page-url version pg-jdbc pg-version playground)
+                                                                      [(sample-transformer (atom 0) notifier page-url version samples playground)
                                                                        code-transformer]))
                  (add-api-links version reference api-versions api-default-version))
         html-tags (if (empty? tags) html
