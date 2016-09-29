@@ -9,26 +9,26 @@
             [wiki.data.versions :as vdata]
             [wiki.data.playground :as pg-data]
             [wiki.generator.api-versions :as api-versions]
+            [playground-samples-parser.fs :as pgs]
             [wiki.components.offline-generator :refer [generate-zip]]
             [me.raynes.fs :as fs]
             [com.climate.claypoole :as cp]
             [taoensso.timbre :as timbre :refer [info error]]))
 
 (defn- generate-version
-  [branch jdbc pg-jdbc notifier offline-generator data-dir api playground api-versions api-default-version queue-index]
+  [branch jdbc notifier offline-generator data-dir api playground api-versions api-default-version queue-index]
   (try
     (do
       (info "building" branch)
       (notifications/start-version-building notifier (:name branch) queue-index)
       (let [branch-path (str data-dir "/versions/" (:name branch))
+            samples (pgs/samples branch-path)
             data (get-struct branch-path)
             tree (tree-gen/generate-tree data)
             version-id (vdata/add-version jdbc
                                           (:name branch)
                                           (:commit branch)
-                                          tree)
-            pg-project (pg-data/project-by-key pg-jdbc "docs")
-            pg-version (pg-data/version-by-key pg-jdbc (:id pg-project) (:name branch))]
+                                          tree)]
         (try
           (let [static-branch-dir (str data-dir "/static/" (:name branch))
                 images-branch-dir (str branch-path "/images")]
@@ -37,9 +37,9 @@
               (fs/copy-dir-into images-branch-dir static-branch-dir)))
           (do
             (dgen/generate notifier
-                           jdbc {:id version-id
+                           jdbc {:id  version-id
                                  :key (:name branch)}
-                           pg-jdbc pg-version
+                           samples
                            data api playground api-versions api-default-version)
             (vgen/remove-previous-versions jdbc version-id (:name branch))
             (generate-zip offline-generator {:id  version-id
@@ -64,7 +64,7 @@
           nil))))
 
 (defn generate
-  [jdbc pg-jdbc notifier offline-generator
+  [jdbc notifier offline-generator
    {:keys [show-branches git-ssh data-dir reference playground
            reference-versions reference-default-version]} queue-index]
   (fs/mkdirs (str data-dir "/versions"))
@@ -77,17 +77,16 @@
     (info "api versions:" api-versions)
     (info "api default version:" reference-default-version)
     (let [result (doall (map #(generate-version %
-                                                    jdbc
-                                                    pg-jdbc
-                                                    notifier
-                                                    offline-generator
-                                                    data-dir
-                                                    reference
-                                                    playground
-                                                    api-versions
-                                                    reference-default-version
-                                                    queue-index)
-                                 branches))]
+                                                jdbc
+                                                notifier
+                                                offline-generator
+                                                data-dir
+                                                reference
+                                                playground
+                                                api-versions
+                                                reference-default-version
+                                                queue-index)
+                             branches))]
       (fs/delete-dir (str data-dir "/versions"))
       (if (some nil? result)
         (notifications/complete-building-with-errors notifier name-branches queue-index)

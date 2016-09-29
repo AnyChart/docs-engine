@@ -16,13 +16,13 @@
   (component/system-map
    :notifier (notifier/new-notifier (:notifications config))
    :jdbc  (jdbc/new-jdbc (:jdbc config))
-   :pg-jdbc (jdbc/new-jdbc (:pg-jdbc config))
+   ;:pg-jdbc (jdbc/new-jdbc (:pg-jdbc config))
    :redis (redis/new-redis (:redis config))
    :sphinx (sphinx/new-sphinx (:sphinx config))
    :web   (component/using (web/new-web (:web config))
-                           [:jdbc :redis :notifier :sphinx :offline-generator :pg-jdbc])
+                           [:jdbc :redis :notifier :sphinx :offline-generator])
    :generator (component/using (generator/new-generator (:generator config))
-                               [:jdbc :pg-jdbc :redis :notifier :offline-generator])
+                               [:jdbc :redis :notifier :offline-generator])
    :offline-generator (component/using (offline-generator/new-offline-generator (:offline-generator config))
                                        [:jdbc :redis])
    :indexer (component/using (indexer/new-indexer (:indexer config))
@@ -32,24 +32,24 @@
   (component/system-map
    :notifier (notifier/new-notifier (:notifications config))
    :jdbc  (jdbc/new-jdbc (:jdbc config))
-   :pg-jdbc (jdbc/new-jdbc (:pg-jdbc config))
+   ;:pg-jdbc (jdbc/new-jdbc (:pg-jdbc config))
    :redis (redis/new-redis (:redis config))
    :sphinx (sphinx/new-sphinx (:sphinx config))
    :indexer (component/using (indexer/new-indexer (:indexer config))
                              [:redis])
    :web   (component/using (web/new-web (:web config))
-                           [:jdbc :redis :notifier :sphinx :pg-jdbc])))
+                           [:jdbc :redis :notifier :sphinx])))
 
 (defn generator-system [config]
   (component/system-map
    :notifier (notifier/new-notifier (:notifications config))
    :jdbc  (jdbc/new-jdbc (:jdbc config))
-   :pg-jdbc (jdbc/new-jdbc (:pg-jdbc config))
+   ;:pg-jdbc (jdbc/new-jdbc (:pg-jdbc config))
    :redis (redis/new-redis (:redis config))
    :offline-generator (component/using (offline-generator/new-offline-generator (:offline-generator config))
                                        [:jdbc :redis])
    :generator (component/using (generator/new-generator (:generator config))
-                               [:jdbc :pg-jdbc :redis :notifier :offline-generator])))
+                               [:jdbc :redis :notifier :offline-generator])))
 
 (def base-config
   {:notifications {:token "P8Z59E0kpaOqTcOxner4P5jb"
