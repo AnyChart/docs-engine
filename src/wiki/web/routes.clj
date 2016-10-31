@@ -83,6 +83,7 @@
     (render-file "templates/page.selmer" {:version        (:key version)
                                           :actual-version (first versions)
                                           :anychart-url   (utils/anychart-bundle-path (:key version))
+                                          :anychart-css-url (utils/anychart-bundle-css-url (:key version))
                                           :old            (not= (first versions) (:key version))
                                           :tree           (versions-data/tree-data (jdbc request)
                                                                                    (:id version))

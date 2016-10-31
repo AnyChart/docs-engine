@@ -9,6 +9,7 @@
     <!--[if IE]>
     <link rel="icon" href="/i/anychart.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="/main.css"/>
+    <link rel="stylesheet" type="text/css" href="{{anychart-css-url}}"/>
     <link rel="stylesheet" href="https://cdn.anychart.com/fonts/2.5.0/anychart.css">
     <link rel="apple-touch-icon" sizes="57x57" href="/icons/57.png">
     <link rel="apple-touch-icon" sizes="76x76" href="/icons/76.png">
@@ -27,6 +28,7 @@
 <!--[if !IE]> -->
 <link rel="icon" href="/i/anychart.ico" type="image/x-icon">
 <link rel="stylesheet" type="text/css" href="/main.css"/>
+<link rel="stylesheet" type="text/css" href="{{anychart-css-url}}"/>
 <link rel="stylesheet" href="https://cdn.anychart.com/fonts/2.5.0/anychart.css">
 <link rel="apple-touch-icon" sizes="57x57" href="/icons/57.png">
 <link rel="apple-touch-icon" sizes="76x76" href="/icons/76.png">
