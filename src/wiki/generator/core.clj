@@ -96,4 +96,4 @@
     (catch Exception e
       (do (error e)
           (error (.getMessage e))
-          (notifications/complete-building-with-errors notifier [] queue-index)))))
+          (notifications/complete-building-with-errors notifier [] queue-index e)))))

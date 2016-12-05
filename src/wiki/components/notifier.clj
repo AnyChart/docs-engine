@@ -98,16 +98,20 @@
                            :short true}])]
     (notify-attach notifier (update-in attachments [0 :fields] concat removed-fields))))
 
-(defn complete-building-with-errors [notifier branches queue-index]
-  (let [attachments [{:color  "danger"
-                      :text (str "#" queue-index " docs `" (prefix notifier) "` - complete with errors")
-                      :mrkdwn_in ["text", "pretext"]
-                      :fields (if (seq branches)
-                                [{:title "Branches"
-                                  :value (clojure.string/join ", " branches)
-                                  :short true}]
-                                [])}]]
-    (notify-attach notifier attachments)))
+(defn complete-building-with-errors
+  ([notifier branches queue-index]
+   (complete-building-with-errors notifier branches queue-index nil))
+  ([notifier branches queue-index message]
+   (let [attachments [{:color     "danger"
+                       :text      (str "#" queue-index " docs `" (prefix notifier) "` - complete with errors"
+                                       (when message (str "\n```"message "```")))
+                       :mrkdwn_in ["text", "pretext"]
+                       :fields    (if (seq branches)
+                                    [{:title "Branches"
+                                      :value (clojure.string/join ", " branches)
+                                      :short true}]
+                                    [])}]]
+     (notify-attach notifier attachments))))
 
 (defn start-version-building [notifier version queue-index]
   (let [attachments [{:color  "#4183C4"
