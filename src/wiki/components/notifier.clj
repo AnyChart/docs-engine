@@ -98,13 +98,16 @@
                            :short true}])]
     (notify-attach notifier (update-in attachments [0 :fields] concat removed-fields))))
 
+(defn- format-exception [e]
+  (str e "\n\n" (apply str (interpose "\n" (.getStackTrace e)))))
+
 (defn complete-building-with-errors
   ([notifier branches queue-index]
    (complete-building-with-errors notifier branches queue-index nil))
-  ([notifier branches queue-index message]
+  ([notifier branches queue-index e]
    (let [attachments [{:color     "danger"
                        :text      (str "#" queue-index " docs `" (prefix notifier) "` - complete with errors"
-                                       (when message (str "\n```"message "```")))
+                                       (when e (str "\n```" (format-exception e) "```")))
                        :mrkdwn_in ["text", "pretext"]
                        :fields    (if (seq branches)
                                     [{:title "Branches"
@@ -125,11 +128,15 @@
                       :mrkdwn_in ["text"]}]]
     (notify-attach notifier attachments)))
 
-(defn build-failed [notifier version queue-index]
-  (let [attachments [{:color  "danger"
-                      :text (str "#" queue-index " docs `" (prefix notifier) "` - *" version "* failed")
-                      :mrkdwn_in ["text"]}]]
-    (notify-attach notifier attachments)))
+(defn build-failed
+  ([notifier version queue-index]
+   (build-failed notifier version queue-index nil))
+  ([notifier version queue-index e]
+   (let [attachments [{:color     "danger"
+                       :text      (str "#" queue-index " docs `" (prefix notifier) "` - *" version "* failed"
+                                       (when e (str "\n```" (format-exception e) "```")))
+                       :mrkdwn_in ["text"]}]]
+     (notify-attach notifier attachments))))
 
 (defn sample-parsing-error [notifier version page-url]
   (let [attachment {:color     "warning"

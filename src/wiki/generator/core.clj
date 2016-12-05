@@ -55,12 +55,12 @@
                   (pdata/delete-version-pages jdbc version-id)
                   (fdata/delete-version-folders jdbc version-id)
                   (vdata/delete-by-id jdbc version-id))
-                (notifications/build-failed notifier (:name branch) queue-index)
+                (notifications/build-failed notifier (:name branch) queue-index e)
                 nil)))))
     (catch Exception e
       (do (error e)
           (error (.getMessage e))
-          (notifications/build-failed notifier (:name branch) queue-index)
+          (notifications/build-failed notifier (:name branch) queue-index e)
           nil))))
 
 (defn generate
@@ -96,5 +96,4 @@
     (catch Exception e
       (do (error e)
           (error (.getMessage e))
-          (notifications/complete-building-with-errors notifier [] queue-index (str e "\n"
-                                                                                    (apply str (interpose "\n" (.getStackTrace e)))))))))
+          (notifications/complete-building-with-errors notifier [] queue-index e)))))
