@@ -125,7 +125,7 @@ function expandCurrentMenu(prefix_path, target) {
         var $ul = $el.parent().find(">ul");
         if ($ul.length && !$ul.is(":visible")) {
             $ul.toggle();
-            $el.find("i").removeClass('fa-folder').addClass('fa-folder-open');
+            $el.find("i").removeClass('ac-folder').addClass('ac-folder-open');
             addFolder($el.attr("href").substr(prefix_path.length));
         }
     }
@@ -152,7 +152,7 @@ function removeFolder(href) {
 }
 
 function addListeners(prefix_path) {
-    $menu.find('a>i.fa-folder').each(function () {
+    $menu.find('a>i.ac-folder').each(function () {
         var $this = $(this);
         var $link = $this.parent();
         var $ul = $link.parent().find(">ul");
@@ -175,7 +175,7 @@ function openFolders(prefix_path, folders) {
         var $ul = $el.parent().find(">ul");
         if ($ul.length && !$ul.is(":visible")) {
             $ul.toggle();
-            $el.find("i").removeClass('fa-folder').addClass('fa-folder-open');
+            $el.find("i").removeClass('ac-folder').addClass('ac-folder-open');
         }
     }
 }

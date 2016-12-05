@@ -22,7 +22,7 @@ module.exports = function(grunt) {
                 files: {
                     "../resources/public/main.css":
                       ["styles-less.css",
-                       "bower_components/font-awesome/css/font-awesome.css",
+                       //"bower_components/font-awesome/css/font-awesome.css",
                        "src/prettify-tomorrow.css"]
                 }
             }
