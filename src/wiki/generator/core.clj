@@ -96,4 +96,4 @@
     (catch Exception e
       (do (error e)
           (error (.getMessage e))
-          (notifications/complete-building-with-errors notifier [] queue-index e)))))
+          (notifications/complete-building-with-errors notifier [] queue-index (str e "\n" (.getMessage e)))))))
