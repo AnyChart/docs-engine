@@ -67,27 +67,33 @@
   [jdbc notifier offline-generator
    {:keys [show-branches git-ssh data-dir reference playground
            reference-versions reference-default-version]} queue-index]
-  (fs/mkdirs (str data-dir "/versions"))
-  (let [actual-branches (vgen/update-branches show-branches git-ssh data-dir)
-        removed-branches (vgen/remove-branches jdbc (map :name actual-branches) data-dir)
-        branches (vgen/filter-for-rebuild jdbc actual-branches)
-        name-branches (map :name branches)
-        api-versions (api-versions/get-versions reference-versions)]
-    (notifications/start-building notifier name-branches removed-branches queue-index)
-    (info "api versions:" api-versions)
-    (info "api default version:" reference-default-version)
-    (let [result (doall (map #(generate-version %
-                                                jdbc
-                                                notifier
-                                                offline-generator
-                                                data-dir
-                                                reference
-                                                playground
-                                                api-versions
-                                                reference-default-version
-                                                queue-index)
-                             branches))]
-      (fs/delete-dir (str data-dir "/versions"))
-      (if (some nil? result)
-        (notifications/complete-building-with-errors notifier name-branches queue-index)
-        (notifications/complete-building notifier name-branches removed-branches queue-index)))))
+  (try
+    (do
+      (fs/mkdirs (str data-dir "/versions"))
+      (let [actual-branches (vgen/update-branches show-branches git-ssh data-dir)
+            removed-branches (vgen/remove-branches jdbc (map :name actual-branches) data-dir)
+            branches (vgen/filter-for-rebuild jdbc actual-branches)
+            name-branches (map :name branches)
+            api-versions (api-versions/get-versions reference-versions)]
+        (notifications/start-building notifier name-branches removed-branches queue-index)
+        (info "api versions:" api-versions)
+        (info "api default version:" reference-default-version)
+        (let [result (doall (map #(generate-version %
+                                                    jdbc
+                                                    notifier
+                                                    offline-generator
+                                                    data-dir
+                                                    reference
+                                                    playground
+                                                    api-versions
+                                                    reference-default-version
+                                                    queue-index)
+                                 branches))]
+          (fs/delete-dir (str data-dir "/versions"))
+          (if (some nil? result)
+            (notifications/complete-building-with-errors notifier name-branches queue-index)
+            (notifications/complete-building notifier name-branches removed-branches queue-index)))))
+    (catch Exception e
+      (do (error e)
+          (error (.getMessage e))
+          (notifications/complete-building-with-errors notifier [] queue-index)))))
