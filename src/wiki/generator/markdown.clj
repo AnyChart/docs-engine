@@ -38,7 +38,7 @@
 (defn get-code [id code scripts sample version-key]
   (condp = (count scripts)
     0 (str "(function(){
-           anychart.theme(null);\n"
+            if (anychart.hasOwnProperty('theme')) {anychart.theme(null);}\n"
            (when (and (= id 1)
                       (> (version-clj/version-compare version-key "7.9.1") 0))
              "anychart.utils.hideTooltips(true);\n")
