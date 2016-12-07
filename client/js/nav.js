@@ -37,8 +37,8 @@ function loadPage(link) {
                                 'reload: true,' +
                                 'config: function () {' +
                                     'this.page.url = window.location.href.split("?")[0];'+
-                                    'this.page.identifier = "' + res.page.url + '";'+
-                                    'this.page.title = "' + res.page.full_name + '";'+
+                                    'this.page.identifier = "' + res.page.url + '".split("\/").join("_").toLowerCase();'+
+                                    'this.page.title = "' + res.page.url + '".split("_").join(" ").split("/").join(" - ");'+
                                     'this.language = "en";'+
                                 '}});'+
                             '})();'+

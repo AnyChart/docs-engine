@@ -177,8 +177,8 @@
                 <script>
                     var disqus_config = function () {
                         this.page.url = window.location.href.split('?')[0];
-                        this.page.identifier = "{{url}}";
-                        this.page.title = "{{title}}";
+                        this.page.identifier = "{{url}}".split("/").join("_").toLowerCase();
+                        this.page.title = "{{url}}".split("_").join(" ").split("/").join(" - ");
                     };
                     (function() { // DON'T EDIT BELOW THIS LINE
                         var d = document, s = d.createElement('script');
