@@ -36,7 +36,7 @@ function loadPage(link) {
                                 'DISQUS.reset({' +
                                 'reload: true,' +
                                 'config: function () {' +
-                                    'this.page.url = window.location.href.split("?")[0];'+
+                                    'this.page.url = "http://docs.anychart.com/" + window.location.pathname;' +
                                     'this.page.identifier = "' + res.page.url + '".split("\/").join("_").toLowerCase();'+
                                     'this.page.title = "' + res.page.url + '".split("_").join(" ").split("/").join(" - ");'+
                                     'this.language = "en";'+
