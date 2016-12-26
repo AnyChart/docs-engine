@@ -37,7 +37,7 @@ function loadPage(link) {
                                 'reload: true,' +
                                 'config: function () {' +
                                     'this.page.url = "http://docs.anychart.com/" + version + "/" + res.page.url;' +
-                                    'this.page.identifier = "' + res.page.url + '".split("\/").join("_").toLowerCase();'+
+                                    'this.page.identifier = "' + res.page.url + '".split("\/").join("_").split("%").join("_").toLowerCase();'+
                                     'this.page.title = "' + res.page.url + '".split("_").join(" ").split("/").join(" - ");'+
                                     'this.language = "en";'+
                                 '}});'+
