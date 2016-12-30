@@ -59,15 +59,17 @@ $menu.find("a").each(function() {
 });
 
 // for url like: Stock_Charts/Technical_Indicators/Bollinger_Bands_%25B
-var replaceURI = function(){
+var replaceURIandExpandMenu = function(){
     var path = location.pathname;
     try {
         path = decodeURI(path);
-    } catch (err){}
-    finally {
-        window.history.replaceState( {} , "", encodeURI(path));
+    } catch (err){
+        path = location.pathname;
     }
+    path = encodeURI(path);
+    window.history.replaceState( {} , "", path);
+    expandMenu(path);
 };
 
-replaceURI();
-expandMenu(location.pathname);
+replaceURIandExpandMenu();
+
