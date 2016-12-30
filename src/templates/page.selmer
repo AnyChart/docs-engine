@@ -195,7 +195,7 @@
     </div>
 </div>
 <script type="text/javascript">
-    var currentUrl = "/{{version}}/" + '{{url}}';
+    var currentUrl = encodeURI("/{{version}}/" + '{{url}}');
     if (location.pathname != currentUrl && window.history){
         window.history.replaceState(null, null, currentUrl);
     }
