@@ -52,18 +52,16 @@
     (parse-string tree :keywordize-keys true)))
 
 (defn versions [jdbc]
-  (reverse
-    (sort version-compare
-          (map :key (query jdbc (-> (select :key)
-                                    (from :versions)
-                                    (where [:= :hidden false])))))))
+  (sort (comp - version-compare)
+        (map :key (query jdbc (-> (select :key)
+                                  (from :versions)
+                                  (where [:= :hidden false]))))))
 
 (defn versions-full-info [jdbc]
-  (reverse
-    (sort #(version-compare (:key %1) (:key %2))
-          (query jdbc (-> (select :id :key)
-                          (from :versions)
-                          (where [:= :hidden false]))))))
+  (sort (comp - #(version-compare (:key %1) (:key %2)))
+        (query jdbc (-> (select :id :key)
+                        (from :versions)
+                        (where [:= :hidden false])))))
 
 (defn outdated-versions-ids [jdbc actual-ids]
   (map :id (query jdbc (-> (select :id)
@@ -106,3 +104,20 @@
                                      (where [:= :id version-id]
                                             [:= :hidden false]))))]
     (javax.xml.bind.DatatypeConverter/parseHexBinary hex)))
+
+(defn get-page-versions [jdbc url]
+  (let [versions (query jdbc (-> (select :versions.key :versions.id, :v.url)
+                               (from :versions)
+                               (left-join [(-> (select :versions.key :versions.id :pages.url)
+                                               (from :versions)
+                                               (join :pages [:= :versions.id :pages.version_id])
+                                               (where [:and [:= :pages.url url] [:= :versions.hidden false]])) :v]
+                                          [:= :versions.id :v.id])))
+        sorted-versions (sort (comp - #(version-compare (:key %1) (:key %2))) versions)
+        url-versions (map #(assoc % :url (str "/" (:key %)
+                                            (when (:url %) (str "/" (:url %)))))
+                        sorted-versions)]
+    url-versions))
+
+(defn current-version [version-key versions]
+  (first (filter #(= version-key (:key %)) versions)))

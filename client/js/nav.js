@@ -53,6 +53,7 @@ function loadPage(link) {
         fixLinks();
         fixToc();
         highlightCode();
+        updateMenu(res.versions);
 
         var url = res.url;
         $("#warning a[data-last-version=latest]").attr("href", "/latest/" + url);
@@ -61,6 +62,13 @@ function loadPage(link) {
     $("#shadow").hide();
     return false;
 };
+
+function updateMenu(versions){
+    var menu = $("ul.dropdown-menu").empty();
+    versions.forEach(function(item, i, arr) {
+        menu.append("<li><a href=" + item.url + ">Version " + item.key +"</a></li>");
+    })
+}
 
 function fixLinks() {
     $("#content a").each(function() {
