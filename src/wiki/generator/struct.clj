@@ -33,20 +33,21 @@
       (clojure.string/replace-first #"\A(?s)(?m)(^\{[^\}]+\})" "")
       (clojure.string/trim-newline)))
 
+(defn- read-document-config [content]
+  (when-let [doc-header (re-matches #"(?s)(?m)(^\{[^\}]+\}).*" content)]
+    (-> doc-header last read-string)))
+
 (defn- create-document [base-path item]
   (let [content (slurp item)
-        doc-header (re-matches #"(?s)(?m)(^\{[^\}]+\}).*" content)
+        config (read-document-config content)
+        page-title (title item)
         res {:name          (get-name item)
              :kind          :doc
-             :title         (title item)
-             :content       content
-             :config        {:index 1000}
+             :title         page-title
+             :content       (if config (fix-document-content content) content)
+             :config        (merge {:index 1000 :title-prefix page-title} config)
              :last-modified (file-last-commit-date base-path (.getAbsolutePath item))}]
-    (if doc-header
-      (-> res
-          (update :config #(merge % (-> doc-header last read-string)))
-          (update :content fix-document-content))
-      res)))
+    res))
 
 (declare build-struct)
 

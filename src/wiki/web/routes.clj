@@ -83,13 +83,14 @@
                                                                                    (:id version))
                                         :url              (:url page)
                                         :title            (:full_name page)
+                                        :config           (:config page)
                                         :page             page
                                         :versions         versions}))
 
 (defn- check-folder-middleware [request]
   (let [version-key (-> request :route-params :version)
         url (-> request :route-params :*)
-        versions (time (versions-data/get-page-versions (jdbc request) url))
+        versions (versions-data/get-page-versions (jdbc request) url)
         version (versions-data/current-version version-key versions)
         page (pages-data/page-by-url (jdbc request) (:id version) url)]
     (if page
@@ -115,6 +116,7 @@
   (response {:url   (:url page)
              :page  page
              :title (:full_name page)
+             :config (:config page)
              :versions versions}))
 
 (defn- check-page-middleware [app]
