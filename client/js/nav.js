@@ -48,7 +48,7 @@ function loadPage(link) {
                             '</noscript>'+
                             '  <div id="table-of-content-large" class="col-lg-6 hidden-sm hidden-xs hidden-md visible-lg"></div>'+
                            '</div>');
-        document.title = res.config['title-prefix'] + " - AnyChart JavaScript Chart Documentation ver. " + version;
+        document.title = res['title-prefix'] + " - AnyChart JavaScript Chart Documentation ver. " + version;
         $("#content").scrollTop(0);
         fixLinks();
         fixToc();

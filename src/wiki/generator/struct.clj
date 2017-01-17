@@ -45,7 +45,7 @@
              :kind          :doc
              :title         page-title
              :content       (if config (fix-document-content content) content)
-             :config        (merge {:index 1000 :title-prefix page-title} config)
+             :config        (merge {:index 1000} config)
              :last-modified (file-last-commit-date base-path (.getAbsolutePath item))}]
     res))
 

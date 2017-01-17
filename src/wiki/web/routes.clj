@@ -41,6 +41,9 @@
 (defn offline-generator [request]
   (-> request :component :offline-generator))
 
+(defn- title-prefix [page]
+  (or (-> page :config :title-prefix) (:full_name page)))
+
 (defn- show-404 [request]
   (render-file "templates/404.selmer" {}))
 
@@ -83,7 +86,7 @@
                                                                                    (:id version))
                                         :url              (:url page)
                                         :title            (:full_name page)
-                                        :config           (:config page)
+                                        :title-prefix     (title-prefix page)
                                         :page             page
                                         :versions         versions}))
 
@@ -113,11 +116,11 @@
         (show-page request version versions page)))))
 
 (defn- show-page-data [request version versions page]
-  (response {:url   (:url page)
-             :page  page
-             :title (:full_name page)
-             :config (:config page)
-             :versions versions}))
+  (response {:url          (:url page)
+             :page         page
+             :title        (:full_name page)
+             :title-prefix (title-prefix page)
+             :versions     versions}))
 
 (defn- check-page-middleware [app]
   (fn [request]
