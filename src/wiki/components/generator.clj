@@ -10,6 +10,9 @@
                       (:offline-generator comp)
                       (:config comp)
                       (swap! (:queue-index (:config comp)) inc))
+  (redisc/enqueue (:redis comp)
+                   (-> comp :config :redirects-queue)
+                   "update-redirects")
   (System/gc))
 
 (defn- message-processor [comp]

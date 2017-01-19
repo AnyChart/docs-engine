@@ -1,5 +1,6 @@
 (ns wiki.generator.struct
   (:require [clojure.java.io :refer [file]]
+            [wiki.web.redirects :refer [parse-redirects]]
             [wiki.generator.git :refer [file-last-commit-date]]))
 
 (defn- title [f]
@@ -94,9 +95,17 @@
                                     %))
     item))
 
+(defn- get-redirects [path]
+  (let [redirect-file (str path "/redirect.cfg")]
+    (when (.exists (file redirect-file))
+      (-> redirect-file
+          slurp
+          parse-redirects))))
+
 (defn get-struct [path]
-  (-> (build-struct [] (file path) path)
-      last
-      filter-struct
-      sort-struct
-      :children))
+  [(-> (build-struct [] (file path) path)
+       last
+       filter-struct
+       sort-struct
+       :children)
+   (get-redirects path)])

@@ -63,6 +63,7 @@
          :port 8080
          :max-line 8192
          :queue "docs-queue"
+         :redirects-queue "redirects-queue"
          :zip-queue "docs-zip-queue"
          :reference "api.anychart.stg"
          :playground "playground.anychart.stg"}
@@ -86,6 +87,7 @@
                :data-dir (.getAbsolutePath (clojure.java.io/file "data"))
                :max-processes 8
                :queue "docs-queue"
+               :redirects-queue "redirects-queue"
                :indexer-queue "docs-stg-search-queue"
                :reference "api.anychart.stg"
                :reference-versions "http://api.anychart.stg/versions"
@@ -118,6 +120,7 @@
                              {:web {:debug false
                                     :port 9011
                                     :queue "docs-prod-queue"
+                                    :redirects-queue "redirects-prod-queue"
                                     :zip-queue "docs-zip-prod-queue"
                                     :reference "api.anychart.com"
                                     :playground "playground.anychart.com"}}
@@ -133,6 +136,7 @@
                                           :git-ssh "/apps/keys/git"
                                           :data-dir "/apps/docs-prod/data"
                                           :queue "docs-prod-queue"
+                                          :redirects-queue "redirects-prod-queue"
                                           :indexer-queue "docs-prod-search-queue"
                                           :reference "api.anychart.com"
                                           :reference-versions "https://api.anychart.com/versions"

@@ -15,7 +15,8 @@
             [wiki.data.sitemap :as sitemap]
             [wiki.data.search :as search]
             [wiki.util.utils :as utils]
-            [wiki.web.tree :refer [tree-view tree-view-local]]))
+            [wiki.web.tree :refer [tree-view tree-view-local]]
+            [wiki.web.redirects :refer [wrap-redirect]]))
 
 (add-tag! :tree-view (fn [args context-map]
                        (let [entries (get context-map (keyword (first args)))]
@@ -221,9 +222,19 @@
   (-> (response (sitemap/generate-sitemap (jdbc request)))
       (content-type "text/xml")))
 
+(defn- request-redirects [request]
+  (let [redirects (-> request :component :redirects deref)]
+    (if (empty? redirects)
+      (response "Redirects empty")
+      (response
+        (->> redirects
+            (map #(str (first %) "\t >> \t" (second %)))
+            (clojure.string/join "\n"))))))
+
 (defroutes app-routes
            (route/resources "/")
            (GET "/_update_" [] request-update)
+           (GET "/_redirects_" [] request-redirects)
            (POST "/_update_" [] request-update)
            (GET "/" [] show-landing)
            (GET "/sitemap" [] show-sitemap)
@@ -244,4 +255,5 @@
 
 (def app (-> (routes app-routes)
              wrap-keyword-params
-             wrap-params))
+             wrap-params
+             wrap-redirect))

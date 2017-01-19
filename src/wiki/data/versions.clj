@@ -3,7 +3,8 @@
             [version-clj.core :refer [version-compare]]
             [honeysql.helpers :refer :all]
             [clojure.java.jdbc :as clj-jdbc]
-            [cheshire.core :refer [generate-string parse-string]]))
+            [cheshire.core :refer [generate-string parse-string]]
+            [wiki.data.utils :refer [pg->clj clj->jsonb]]))
 
 ;; CREATE SEQUENCE version_id_seq;
 ;; CREATE TABLE versions (
@@ -15,10 +16,11 @@
 ;;    zip BYTEA
 ;; );
 
-(defn add-version [jdbc key commit tree]
+(defn add-version [jdbc key commit tree config]
   (:id (first (insert! jdbc :versions {:key    key
                                        :commit commit
-                                       :tree   (generate-string tree)}))))
+                                       :tree   (generate-string tree)
+                                       :config (clj->jsonb config)}))))
 
 (defn version-by-key [jdbc key]
   (one jdbc (-> (select :key :id)
@@ -121,3 +123,11 @@
 
 (defn current-version [version-key versions]
   (first (filter #(= version-key (:key %)) versions)))
+
+(defn get-redirects [jdbc]
+  (let [redirects (query jdbc (-> (select :config)
+                                  (from :versions)
+                                  (where [:= :hidden false])))
+        redirects* (->> redirects (filter (comp some? :config))
+                        (map (comp :redirects pg->clj :config)))]
+    (seq (set (apply concat redirects*)))))

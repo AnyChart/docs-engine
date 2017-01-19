@@ -3,8 +3,7 @@
             [clojure.java.jdbc :as clj-jdbc]
             [honeysql.helpers :refer :all]
             [honeysql.types :as types]
-            [cheshire.core :refer [generate-string parse-string]])
-  (:import (org.postgresql.util PGobject)))
+            [wiki.data.utils :refer [pg->clj clj->jsonb]]))
 
 ;; CREATE SEQUENCE page_id_seq;
 ;; CREATE TABLE pages (
@@ -17,16 +16,6 @@
 ;;   tags varchar(255)[],
 ;;   config JSONB
 ;; );
-
-(defn clj->jsonb
-  "Converts the given value to a PG JSONB object"
-  [value]
-  (doto (PGobject.)
-    (.setType "jsonb")
-    (.setValue (generate-string value))))
-
-(defn pg->clj [pg-obj]
-  (parse-string (.getValue pg-obj) true))
 
 (defn page-by-url [jdbc version-id page-url]
   (if version-id

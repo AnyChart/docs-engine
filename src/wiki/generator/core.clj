@@ -23,12 +23,13 @@
       (notifications/start-version-building notifier (:name branch) queue-index)
       (let [branch-path (str data-dir "/versions/" (:name branch))
             samples (pgs/samples branch-path)
-            data (get-struct branch-path)
+            [data redirect-data] (get-struct branch-path)
             tree (tree-gen/generate-tree data)
             version-id (vdata/add-version jdbc
                                           (:name branch)
                                           (:commit branch)
-                                          tree)]
+                                          tree
+                                          {:redirects redirect-data})]
         (try
           (let [static-branch-dir (str data-dir "/static/" (:name branch))
                 images-branch-dir (str branch-path "/images")]
