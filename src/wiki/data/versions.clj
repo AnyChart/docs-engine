@@ -3,7 +3,8 @@
             [version-clj.core :refer [version-compare]]
             [honeysql.helpers :refer :all]
             [clojure.java.jdbc :as clj-jdbc]
-            [cheshire.core :refer [generate-string parse-string]]))
+            [cheshire.core :refer [generate-string parse-string]]
+            [wiki.data.utils :refer [pg->clj clj->jsonb]]))
 
 ;; CREATE SEQUENCE version_id_seq;
 ;; CREATE TABLE versions (
@@ -15,10 +16,11 @@
 ;;    zip BYTEA
 ;; );
 
-(defn add-version [jdbc key commit tree]
+(defn add-version [jdbc key commit tree config]
   (:id (first (insert! jdbc :versions {:key    key
                                        :commit commit
-                                       :tree   (generate-string tree)}))))
+                                       :tree   (generate-string tree)
+                                       :config (clj->jsonb config)}))))
 
 (defn version-by-key [jdbc key]
   (one jdbc (-> (select :key :id)
@@ -52,18 +54,16 @@
     (parse-string tree :keywordize-keys true)))
 
 (defn versions [jdbc]
-  (reverse
-    (sort version-compare
-          (map :key (query jdbc (-> (select :key)
-                                    (from :versions)
-                                    (where [:= :hidden false])))))))
+  (sort (comp - version-compare)
+        (map :key (query jdbc (-> (select :key)
+                                  (from :versions)
+                                  (where [:= :hidden false]))))))
 
 (defn versions-full-info [jdbc]
-  (reverse
-    (sort #(version-compare (:key %1) (:key %2))
-          (query jdbc (-> (select :id :key)
-                          (from :versions)
-                          (where [:= :hidden false]))))))
+  (sort (comp - #(version-compare (:key %1) (:key %2)))
+        (query jdbc (-> (select :id :key)
+                        (from :versions)
+                        (where [:= :hidden false])))))
 
 (defn outdated-versions-ids [jdbc actual-ids]
   (map :id (query jdbc (-> (select :id)
@@ -106,3 +106,28 @@
                                      (where [:= :id version-id]
                                             [:= :hidden false]))))]
     (javax.xml.bind.DatatypeConverter/parseHexBinary hex)))
+
+(defn get-page-versions [jdbc url]
+  (let [versions (query jdbc (-> (select :versions.key :versions.id, :v.url)
+                               (from :versions)
+                               (left-join [(-> (select :versions.key :versions.id :pages.url)
+                                               (from :versions)
+                                               (join :pages [:= :versions.id :pages.version_id])
+                                               (where [:and [:= :pages.url url] [:= :versions.hidden false]])) :v]
+                                          [:= :versions.id :v.id])))
+        sorted-versions (sort (comp - #(version-compare (:key %1) (:key %2))) versions)
+        url-versions (map #(assoc % :url (str "/" (:key %)
+                                            (when (:url %) (str "/" (:url %)))))
+                        sorted-versions)]
+    url-versions))
+
+(defn current-version [version-key versions]
+  (first (filter #(= version-key (:key %)) versions)))
+
+(defn get-redirects [jdbc]
+  (let [redirects (query jdbc (-> (select :config)
+                                  (from :versions)
+                                  (where [:= :hidden false])))
+        redirects* (->> redirects (filter (comp some? :config))
+                        (map (comp :redirects pg->clj :config)))]
+    (seq (set (apply concat redirects*)))))

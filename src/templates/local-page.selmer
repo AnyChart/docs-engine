@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <link rel="icon" href="{{path|add:deps/i/anychart.ico}}" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="{{path|add:deps/main.css}}"/>
+    <link rel="stylesheet" href="{{path|add:deps/fonts/2.7.0/anychart.css}}">
     <link rel="apple-touch-icon" sizes="57x57" href="{{path|add:deps/icons/57.png}}">
     <link rel="apple-touch-icon" sizes="76x76" href="{{path|add:deps/icons/76.png}}">
     <link rel="apple-touch-icon" sizes="120x120" href="{{path|add:deps/icons/120.png}}">
@@ -18,7 +19,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-22 col-lg-offset-1">
-                <a class="sidebar-switcher hidden-md hidden-lg"><i class="fa fa-bars"></i></a>
+                <a class="sidebar-switcher hidden-md hidden-lg"><i class="ac ac-bars"></i></a>
                 <a class="navbar-brand" href="http://anychart.com/" style="display: block;">
                     <img src="{{path|add:deps/i/logo-empty.png}}" width="300" height="72" alt="AnyChart">
                     <span class="chart-row" style="display: block;">
@@ -43,7 +44,7 @@
                     </div>
                     <div class="text-muted questions">
                         <a href="http://support.anychart.com/" class="text-support">
-                            <i class="icon icon-ring icon-data"></i>
+                            <i class="ac ac-support"></i>
                         </a>
                         <span class="hidden-super-small">
                             Still have questions?<br/>
@@ -83,13 +84,13 @@
     <div class="footer">
         <div class="footer-inner">
             <a href="https://www.facebook.com/AnyCharts" class="soc-network" target="_blank">
-                <span class="soc-network-icon fb"><i class="icon icon-fb"></i></span>
+                <span class="soc-network-icon fb"><i class="sn-mini-icon ac ac-facebook"></i></span>
             </a>
             <a href="https://twitter.com/AnyChart" class="soc-network" target="_blank">
-                <span class="soc-network-icon tw"><i class="icon icon-tw"></i></span>
+                <span class="soc-network-icon tw"><i class="sn-mini-icon ac ac-twitter"></i></span>
             </a>
             <a href="https://www.linkedin.com/company/386660" class="soc-network" target="_blank">
-                <span class="soc-network-icon in"><i class="icon icon-in"></i></span>
+                <span class="soc-network-icon in"><i class="sn-mini-icon ac ac-linkedin"></i></span>
             </a>
             <p> © 2015 AnyChart.Com All rights reserved.</p>
         </div>
@@ -106,13 +107,13 @@
             <div class="footer">
                 <div class="footer-inner">
                     <a href="https://www.facebook.com/AnyCharts" class="soc-network" target="_blank">
-                        <span class="soc-network-icon fb"><i class="icon icon-fb"></i></span>
+                        <span class="soc-network-icon fb"><i class="sn-mini-icon ac ac-facebook"></i></span>
                     </a>
                     <a href="https://twitter.com/AnyChart" class="soc-network" target="_blank">
-                        <span class="soc-network-icon tw"><i class="icon icon-tw"></i></span>
+                        <span class="soc-network-icon tw"><i class="sn-mini-icon ac ac-twitter"></i></span>
                     </a>
                     <a href="https://www.linkedin.com/company/386660" class="soc-network" target="_blank">
-                        <span class="soc-network-icon in"><i class="icon icon-in"></i></span>
+                        <span class="soc-network-icon in"><i class="sn-mini-icon ac ac-linkedin"></i></span>
                     </a>
                     <p> © 2015 AnyChart.Com All rights reserved.</p>
                 </div>
@@ -123,7 +124,7 @@
                 <div class="input-group search">
                     <input type="text" class="form-control" placeholder="What are you looking for?">
                     <span class="input-group-btn"><button class="btn btn-default" type="button"><span
-                            class="glyphicon glyphicon-search form-control-feedback"></span></button></span>
+                            class="ac ac-search form-control-feedback"></span></button></span>
                 </div>
             </div>
         </div>
@@ -131,7 +132,7 @@
         {% if old %}
         <div id="warning" class="warning-version alert alert-default fade in">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <i class="fa fa-exclamation-triangle"></i> You are looking old product version {{version}}. See for actual
+            <i class="ac ac-exclamation"></i> You are looking old product version {{version}}. See for actual
             information <a data-last-version="latest" href="/latest/{{url}}">{{actual-version}}</a>.
         </div>
         {% endif %}

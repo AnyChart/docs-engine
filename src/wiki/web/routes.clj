@@ -15,7 +15,8 @@
             [wiki.data.sitemap :as sitemap]
             [wiki.data.search :as search]
             [wiki.util.utils :as utils]
-            [wiki.web.tree :refer [tree-view tree-view-local]]))
+            [wiki.web.tree :refer [tree-view tree-view-local]]
+            [wiki.web.redirects :refer [wrap-redirect]]))
 
 (add-tag! :tree-view (fn [args context-map]
                        (let [entries (get context-map (keyword (first args)))]
@@ -40,6 +41,9 @@
 
 (defn offline-generator [request]
   (-> request :component :offline-generator))
+
+(defn- title-prefix [page]
+  (or (-> page :config :title-prefix) (:full_name page)))
 
 (defn- show-404 [request]
   (render-file "templates/404.selmer" {}))
@@ -73,33 +77,62 @@
       (redirect (str "/" (:key version) "/" url))
       (redirect (str "/" (:key version) "/Quick_Start")))))
 
-(defn- show-page-data [request version page]
-  (response {:url   (:url page)
-             :page  page
-             :title (:full_name page)}))
-
-(defn- show-page [request version page]
-  (let [versions (versions-data/versions (jdbc request))]
-    (render-file "templates/page.selmer" {:version        (:key version)
-                                          :actual-version (first versions)
-                                          :anychart-url   (utils/anychart-bundle-path (:key version))
-                                          :anychart-css-url (utils/anychart-bundle-css-url (:key version))
-                                          :old            (not= (first versions) (:key version))
-                                          :tree           (versions-data/tree-data (jdbc request)
+(defn- show-page [request version versions page]
+  (render-file "templates/page.selmer" {:version          (:key version)
+                                        :actual-version   (:key (first versions))
+                                        :anychart-url     (utils/anychart-bundle-path (:key version))
+                                        :anychart-css-url (utils/anychart-bundle-css-url (:key version))
+                                        :old              (not= (:key (first versions)) (:key version))
+                                        :tree             (versions-data/tree-data (jdbc request)
                                                                                    (:id version))
-                                          :url            (:url page)
-                                          :title          (:full_name page)
-                                          :page           page
-                                          :versions       versions})))
+                                        :url              (:url page)
+                                        :title            (:full_name page)
+                                        :title-prefix     (title-prefix page)
+                                        :page             page
+                                        :versions         versions}))
+
+(defn- check-folder-middleware [request]
+  (let [version-key (-> request :route-params :version)
+        url (-> request :route-params :*)
+        versions (versions-data/get-page-versions (jdbc request) url)
+        version (versions-data/current-version version-key versions)
+        page (pages-data/page-by-url (jdbc request) (:id version) url)]
+    (if page
+      (show-page request version versions page)
+      (if-let [folder (folders-data/get-folder-by-url (jdbc request) (:id version) url)]
+        (redirect (str "/" (:key version) "/" (:url folder)
+                       "/" (:default_page folder)))
+        (error-404 request)))))
 
 (defn- show-landing [request]
-  (let [version (first (versions-data/versions-full-info (jdbc request)))
-        folder (folders-data/get-folder-by-url (jdbc request)
-                                               (:id version)
-                                               "Quick_Start")
-        page (pages-data/page-by-url (jdbc request) (:id version)
-                                     (str "Quick_Start/" (:default_page folder)))]
-    (show-page request version page)))
+  (let [url "Quick_Start/Quick_Start"
+        versions (versions-data/get-page-versions (jdbc request) url)
+        version (first versions)
+        page (pages-data/page-by-url (jdbc request) (:id version) url)]
+    (if page
+      (show-page request version versions page)
+      (let [folder (folders-data/get-folder-by-url (jdbc request) (:id version) "Quick_Start")
+            page (pages-data/page-by-url (jdbc request) (:id version)
+                                         (str "Quick_Start/" (:default_page folder)))]
+        (show-page request version versions page)))))
+
+(defn- show-page-data [request version versions page]
+  (response {:url          (:url page)
+             :page         page
+             :title        (:full_name page)
+             :title-prefix (title-prefix page)
+             :versions     versions}))
+
+(defn- check-page-middleware [app]
+  (fn [request]
+    (let [version-key (-> request :route-params :version)
+          url (-> request :route-params :*)
+          versions (versions-data/get-page-versions (jdbc request) url)
+          version (versions-data/current-version version-key versions)
+          page (pages-data/page-by-url (jdbc request) (:id version) url)]
+      (if (and version versions page)
+        (app request version versions page)
+        (error-404 request)))))
 
 (defn download-zip [request version]
   (if-let [zip (versions-data/get-zip (jdbc request) (:id version))]
@@ -189,36 +222,19 @@
   (-> (response (sitemap/generate-sitemap (jdbc request)))
       (content-type "text/xml")))
 
-(defn- check-folder-middleware [app]
-  (fn [request]
-    (let [version (versions-data/version-by-key (jdbc request)
-                                                (-> request :route-params :version))
-          folder (folders-data/get-folder-by-url (jdbc request)
-                                                 (:id version)
-                                                 (-> request
-                                                     :route-params
-                                                     :*))]
-      (if folder
-        (redirect (str "/" (:key version) "/" (:url folder)
-                       "/" (:default_page folder)))
-        (if-let [page (pages-data/page-by-url (jdbc request) (:id version)
-                                              (-> request :route-params :*))]
-          (app request version page)
-          (error-404 request))))))
-
-(defn- check-page-middleware [app]
-  (fn [request]
-    (let [version (versions-data/version-by-key (jdbc request)
-                                                (-> request :route-params :version))
-          page (pages-data/page-by-url (jdbc request) (:id version)
-                                       (-> request :route-params :*))]
-      (if (and version page)
-        (app request version page)
-        (error-404 request)))))
+(defn- request-redirects [request]
+  (let [redirects (-> request :component :redirects deref)]
+    (if (empty? redirects)
+      (response "Redirects empty")
+      (response
+        (->> redirects
+            (map #(str (first %) "\t >> \t" (second %)))
+            (clojure.string/join "\n"))))))
 
 (defroutes app-routes
            (route/resources "/")
            (GET "/_update_" [] request-update)
+           (GET "/_redirects_" [] request-redirects)
            (POST "/_update_" [] request-update)
            (GET "/" [] show-landing)
            (GET "/sitemap" [] show-sitemap)
@@ -234,9 +250,10 @@
            (POST "/:version/search-data" [] (check-version-middleware search-data))
            (GET "/:version/_generate-zip_" [] (check-version-middleware generate-zip))
            (GET "/:version/download" [] (check-version-middleware download-zip))
-           (GET "/:version/*" [] (check-folder-middleware show-page))
+           (GET "/:version/*" [] check-folder-middleware)
            (route/not-found show-404))
 
 (def app (-> (routes app-routes)
              wrap-keyword-params
-             wrap-params))
+             wrap-params
+             wrap-redirect))

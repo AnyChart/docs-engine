@@ -28,34 +28,36 @@ var expandMenu = function(target) {
         var $ul = $el.parent().find(">ul");
         if ($ul.length && !$ul.is(":visible")) {
             $ul.toggle();
-            $el.find("i").removeClass('fa-folder').addClass('fa-folder-open');
+            $el.find("i").removeClass('ac-folder').addClass('ac-folder-open');
         }
     }
     $el.addClass("active");
 };
 
 $menu.find('ul').hide();
-$menu.find('a>i.fa-folder-open').removeClass('fa-folder-open').addClass('fa-folder');
-$menu.find('a>i.fa-folder').each(function() {
+$menu.find('a>i.ac-folder-open').removeClass('ac-folder-open').addClass('ac-folder');
+$menu.find('a>i.ac-folder').each(function() {
     var $this = $(this);
     var $link = $this.parent();
     var $ul = $link.parent().find(">ul");
     $link.click(function() {
         $ul.toggle();
         if ($ul.is(":visible")) {
-            $this.removeClass('fa-folder').addClass('fa-folder-open');
+            $this.removeClass('ac-folder').addClass('ac-folder-open');
         }else {
-            $this.removeClass('fa-folder-open').addClass('fa-folder');
+            $this.removeClass('ac-folder-open').addClass('ac-folder');
         }
         return false;
     });
 });
 $menu.find("a").each(function() {
-    if ($(this).find(">i.fa-file").length) {
+    if ($(this).find(">i.ac-file-text").length) {
         $(this).click(function() {
             return loadPage($(this).attr("href"));
         });
     }
 });
 
+
 expandMenu(location.pathname);
+

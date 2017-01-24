@@ -31,14 +31,14 @@
        <div class='no-overflow'>
        <iframe " style " src='//" playground "/" version "/samples/" sample-path "-iframe'></iframe></div>
        <div class='btns'>
-         <a class='btn-playground btn jsfiddle-btn' target='_blank'><i class='fa fa-jsfiddle'></i> JsFiddle</a> 
-         <a class='btn-playground btn' target='_blank' href='//" playground "/" version "/samples/" sample-path "-plain'><i class='fa fa-play'></i> Playground</a>
+         <a class='btn-playground btn jsfiddle-btn' target='_blank'><i class='ac ac-jsfiddle'></i> JsFiddle</a>
+         <a class='btn-playground btn' target='_blank' href='//" playground "/" version "/samples/" sample-path "-plain'><i class='ac ac-play'></i> Playground</a>
        </div></div>")))
 
 (defn get-code [id code scripts sample version-key]
   (condp = (count scripts)
     0 (str "(function(){
-           anychart.theme(null);\n"
+            if (anychart.hasOwnProperty('theme')) {anychart.theme(null);}\n"
            (when (and (= id 1)
                       (> (version-clj/version-compare version-key "7.9.1") 0))
              "anychart.utils.hideTooltips(true);\n")

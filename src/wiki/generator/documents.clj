@@ -22,7 +22,8 @@
                       (:title item)
                       html
                       (:last-modified item)
-                      tags))
+                      tags
+                      (:config item)))
     (let [items (:children item)]
       (when (seq items)
         (fdata/add-folder jdbc (:id version) (fix-url (str base-path "/" (:name item)))

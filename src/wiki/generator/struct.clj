@@ -1,5 +1,6 @@
 (ns wiki.generator.struct
   (:require [clojure.java.io :refer [file]]
+            [wiki.web.redirects :refer [parse-redirects]]
             [wiki.generator.git :refer [file-last-commit-date]]))
 
 (defn- title [f]
@@ -33,20 +34,21 @@
       (clojure.string/replace-first #"\A(?s)(?m)(^\{[^\}]+\})" "")
       (clojure.string/trim-newline)))
 
+(defn- read-document-config [content]
+  (when-let [doc-header (re-matches #"(?s)(?m)(^\{[^\}]+\}).*" content)]
+    (-> doc-header last read-string)))
+
 (defn- create-document [base-path item]
   (let [content (slurp item)
-        doc-header (re-matches #"(?s)(?m)(^\{[^\}]+\}).*" content)
+        config (read-document-config content)
+        page-title (title item)
         res {:name          (get-name item)
              :kind          :doc
-             :title         (title item)
-             :content       content
-             :config        {:index 1000}
+             :title         page-title
+             :content       (if config (fix-document-content content) content)
+             :config        (merge {:index 1000} config)
              :last-modified (file-last-commit-date base-path (.getAbsolutePath item))}]
-    (if doc-header
-      (-> res
-          (update :config #(merge % (-> doc-header last read-string)))
-          (update :content fix-document-content))
-      res)))
+    res))
 
 (declare build-struct)
 
@@ -93,9 +95,17 @@
                                     %))
     item))
 
+(defn- get-redirects [path]
+  (let [redirect-file (str path "/redirect.cfg")]
+    (when (.exists (file redirect-file))
+      (-> redirect-file
+          slurp
+          parse-redirects))))
+
 (defn get-struct [path]
-  (-> (build-struct [] (file path) path)
-      last
-      filter-struct
-      sort-struct
-      :children))
+  [(-> (build-struct [] (file path) path)
+       last
+       filter-struct
+       sort-struct
+       :children)
+   (get-redirects path)])

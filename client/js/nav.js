@@ -27,7 +27,7 @@ function loadPage(link) {
         $("#content").html('<div class="row">'+
                            '<div class="col-lg-17" id="article-content">' +
                                '<a class="btn btn-default btn-small github-fork pull-right hidden-xs" id="github-edit" href="https://github.com/AnyChart/docs.anychart.com">'+
-                               '<span><i class="fa fa-code-fork"></i></span> Improve this Doc'+
+                               '<span><i class="ac ac-andrews-pitchfork"></i></span> Improve this Doc'+
                                '</a>'
                            +res.page.content+'</div>'+
                             '<div id="disqus_thread" class="col-lg-17"></div>'+
@@ -36,23 +36,24 @@ function loadPage(link) {
                                 'DISQUS.reset({' +
                                 'reload: true,' +
                                 'config: function () {' +
-                                    'this.page.url = window.location.href.split("?")[0];'+
-                                    'this.page.identifier = "' + res.page.url + '";'+
-                                    'this.page.title = "' + res.page.full_name + '";'+
+                                    'this.page.url = "http://docs.anychart.com/" + version + "/" + res.page.url;' +
+                                    'this.page.identifier = "' + res.page.url + '".split("\/").join("_").split("%").join("_").toLowerCase();'+
+                                    'this.page.title = "' + res.page.url + '".split("_").join(" ").split("/").join(" - ");'+
                                     'this.language = "en";'+
                                 '}});'+
                             '})();'+
                             'tryUpdateSampleInit();' +
                             '</script>'+
-                            '<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>'+
+                            '<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="noclilow">comments powered by Disqus.</a>'+
                             '</noscript>'+
                             '  <div id="table-of-content-large" class="col-lg-6 hidden-sm hidden-xs hidden-md visible-lg"></div>'+
                            '</div>');
-        document.title = res.title + " - AnyChart JavaScript Chart Documentation ver. " + version;
+        document.title = res['title-prefix'] + " - AnyChart JavaScript Chart Documentation ver. " + version;
         $("#content").scrollTop(0);
         fixLinks();
         fixToc();
         highlightCode();
+        updateMenu(res.versions);
 
         var url = res.url;
         $("#warning a[data-last-version=latest]").attr("href", "/latest/" + url);
@@ -61,6 +62,13 @@ function loadPage(link) {
     $("#shadow").hide();
     return false;
 };
+
+function updateMenu(versions){
+    var menu = $("ul.dropdown-menu").empty();
+    versions.forEach(function(item, i, arr) {
+        menu.append("<li><a href=" + item.url + ">Version " + item.key +"</a></li>");
+    })
+}
 
 function fixLinks() {
     $("#content a").each(function() {
