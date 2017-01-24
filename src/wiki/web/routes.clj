@@ -43,7 +43,8 @@
   (-> request :component :offline-generator))
 
 (defn- title-prefix [page]
-  (or (-> page :config :title-prefix) (:full_name page)))
+  (or (-> page :config :title)
+      (-> page :url utils/url->title)))
 
 (defn- show-404 [request]
   (render-file "templates/404.selmer" {}))
