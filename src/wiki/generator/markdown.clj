@@ -144,7 +144,7 @@
     (clojure.string/replace text
                             #"\{api:([^}]+)\}([^{]+)\{api\}"
                             (fn [[_ link title]]
-                              (str "<a class='method' href='//" reference "/" api-default-version "/" link "'>" title "</a>")))))
+                              (str "<a class='method' href='//" reference "/" real-version "/" link "'>" title "</a>")))))
 
 (defn- add-tags [html tags]
   (let [tags-html  (str "<div class='tags'>" (apply str (map #(str "<span>" % "</span>") tags)) "</div>")
