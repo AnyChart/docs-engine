@@ -114,11 +114,11 @@
             <div class="row">
                 <div class="col-lg-17">
                     <button type="button" class="btn btn-default btn-blue visible-xs"><i
-                            class="glyphicon glyphicon-arrow-left"></i> Back
+                            class="ac ac-arrow-left-thin"></i> Back
                     </button>
                     <h1 class="search">
                         <button type="button" class="btn btn-default btn-blue hidden-xs"><i
-                                class="glyphicon glyphicon-arrow-left"></i> Back
+                                class="ac ac-arrow-left-thin"></i> Back
                         </button>Search results for <span>{{query}}</span></h1>
 
                     {% for r in results %}
