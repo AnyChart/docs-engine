@@ -78,7 +78,7 @@
              :user "playground_user"
              :password "pass"}
    :sphinx {:subprotocol "mysql"
-            :subname "//104.236.66.244:3312?characterEncoding=utf8&characterSetResults=utf8&maxAllowedPacket=512000"
+            :subname "//localhost:3312?characterEncoding=utf8&characterSetResults=utf8&maxAllowedPacket=512000"
             :table "docs_stg_index"}
    :redis {:pool {}
            :spec {:host "127.0.0.1" :port 6379 :db 0}}
@@ -110,6 +110,7 @@
                                     :user "pg_stg_user"
                                     :password "fuckstg"}}
                             {:redis {:spec {:host "10.132.9.26" :db 1}}}
+                            {:sphinx {:subname "//104.236.66.244:3312?characterEncoding=utf8&characterSetResults=utf8&maxAllowedPacket=512000"}}
                             {:generator {:git-ssh "/apps/keys/git"
                                          :data-dir "/apps/docs-stg/data"}}
                             {:offline-generator {:zip-dir "/apps/docs-stg/data/zip"}}
@@ -131,7 +132,8 @@
                                      :user "pg_prod_user"
                                      :password "fuckprod"}}
                              {:redis {:spec {:host "10.132.9.26" :db 1}}}
-                             {:sphinx {:table "docs_prod_index"}}
+                             {:sphinx {:subname "//104.236.66.244:3312?characterEncoding=utf8&characterSetResults=utf8&maxAllowedPacket=512000"
+                                       :table "docs_prod_index"}}
                              {:generator {:show-branches false
                                           :git-ssh "/apps/keys/git"
                                           :data-dir "/apps/docs-prod/data"
