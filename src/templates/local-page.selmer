@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>{{title}} - AnyChart JavaScript Chart Documentation ver. {{version}}</title>
+    <title>{{title}} | AnyChart Documentation ver. {{version}}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
     <link rel="icon" href="{{path|add:deps/i/anychart.ico}}" type="image/x-icon">
