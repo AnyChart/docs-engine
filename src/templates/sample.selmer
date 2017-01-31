@@ -10,10 +10,10 @@
             </script>
         </div>
     </div>
-    <div class='btns'>
+    <fieldset class='btns'>
         <a class='btn-playground btn jsfiddle-btn' target='_blank'><i class='ac ac-jsfiddle'></i> JsFiddle</a>
         <a class='btn-playground btn' target='_blank' href='//{{playground|safe}}/{{version|safe}}/samples/{{sample-path|safe}}-plain'>
             <i class='ac ac-play'></i> Playground
         </a>
-    </div>
+    </fieldset>
 </div>
