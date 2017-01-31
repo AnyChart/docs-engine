@@ -52,8 +52,14 @@ $menu.find('a>i.ac-folder').each(function() {
 });
 $menu.find("a").each(function() {
     if ($(this).find(">i.ac-file-text").length) {
-        $(this).click(function() {
-            return loadPage($(this).attr("href"));
+        $(this).click(function(e) {
+            var url = $(this).attr("href");
+            if (e.ctrlKey || e.metaKey){
+                var win = window.open(url, '_blank');
+                return false;
+            }else{
+                return loadPage(url);
+            }
         });
     }
 });

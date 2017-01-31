@@ -87,7 +87,8 @@
                                         :is-url-version   is-url-version
                                         :anychart-url     (utils/anychart-bundle-path (:key version))
                                         :anychart-css-url (utils/anychart-bundle-css-url (:key version))
-                                        :old              (not= (:key (first versions)) (:key version))
+                                        :old              (and (not= (:key (first versions)) (:key version))
+                                                               (utils/released-version? (:key version)))
                                         :tree             (versions-data/tree-data (jdbc request) (:id version))
                                         :url              (:url page)
                                         :title            (:full_name page)

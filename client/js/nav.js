@@ -28,7 +28,7 @@ function loadPage(link, needPushState) {
         $("#content").html('<div class="row">'+
                            '<div class="col-lg-17" id="article-content">' +
                                '<a class="btn btn-default btn-small github-fork pull-right hidden-xs" id="github-edit" href="https://github.com/AnyChart/docs.anychart.com">'+
-                               '<span><i class="ac ac-andrews-pitchfork"></i></span> Improve this Doc'+
+                               '<span><i class="ac ac-net"></i></span> Improve this Doc'+
                                '</a>'
                            +res.page.content+'</div>'+
                             '<div id="disqus_thread" class="col-lg-17"></div>'+

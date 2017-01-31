@@ -15,7 +15,7 @@
     <link rel="icon" href="/i/anychart.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="/main.css"/>
     <link rel="stylesheet" type="text/css" href="{{anychart-css-url}}"/>
-    <link rel="stylesheet" href="https://cdn.anychart.com/fonts/2.7.0/anychart.css">
+    <link rel="stylesheet" href="https://cdn.anychart.com/fonts/2.7.2/anychart.css">
     <link rel="apple-touch-icon" sizes="57x57" href="/icons/57.png">
     <link rel="apple-touch-icon" sizes="76x76" href="/icons/76.png">
     <link rel="apple-touch-icon" sizes="120x120" href="/icons/120.png">
@@ -34,7 +34,7 @@
 <link rel="icon" href="/i/anychart.ico" type="image/x-icon">
 <link rel="stylesheet" type="text/css" href="/main.css"/>
 <link rel="stylesheet" type="text/css" href="{{anychart-css-url}}"/>
-<link rel="stylesheet" href="https://cdn.anychart.com/fonts/2.7.0/anychart.css">
+<link rel="stylesheet" href="https://cdn.anychart.com/fonts/2.7.2/anychart.css">
 <link rel="apple-touch-icon" sizes="57x57" href="/icons/57.png">
 <link rel="apple-touch-icon" sizes="76x76" href="/icons/76.png">
 <link rel="apple-touch-icon" sizes="120x120" href="/icons/120.png">
@@ -63,7 +63,7 @@
                     <div class="btn-group">
                         <button type="button" class="btn btn-default btn-blue dropdown-toggle" data-toggle="dropdown">
                             Version {{version}} <span class="caret"></span></button>
-                        <ul class="dropdown-menu" role="menu">
+                        <ul class="dropdown-menu version-menu" role="menu">
                             {% for v in versions %}
                             <li><a href="/{{v}}/{{url}}">Version {{v}}</a></li>
                             {% endfor %}
@@ -92,7 +92,7 @@
         <div class="btn-group">
             <button type="button" class="btn btn-default btn-blue dropdown-toggle" data-toggle="dropdown">Version
                 {{version}} <span class="caret"></span></button>
-            <ul class="dropdown-menu" role="menu">
+            <ul class="dropdown-menu version-menu" role="menu">
                 {% for v in versions %}
                 <li><a href="/{{v}}/{{url}}">Version {{v}}</a></li>
                 {% endfor %}

@@ -6546,6 +6546,10 @@ section {
   color: #ff6c00;
   text-decoration: underline;
 }
+ul.version-menu {
+  max-height: 580px;
+  overflow-y: auto;
+}
 ul.menu {
   background: #f6f6f6;
   color: #fff;
