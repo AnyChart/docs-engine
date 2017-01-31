@@ -8,19 +8,20 @@ function highlightCode() {
         var href = $(this).find(".btn-playground:not(.jsfiddle-btn)").attr("href").replace(/-plain$/, "");
         $(this).find(".jsfiddle-btn").attr("href", href + "-jsfiddle");
     });
-};
+}
 
-function loadPage(link) {
+function loadPage(link, needPushState) {
+    needPushState = (typeof needPushState !== 'undefined') ?  needPushState : true;
     if (page == link) return true;
-    
     page = link;
-    window.history.pushState(null, null, link);
-
     if (link.indexOf("search?q=") != -1) {
         var query = link.substr(link.indexOf("search?q=") + "search?q=".length);
-        console.log(query);
-        searchFor(query);
+        searchFor(query, needPushState);
         return false;
+    }else{
+        if (needPushState){
+            window.history.pushState(null, null, link);
+        }
     }
     expandMenu(location.pathname);
     $.get(link + "-json", function(res) {
@@ -61,7 +62,7 @@ function loadPage(link) {
     $("#bar").hide();
     $("#shadow").hide();
     return false;
-};
+}
 
 function updateMenu(versions){
     var menu = $("ul.dropdown-menu").empty();
@@ -92,11 +93,11 @@ function fixLinks() {
             });
         }
     });
-};
+}
 
 window.onpopstate = function(e) {
     if (location.pathname == page) return;
-    loadPage(location.href);
+    loadPage(location.href, false);
 };
 
 fixLinks();

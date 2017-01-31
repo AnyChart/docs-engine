@@ -3,21 +3,45 @@
 <head>
     <title>{{query}} search | AnyChart Documentation ver. {{version}}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="{{query}} search  | AnyChart Documentation ver. {{version}}"/>
+    <meta name="description" content="Search page"/>
+    <meta property="og:description" content="Search page"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:site_name" content="AnyChart Documentation"/>
+    <meta property="article:publisher" content="https://www.facebook.com/AnyCharts"/>
+    <meta property="fb:admins" content="704106090"/>
+    <meta property="og:locale" content="en_US"/>
+    <!--[if IE]>
     <link rel="icon" href="/i/anychart.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="/main.css"/>
+    <link rel="stylesheet" type="text/css" href="{{anychart-css-url}}"/>
     <link rel="stylesheet" href="https://cdn.anychart.com/fonts/2.7.0/anychart.css">
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-         <![endif]-->
     <link rel="apple-touch-icon" sizes="57x57" href="/icons/57.png">
     <link rel="apple-touch-icon" sizes="76x76" href="/icons/76.png">
     <link rel="apple-touch-icon" sizes="120x120" href="/icons/120.png">
     <link rel="apple-touch-icon" sizes="152x152" href="/icons/152.png">
     <link rel="apple-touch-icon" sizes="167x167" href="/icons/167.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/icons/180.png">
+    <![endif]-->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+    <script id="anychart_script" src="{{anychart-url}}" async></script>
 </head>
 <body>
+<!--[if !IE]> -->
+<link rel="icon" href="/i/anychart.ico" type="image/x-icon">
+<link rel="stylesheet" type="text/css" href="/main.css"/>
+<link rel="stylesheet" type="text/css" href="{{anychart-css-url}}"/>
+<link rel="stylesheet" href="https://cdn.anychart.com/fonts/2.7.0/anychart.css">
+<link rel="apple-touch-icon" sizes="57x57" href="/icons/57.png">
+<link rel="apple-touch-icon" sizes="76x76" href="/icons/76.png">
+<link rel="apple-touch-icon" sizes="120x120" href="/icons/120.png">
+<link rel="apple-touch-icon" sizes="152x152" href="/icons/152.png">
+<link rel="apple-touch-icon" sizes="167x167" href="/icons/167.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/180.png">
+<!-- <![endif]-->
 <header>
     <div class="container-fluid">
         <div class="row">
@@ -64,7 +88,7 @@
 
 <div id="shadow" class=""></div>
 <div id="bar" class="">
-    <div class="helpers visible-xs bordered">
+    <div class="helpers visible-830 bordered">
         <div class="btn-group">
             <button type="button" class="btn btn-default btn-blue dropdown-toggle" data-toggle="dropdown">Version
                 {{version}} <span class="caret"></span></button>
@@ -85,6 +109,20 @@
     <ul class="menu">
         {% tree-view tree %}
     </ul>
+    <div class="footer">
+        <div class="footer-inner">
+            <a href="https://www.facebook.com/AnyCharts" class="soc-network" target="_blank">
+                <span class="soc-network-icon fb"><i class="sn-mini-icon ac ac-facebook"></i></span>
+            </a>
+            <a href="https://twitter.com/AnyChart" class="soc-network" target="_blank">
+                <span class="soc-network-icon tw"><i class="sn-mini-icon ac ac-twitter"></i></span>
+            </a>
+            <a href="https://www.linkedin.com/company/386660" class="soc-network" target="_blank">
+                <span class="soc-network-icon in"><i class="sn-mini-icon ac ac-linkedin"></i></span>
+            </a>
+            <p> © {% now yyyy %} AnyChart.Com All rights reserved.</p>
+        </div>
+    </div>
 </div>
 
 <div class="wrapper container-fluid">
@@ -100,6 +138,20 @@
                 </div>
             </div>
             <ul class="menu">{% tree-view tree %}</ul>
+            <div class="footer">
+                <div class="footer-inner">
+                    <a href="https://www.facebook.com/AnyCharts" class="soc-network" target="_blank">
+                        <span class="soc-network-icon fb"><i class="sn-mini-icon ac ac-facebook"></i></span>
+                    </a>
+                    <a href="https://twitter.com/AnyChart" class="soc-network" target="_blank">
+                        <span class="soc-network-icon tw"><i class="sn-mini-icon ac ac-twitter"></i></span>
+                    </a>
+                    <a href="https://www.linkedin.com/company/386660" class="soc-network" target="_blank">
+                        <span class="soc-network-icon in"><i class="sn-mini-icon ac ac-linkedin"></i></span>
+                    </a>
+                    <p> © {% now yyyy %} AnyChart.Com All rights reserved.</p>
+                </div>
+            </div>
         </div>
         <div class="row helpers hidden-lg hidden-md">
             <div class="col-xs-24 col-sm-12">
@@ -112,10 +164,10 @@
         </div>
         <section class="col-md-16 col-lg-18 col-lg-offset-6 col-md-offset-8" id="content">
             <div class="row">
-                <div class="col-lg-17">
-                    <button type="button" class="btn btn-default btn-blue visible-xs"><i
-                            class="ac ac-arrow-left-thin"></i> Back
-                    </button>
+                <div class="col-lg-17" id="article-content">
+                    <!--<button type="button" class="btn btn-default btn-blue visible-xs"><i-->
+                            <!--class="ac ac-arrow-left-thin"></i> Back-->
+                    <!--</button>-->
                     <h1 class="search">
                         <button type="button" class="btn btn-default btn-blue hidden-xs"><i
                                 class="ac ac-arrow-left-thin"></i> Back
@@ -130,6 +182,22 @@
                     Nothing found
                     {% endfor %}
                 </div>
+                <div id="disqus_thread" class="col-lg-17" style="display: none;"></div>
+                <script>
+                    var disqus_config = function () {
+                        this.page.url = "http://docs.anychart.com/{{version}}/{{url}}";
+                        this.page.identifier = "search";
+                        this.page.title = "Search page";
+                    };
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                        var d = document, s = d.createElement('script');
+                        s.src = '//anychart-docs.disqus.com/embed.js';
+                        s.setAttribute('data-timestamp', +new Date());
+                        (d.head || d.body).appendChild(s);
+                    })();
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
+                </noscript>
             </div>
         </section>
     </div>
@@ -137,8 +205,38 @@
 
 <script type="text/javascript">
     window['version'] = '{{version}}';
+    window['isUrlVersion'] = {% if is-url-version %}true{% else %}false{% endif %};
 </script>
-<script type="text/javascript" src="/main.min.js"></script>
+<script id="main_script" type="text/javascript" src="/main.min.js"></script>
+<script type="text/javascript">
+    var tryUpdateSampleInit = function(){
+        var anychartScriptIsLoad;
+        var mainScriptIsLoad;
+        var updateSampleInit = function(){
+            if( anychartScriptIsLoad == false) return;
+            if( mainScriptIsLoad == false) return;
+            for( var i = 1; typeof window["sampleInit" + i] !== 'undefined'; i++){
+                window["sampleInit" + i]();
+                delete window["sampleInit" + i];
+            }
+        };
+        anychartScriptIsLoad = typeof anychart !== 'undefined';
+        mainScriptIsLoad = typeof $ !== 'undefined';
+        if (anychartScriptIsLoad && mainScriptIsLoad){
+            updateSampleInit();
+        }else{
+            anychart_script.onload = function(){
+                anychartScriptIsLoad = true;
+                updateSampleInit();
+            };
+            main_script.onload = function(){
+                mainScriptIsLoad = true;
+                updateSampleInit();
+            };
+        }
+    };
+    tryUpdateSampleInit();
+</script>
 <script type="text/javascript">
     initSearch();
 </script>

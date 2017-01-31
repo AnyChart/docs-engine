@@ -15,16 +15,16 @@ var expandMenu = function(target) {
     target = target.split("/");
     var path = [];
     for (var i = target.length - 1; i >= 0; i--) {
-        if (target[i] == version)
-            break;
-        path.push(target[i]);
+        if (target[i] == version) break;
+        else if (target[i] != "") path.push(target[i]);
     }
     path = path.reverse();
     var $el;
-    var str = "/" + version;
+    var str = "";
     for (var i = 0; i < path.length; i++) {
         str += "/" + path[i];
-        $el = $menu.find("a[href='"+str+"']");
+        // for both links: /Quick_Start/Quick_start - default page and /7.12.0/Quick_Start/Quick_Start - version page
+        $el = $menu.find("a[href='"+str+"'], a[href='"+ "/" + version + str+"']");
         var $ul = $el.parent().find(">ul");
         if ($ul.length && !$ul.is(":visible")) {
             $ul.toggle();

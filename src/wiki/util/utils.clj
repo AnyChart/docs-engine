@@ -1,5 +1,6 @@
 (ns wiki.util.utils
-  (:require [clojure.string :as s]))
+  (:require [clojure.string :as s])
+  (import [org.jsoup Jsoup]))
 
 (defn released-version? [version-key]
   (re-matches #"^\d+\.\d+\.\d+$" version-key))
@@ -20,3 +21,9 @@
                 (s/split #"/")
                 reverse)]
     (s/join " | " parts )))
+
+(defn remove-tags
+  "subs - for optimization to not parse all html"
+  [html]
+  (let [replaced-html (.text (Jsoup/parse (subs html 0 (min 1000 (count html)))))]
+    (subs replaced-html 0 (min 155 (count replaced-html)))))

@@ -3,9 +3,16 @@
 <head>
     <title>{{title-prefix}} | AnyChart Documentation ver. {{version}}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% if page.tags %}
-    <meta name="keywords" content="{{page.tags|join:", "}}">
-    {% endif %}
+    <meta property="og:title" content="{{title-prefix}} | AnyChart Documentation ver. {{version}}"/>
+    <meta name="description" content="{{description}}"/>
+    <meta property="og:description" content="{{description}}"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:site_name" content="AnyChart Documentation"/>
+    <meta property="article:publisher" content="https://www.facebook.com/AnyCharts"/>
+    <meta property="fb:admins" content="704106090"/>
+    <meta property="og:locale" content="en_US"/>
+    {% if page.tags %}<meta name="keywords" content="{{page.tags|join:", "}}">{% endif %}
+    <link rel="canonical" href="http://docs.anychart.com/{{url}}">
     <!--[if IE]>
     <link rel="icon" href="/i/anychart.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="/main.css"/>
@@ -115,7 +122,7 @@
             <a href="https://www.linkedin.com/company/386660" class="soc-network" target="_blank">
                 <span class="soc-network-icon in"><i class="sn-mini-icon ac ac-linkedin"></i></span>
             </a>
-            <p> © 2015 AnyChart.Com All rights reserved.</p>
+            <p> © {% now yyyy %} AnyChart.Com All rights reserved.</p>
         </div>
     </div>
 </div>
@@ -144,7 +151,7 @@
                     <a href="https://www.linkedin.com/company/386660" class="soc-network" target="_blank">
                         <span class="soc-network-icon in"><i class="sn-mini-icon ac ac-linkedin"></i></span>
                     </a>
-                    <p> © 2015 AnyChart.Com All rights reserved.</p>
+                    <p> © {% now yyyy %} AnyChart.Com All rights reserved.</p>
                 </div>
             </div>
         </div>
@@ -195,11 +202,13 @@
     </div>
 </div>
 <script type="text/javascript">
-    var currentUrl = encodeURI("/{{version}}/" + '{{url}}');
-    if (location.pathname != currentUrl && window.history){
-        window.history.replaceState(null, null, currentUrl);
-    }
     window['version'] = '{{version}}';
+    window['isUrlVersion'] = {% if is-url-version %}true{% else %}false{% endif %};
+    // change location for / landing page
+    if (location.pathname != encodeURI("/{{version}}/" + '{{url}}') &&
+         location.pathname != encodeURI("/{{url}}") && window.history){
+        window.history.replaceState(null, null, encodeURI("/{{url}}"));
+    }
 </script>
 <script id="main_script" type="text/javascript" src="/main.min.js" async></script>
 <script type="text/javascript">

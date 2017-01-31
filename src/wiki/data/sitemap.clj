@@ -24,6 +24,7 @@
                        [(str "https://docs.anychart.com/" (:key version) "/"
                              (:url entry))]}
                       {:tag :priority :content [(format "%.1f" priority)]}
+                      {:tag :changefreq :content ["monthly"]}
                       {:tag :lastmod :content [(f/unparse formatter
                                                           (c/from-long (* 1000 (:last_modified entry))))]}]})
          entries)))

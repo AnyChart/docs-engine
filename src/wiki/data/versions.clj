@@ -107,19 +107,22 @@
                                             [:= :hidden false]))))]
     (javax.xml.bind.DatatypeConverter/parseHexBinary hex)))
 
-(defn get-page-versions [jdbc url]
-  (let [versions (query jdbc (-> (select :versions.key :versions.id, :v.url)
-                               (from :versions)
-                               (left-join [(-> (select :versions.key :versions.id :pages.url)
-                                               (from :versions)
-                                               (join :pages [:= :versions.id :pages.version_id])
-                                               (where [:and [:= :pages.url url] [:= :versions.hidden false]])) :v]
-                                          [:= :versions.id :v.id])))
-        sorted-versions (sort (comp - #(version-compare (:key %1) (:key %2))) versions)
-        url-versions (map #(assoc % :url (str "/" (:key %)
-                                            (when (:url %) (str "/" (:url %)))))
-                        sorted-versions)]
-    url-versions))
+(defn get-page-versions
+  ([jdbc url short-url]
+   (let [versions (query jdbc (-> (select :versions.key :versions.id, :v.url)
+                                  (from :versions)
+                                  (left-join [(-> (select :versions.key :versions.id :pages.url)
+                                                  (from :versions)
+                                                  (join :pages [:= :versions.id :pages.version_id])
+                                                  (where [:and [:or [:= :pages.url url] [:= :pages.url short-url]] [:= :versions.hidden false]])) :v]
+                                             [:= :versions.id :v.id])))
+         sorted-versions (sort (comp - #(version-compare (:key %1) (:key %2))) versions)
+         url-versions (map #(assoc % :url (str "/" (:key %)
+                                               (when (:url %) (str "/" (:url %)))))
+                           sorted-versions)]
+     url-versions))
+  ([jdbc url]
+    (get-page-versions jdbc url url)))
 
 (defn current-version [version-key versions]
   (first (filter #(= version-key (:key %)) versions)))
