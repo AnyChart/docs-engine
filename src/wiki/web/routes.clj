@@ -154,14 +154,16 @@
                           (-> request :component :sphinx :config :table))))
 
 (defn- search-page [request version & [versions url is-url-version]]
-  (render-file "templates/search.selmer" {:version  (:key version)
-                                          :anychart-url     (utils/anychart-bundle-path (:key version))
-                                          :anychart-css-url (utils/anychart-bundle-css-url (:key version))
-                                          :is-url-version  is-url-version
-                                          :tree     (versions-data/tree-data (jdbc request) (:id version))
-                                          :query    (-> request :params :q)
-                                          :versions (versions-data/versions (jdbc request))
-                                          :results  (search-results request version)}))
+  (if-let [query (-> request :params :q)]
+    (render-file "templates/search.selmer" {:version         (:key version)
+                                           :anychart-url     (utils/anychart-bundle-path (:key version))
+                                           :anychart-css-url (utils/anychart-bundle-css-url (:key version))
+                                           :is-url-version   is-url-version
+                                           :tree             (versions-data/tree-data (jdbc request) (:id version))
+                                           :query            query
+                                           :versions         (versions-data/versions (jdbc request))
+                                           :results          (search-results request version)})
+    (error-404 request)))
 
 (defn- search-data [request version & [versions url is-url-version]]
   (response (search-results request version)))
