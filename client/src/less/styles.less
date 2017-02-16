@@ -317,6 +317,14 @@ ul.menu a:hover .fa.fa-file {
   overflow-y: scroll;
 }
 
+#table-of-content-large{
+  position: fixed;
+  height: 100%;
+  top: 0;
+  padding-top: 120px;
+  padding-bottom: 85px;
+}
+
 #content ul.table_of_content, ul.table_of_content {
   list-style: none;
   margin: 0;
@@ -324,6 +332,8 @@ ul.menu a:hover .fa.fa-file {
   border-left: none;
   font-size: 14px;
   line-height: normal;
+  max-height: 100%;
+  overflow-y: auto;
 }
 
 #content ul.table_of_content li {
@@ -1064,8 +1074,6 @@ a.soc-network:hover .soc-network-icon.in {
 }
 @media (min-width: 1200px) {
   ul.table_of_content {
-    position: fixed;
-    top: 120px;
     max-width: 270px;
   }
 

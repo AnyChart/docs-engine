@@ -47,7 +47,7 @@ function loadPage(link, needPushState) {
                             '</script>'+
                             '<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="noclilow">comments powered by Disqus.</a>'+
                             '</noscript>'+
-                            '  <div id="table-of-content-large" class="col-lg-6 hidden-sm hidden-xs hidden-md visible-lg"></div>'+
+                            '  <div class="col-lg-6 hidden-sm hidden-xs hidden-md visible-lg"><div id="table-of-content-large"></div></div>'+
                            '</div>');
         document.title = res['title-prefix'] + " | AnyChart Documentation ver. " + version;
         $("#content").scrollTop(0);
@@ -75,10 +75,10 @@ function fixLinks() {
     $("#content a").each(function() {
         var $this = $(this);
         if ($this.attr("href") && $this.attr("href").match(/^[a-zA-Z]/gi)) {
-            if ($this.attr("href").indexOf("#") == 0) return;
+            if ($this.attr("href").indexOf("#") >= 0) return;
             if ($this.attr("href").indexOf("http://") == 0) return;
             if ($this.attr("href").indexOf("https://") == 0) return;
-    
+
             $this.click(function() {
                 var res = false;
                 try {

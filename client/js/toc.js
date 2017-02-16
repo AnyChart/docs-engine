@@ -22,8 +22,8 @@ function fixToc() {
         idx++;
 
     var $next = $($items.get(idx));
-    
-    $("div.wrapper.container-fluid>div.row>div.visible-lg").html('');
+
+    $("#table-of-content-large").html('');
     if ($next.prop("tagName").toLowerCase() == "ul") {
         $next.addClass("table_of_content");
         $next.find("li").addClass("main");
