@@ -64,7 +64,9 @@
                 <div class="pull-right helpers hidden-830">
                     <div class="btn-group">
                         <button type="button" class="btn btn-default btn-blue dropdown-toggle" data-toggle="dropdown">
-                            Version {{version}} <span class="caret"></span></button>
+                            <span class="version-label">Version {{version}}</span>
+                            <span class="caret"></span>
+                        </button>
                         <ul class="dropdown-menu version-menu" role="menu">
                             {% for v in versions %}
                             <li><a href="{{v.url}}">Version {{v.key}}</a></li>
@@ -92,8 +94,10 @@
 <div id="bar" class="">
     <div class="helpers visible-830 bordered">
         <div class="btn-group">
-            <button type="button" class="btn btn-default btn-blue dropdown-toggle" data-toggle="dropdown">Version
-                {{version}} <span class="caret"></span></button>
+            <button type="button" class="btn btn-default btn-blue dropdown-toggle" data-toggle="dropdown">
+                <span class="version-label">Version {{version}}</span>
+                <span class="caret"></span>
+            </button>
             <ul class="dropdown-menu version-menu" role="menu">
                 {% for v in versions %}
                 <li><a href="{{v.url}}">Version {{v.key}}</a></li>
