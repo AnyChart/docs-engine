@@ -30,7 +30,9 @@
                  [markdown-clj "0.9.89"]
                  ;; filesystem
                  [me.raynes/fs "1.4.6"]
-                 [cpath-clj "0.1.2"]]
+                 [cpath-clj "0.1.2"]
+
+                 [com.googlecode.htmlcompressor/htmlcompressor "1.5.2"]]
   :plugins [[lein-ancient "0.6.10"]]
   :main wiki.core
   :target-path "target/%s"

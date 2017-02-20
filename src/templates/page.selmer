@@ -34,9 +34,9 @@
 <body>
 <!--[if !IE]> -->
 <link rel="icon" href="/i/anychart.ico" type="image/x-icon">
-<link rel="stylesheet" type="text/css" href="/main.css"/>
-<link rel="stylesheet" type="text/css" href="{{anychart-css-url}}"/>
-<link rel="stylesheet" href="https://cdn.anychart.com/fonts/2.7.2/anychart.css">
+<link rel="stylesheet" type="text/css" href="/main.css" lazyload/>
+<link rel="stylesheet" type="text/css" href="{{anychart-css-url}}" lazyload/>
+<link rel="stylesheet" href="https://cdn.anychart.com/fonts/2.7.2/anychart.css" lazyload>
 <link rel="apple-touch-icon" sizes="57x57" href="/icons/57.png">
 <link rel="apple-touch-icon" sizes="76x76" href="/icons/76.png">
 <link rel="apple-touch-icon" sizes="120x120" href="/icons/120.png">
@@ -246,23 +246,10 @@
     };
     tryUpdateSampleInit();
 </script>
-<!-- Google Tag Manager -->
-<noscript>
-    <iframe src="//www.googletagmanager.com/ns.html?id=GTM-5B8NXZ"
-            height="0" width="0" style="display:none;visibility:hidden"></iframe>
-</noscript>
-<script>(function (w, d, s, l, i) {
-    w[l] = w[l] || [];
-    w[l].push({
-        'gtm.start': new Date().getTime(), event: 'gtm.js'
-    });
-    var f = d.getElementsByTagName(s)[0],
-            j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
-    j.async = true;
-    j.src =
-            '//www.googletagmanager.com/gtm.js?id=' + i + dl;
-    f.parentNode.insertBefore(j, f);
-})(window, document, 'script', 'dataLayer', 'GTM-5B8NXZ');</script>
-<!-- End Google Tag Manager -->
+
+{% if is-ga-speed-insights %}
+{% include "templates/google-analytics.selmer" %}
+{% endif %}
+
 </body>
 </html>

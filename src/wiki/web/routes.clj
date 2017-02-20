@@ -16,7 +16,8 @@
             [wiki.data.search :as search]
             [wiki.util.utils :as utils]
             [wiki.web.tree :refer [tree-view tree-view-local]]
-            [wiki.web.redirects :refer [wrap-redirect]]))
+            [wiki.web.redirects :refer [wrap-redirect]])
+  (:import (com.googlecode.htmlcompressor.compressor HtmlCompressor)))
 
 (add-tag! :tree-view (fn [args context-map]
                        (let [entries (get context-map (keyword (first args)))]
@@ -82,20 +83,22 @@
       (redirect (str "/" (:key version) "/Quick_Start")))))
 
 (defn- show-page [request version versions page is-url-version]
-  (render-file "templates/page.selmer" {:version          (:key version)
-                                        :actual-version   (:key (first versions))
-                                        :is-url-version   is-url-version
-                                        :anychart-url     (utils/anychart-bundle-path (:key version))
-                                        :anychart-css-url (utils/anychart-bundle-css-url (:key version))
-                                        :old              (and (not= (:key (first versions)) (:key version))
-                                                               (utils/released-version? (:key version)))
-                                        :tree             (versions-data/tree-data (jdbc request) (:id version))
-                                        :url              (:url page)
-                                        :title            (:full_name page)
-                                        :title-prefix     (title-prefix page)
-                                        :description      (utils/remove-tags (:content page))
-                                        :page             page
-                                        :versions         versions}))
+  (let [page (render-file "templates/page.selmer" {:version              (:key version)
+                                                   :actual-version       (:key (first versions))
+                                                   :is-url-version       is-url-version
+                                                   :anychart-url         (utils/anychart-bundle-path (:key version))
+                                                   :anychart-css-url     (utils/anychart-bundle-css-url (:key version))
+                                                   :old                  (and (not= (:key (first versions)) (:key version))
+                                                                              (utils/released-version? (:key version)))
+                                                   :tree                 (versions-data/tree-data (jdbc request) (:id version))
+                                                   :url                  (:url page)
+                                                   :title                (:full_name page)
+                                                   :title-prefix         (title-prefix page)
+                                                   :description          (utils/remove-tags (:content page))
+                                                   :page                 page
+                                                   :versions             versions
+                                                   :is-ga-speed-insights (:is-ga-speed-insights request)})]
+    (.compress (HtmlCompressor.) page)))
 
 (defn- show-landing [request]
   (let [url "Quick_Start/Quick_Start"
@@ -155,14 +158,14 @@
 
 (defn- search-page [request version & [versions url is-url-version]]
   (if-let [query (-> request :params :q)]
-    (render-file "templates/search.selmer" {:version         (:key version)
-                                           :anychart-url     (utils/anychart-bundle-path (:key version))
-                                           :anychart-css-url (utils/anychart-bundle-css-url (:key version))
-                                           :is-url-version   is-url-version
-                                           :tree             (versions-data/tree-data (jdbc request) (:id version))
-                                           :query            query
-                                           :versions         (versions-data/versions (jdbc request))
-                                           :results          (search-results request version)})
+    (render-file "templates/search.selmer" {:version          (:key version)
+                                            :anychart-url     (utils/anychart-bundle-path (:key version))
+                                            :anychart-css-url (utils/anychart-bundle-css-url (:key version))
+                                            :is-url-version   is-url-version
+                                            :tree             (versions-data/tree-data (jdbc request) (:id version))
+                                            :query            query
+                                            :versions         (versions-data/versions (jdbc request))
+                                            :results          (search-results request version)})
     (error-404 request)))
 
 (defn- search-data [request version & [versions url is-url-version]]
@@ -254,7 +257,15 @@
            (GET "/*" [] (check-version-middleware-by-url show-page-middleware))
            (route/not-found show-404))
 
+(defn wrap-google-analytics-optimize [handler]
+  (fn [request]
+    (let [user-agent (get-in request [:headers "user-agent"])
+          is-ga-speed-insights (.contains (.toLowerCase user-agent)
+                                          (.toLowerCase "Speed Insights"))]
+      (handler (assoc request :is-ga-speed-insights is-ga-speed-insights)))))
+
 (def app (-> (routes app-routes)
              wrap-keyword-params
              wrap-params
-             wrap-redirect))
+             wrap-redirect
+             wrap-google-analytics-optimize))
