@@ -32,6 +32,8 @@
                  [me.raynes/fs "1.4.6"]
                  [cpath-clj "0.1.2"]
 
+                 [criterium "0.4.4"]
+                 ;; optimizations
                  [com.googlecode.htmlcompressor/htmlcompressor "1.5.2"]]
   :plugins [[lein-ancient "0.6.10"]]
   :main wiki.core

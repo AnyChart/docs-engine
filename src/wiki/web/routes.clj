@@ -16,8 +16,10 @@
             [wiki.data.search :as search]
             [wiki.util.utils :as utils]
             [wiki.web.tree :refer [tree-view tree-view-local]]
-            [wiki.web.redirects :refer [wrap-redirect]])
-  (:import (com.googlecode.htmlcompressor.compressor HtmlCompressor)))
+            [wiki.web.redirects :refer [wrap-redirect]]
+            [criterium.core :refer [bench]])
+  (:import (com.googlecode.htmlcompressor.compressor HtmlCompressor ClosureJavaScriptCompressor)
+           (com.google.javascript.jscomp CompilationLevel)))
 
 (add-tag! :tree-view (fn [args context-map]
                        (let [entries (get context-map (keyword (first args)))]
@@ -97,8 +99,13 @@
                                                    :description          (utils/remove-tags (:content page))
                                                    :page                 page
                                                    :versions             versions
-                                                   :is-ga-speed-insights (:is-ga-speed-insights request)})]
-    (.compress (HtmlCompressor.) page)))
+                                                   :is-ga-speed-insights (:is-ga-speed-insights request)})
+        html-compressor (HtmlCompressor.)]
+    (.setRemoveIntertagSpaces html-compressor true)
+    (.setRemoveQuotes html-compressor true)
+    ;(.setJavaScriptCompressor html-compressor (ClosureJavaScriptCompressor. CompilationLevel/SIMPLE_OPTIMIZATIONS))
+    ;(.setCompressJavaScript html-compressor true)
+    (.compress html-compressor page)))
 
 (defn- show-landing [request]
   (let [url "Quick_Start/Quick_Start"
