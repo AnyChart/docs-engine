@@ -247,7 +247,7 @@
     tryUpdateSampleInit();
 </script>
 
-{% if is-ga-speed-insights %}
+{% if not is-ga-speed-insights %}
 {% include "templates/google-analytics.selmer" %}
 {% endif %}
 
