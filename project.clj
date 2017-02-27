@@ -6,7 +6,7 @@
                  [clj-time "0.11.0"]
                  [com.climate/claypoole "1.1.3"]
                  ;; templates
-                 [selmer "1.0.4"]
+                 [selmer "1.10.6"]
                  ;; html
                  [enlive "1.1.6"]
                  [org.apache.commons/commons-lang3 "3.4"]

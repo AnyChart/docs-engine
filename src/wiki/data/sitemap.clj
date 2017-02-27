@@ -21,19 +21,14 @@
     (map (fn [entry]
            {:tag :url
             :content [{:tag :loc :content
-                       [(str "https://docs.anychart.com/" (:key version) "/"
-                             (:url entry))]}
+                       [(str "https://docs.anychart.com/" (:url entry))]}
                       {:tag :priority :content [(format "%.1f" priority)]}
                       {:tag :changefreq :content ["monthly"]}
                       {:tag :lastmod :content [(f/unparse formatter
                                                           (c/from-long (* 1000 (:last_modified entry))))]}]})
          entries)))
 
-(defn- landing-entry [])
-
 (defn generate-sitemap [jdbc]
   (with-out-str
     (emit {:tag :urlset :attrs {:xmlns "http://www.sitemaps.org/schemas/sitemap/0.9"}
-           :content (apply concat (map-indexed (fn [idx val]
-                                                 (generate-version-sitemap jdbc idx val))
-                                               (vdata/versions-full-info jdbc)))})))
+           :content (generate-version-sitemap jdbc 0 (first (vdata/versions-full-info jdbc)))})))

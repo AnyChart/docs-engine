@@ -11,7 +11,7 @@
     <meta property="article:publisher" content="https://www.facebook.com/AnyCharts"/>
     <meta property="fb:admins" content="704106090"/>
     <meta property="og:locale" content="en_US"/>
-    {% if page.tags %}<meta name="keywords" content="{{page.tags|join:", "}}">{% endif %}
+    {% if page.tags|not-empty %}<meta name="keywords" content="{{page.tags|join:", "}}">{% endif %}
     <link rel="canonical" href="http://docs.anychart.com/{{url}}">
     <!--[if IE]>
     <link rel="icon" href="/i/anychart.ico" type="image/x-icon">
