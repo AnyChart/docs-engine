@@ -12,6 +12,7 @@
     <meta property="fb:admins" content="704106090"/>
     <meta property="og:locale" content="en_US"/>
     {% if page.tags|not-empty %}<meta name="keywords" content="{{page.tags|join:", "}}">{% endif %}
+    <meta name="yandex-verification" content="c5fb5d43a81ea360"/>
     <link rel="canonical" href="http://docs.anychart.com/{{url}}">
     <!--[if IE]>
     <link rel="icon" href="/i/anychart.ico" type="image/x-icon">
