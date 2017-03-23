@@ -126,18 +126,6 @@
          text))
      state]))
 
-(defn- code-shifted? [text]
-  (every? #(re-find #"(^\t\S)|(^\s{4}\S)" %)
-          (clojure.string/split-lines text)))
-
-(defn- code-transformer [text state]
-  (if (and (or (:code state) (:codeblock state))
-           (code-shifted? text))
-    [(-> text
-         (clojure.string/replace #"(?m)^\t" "")
-         (clojure.string/replace #"(?m)^\s{4}" "")) state]
-    [text state]))
-
 (defn- add-api-links [text version reference api-versions api-default-version]
   (let [real-version (if (some #{version} api-versions)
                        version api-default-version)]
@@ -183,8 +171,7 @@
                                     :replacement-transformers (concat [(branch-name-transformer version)
                                                                        (image-checker notifier page-url version)]
                                                                       transformer-vector
-                                                                      [(sample-transformer (atom 0) notifier page-url version samples playground)
-                                                                       code-transformer]))
+                                                                      [(sample-transformer (atom 0) notifier page-url version samples playground)]))
                  (add-api-links version reference api-versions api-default-version))
         html-tags (if (empty? tags) html
                                     (add-tags html tags))]
