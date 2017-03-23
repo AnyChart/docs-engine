@@ -96,7 +96,7 @@
                                                    :url                  (:url page)
                                                    :title                (:full_name page)
                                                    :title-prefix         (title-prefix page)
-                                                   :description          (utils/remove-tags (:content page))
+                                                   :description          (utils/page-description (:content page))
                                                    :page                 page
                                                    :versions             versions
                                                    :is-ga-speed-insights (:is-ga-speed-insights request)})
