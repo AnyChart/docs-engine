@@ -21,9 +21,10 @@
                  [com.taoensso/timbre "4.8.0"]
                  ;; databases
                  [com.taoensso/carmine "2.15.1"]
-                 [org.clojure/java.jdbc "0.6.1"]
+                 ;; there are some problems with new jdbc using sphinx
+                 [org.clojure/java.jdbc "0.3.6"]
+                 [mysql/mysql-connector-java "5.1.36"]
                  [postgresql/postgresql "9.3-1102.jdbc41"]
-                 [mysql/mysql-connector-java "6.0.6"]
                  [clojure.jdbc/clojure.jdbc-c3p0 "0.3.2"]
                  [honeysql "0.8.2"]
                  ;; markdown
