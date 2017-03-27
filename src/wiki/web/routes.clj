@@ -94,6 +94,7 @@
                                                                               (utils/released-version? (:key version)))
                                                    :tree                 (versions-data/tree-data (jdbc request) (:id version))
                                                    :url                  (:url page)
+                                                   :image-url            (utils/name->url (:url page))
                                                    :title                (:full_name page)
                                                    :title-prefix         (title-prefix page)
                                                    :description          (utils/page-description (:content page))

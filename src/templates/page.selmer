@@ -6,6 +6,7 @@
     <meta property="og:title" content="{{title-prefix}} | AnyChart Documentation ver. {{version}}"/>
     <meta name="description" content="{{description}}"/>
     <meta property="og:description" content="{{description}}"/>
+    <meta property="og:image" content="http://static.anychart.com/docs/images/{{image-url}}.png"/>
     <meta property="og:type" content="article"/>
     <meta property="og:site_name" content="AnyChart Documentation"/>
     <meta property="article:publisher" content="https://www.facebook.com/AnyCharts"/>

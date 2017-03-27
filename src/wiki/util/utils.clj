@@ -2,6 +2,17 @@
   (:require [clojure.string :as s])
   (import [org.jsoup Jsoup]))
 
+(defn name->url [name]
+  (-> name
+      (clojure.string/replace #"^/" "")
+      (clojure.string/replace #"/" "-")
+      (clojure.string/replace #", " "-")
+      (clojure.string/replace #",_" "-")
+      (clojure.string/replace #"," "-")
+      (clojure.string/replace #" " "-")
+      (clojure.string/replace #"_" "-")
+      s/lower-case))
+
 (defn released-version? [version-key]
   (re-matches #"^\d+\.\d+\.\d+$" version-key))
 

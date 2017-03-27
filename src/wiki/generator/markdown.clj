@@ -6,6 +6,7 @@
             [taoensso.timbre :as timbre :refer [info error]]
             [wiki.data.playground :as pg-data]
             [wiki.components.notifier :as notifications]
+            [wiki.generator.phantom.core :as phantom]
             [version-clj.core :as version-clj]))
 
 (defn get-tags [text]
@@ -54,7 +55,7 @@
 
 (defn get-wrapped-code [id code scripts sample version-key]
   (str "sampleInit" id " = function(){"
-       (get-code id code scripts sample version-key )
+       (get-code id code scripts sample version-key)
        "}"))
 
 (defn build-sample-div [notifier page-url id version samples playground sample-path custom-settings]
@@ -68,7 +69,7 @@
                    (:height custom-settings)
                    (str (:height custom-settings) "px"))
                  "400px")
-        div-style  (str "style='width:" width ";'")
+        div-style (str "style='width:" width ";'")
         style (str "style='position:relative;margin:0px;height:" height ";'")
         url (str "/samples/" (StringEscapeUtils/unescapeHtml4 sample-path))
         ;sample (pg-data/sample-by-url pg-jdbc (:id pg-version) url)
@@ -102,22 +103,42 @@
         (info "Sample isn't available:  " page-url url id full-id)
         (format "<div class=\"alert alert-warning\"><strong>Sample not available!</strong><p>%s</p></div>" url)))))
 
-(defn- sample-transformer [id-counter notifier page-url version samples playground]
+(defn generate-img [generator-config sample-path page-url samples version]
+  (let [url (str "/samples/" (StringEscapeUtils/unescapeHtml4 sample-path))
+        sample (first (filter #(= url (:url %)) samples))]
+    (try (phantom/generate-img (:phantom-engine generator-config)
+                               (:generator generator-config)
+                               (:images-dir generator-config)
+                               page-url
+                               version
+                               sample)
+         (catch Exception e
+           (prn "ERROR img gen: " e)))))
+
+(defn- sample-transformer [id-counter notifier page-url version samples generator-config generate-images]
   (fn [text state]
     [(if (or (:code state) (:codeblock state))
        text
        (if-let [matches (re-matches #".*(\{sample([^}]*)\}(.*)\{sample\}).*" text)]
          (try
            (let [sample-path (last matches)
-                source (nth matches 1)
-                custom-settings (read-string
-                                  (clojure.string/replace (str "{" (nth matches 2) "}")
-                                                          #"(\d+%)" "\"$1\""))]
-            (clojure.string/replace text
-                                    source
-                                    ;(build-sample-embed version playground sample-path custom-settings)
-                                    (build-sample-div notifier page-url (swap! id-counter inc) version samples playground
-                                                      sample-path custom-settings)))
+                 source (nth matches 1)
+                 custom-settings (read-string
+                                   (clojure.string/replace (str "{" (nth matches 2) "}")
+                                                           #"(\d+%)" "\"$1\""))]
+             (when (and (:generate-images generator-config)
+                        generate-images
+                        (= 0 @id-counter))
+               (generate-img generator-config sample-path page-url samples version))
+             (clojure.string/replace text
+                                     source
+                                     ;(build-sample-embed version playground sample-path custom-settings)
+                                     (build-sample-div notifier
+                                                       page-url
+                                                       (swap! id-counter inc)
+                                                       version samples
+                                                       (:playground generator-config)
+                                                       sample-path custom-settings)))
            (catch Exception _
              (do
                (notifications/sample-parsing-error notifier version page-url)
@@ -135,7 +156,7 @@
                               (str "<a class='method' href='//" reference "/" real-version "/" link "'>" title "</a>")))))
 
 (defn- add-tags [html tags]
-  (let [tags-html  (str "<div class='tags'>" (apply str (map #(str "<span>" % "</span>") tags)) "</div>")
+  (let [tags-html (str "<div class='tags'>" (apply str (map #(str "<span>" % "</span>") tags)) "</div>")
         h1 "</h1>"
         index (+ (.indexOf html h1) (count h1))]
     (str (subs html 0 index) tags-html (subs html index))))
@@ -163,7 +184,9 @@
          (catch Exception _ (image-format-error notifier version page-url "exception caught"))))
      state]))
 
-(defn to-html [notifier page-url source version samples playground reference api-versions api-default-version]
+(defn to-html [notifier page-url source version samples api-versions
+               {:keys [playground reference api-default-version] :as generator-config}
+               generate-images]
   (let [{tags :tags html-without-tags :html} (get-tags source)
         html (-> (md-to-html-string html-without-tags
                                     :heading-anchors true
@@ -171,7 +194,8 @@
                                     :replacement-transformers (concat [(branch-name-transformer version)
                                                                        (image-checker notifier page-url version)]
                                                                       transformer-vector
-                                                                      [(sample-transformer (atom 0) notifier page-url version samples playground)]))
+                                                                      [(sample-transformer (atom 0) notifier page-url version samples
+                                                                                           generator-config generate-images)]))
                  (add-api-links version reference api-versions api-default-version))
         html-tags (if (empty? tags) html
                                     (add-tags html tags))]

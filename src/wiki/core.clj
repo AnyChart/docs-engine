@@ -92,7 +92,13 @@
                :reference "api.anychart.stg"
                :reference-versions "http://api.anychart.stg/versions"
                :reference-default-version "develop"
-               :playground "playground.anychart.stg/docs"}
+               :playground "playground.anychart.stg/docs"
+               ;; page images generation, only for local and stg (to not generate images by prod and stg in one time)
+               :generate-images true
+               :phantom-engine "/usr/local/bin/phantomjs"
+               :generator (.getAbsolutePath (clojure.java.io/file "data/phantom.js"))
+               :images-dir (.getAbsolutePath (clojure.java.io/file "data/images"))
+               :static-dir "root@104.236.0.245:/apps/static/docs/"}
    :offline-generator {:queue "docs-zip-queue"
                        :zip-dir (.getAbsolutePath (clojure.java.io/file "data/zip"))}
    :log {:file (.getAbsolutePath (clojure.java.io/file "log.txt"))}})
@@ -112,7 +118,12 @@
                             {:redis {:spec {:host "10.132.9.26" :db 1}}}
                             {:sphinx {:subname "//104.236.66.244:3312?characterEncoding=utf8&characterSetResults=utf8&maxAllowedPacket=512000"}}
                             {:generator {:git-ssh "/apps/keys/git"
-                                         :data-dir "/apps/docs-stg/data"}}
+                                         :data-dir "/apps/docs-stg/data"
+                                         :generate-images true
+                                         :phantom-engine "/usr/local/bin/phantomjs2"
+                                         :generator "/apps/docs-stg/data/phantom.js"
+                                         :images-dir "/apps/docs-stg/data/images"
+                                         :static-dir "root@10.132.180.22:/apps/static/docs/"}}
                             {:offline-generator {:zip-dir "/apps/docs-stg/data/zip"}}
                             {:log {:file "/apps/docs-stg/log.txt"}}))
 
@@ -143,7 +154,8 @@
                                           :reference "api.anychart.com"
                                           :reference-versions "https://api.anychart.com/versions"
                                           :reference-default-version "latest"
-                                          :playground "playground.anychart.com/docs"}}
+                                          :playground "playground.anychart.com/docs"
+                                          :generate-images false}}
                              {:offline-generator {:queue "docs-zip-prod-queue"
                                                   :zip-dir "/apps/docs-prod/data/zip"}}
                              {:log {:file "/apps/docs-prod/log.txt"}}))

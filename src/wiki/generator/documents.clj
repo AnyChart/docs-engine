@@ -12,12 +12,12 @@
       (clojure.string/replace #"index\.md$" "")))
 
 (defn- generate-struct-item
-  [notifier jdbc version samples base-path item api playground api-versions api-default-version]
+  [notifier jdbc version samples base-path item api-versions generator-config generate-images]
   ;;(info "generating" (dissoc item :content))
   (if-let [content (:content item)]
     (let [page-url (fix-url (str base-path "/" (:name item)))
           {html :html tags :tags}
-          (md/to-html notifier page-url content (:key version) samples playground api api-versions api-default-version)]
+          (md/to-html notifier page-url content (:key version) samples api-versions generator-config generate-images)]
       (pdata/add-page jdbc (:id version) page-url
                       (:title item)
                       html
@@ -30,12 +30,13 @@
                           (-> items first :name))
         (doall (map #(generate-struct-item notifier jdbc version samples
                                             (str base-path "/" (:name item))
-                                            % api playground api-versions api-default-version)
+                                            % api-versions generator-config generate-images)
                      items))))))
 
-(defn generate [notifier jdbc version samples data api playground api-versions api-default-version]
+(defn generate [notifier jdbc version samples data api-versions
+                generator-config generate-images]
   (cp/with-shutdown! [pool (+ 2 (cp/ncpus))]
                      (doall (cp/pmap pool #(generate-struct-item notifier jdbc version
-                                                                 samples nil % api
-                                                                 playground api-versions api-default-version)
+                                                                 samples nil % api-versions
+                                                                 generator-config generate-images)
                 data))))

@@ -31,6 +31,8 @@
                  ;; filesystem
                  [me.raynes/fs "1.4.6"]
                  [cpath-clj "0.1.2"]
+                 ;; phantom
+                 [org.imgscalr/imgscalr-lib "4.2"]
 
                  [criterium "0.4.4"]
                  ;; optimizations

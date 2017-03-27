@@ -13,10 +13,30 @@
             [wiki.components.offline-generator :refer [generate-zip]]
             [me.raynes.fs :as fs]
             [com.climate.claypoole :as cp]
-            [taoensso.timbre :as timbre :refer [info error]]))
+            [taoensso.timbre :as timbre :refer [info error]]
+            [wiki.util.utils :as utils]
+            [version-clj.core :as version-clj]
+            [clojure.java.shell :refer [sh]]))
+
+(defn last-version? [jdbc branch-name]
+  (let [last-version (vdata/default jdbc)]
+    (and (utils/released-version? branch-name)
+         (or
+           (= 0 (version-clj/version-compare branch-name last-version))
+           (= 1 (version-clj/version-compare branch-name last-version))))))
+
+(defn last-version [jdbc branches]
+  (let [versions (vdata/versions jdbc)]
+    (first (sort (comp - version-clj/version-compare)
+                 (concat versions branches)))))
 
 (defn- generate-version
-  [branch jdbc notifier offline-generator data-dir api playground api-versions api-default-version queue-index]
+  [branch
+   api-versions
+   {:keys [jdbc notifier offline-generator] :as generator}
+   {:keys [data-dir] :as generator-config}
+   queue-index
+   generate-images]
   (try
     (do
       (info "building" branch)
@@ -37,11 +57,24 @@
               (fs/mkdirs static-branch-dir)
               (fs/copy-dir-into images-branch-dir static-branch-dir)))
           (do
+            (when (and (:generate-images generator-config)
+                       generate-images)
+              (fs/delete-dir (:images-dir generator-config))
+              (fs/mkdirs (:images-dir generator-config)))
             (dgen/generate notifier
-                           jdbc {:id  version-id
-                                 :key (:name branch)}
+                           jdbc
+                           {:id  version-id
+                            :key (:name branch)}
                            samples
-                           data api playground api-versions api-default-version)
+                           data
+                           api-versions
+                           generator-config
+                           generate-images)
+            (when (and (:generate-images generator-config)
+                       generate-images)
+              (info "Uploading images: " (:images-dir generator-config) (:static-dir generator-config))
+              (let [upl-res (sh "scp" "-r" (:images-dir generator-config) (:static-dir generator-config))]
+                (info "Uploading result: " upl-res)))
             (vgen/remove-previous-versions jdbc version-id (:name branch))
             (generate-zip offline-generator {:id  version-id
                                              :key (:name branch)})
@@ -65,9 +98,9 @@
           nil))))
 
 (defn generate
-  [jdbc notifier offline-generator
-   {:keys [show-branches git-ssh data-dir reference playground
-           reference-versions reference-default-version]} queue-index]
+  [{:keys [jdbc notifier offline-generator] :as generator
+    {:keys [show-branches git-ssh data-dir reference-versions] :as generator-config} :config}
+   queue-index]
   (try
     (do
       (fs/mkdirs (str data-dir "/versions"))
@@ -75,20 +108,17 @@
             removed-branches (vgen/remove-branches jdbc (map :name actual-branches) data-dir)
             branches (vgen/filter-for-rebuild jdbc actual-branches)
             name-branches (map :name branches)
-            api-versions (api-versions/get-versions reference-versions)]
+            api-versions (api-versions/get-versions reference-versions)
+            last-version (last-version jdbc name-branches)]
         (notifications/start-building notifier name-branches removed-branches queue-index)
         (info "api versions:" api-versions)
-        (info "api default version:" reference-default-version)
+        (info "last version:" last-version)
         (let [result (doall (map #(generate-version %
-                                                    jdbc
-                                                    notifier
-                                                    offline-generator
-                                                    data-dir
-                                                    reference
-                                                    playground
                                                     api-versions
-                                                    reference-default-version
-                                                    queue-index)
+                                                    generator
+                                                    generator-config
+                                                    queue-index
+                                                    (= (:name %) last-version))
                                  branches))]
           (fs/delete-dir (str data-dir "/versions"))
           (if (some nil? result)

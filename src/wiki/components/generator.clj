@@ -5,10 +5,7 @@
             [taoensso.timbre :as timbre :refer [info error]]))
 
 (defn generate-docs [comp]
-  (generator/generate (:jdbc comp)
-                      (:notifier comp)
-                      (:offline-generator comp)
-                      (:config comp)
+  (generator/generate comp
                       (swap! (:queue-index (:config comp)) inc))
   (redisc/enqueue (:redis comp)
                    (-> comp :config :redirects-queue)
