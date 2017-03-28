@@ -185,7 +185,7 @@
      state]))
 
 (defn to-html [notifier page-url source version samples api-versions
-               {:keys [playground reference api-default-version] :as generator-config}
+               {:keys [playground reference reference-default-version] :as generator-config}
                generate-images]
   (let [{tags :tags html-without-tags :html} (get-tags source)
         html (-> (md-to-html-string html-without-tags
@@ -196,7 +196,7 @@
                                                                       transformer-vector
                                                                       [(sample-transformer (atom 0) notifier page-url version samples
                                                                                            generator-config generate-images)]))
-                 (add-api-links version reference api-versions api-default-version))
+                 (add-api-links version reference api-versions reference-default-version))
         html-tags (if (empty? tags) html
                                     (add-tags html tags))]
     {:html html-tags :tags tags}))
