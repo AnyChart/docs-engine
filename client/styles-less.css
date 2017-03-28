@@ -6663,6 +6663,12 @@ ul.table_of_content ul {
   margin-left: 0;
   text-decoration: none;
 }
+#content ul.table_of_content ul ul a {
+  padding: 2px 0 2px 30px;
+}
+#content ul.table_of_content ul ul ul a {
+  padding: 2px 0 2px 40px;
+}
 #content ul.table_of_content a:hover {
   border-left: 3px solid #929292;
   text-decoration: underline;
