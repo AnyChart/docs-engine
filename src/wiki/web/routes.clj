@@ -84,6 +84,12 @@
       (redirect (str "/" (:key version) "/" url))
       (redirect (str "/" (:key version) "/Quick_Start")))))
 
+(defn- old-url [versions url]
+  (let [last-version-url (-> versions first :url)]
+    (if (.endsWith last-version-url url)
+      (str "/" url)
+      "/")))
+
 (defn- show-page [request version versions page is-url-version]
   (let [page (render-file "templates/page.selmer" {:version              (:key version)
                                                    :actual-version       (:key (first versions))
@@ -92,6 +98,7 @@
                                                    :anychart-css-url     (utils/anychart-bundle-css-url (:key version))
                                                    :old                  (and (not= (:key (first versions)) (:key version))
                                                                               (utils/released-version? (:key version)))
+                                                   :old-url              (old-url versions (:url page))
                                                    :tree                 (versions-data/tree-data (jdbc request) (:id version))
                                                    :url                  (:url page)
                                                    :image-url            (utils/name->url (:url page))

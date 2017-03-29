@@ -39,3 +39,11 @@
         text (.text (first p))
         description (subs text 0 (min 155 (count text))) ]
       description))
+
+;; select * from pages where version_id in (select id from versions where key = '7.13.0') AND content NOT LIKE '%sampleInit1%';
+;; for og:image tag
+(defn articles-without-samples [file-name]
+  (let [articles (-> file-name slurp clojure.string/split-lines)
+        articles-with-urls (map (fn [a] [a (str (name->url a) ".png")]) articles)]
+    (doseq [a articles-with-urls]
+      (println (a 0) " " (a 1)))))
