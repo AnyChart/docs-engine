@@ -104,7 +104,8 @@
                                                    :image-url            (utils/name->url (:url page))
                                                    :title                (:full_name page)
                                                    :title-prefix         (title-prefix page)
-                                                   :description          (utils/page-description (:content page))
+                                                   :description          (or (utils/page-description (:content page))
+                                                                             (:full_name page))
                                                    :page                 page
                                                    :versions             versions
                                                    :is-ga-speed-insights (:is-ga-speed-insights request)})
@@ -199,13 +200,14 @@
              (map #(str (first %) "\t >> \t" (second %)))
              (clojure.string/join "\n"))))))
 
-(defn- show-page-data [request version versions url & _]
+(defn- show-page-data [request version versions url url-version & _]
   (if-let [page (pages-data/page-by-url (jdbc request) (:id version) url)]
-    (response {:url          (:url page)
-               :page         page
-               :title        (:full_name page)
-               :title-prefix (title-prefix page)
-               :versions     versions})
+    (response {:url            (:url page)
+               :page           page
+               :title          (:full_name page)
+               :title-prefix   (title-prefix page)
+               :versions       versions
+               :is-url-version (boolean url-version)})
     (error-404 request)))
 
 (defn- check-version-middleware [app]
@@ -232,16 +234,18 @@
       (handler request version versions page-url url-version))))
 
 (defn- show-page-middleware [request version versions page-url url-version]
-  ;(prn :show-page-middleware (-> request :route-params :*) version page-url url-version)
-  (if (empty? page-url)
-    (redirect (str "/" (:key version) "/Quick_Start"))
-    (if-let [page (pages-data/page-by-url (jdbc request) (:id version) page-url)]
-      (show-page request version versions page (boolean url-version))
-      (if-let [folder (folders-data/get-folder-by-url (jdbc request) (:id version) page-url)]
-        (redirect (str (when url-version (str "/" (:key version)))
-                       "/" (:url folder)
-                       "/" (:default_page folder)))
-        (error-404 request)))))
+  (let [url (-> request :route-params :*)]
+    (if (empty? page-url)
+     (redirect (str "/" (:key version) "/Quick_Start"))
+     (if-let [page (pages-data/page-by-url (jdbc request) (:id version) (utils/drop-last-slash page-url))]
+       (if (.endsWith url "/")
+         (redirect (str "/" (utils/drop-last-slash url)) 301)
+         (show-page request version versions page (boolean url-version)))
+       (if-let [folder (folders-data/get-folder-by-url (jdbc request) (:id version) page-url)]
+         (redirect (str (when url-version (str "/" (:key version)))
+                        "/" (:url folder)
+                        "/" (:default_page folder)) 301)
+         (error-404 request))))))
 
 (defroutes app-routes
            (route/resources "/")

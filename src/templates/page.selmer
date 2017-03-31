@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{{title-prefix}} | AnyChart Documentation ver. {{version}}</title>
+    <title>{{title-prefix}} | AnyChart Documentation{% if is-url-version %} ver. {{version}}{% endif %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:title" content="{{title-prefix}} | AnyChart Documentation ver. {{version}}"/>
+    <meta property="og:title" content="{{title-prefix}} | AnyChart Documentation{% if is-url-version %} ver. {{version}}{% endif %}"/>
     <meta name="description" content="{{description}}"/>
     <meta property="og:description" content="{{description}}"/>
     <meta property="og:image" content="http://static.anychart.com/docs/images/{{image-url}}.png"/>
@@ -50,7 +50,7 @@
         <div class="row">
             <div class="col-lg-22 col-lg-offset-1">
                 <a class="sidebar-switcher hidden-md hidden-lg"><i class="ac ac-bars"></i></a>
-                <a class="navbar-brand" href="//anychart.com/">
+                <a class="navbar-brand" href="https://www.anychart.com" rel="nofollow">
                     <img src="/i/logo-empty.png" width="300" height="72" alt="AnyChart">
 
                     <div class="chart-row">
@@ -80,10 +80,10 @@
                             Download .zip</button>
                     </div>
                     <div class="text-muted questions">
-                        <a href="http://support.anychart.com/" class="text-support"><i class="ac ac-support"></i></a>
+                        <a href="http://support.anychart.com" rel="nofollow" class="text-support"><i class="ac ac-support"></i></a>
                             <span class="hidden-super-small">
                                 Still have questions?<br/>
-                                <a href="//anychart.com/support/"> Contact support</a></span>
+                                <a href="https://www.anychart.com/support/" rel="nofollow"> Contact support</a></span>
                     </div>
                 </div>
             </div>
@@ -107,8 +107,8 @@
         </div>
 
         <div class="text-muted questions">
-            <a href="//support.anychart.com/" class="text-support"><i class="ac ac-support"></i></a>
-            <span class="hidden-super-small"> Still have questions?<br/> <a href="http://anychart.com/support/"> Contact
+            <a href="http://support.anychart.com" rel="nofollow" class="text-support"><i class="ac ac-support"></i></a>
+            <span class="hidden-super-small"> Still have questions?<br/> <a href="https://www.anychart.com/support/" rel="nofollow"> Contact
                 support</a></span>
         </div>
     </div>
@@ -118,13 +118,13 @@
     </ul>
     <div class="footer">
         <div class="footer-inner">
-            <a href="https://www.facebook.com/AnyCharts" class="soc-network" target="_blank">
+            <a href="https://www.facebook.com/AnyCharts" rel="nofollow" class="soc-network" target="_blank">
                 <span class="soc-network-icon fb"><i class="sn-mini-icon ac ac-facebook"></i></span>
             </a>
-            <a href="https://twitter.com/AnyChart" class="soc-network" target="_blank">
+            <a href="https://twitter.com/AnyChart" rel="nofollow" class="soc-network" target="_blank">
                 <span class="soc-network-icon tw"><i class="sn-mini-icon ac ac-twitter"></i></span>
             </a>
-            <a href="https://www.linkedin.com/company/386660" class="soc-network" target="_blank">
+            <a href="https://www.linkedin.com/company/386660" rel="nofollow" class="soc-network" target="_blank">
                 <span class="soc-network-icon in"><i class="sn-mini-icon ac ac-linkedin"></i></span>
             </a>
             <p> © {% now yyyy %} AnyChart.Com All rights reserved.</p>
@@ -147,13 +147,13 @@
             <ul class="menu">{% tree-view tree %}</ul>
             <div class="footer">
                 <div class="footer-inner">
-                    <a href="https://www.facebook.com/AnyCharts" class="soc-network" target="_blank">
+                    <a href="https://www.facebook.com/AnyCharts" rel="nofollow" class="soc-network" target="_blank">
                         <span class="soc-network-icon fb"><i class="sn-mini-icon ac ac-facebook"></i></span>
                     </a>
-                    <a href="https://twitter.com/AnyChart" class="soc-network" target="_blank">
+                    <a href="https://twitter.com/AnyChart" rel="nofollow" class="soc-network" target="_blank">
                         <span class="soc-network-icon tw"><i class="sn-mini-icon ac ac-twitter"></i></span>
                     </a>
-                    <a href="https://www.linkedin.com/company/386660" class="soc-network" target="_blank">
+                    <a href="https://www.linkedin.com/company/386660" rel="nofollow" class="soc-network" target="_blank">
                         <span class="soc-network-icon in"><i class="sn-mini-icon ac ac-linkedin"></i></span>
                     </a>
                     <p> © {% now yyyy %} AnyChart.Com All rights reserved.</p>

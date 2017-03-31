@@ -28,17 +28,23 @@
 
 (defn url->title [url]
   (let [parts (-> url
-                (s/replace #"_" " ")
-                (s/split #"/")
-                reverse)]
-    (s/join " | " parts )))
+                  (s/replace #"_" " ")
+                  (s/split #"/")
+                  reverse)]
+    (s/join " | " parts)))
+
+(defn drop-last-slash [s]
+  (if (.endsWith s "/")
+    (subs s 0 (dec (count s)))
+    s))
 
 (defn page-description [html]
-  (let [doc (Jsoup/parse html)
-        p (.select doc "p")
-        text (.text (first p))
-        description (subs text 0 (min 155 (count text))) ]
-      description))
+  (when html
+    (when-let [doc (Jsoup/parse html)]
+      (when-let [p (first (.select doc "p"))]
+        (when-let [text (.text p)]
+          (when (not-empty text)
+            (subs text 0 (min 155 (count text)))))))))
 
 ;; select * from pages where version_id in (select id from versions where key = '7.13.0') AND content NOT LIKE '%sampleInit1%';
 ;; for og:image tag

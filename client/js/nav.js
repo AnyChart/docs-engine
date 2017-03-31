@@ -49,7 +49,7 @@ function loadPage(link, needPushState) {
                             '</noscript>'+
                             '  <div class="col-lg-6 hidden-sm hidden-xs hidden-md visible-lg"><div id="table-of-content-large"></div></div>'+
                            '</div>');
-        document.title = res['title-prefix'] + " | AnyChart Documentation ver. " + version;
+        document.title = res['title-prefix'] + " | AnyChart Documentation" + (res["is-url-version"] ? " ver. " + version : "");
         $("#content").scrollTop(0);
         fixLinks();
         fixToc();
