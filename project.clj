@@ -38,7 +38,8 @@
                  [criterium "0.4.4"]
                  ;; optimizations
                  [com.googlecode.htmlcompressor/htmlcompressor "1.5.2"]]
-  :plugins [[lein-ancient "0.6.10"]]
+  :plugins [[lein-ancient "0.6.10"]
+            [lein-kibit "0.1.3"]]
   :main wiki.core
   :target-path "target/%s"
   :aot :all
