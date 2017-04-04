@@ -85,7 +85,6 @@ function fixLinks() {
                     var current = location.pathname.split("/");
                     current.pop();
                     res = loadPage(current.join("/") + "/" + $this.attr("href"));
-                    expandMenu($this.attr("href"));
                 }catch (e) {
                     console.error(e);
                 }
