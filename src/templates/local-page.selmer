@@ -136,15 +136,15 @@
         </div>
         {% endif %}
 
-
-        <!--<section class="col-md-16 col-lg-18 col-lg-offset-6 col-md-offset-8" id="page-content">-->
         <section class="col-md-16 col-lg-18 col-lg-offset-6 col-md-offset-8" id="page-content" style="padding-top: 30px;">
             <div id="table-of-content-small" class="hidden-lg"></div>
             <div class="row">
                 <div class="col-lg-17" id="article-content">
                     {{page.content|safe}}
                 </div>
-                <div id="table-of-content-large" class="col-lg-6 hidden-sm hidden-xs hidden-md visible-lg"></div>
+                <div class="col-lg-6 hidden-sm hidden-xs hidden-md visible-lg">
+                    <div id="table-of-content-large"></div>
+                </div>
             </div>
         </section>
     </div>

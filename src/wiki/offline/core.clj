@@ -142,7 +142,9 @@
 (defn add-html [path]
   (let [parts (clojure.string/split path #"#")]
     (if (= 2 (count parts))
-      (str (first parts) ".html#" (second parts))
+      (if (empty? (first parts))
+        path
+        (str (first parts) ".html#" (second parts)))
       (str path ".html"))))
 
 (defn replace-a-node [node]
