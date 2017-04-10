@@ -1,7 +1,7 @@
 var page = location.pathname;
 
 function highlightCode() {
-    $("#content pre").addClass("prettyprint");
+    $("#page-content pre").addClass("prettyprint");
     prettyPrint();
 
     $("div.iframe .btns").each(function() {
@@ -24,7 +24,7 @@ function loadPage(link) {
     }
     expandMenu(location.pathname);
     /*$.get(link + "-json", function(res) {
-        $("#content").html('<div id="table-of-content-small" class="hidden-lg"></div>'+
+        $("#page-content").html('<div id="table-of-content-small" class="hidden-lg"></div>'+
                            '<div class="row">'+
                            '  <div class="col-lg-17">'+res.page.content+'</div>'+
                             '<div id="disqus_thread" class="col-lg-17"></div>'+
@@ -45,7 +45,7 @@ function loadPage(link) {
                             '  <div id="table-of-content-large" class="col-lg-6 hidden-sm hidden-xs hidden-md visible-lg"></div>'+
                            '</div>');
         document.title = res.title + " - AnyChart JavaScript Chart Documentation ver. " + version;
-        $("#content").scrollTop(0);
+        $("#page-content").scrollTop(0);
         fixLinks();
         fixToc();
         fixHeaders();
@@ -60,7 +60,7 @@ function loadPage(link) {
 };
 
 function fixLinks() {
-    $("#content a").each(function() {
+    $("#page-content a").each(function() {
         var $this = $(this);
         if ($this.attr("href") && $this.attr("href").match(/^[a-zA-Z]/gi)) {
             if ($this.attr("href").indexOf("#") == 0) return;

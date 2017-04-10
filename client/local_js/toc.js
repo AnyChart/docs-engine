@@ -1,7 +1,7 @@
 function fixToc() {
 
     var idx = 0;
-    var $items = $("#content .col-lg-17 > *");
+    var $items = $("#page-content .col-lg-17 > *");
     while ($items.get(idx).tagName.toLowerCase() == "br")
         idx++;
 

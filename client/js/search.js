@@ -1,7 +1,7 @@
 var $search = $("div.search");
 
 function initSearch() {
-    $('#content button').click(function () {
+    $('#page-content button').click(function () {
         history.back();
     });
     fixLinks();
@@ -10,7 +10,7 @@ function initSearch() {
 function searchFor(query, needPushState) {
     needPushState = (typeof needPushState !== 'undefined') ? needPushState : true;
     if (query) {
-        $("#content").html("Searching...");
+        $("#page-content").html("Searching...");
         $menu.find(".active").removeClass("active");
         var url = (isUrlVersion ? "/" + version : "") + "/search?q=" + query;
         page = url;
@@ -18,13 +18,13 @@ function searchFor(query, needPushState) {
             window.history.pushState(null, null, url);
         }
         $.post("/" + version + "/search-data", {"q": query}, function (res) {
-            $("#content").html('<div class="row"><div class="col-lg-17"><button type="button" class="btn btn-default btn-blue visible-xs"> <i class="ac ac-arrow-left-thin"></i> Back</button><h1 class="search"><button type="button" class="btn btn-default btn-blue hidden-xs"> <i class="ac ac-arrow-left-thin"></i> Back</button>Search results for <span>' + query + '</span> </div></div></h1>');
+            $("#page-content").html('<div class="row"><div class="col-lg-17"><button type="button" class="btn btn-default btn-blue visible-xs"> <i class="ac ac-arrow-left-thin"></i> Back</button><h1 class="search"><button type="button" class="btn btn-default btn-blue hidden-xs"> <i class="ac ac-arrow-left-thin"></i> Back</button>Search results for <span>' + query + '</span> </div></div></h1>');
             if (res.length) {
                 $(res).each(function () {
-                    $("#content .col-lg-17").append('<div class="result-block"><h2>' + this.title + '</a></h2><p>' + this.sn + '</p></div>');
+                    $("#page-content .col-lg-17").append('<div class="result-block"><h2>' + this.title + '</a></h2><p>' + this.sn + '</p></div>');
                 });
             } else {
-                $("#content").append('Nothing found');
+                $("#page-content").append('Nothing found');
             }
             initSearch();
         });

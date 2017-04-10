@@ -177,7 +177,7 @@
             </div>
         {% endif %}
 
-        <section class="col-md-16 col-lg-18 col-lg-offset-6 col-md-offset-8" id="content">
+        <section class="col-md-16 col-lg-18 col-lg-offset-6 col-md-offset-8" id="page-content">
             <div class="row">
                 <div class="col-lg-17" id="article-content">
                     <a class="btn btn-default btn-small github-fork pull-right hidden-xs" id="github-edit" href="https://github.com/AnyChart/docs.anychart.com">

@@ -137,8 +137,8 @@
         {% endif %}
 
 
-        <!--<section class="col-md-16 col-lg-18 col-lg-offset-6 col-md-offset-8" id="content">-->
-        <section class="col-md-16 col-lg-18 col-lg-offset-6 col-md-offset-8" id="content" style="padding-top: 30px;">
+        <!--<section class="col-md-16 col-lg-18 col-lg-offset-6 col-md-offset-8" id="page-content">-->
+        <section class="col-md-16 col-lg-18 col-lg-offset-6 col-md-offset-8" id="page-content" style="padding-top: 30px;">
             <div id="table-of-content-small" class="hidden-lg"></div>
             <div class="row">
                 <div class="col-lg-17" id="article-content">

@@ -1,7 +1,7 @@
 var page = location.pathname;
 
 function highlightCode() {
-    $("#content pre").addClass("prettyprint");
+    $("#page-content pre").addClass("prettyprint");
     prettyPrint();
 
     $("div.iframe .btns").each(function() {
@@ -25,7 +25,7 @@ function loadPage(link, needPushState) {
     }
     expandMenu(location.pathname);
     $.get(link + "-json", function(res) {
-        $("#content").html('<div class="row">'+
+        $("#page-content").html('<div class="row">'+
                            '<div class="col-lg-17" id="article-content">' +
                                '<a class="btn btn-default btn-small github-fork pull-right hidden-xs" id="github-edit" href="https://github.com/AnyChart/docs.anychart.com">'+
                                '<span><i class="ac ac-net"></i></span> Improve this Doc'+
@@ -50,7 +50,7 @@ function loadPage(link, needPushState) {
                             '  <div class="col-lg-6 hidden-sm hidden-xs hidden-md visible-lg"><div id="table-of-content-large"></div></div>'+
                            '</div>');
         document.title = res['title-prefix'] + " | AnyChart Documentation" + (res["is-url-version"] ? " ver. " + version : "");
-        $("#content").scrollTop(0);
+        $("#page-content").scrollTop(0);
         fixLinks();
         fixToc();
         highlightCode();
@@ -72,7 +72,7 @@ function updateMenu(versions){
 }
 
 function fixLinks() {
-    $("#content a").each(function() {
+    $("#page-content a").each(function() {
         var $this = $(this);
         if ($this.attr("href") && $this.attr("href").match(/^[a-zA-Z]/gi)) {
             if ($this.attr("href").indexOf("#") >= 0) return;
