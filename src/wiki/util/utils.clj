@@ -2,6 +2,9 @@
   (:require [clojure.string :as s])
   (import [org.jsoup Jsoup]))
 
+(defn format-exception [e]
+  (str e "\n\n" (apply str (interpose "\n" (.getStackTrace e)))))
+
 (defn name->url [name]
   (-> name
       (clojure.string/replace #"^/" "")

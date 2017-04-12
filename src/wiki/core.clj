@@ -52,11 +52,15 @@
                                [:jdbc :redis :notifier :offline-generator])))
 
 (def base-config
-  {:notifications {:token "P8Z59E0kpaOqTcOxner4P5jb"
-                   :channel "#notifications-local"
-                   :username "docs-engine"
-                   :domain "http://localhost/"
-                   :prefix "local"}
+  {:notifications {:slack {:token "P8Z59E0kpaOqTcOxner4P5jb"
+                           :channel "#notifications-local"
+                           :username "docs-engine"
+                           :domain "http://localhost/"
+                           :prefix "local"}
+                   :skype {:id "5bab828d-d6b2-4c0f-a955-82b088e30bcb"
+                           :key "L2q5SBiXYqPDHVmq36vjgwe"
+                           :chat-id "19:58cbaa008fc640bab8c3cf71e0e2d51a@thread.skype"
+                           :prefix "local"}}
    :indexer {:queue "docs-stg-search-queue"}
    :web {:debug true
          :static 12
@@ -106,7 +110,8 @@
 (def config base-config)
 
 (def stg-config (merge-with merge base-config
-                            {:notifications {:domain "http://docs.anychart.stg/" :channel "#notifications-stg" :prefix "stg"}}
+                            {:notifications {:slack {:domain "http://docs.anychart.stg/" :channel "#notifications-stg" :prefix "stg"}
+                                             :skype {:prefix "stg"}}}
                             {:web {:debug false
                                    :port 9010}}
                             {:jdbc {:subname "//10.132.9.26:5432/docs_stg"
@@ -128,7 +133,8 @@
                             {:log {:file "/apps/docs-stg/log.txt"}}))
 
 (def prod-config (merge-with merge base-config
-                             {:notifications {:domain "https://docs.anychart.com/" :channel "#notifications-prod" :prefix "prod"}}
+                             {:notifications {:slack {:domain "https://docs.anychart.com/" :channel "#notifications-prod" :prefix "prod"}
+                                              :skype {:prefix "prod"}}}
                              {:web {:debug false
                                     :port 9011
                                     :queue "docs-prod-queue"
