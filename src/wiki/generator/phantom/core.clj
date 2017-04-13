@@ -21,7 +21,7 @@
                     page-url
                     version
                     sample]
-  (info "generate-img:" page-url phantom-engine  phantom-generator version images-folder sample)
+  (info "generate-img:" page-url phantom-engine phantom-generator version images-folder sample)
   (let [code (render-file "templates/phantom.selmer"
                           {:export          (:exports sample)
                            :scripts         (download/get-urls (:scripts sample))
@@ -54,7 +54,7 @@
                                 (* 2 150)
                                 (into-array BufferedImageOp [Scalr/OP_ANTIALIAS]))]
           (ImageIO/write res "png" (file image-path)))
-        (sh "pngquant"  "--force" "--ext" ".png" image-path)
+        (sh "pngquant" "--force" "--ext" ".png" image-path)
         (info "generated" image-path)
         ;;(.delete tmp-file)
         nil)

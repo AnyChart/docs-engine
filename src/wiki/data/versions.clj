@@ -1,7 +1,7 @@
 (ns wiki.data.versions
   (:require [wiki.components.jdbc :refer [query one insert! exec]]
             [version-clj.core :refer [version-compare]]
-            [honeysql.helpers :refer :all]
+            [honeysql.helpers :refer :all :as honey]
             [clojure.java.jdbc :as clj-jdbc]
             [cheshire.core :refer [generate-string parse-string]]
             [wiki.data.utils :refer [pg->clj clj->jsonb]]))
@@ -13,7 +13,9 @@
 ;;    commit varchar(40) not NULL,
 ;;    hidden BOOLEAN DEFAULT FALSE,
 ;;    tree TEXT,
-;;    zip BYTEA
+;;    zip BYTEA,
+;;    config JSONB,
+;;    report JSONB
 ;; );
 
 (defn add-version [jdbc key commit tree config]
@@ -21,6 +23,11 @@
                                        :commit commit
                                        :tree   (generate-string tree)
                                        :config (clj->jsonb config)}))))
+
+(defn add-report [jdbc version-id report]
+  (exec jdbc (-> (honey/update :versions)
+                  (sset {:report (clj->jsonb report)})
+                  (where [:= :id version-id]))))
 
 (defn version-by-key [jdbc key]
   (one jdbc (-> (select :key :id)
@@ -33,6 +40,13 @@
                 (from :versions)
                 (where [:= :hidden false]
                        [:= :id version-id]))))
+
+(defn version-report [jdbc version-key]
+  (let [res (one jdbc (-> (select :report)
+                      (from :versions)
+                      (where [:= :key version-key])))]
+    (when (:report res)
+      (pg->clj (:report res)))))
 
 (defn delete-by-key [jdbc key]
   (exec jdbc (-> (delete-from :versions)

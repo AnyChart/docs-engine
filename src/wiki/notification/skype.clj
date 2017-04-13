@@ -78,8 +78,8 @@
   (let [msg (str "#" queue-index " docs " (-> notifier prefix (font "#cc0066" 11) u) " - " (b version) (-> " start" (font "#4183C4") b) "\n")]
     (send-message (config notifier) msg)))
 
-(defn complete-version-building [notifier version queue-index]
-  (let [msg (str "#" queue-index " docs " (-> notifier prefix (font "#cc0066" 11) u) " - " (b version) (-> " complete" (font "#36a64f") b) "\n")]
+(defn complete-version-building [notifier version queue-index message]
+  (let [msg (str "#" queue-index " docs " (-> notifier prefix (font "#cc0066" 11) u) " - " (b version) (-> " complete" (font "#36a64f") b) " " message  "\n")]
     (send-message (config notifier) msg)))
 
 (defn build-failed [notifier version queue-index & [e]]

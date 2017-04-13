@@ -7,11 +7,11 @@
     {:canonical-error true}))
 
 (defn check-https [link]
-  (when (re-find #"http[^s]" link)
+  (when (.startsWith link "http:")
     {:https-error true}))
 
 (defn check-direct [link]
-  (when (re-find #"(api.anychart|doc.anychart|pg.anychart|playground.anychart)")
+  (when (re-find #"(api.anychart|doc.anychart|pg.anychart|playground.anychart)" link)
     {:direct-error true}))
 
 (defn check-env [link]
@@ -24,16 +24,23 @@
     links))
 
 (defn check-links [md]
-  (let [links (get-links md)]
-    ;(filter some? links)
-    ;{:canonical-error (seq (filter))}
-    links))
+  (let [links (get-links md)
+        canonical-links (filter check-canonical links)
+        https-links (filter check-https links)
+        direct-links (filter check-direct links)
+        env-links (filter check-env links)]
+    ;(prn links)
+    (reduce (fn [res [k coll]]
+              (if (seq coll)
+                (assoc res k coll)
+                res)) {} [[:http-links https-links]
+                          [:non-canonical-links canonical-links]
+                          [:direct-links direct-links]
+                          [:env-links env-links]])))
 
 
-(defn start [path md]
-  (merge
-    (check-https md)
-    (check-links md)))
+(defn start [md]
+  (check-links md))
 
 
 

@@ -17,7 +17,8 @@
             [wiki.util.utils :as utils]
             [wiki.web.tree :refer [tree-view tree-view-local]]
             [wiki.web.redirects :refer [wrap-redirect]]
-            [criterium.core :refer [bench]])
+            [criterium.core :refer [bench]]
+            [wiki.data.versions :as vdata])
   (:import (com.googlecode.htmlcompressor.compressor HtmlCompressor ClosureJavaScriptCompressor)
            (com.google.javascript.jscomp CompilationLevel)))
 
@@ -247,6 +248,13 @@
                         "/" (:default_page folder)) 301)
          (error-404 request))))))
 
+(defn report [request]
+  (let [version-key (-> request :route-params :version)
+        report (vdata/version-report (jdbc request) version-key)]
+    {:status  200
+     :headers {"Access-Control-Allow-Origin" "*"}
+     :body    report}))
+
 (defroutes app-routes
            (route/resources "/")
            (GET "/_update_" [] request-update)
@@ -265,6 +273,7 @@
            (POST "/:version/search-data" [] (check-version-middleware search-data))
            (GET "/:version/_generate-zip_" [] (check-version-middleware generate-zip))
            (GET "/:version/download" [] (check-version-middleware download-zip))
+           (GET "/:version/report.json" [] report)
 
            (GET "/check/*" [] (check-version-middleware try-show-page))
            (GET "/search" [] (check-version-middleware search-page))

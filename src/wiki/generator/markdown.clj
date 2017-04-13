@@ -58,7 +58,7 @@
        (get-code id code scripts sample version-key)
        "}"))
 
-(defn build-sample-div [notifier page-url id version samples playground sample-path custom-settings]
+(defn build-sample-div [notifier page-url id version samples playground sample-path custom-settings page-report]
   (let [width (if (:width custom-settings)
                 (if (string? (:width custom-settings))
                   (:width custom-settings)
@@ -100,6 +100,7 @@
                                                  :engine-version version)))
       (do
         (notifications/sample-not-available notifier version page-url)
+        (swap! page-report (fn [page-report] (update page-report :sample-not-available conj page-url)))
         (info "Sample isn't available:  " page-url url id full-id)
         (format "<div class=\"alert alert-warning\"><strong>Sample not available!</strong><p>%s</p></div>" url)))))
 
@@ -115,7 +116,7 @@
          (catch Exception e
            (prn "ERROR img gen: " e)))))
 
-(defn- sample-transformer [id-counter notifier page-url version samples generator-config generate-images]
+(defn- sample-transformer [id-counter notifier page-url version samples generator-config generate-images page-report]
   (fn [text state]
     [(if (or (:code state) (:codeblock state))
        text
@@ -138,10 +139,11 @@
                                                        (swap! id-counter inc)
                                                        version samples
                                                        (:playground generator-config)
-                                                       sample-path custom-settings)))
+                                                       sample-path custom-settings page-report)))
            (catch Exception _
              (do
                (notifications/sample-parsing-error notifier version page-url)
+               (swap! page-report (fn [page-report] (update page-report :sample-parsing-error conj page-url)))
                (format "<div class=\"alert alert-danger\"><strong>Sample parsing error!</strong><p>%s</p></div>"
                        (clojure.string/trim text)))))
          text))
@@ -165,13 +167,14 @@
   (fn [text state]
     [(clojure.string/replace text #"\{branch_name\}" version) state]))
 
-(defn- image-format-error [notifier version page-url text]
+(defn- image-format-error [notifier version page-url text page-report]
   (info "image error:" page-url text)
   (notifications/image-format-error notifier version page-url)
+  (swap! page-report (fn [page-report] (update page-report :image-format-error conj page-url)))
   (format "<div class=\"alert alert-danger\"><strong>Image format error!</strong><p>%s</p></div>"
           (clojure.string/trim text)))
 
-(defn- image-checker [notifier page-url version]
+(defn- image-checker [notifier page-url version page-report]
   (fn [text state]
     [(if (or (:code state) (:codeblock state))
        text
@@ -179,23 +182,23 @@
          (if-let [[_ _ params] (re-matches #".*(!\[[^\]]*\]\s*\(([^\)]*)\)).*" text)]
            (if (re-matches #"[^\s]+\s*(\"[^\"]+\")?\s*(\w+\s*=\s*[\w\"%]+\s*)*" params)
              text
-             (image-format-error notifier version page-url params))
+             (image-format-error notifier version page-url params page-report))
            text)
-         (catch Exception _ (image-format-error notifier version page-url "exception caught"))))
+         (catch Exception _ (image-format-error notifier version page-url "exception caught" page-report))))
      state]))
 
 (defn to-html [notifier page-url source version samples api-versions
                {:keys [playground reference reference-default-version] :as generator-config}
-               generate-images]
+               generate-images page-report]
   (let [{tags :tags html-without-tags :html} (get-tags source)
         html (-> (md-to-html-string html-without-tags
                                     :heading-anchors true
                                     :reference-links? true
                                     :replacement-transformers (concat [(branch-name-transformer version)
-                                                                       (image-checker notifier page-url version)]
+                                                                       (image-checker notifier page-url version page-report)]
                                                                       transformer-vector
                                                                       [(sample-transformer (atom 0) notifier page-url version samples
-                                                                                           generator-config generate-images)]))
+                                                                                           generator-config generate-images page-report)]))
                  (add-api-links version reference api-versions reference-default-version))
         html-tags (if (empty? tags) html
                                     (add-tags html tags))]

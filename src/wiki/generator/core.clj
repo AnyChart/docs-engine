@@ -61,25 +61,26 @@
                        generate-images)
               (fs/delete-dir (:images-dir generator-config))
               (fs/mkdirs (:images-dir generator-config)))
-            (dgen/generate notifier
-                           jdbc
-                           {:id  version-id
-                            :key (:name branch)}
-                           samples
-                           data
-                           api-versions
-                           generator-config
-                           generate-images)
-            (when (and (:generate-images generator-config)
-                       generate-images)
-              (info "Uploading images: " (:images-dir generator-config) (:static-dir generator-config))
-              (let [upl-res (sh "scp" "-r" (:images-dir generator-config) (:static-dir generator-config))]
-                (info "Uploading result: " upl-res)))
-            (vgen/remove-previous-versions jdbc version-id (:name branch))
-            (generate-zip offline-generator {:id  version-id
-                                             :key (:name branch)})
-            (notifications/complete-version-building notifier (:name branch) queue-index)
-            version-id)
+            (let [report (dgen/generate notifier
+                                        jdbc
+                                        {:id  version-id
+                                         :key (:name branch)}
+                                        samples
+                                        data
+                                        api-versions
+                                        generator-config
+                                        generate-images)]
+              (vdata/add-report jdbc version-id report)
+              (when (and (:generate-images generator-config)
+                         generate-images)
+                (info "Uploading images: " (:images-dir generator-config) (:static-dir generator-config))
+                (let [upl-res (sh "scp" "-r" (:images-dir generator-config) (:static-dir generator-config))]
+                  (info "Uploading result: " upl-res)))
+              (vgen/remove-previous-versions jdbc version-id (:name branch))
+              (generate-zip offline-generator {:id  version-id
+                                               :key (:name branch)})
+              (notifications/complete-version-building notifier (:name branch) queue-index report)
+              version-id))
           (catch Exception e
             (do (error e)
                 (error (.getMessage e))

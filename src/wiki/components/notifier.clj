@@ -29,9 +29,30 @@
   (slack/start-version-building notifier version queue-index)
   (skype/start-version-building notifier version queue-index))
 
-(defn complete-version-building [notifier version queue-index]
-  (slack/complete-version-building notifier version queue-index)
-  (skype/complete-version-building notifier version queue-index))
+(defn complete-version-building [notifier version queue-index report]
+  (let [direct-links (count (set (mapcat :direct-links report)))
+        canonical-links (count (set (mapcat :non-canonical-links report)))
+        http-links (count (set (mapcat :http-links report)))
+        env-links (count (set (mapcat :env-links report)))
+        sample-not-available (count (set (mapcat :sample-not-available report)))
+        sample-parsing-error (count (set (mapcat :sample-parsing-error report)))
+        image-format-error (count (set (mapcat :image-format-error report)))
+        msg-coll [(when (pos? direct-links) (str "direct links: " direct-links))
+                  (when (pos? canonical-links) (str "non canonical links: " canonical-links))
+                  (when (pos? http-links) (str "http links: " http-links))
+                  (when (pos? env-links) (str "env links: " env-links))
+                  (when (pos? sample-not-available) (str "unavailable samples: " sample-not-available))
+                  (when (pos? sample-parsing-error) (str "parsing samples errors: " sample-parsing-error))
+                  (when (pos? image-format-error) (str "parsing images errors: " image-format-error))]
+        msg (clojure.string/join ", " (filter some? msg-coll))
+        res-msg (if (= 0 direct-links canonical-links env-links http-links
+                       sample-not-available sample-parsing-error image-format-error)
+                  "good job, everything is ok!"
+                  msg)]
+    ;(prn report)
+    ;(prn "==complete-version-building " direct-links canonical-links http-links env-links res-msg)
+    (slack/complete-version-building notifier version queue-index)
+    (skype/complete-version-building notifier version queue-index res-msg)))
 
 (defn build-failed [notifier version queue-index & [e]]
   (slack/build-failed notifier version queue-index e)
