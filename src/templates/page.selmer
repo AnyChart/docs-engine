@@ -14,8 +14,8 @@
     {% if page.tags|not-empty %}<meta name="keywords" content="{{page.tags|join:", "}}">{% endif %}
     <meta name="yandex-verification" content="c5fb5d43a81ea360"/>
     <link rel="canonical" href="https://docs.anychart.com/{{url}}">
-    <!--[if IE]>
     <link rel="icon" href="/i/anychart.ico" type="image/x-icon">
+    <!--[if IE]>
     <link rel="stylesheet" type="text/css" href="/main.css"/>
     <link rel="stylesheet" type="text/css" href="{{anychart-css-url}}"/>
     <link rel="stylesheet" href="https://cdn.anychart.com/fonts/2.7.2/anychart.css">
@@ -34,7 +34,6 @@
 </head>
 <body>
 <!--[if !IE]> -->
-<link rel="icon" href="/i/anychart.ico" type="image/x-icon">
 <link rel="stylesheet" type="text/css" href="/main.css" lazyload/>
 <link rel="stylesheet" type="text/css" href="{{anychart-css-url}}" lazyload/>
 <link rel="stylesheet" href="https://cdn.anychart.com/fonts/2.7.2/anychart.css" lazyload>
