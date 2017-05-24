@@ -51,7 +51,15 @@ function loadPage(link, needPushState) {
                             '  <div class="col-lg-6 hidden-sm hidden-xs hidden-md visible-lg"><div id="table-of-content-large"></div></div>'+
                            '</div>');
         document.title = res['title-prefix'] + " | AnyChart Documentation" + (res["is-url-version"] ? " ver. " + version : "");
-        $("#page-content").scrollTop(0);
+        // scroll page to appropriate text
+        if (location.hash.length > 1){
+            var el = $('a[href="' + location.hash + '"]');
+            if (el.length > 0 ){
+                el[0].click();
+            }
+        }else{
+            $("#page-content").scrollTop(0);
+        }
         fixLinks();
         fixToc();
         highlightCode();
