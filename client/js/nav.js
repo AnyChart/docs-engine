@@ -11,6 +11,7 @@ function highlightCode() {
 }
 
 function loadPage(link, needPushState) {
+    //console.log("loadpage: " + link);
     needPushState = (typeof needPushState !== 'undefined') ?  needPushState : true;
     if (page == link) return true;
     page = link;
@@ -74,7 +75,7 @@ function updateMenu(versions){
 function fixLinks() {
     $("#page-content a").each(function() {
         var $this = $(this);
-        if ($this.attr("href") && $this.attr("href").match(/^[a-zA-Z]/gi)) {
+        if ($this.attr("href") && $this.attr("href").match(/^[a-zA-Z\(\)]/gi)) {
             if ($this.attr("href").indexOf("#") >= 0) return;
             if ($this.attr("href").indexOf("http://") == 0) return;
             if ($this.attr("href").indexOf("https://") == 0) return;
@@ -96,7 +97,7 @@ function fixLinks() {
 
 window.onpopstate = function(e) {
     if (location.pathname == page) return;
-    loadPage(location.href, false);
+    loadPage(location.pathname, false);
 };
 
 fixLinks();
