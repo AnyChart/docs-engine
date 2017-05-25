@@ -15,21 +15,24 @@
 
 (defn start-building [notifier branches removed-branches queue-index]
   (slack/start-building notifier branches removed-branches queue-index)
-  (skype/start-building notifier branches removed-branches queue-index))
+  ;(skype/start-building notifier branches removed-branches queue-index)
+  )
 
 (defn complete-building [notifier branches removed-branches queue-index]
   (slack/complete-building notifier branches removed-branches queue-index)
-  (skype/complete-building notifier branches removed-branches queue-index))
+  ;(skype/complete-building notifier branches removed-branches queue-index)
+  )
 
 (defn complete-building-with-errors [notifier branches queue-index & [e]]
   (slack/complete-building-with-errors notifier branches queue-index e)
-  (skype/complete-building-with-errors notifier branches queue-index e))
+  ;(skype/complete-building-with-errors notifier branches queue-index e)
+  )
 
-(defn start-version-building [notifier version queue-index]
-  (slack/start-version-building notifier version queue-index)
-  (skype/start-version-building notifier version queue-index))
+(defn start-version-building [notifier branch queue-index]
+  (slack/start-version-building notifier (:name branch) queue-index)
+  (skype/start-version-building notifier branch queue-index))
 
-(defn complete-version-building [notifier version queue-index report]
+(defn complete-version-building [notifier version queue-index report conflicts-with-develop]
   (let [direct-links (count (set (mapcat :direct-links report)))
         canonical-links (count (set (mapcat :non-canonical-links report)))
         http-links (count (set (mapcat :http-links report)))
@@ -37,22 +40,20 @@
         sample-not-available (count (set (mapcat :sample-not-available report)))
         sample-parsing-error (count (set (mapcat :sample-parsing-error report)))
         image-format-error (count (set (mapcat :image-format-error report)))
-        msg-coll [(when (pos? direct-links) (str "direct links: " direct-links))
-                  (when (pos? canonical-links) (str "non canonical links: " canonical-links))
-                  (when (pos? http-links) (str "http links: " http-links))
-                  (when (pos? env-links) (str "env links: " env-links))
-                  (when (pos? sample-not-available) (str "unavailable samples: " sample-not-available))
-                  (when (pos? sample-parsing-error) (str "parsing samples errors: " sample-parsing-error))
-                  (when (pos? image-format-error) (str "parsing images errors: " image-format-error))]
-        msg (clojure.string/join ", " (filter some? msg-coll))
-        res-msg (if (= 0 direct-links canonical-links env-links http-links
-                       sample-not-available sample-parsing-error image-format-error)
-                  "good job, everything is ok!"
-                  msg)]
-    ;(prn report)
-    ;(prn "==complete-version-building " direct-links canonical-links http-links env-links res-msg)
+        msg-coll [(when (pos? direct-links) (str "Direct links: " direct-links))
+                  (when (pos? canonical-links) (str "Non canonical links: " canonical-links))
+                  (when (pos? http-links) (str "Http links: " http-links))
+                  (when (pos? env-links) (str "Env links: " env-links))
+                  (when (pos? sample-not-available) (str "Unavailable samples: " sample-not-available))
+                  (when (pos? sample-parsing-error) (str "Parsing samples errors: " sample-parsing-error))
+                  (when (pos? image-format-error) (str "Parsing images errors: " image-format-error))
+                  (when (pos? conflicts-with-develop) (str "Conflicts with develop: " conflicts-with-develop))]
+        msg (clojure.string/join "\n" (filter some? msg-coll))]
     (slack/complete-version-building notifier version queue-index)
-    (skype/complete-version-building notifier version queue-index res-msg)))
+    (if (= 0 direct-links canonical-links env-links http-links
+           sample-not-available sample-parsing-error image-format-error conflicts-with-develop)
+      (skype/complete-version-building notifier version queue-index "good job, everything is ok!")
+      (skype/complete-version-building-with-warnings notifier version queue-index msg))))
 
 (defn build-failed [notifier version queue-index & [e]]
   (slack/build-failed notifier version queue-index e)

@@ -16,7 +16,8 @@
             [taoensso.timbre :as timbre :refer [info error]]
             [wiki.util.utils :as utils]
             [version-clj.core :as version-clj]
-            [clojure.java.shell :refer [sh]]))
+            [clojure.java.shell :refer [sh]]
+            [wiki.generator.git :as git]))
 
 (defn last-version? [jdbc branch-name]
   (let [last-version (vdata/default jdbc)]
@@ -32,6 +33,7 @@
 
 (defn- generate-version
   [branch
+   git-ssh
    api-versions
    {:keys [jdbc notifier offline-generator] :as generator}
    {:keys [data-dir] :as generator-config}
@@ -40,7 +42,7 @@
   (try
     (do
       (info "building" branch)
-      (notifications/start-version-building notifier (:name branch) queue-index)
+      (notifications/start-version-building notifier branch queue-index)
       (let [branch-path (str data-dir "/versions/" (:name branch))
             samples (pgs/samples branch-path)
             [data redirect-data] (get-struct branch-path)
@@ -69,7 +71,11 @@
                                         data
                                         api-versions
                                         generator-config
-                                        generate-images)]
+                                        generate-images)
+                  conflicts-with-develop (if (= "develop" (:name branch))
+                                           0
+                                           (git/merge-conflicts git-ssh branch-path))]
+              ;(prn "Conflicts with develop: " conflicts-with-develop)
               (vdata/add-report jdbc version-id report)
               (when (and (:generate-images generator-config)
                          generate-images)
@@ -79,7 +85,7 @@
               (vgen/remove-previous-versions jdbc version-id (:name branch))
               (generate-zip offline-generator {:id  version-id
                                                :key (:name branch)})
-              (notifications/complete-version-building notifier (:name branch) queue-index report)
+              (notifications/complete-version-building notifier (:name branch) queue-index report conflicts-with-develop)
               version-id))
           (catch Exception e
             (do (error e)
@@ -114,7 +120,9 @@
         (notifications/start-building notifier name-branches removed-branches queue-index)
         (info "api versions:" api-versions)
         (info "last version:" last-version)
+        ;(info "actual branches :" (pr-str actual-branches))
         (let [result (doall (map #(generate-version %
+                                                    git-ssh
                                                     api-versions
                                                     generator
                                                     generator-config

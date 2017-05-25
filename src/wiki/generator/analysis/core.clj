@@ -1,9 +1,18 @@
 (ns wiki.generator.analysis.core
   (:require [clojure.string :as s]))
 
+(defn landing-link? [link]
+  (or (.endsWith link ".com")
+      (.endsWith link ".com/")))
+
+(defn anchor-link? [link]
+  (.startsWith link "#"))
+
 (defn check-canonical [link]
-  (when (or (re-find #"\d+\.\d+\.\d+" link)
-            (re-find #"latest" link))
+  (when (and
+          (not (.contains link ".com"))
+          (or (re-find #"\d+\.\d+\.\d+" link)
+              (re-find #"latest" link)))
     {:canonical-error true}))
 
 (defn check-https [link]
@@ -15,7 +24,7 @@
     {:direct-error true}))
 
 (defn check-env [link]
-  (when (re-find #"(stg|develop|localhost|8080)" link)
+  (when (re-find #"(stg|develop/localhost|8080)" link)
     {:env-error true}))
 
 (defn get-links [md]
@@ -24,12 +33,13 @@
     links))
 
 (defn check-links [md]
-  (let [links (get-links md)
+  (let [all-links (get-links md)
+        links (remove #(or (landing-link? %)
+                           (anchor-link? %)) all-links)
         canonical-links (filter check-canonical links)
-        https-links (filter check-https links)
+        https-links (filter check-https all-links)
         direct-links (filter check-direct links)
         env-links (filter check-env links)]
-    ;(prn links)
     (reduce (fn [res [k coll]]
               (if (seq coll)
                 (assoc res k coll)

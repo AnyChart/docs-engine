@@ -11,7 +11,7 @@
 (defn update-branches [show-branches git-ssh data-dir]
   (let [repo-path (str data-dir "/repo/")
         versions-path (str data-dir "/versions/")]
-    (git/update git-ssh repo-path)
+    (git/update-repo git-ssh repo-path)
     (let [branches (if show-branches
                      (git/actual-branches git-ssh repo-path)
                      (git/version-branches git-ssh repo-path))]

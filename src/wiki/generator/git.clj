@@ -20,7 +20,11 @@
                               (println command res)
                               (:out res)))))
 
-(defn update [git-ssh repo]
+(defn set-user [git-ssh path]
+  (run-git git-ssh path "config" "user.name" "docs-engine")
+  (run-git git-ssh path "config" "user.email" "support@anychart.com"))
+
+(defn update-repo [git-ssh repo]
   (run-git git-ssh repo "fetch" "-p"))
 
 (defn checkout [git-ssh repo version target-path]
@@ -29,9 +33,23 @@
   (run-git git-ssh target-path "checkout" version)
   (run-git git-ssh target-path "pull" "origin" version))
 
+(defn merge-conflicts [git-ssh path]
+  (set-user git-ssh path)
+  (run-git git-ssh path "checkout" "develop")
+  (run-git git-ssh path "pull" "origin" "develop")
+  (run-git git-ssh path "checkout" (last (clojure.string/split path #"/")))
+  (let [git-resp (run-git git-ssh path "merge" "--no-commit" "--no-ff" "develop")
+        result (count (re-seq #"CONFLICT" git-resp))]
+    result))
 
 (defn- get-hash [git-ssh path]
   (clojure.string/trim-newline (run-git git-ssh path "rev-parse" "HEAD")))
+
+(defn- get-author [git-ssh path]
+  (clojure.string/trim-newline (run-git git-ssh path "log" "-1" "--pretty=%an")))
+
+(defn- get-message [git-ssh path]
+  (clojure.string/trim-newline (run-git git-ssh path "log" "-1" "--pretty=%s")))
 
 (defn actual-branches [git-ssh path]
   (map (fn [s] (last (re-matches #".*origin/([^ ]+).*" s)))
@@ -48,5 +66,7 @@
 (defn get-hashes [git-ssh base-path branches]
   (map (fn [branch]
          {:name   branch
-          :commit (get-hash git-ssh (str base-path branch))})
+          :commit (get-hash git-ssh (str base-path branch))
+          :author (get-author git-ssh (str base-path branch))
+          :message (get-message git-ssh (str base-path branch))})
        branches))
