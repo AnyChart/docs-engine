@@ -192,6 +192,11 @@
   (-> (response (sitemap/generate-sitemap (jdbc request)))
       (content-type "text/xml")))
 
+(defn- show-sitemap-version [request]
+  (let [version-name (-> request :params :version)]
+    (-> (response (sitemap/generate-sitemap-version (jdbc request) version-name))
+        (content-type "text/xml"))))
+
 (defn- request-redirects [request]
   (let [redirects (-> request :component :redirects deref)]
     (if (empty? redirects)
@@ -263,6 +268,8 @@
            (GET "/" [] show-landing)
            (GET "/sitemap" [] show-sitemap)
            (GET "/sitemap.xml" [] show-sitemap)
+           (GET "/sitemap/:version" [] show-sitemap-version)
+           (GET "/sitemap.xml/:version" [] show-sitemap-version)
            (GET "/latest" [] show-latest)
            (GET "/latest/" [] show-latest)
            (GET "/latest/search" [] show-latest-search)
