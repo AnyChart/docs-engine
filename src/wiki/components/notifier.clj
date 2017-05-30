@@ -32,7 +32,10 @@
   (slack/start-version-building notifier (:name branch) queue-index)
   (skype/start-version-building notifier branch queue-index))
 
-(defn complete-version-building [notifier version queue-index report conflicts-with-develop]
+(defn complete-version-building [notifier version queue-index
+                                 report
+                                 conflicts-with-develop
+                                 broken-links]
   (let [direct-links (count (set (mapcat :direct-links report)))
         canonical-links (count (set (mapcat :non-canonical-links report)))
         http-links (count (set (mapcat :http-links report)))
@@ -40,6 +43,7 @@
         sample-not-available (count (set (mapcat :sample-not-available report)))
         sample-parsing-error (count (set (mapcat :sample-parsing-error report)))
         image-format-error (count (set (mapcat :image-format-error report)))
+        broken-links-error (count broken-links)
         msg-coll [(when (pos? direct-links) (str "Direct links: " direct-links))
                   (when (pos? canonical-links) (str "Non canonical links: " canonical-links))
                   (when (pos? http-links) (str "Http links: " http-links))
@@ -47,7 +51,8 @@
                   (when (pos? sample-not-available) (str "Unavailable samples: " sample-not-available))
                   (when (pos? sample-parsing-error) (str "Parsing samples errors: " sample-parsing-error))
                   (when (pos? image-format-error) (str "Parsing images errors: " image-format-error))
-                  (when (pos? conflicts-with-develop) (str "Conflicts with develop: " conflicts-with-develop))]
+                  (when (pos? conflicts-with-develop) (str "Conflicts with develop: " conflicts-with-develop))
+                  (when (pos? broken-links-error) (str "404 errors: " broken-links-error))]
         msg (clojure.string/join "\n" (filter some? msg-coll))]
     (slack/complete-version-building notifier version queue-index)
     (if (= 0 direct-links canonical-links env-links http-links

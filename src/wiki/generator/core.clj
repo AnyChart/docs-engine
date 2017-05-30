@@ -17,7 +17,8 @@
             [wiki.util.utils :as utils]
             [version-clj.core :as version-clj]
             [clojure.java.shell :refer [sh]]
-            [wiki.generator.git :as git]))
+            [wiki.generator.git :as git]
+            [wiki.generator.analysis.core :as analysis]))
 
 (defn last-version? [jdbc branch-name]
   (let [last-version (vdata/default jdbc)]
@@ -36,7 +37,7 @@
    git-ssh
    api-versions
    {:keys [jdbc notifier offline-generator] :as generator}
-   {:keys [data-dir] :as generator-config}
+   {:keys [data-dir domain] :as generator-config}
    queue-index
    generate-images]
   (try
@@ -74,18 +75,32 @@
                                         generate-images)
                   conflicts-with-develop (if (= "develop" (:name branch))
                                            0
-                                           (git/merge-conflicts git-ssh branch-path))]
-              ;(prn "Conflicts with develop: " conflicts-with-develop)
-              (vdata/add-report jdbc version-id report)
+                                           (git/merge-conflicts git-ssh branch-path))
+                  *broken-link-result (promise)]
+
               (when (and (:generate-images generator-config)
                          generate-images)
                 (info "Uploading images: " (:images-dir generator-config) (:static-dir generator-config))
                 (let [upl-res (sh "scp" "-r" (:images-dir generator-config) (:static-dir generator-config))]
                   (info "Uploading result: " upl-res)))
+
               (vgen/remove-previous-versions jdbc version-id (:name branch))
+
               (generate-zip offline-generator {:id  version-id
                                                :key (:name branch)})
-              (notifications/complete-version-building notifier (:name branch) queue-index report conflicts-with-develop)
+
+              (timbre/info "Start check-broken-links")
+
+              (analysis/check-broken-links jdbc {:id  version-id
+                                                 :key (:name branch)} report domain *broken-link-result)
+              (let [total-report @*broken-link-result]
+                (timbre/info "Block until promise realised")
+                (vdata/add-report jdbc version-id total-report)
+
+                (notifications/complete-version-building notifier (:name branch) queue-index
+                                                         report
+                                                         conflicts-with-develop
+                                                         (:broken-links total-report)))
               version-id))
           (catch Exception e
             (do (error e)

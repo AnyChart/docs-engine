@@ -87,7 +87,8 @@
                        :table       "docs_stg_index"}
    :redis             {:pool {}
                        :spec {:host "127.0.0.1" :port 6379 :db 0}}
-   :generator         {:show-branches             true
+   :generator         {:domain                    :local
+                       :show-branches             true
                        :git-ssh                   "/Users/alex/Work/anychart/reference-engine/keys/git"
                        :data-dir                  (.getAbsolutePath (clojure.java.io/file "data"))
                        :max-processes             8
@@ -124,7 +125,8 @@
                                        :password "fuckstg"}
                    :redis             {:spec {:host "10.132.9.26" :db 1}}
                    :sphinx            {:subname "//104.236.66.244:3312?characterEncoding=utf8&characterSetResults=utf8&maxAllowedPacket=512000"}
-                   :generator         {:git-ssh         "/apps/keys/git"
+                   :generator         {:domain          :stg
+                                       :git-ssh         "/apps/keys/git"
                                        :data-dir        "/apps/docs-stg/data"
                                        :generate-images true
                                        :phantom-engine  "/usr/local/bin/phantomjs2"
@@ -154,7 +156,8 @@
                     :redis             {:spec {:host "10.132.9.26" :db 1}}
                     :sphinx            {:subname "//104.236.66.244:3312?characterEncoding=utf8&characterSetResults=utf8&maxAllowedPacket=512000"
                                         :table   "docs_prod_index"}
-                    :generator         {:show-branches             false
+                    :generator         {:domain                    :prod
+                                        :show-branches             false
                                         :git-ssh                   "/apps/keys/git"
                                         :data-dir                  "/apps/docs-prod/data"
                                         :queue                     "docs-prod-queue"
