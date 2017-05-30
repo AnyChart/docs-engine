@@ -85,9 +85,15 @@
   (let [msg (str "#" queue-index " docs " (-> notifier prefix (font "#cc0066" 11) u) " - " (b version) (-> " complete" (font "#36a64f") b) " " message  "\n")]
     (send-message (config notifier) msg)))
 
+(defn base-url-by-prefix [prefix]
+  (case (keyword prefix)
+    :prod "https://docs.anychart.com/"
+    :stg "http://docs.anychart.stg/"
+    :local "http://localhost:8080/"))
+
 (defn complete-version-building-with-warnings [notifier version queue-index message]
   (let [msg (str "#" queue-index " docs " (-> notifier prefix (font "#cc0066" 11) u) " - " (b version) (-> " complete with warnings" (font "#daa038") b)
-                 "\n" message  "\nSee full report at: Coming soon...\n" )]
+                 "\n" message  "\nSee full report at: " (base-url-by-prefix (-> notifier prefix)) version "/report"  )]
     (send-message (config notifier) msg)))
 
 (defn build-failed [notifier version queue-index & [e]]
