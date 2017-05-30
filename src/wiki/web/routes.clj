@@ -18,7 +18,8 @@
             [wiki.web.tree :refer [tree-view tree-view-local]]
             [wiki.web.redirects :refer [wrap-redirect]]
             [criterium.core :refer [bench]]
-            [wiki.data.versions :as vdata])
+            [wiki.data.versions :as vdata]
+            [wiki.generator.analysis.page :as analysis-page])
   (:import (com.googlecode.htmlcompressor.compressor HtmlCompressor ClosureJavaScriptCompressor)
            (com.google.javascript.jscomp CompilationLevel)))
 
@@ -260,6 +261,11 @@
      :headers {"Access-Control-Allow-Origin" "*"}
      :body    report}))
 
+(defn report-page [request]
+  (let [version-key (-> request :route-params :version)
+        report (vdata/version-report (jdbc request) version-key)]
+    (analysis-page/page report version-key)))
+
 (defroutes app-routes
            (route/resources "/")
            (GET "/_update_" [] request-update)
@@ -281,6 +287,7 @@
            (GET "/:version/_generate-zip_" [] (check-version-middleware generate-zip))
            (GET "/:version/download" [] (check-version-middleware download-zip))
            (GET "/:version/report.json" [] report)
+           (GET "/:version/report" [] report-page)
 
            (GET "/check/*" [] (check-version-middleware try-show-page))
            (GET "/search" [] (check-version-middleware search-page))

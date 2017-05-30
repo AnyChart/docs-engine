@@ -83,3 +83,10 @@
                                     (deliver *broken-link-result total-report)))}]
     (link-checker/start-by-urls sitemap-urls sitemap-url config)))
 
+
+(defn format-report [broken-links]
+  (let [broken-links (mapcat (fn [link]
+                               (map (fn [from-link] (assoc from-link :bad-url (:url link)))
+                                    (:from link)))
+                             broken-links)]
+    broken-links))

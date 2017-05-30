@@ -120,7 +120,7 @@
           nil))))
 
 (defn generate
-  [{:keys [jdbc notifier offline-generator] :as generator
+  [{:keys                                                                            [jdbc notifier offline-generator] :as generator
     {:keys [show-branches git-ssh data-dir reference-versions] :as generator-config} :config}
    queue-index]
   (try

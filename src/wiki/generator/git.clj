@@ -65,8 +65,8 @@
 
 (defn get-hashes [git-ssh base-path branches]
   (map (fn [branch]
-         {:name   branch
-          :commit (get-hash git-ssh (str base-path branch))
-          :author (get-author git-ssh (str base-path branch))
+         {:name    branch
+          :commit  (get-hash git-ssh (str base-path branch))
+          :author  (get-author git-ssh (str base-path branch))
           :message (get-message git-ssh (str base-path branch))})
        branches))

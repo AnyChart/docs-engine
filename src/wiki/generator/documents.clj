@@ -42,8 +42,8 @@
                 generator-config generate-images]
   (let [report (atom [])]
     (cp/with-shutdown! [pool (+ 2 (cp/ncpus))]
-                      (doall (cp/pmap pool #(generate-struct-item notifier jdbc version
-                                                                  samples nil % api-versions
-                                                                  generator-config generate-images report)
-                                      data)))
+                       (doall (cp/pmap pool #(generate-struct-item notifier jdbc version
+                                                                   samples nil % api-versions
+                                                                   generator-config generate-images report)
+                                       data)))
     @report))
