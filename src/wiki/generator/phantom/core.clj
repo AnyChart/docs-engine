@@ -56,7 +56,7 @@
           (ImageIO/write res "png" (file image-path)))
         (sh "pngquant" "--force" "--ext" ".png" image-path)
         (info "generated" image-path)
-        ;;(.delete tmp-file)
+        (.delete tmp-file)
         nil)
       (catch Exception e
         (do
