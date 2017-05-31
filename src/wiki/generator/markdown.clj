@@ -39,7 +39,7 @@
 (defn get-code [id code scripts sample version-key]
   (condp = (count scripts)
     0 (str "(function(){
-            if (anychart.hasOwnProperty('theme')) {anychart.theme(null);}\n"
+            if (anychart.hasOwnProperty('theme')) {anychart.theme('defaultTheme');}\n"
            (when (and (= id 1)
                       (> (version-clj/version-compare version-key "7.9.1") 0))
              "anychart.utils.hideTooltips(true);\n")
@@ -84,11 +84,14 @@
                 (clojure.string/replace #" container\." (str " " full-id "."))
                 (clojure.string/replace #"=\s*\"container\"" (str "=\"" full-id "\""))
                 (clojure.string/replace #"=\s*'container'" (str "='" full-id "'"))
+                (clojure.string/replace #"'#container'" (str "'#" full-id "'"))
                 (clojure.string/replace #"getElementsByTagName\(.body.\)\[0\]" (str "getElementById('iframe" id "')"))
                 (clojure.string/replace #"\$\(.body.\)" "\\$('.iframe-tag')")
                 (clojure.string/replace #"var\s+chart\s*=" "chart =")
                 (clojure.string/replace #"\"fixed\"" "\"absolute\"")
-                (clojure.string/replace #"anychart\.onDocumentReady" "setTimeout"))]
+                (clojure.string/replace #"anychart\.onDocumentReady" "setTimeout")
+                ;(clojure.string/replace  #"anychart\.onDocumentReady\(function\(\)\s*\{" "setTimeout(function(){if (anychart.hasOwnProperty('theme')) {anychart.theme('defaultTheme');}\n ")
+                )]
         (render-file "templates/sample.selmer" (assoc sample
                                                  :div-style div-style
                                                  :style style
