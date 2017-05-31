@@ -57,6 +57,7 @@
         (sh "pngquant" "--force" "--ext" ".png" image-path)
         (info "generated" image-path)
         (.delete tmp-file)
+        (.delete tmp-json)
         nil)
       (catch Exception e
         (do
