@@ -55,11 +55,15 @@
   (check-links md))
 
 
+(defn domain-url [domain]
+  (case domain
+    :stg "http://docs.anychart.stg/"
+    :prod "https://docs.anychart.com/"
+    :local "http://localhost:8080/"))
+
+
 (defn check-broken-links [jdbc version report domain *broken-link-result]
-  (let [sitemap-url (case domain
-                      :stg (str "http://docs.anychart.stg/sitemap/" (:key version))
-                      :prod (str "https://docs.anychart.com/sitemap/" (:key version))
-                      :local (str "http://localhost:8080/sitemap/" (:key version)))
+  (let [sitemap-url (str (domain-url domain) "sitemap/" (:key version))
         sitemap-urls (map link-checker.url/prepare-url (link-checker/urls-from-sitemap sitemap-url))
         sitemap-urls (map
                        (fn [s] (case domain
@@ -71,11 +75,8 @@
                                  :local (-> s (clojure.string/replace #"https://docs\.anychart\.com" "http://localhost:8080"))))
                        sitemap-urls)
         config {:check-fn       (fn [url data]
-                                  (case domain
-                                    :stg (.contains url (str "//docs.anychart.stg/" (:key version) "/"))
-                                    :prod (.contains url (str "//docs.anychart.com/" (:key version) "/"))
-                                    :local (.contains url (str "//localhost:8080/" (:key version) "/"))))
-                :max-loop-count 100
+                                  (.contains url (str (domain-url domain) (:key version) "/")))
+                :max-loop-count 15
                 :end-fn         (fn [res]
                                   ;(prn "LINK CHEKER RESULT: " res)
                                   (let [total-report {:error-links  report
