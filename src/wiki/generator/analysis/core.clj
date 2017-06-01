@@ -62,6 +62,22 @@
     :local "http://localhost:8080/"))
 
 
+(defn get-check-fn [domain version]
+  (fn [url data]
+    (and (not (.contains url "export-server.jar"))
+         (or (.contains url (str (domain-url domain) (:key version) "/"))
+             (and
+               (or (and (.contains url "anychart.stg/")
+                        (.contains url (:key version)))
+                   (and (.contains url "anychart.com/")
+                        (.contains url (:key version))))
+               (seq (filter (fn [from-link]
+                              (.contains
+                                (:url from-link)
+                                (str (domain-url domain) (:key version) "/")))
+                            (:from data))))))))
+
+
 (defn check-broken-links [jdbc version report domain *broken-link-result]
   (let [sitemap-url (str (domain-url domain) "sitemap/" (:key version))
         sitemap-urls (map link-checker.url/prepare-url (link-checker/urls-from-sitemap sitemap-url))
@@ -74,14 +90,17 @@
                                           )
                                  :local (-> s (clojure.string/replace #"https://docs\.anychart\.com" "http://localhost:8080"))))
                        sitemap-urls)
-        config {:check-fn       (fn [url data]
-                                  (.contains url (str (domain-url domain) (:key version) "/")))
-                :max-loop-count 15
-                :end-fn         (fn [res]
-                                  ;(prn "LINK CHEKER RESULT: " res)
-                                  (let [total-report {:error-links  report
-                                                      :broken-links res}]
-                                    (deliver *broken-link-result total-report)))}]
+        config {:check-fn         (get-check-fn domain version)
+                ;(fn [url data]
+                ;  (.contains url (str (domain-url domain) (:key version) "/")))
+                :iteration-fn     (fn [iteration urls-count urls-for-check-total-count total-count]
+                                    (println "Iteration: " iteration urls-count urls-for-check-total-count total-count))
+                :max-loop-count   25
+                :default-protocol "http"
+                :end-fn           (fn [res]
+                                    (let [total-report {:error-links  report
+                                                        :broken-links res}]
+                                      (deliver *broken-link-result total-report)))}]
     (link-checker/start-by-urls sitemap-urls sitemap-url config)))
 
 
