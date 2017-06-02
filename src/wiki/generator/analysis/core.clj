@@ -2,6 +2,7 @@
   (:require [clojure.string :as s]
             [link-checker.core :as link-checker]
             [link-checker.url]
+            [link-checker.utils :as link-checker-utils]
             [wiki.data.versions :as vdata]))
 
 (defn landing-link? [link]
@@ -86,27 +87,16 @@
                                  :prod s
                                  :stg (-> s
                                           (clojure.string/replace #"\.com" ".stg")
-                                          (clojure.string/replace #"https:" "http:")
-                                          )
+                                          (clojure.string/replace #"https:" "http:"))
                                  :local (-> s (clojure.string/replace #"https://docs\.anychart\.com" "http://localhost:8080"))))
                        sitemap-urls)
         config {:check-fn         (get-check-fn domain version)
-                ;(fn [url data]
-                ;  (.contains url (str (domain-url domain) (:key version) "/")))
                 :iteration-fn     (fn [iteration urls-count urls-for-check-total-count total-count]
                                     (println "Iteration: " iteration urls-count urls-for-check-total-count total-count))
                 :max-loop-count   25
                 :default-protocol "http"
                 :end-fn           (fn [res]
                                     (let [total-report {:error-links  report
-                                                        :broken-links res}]
+                                                        :broken-links (link-checker-utils/revert-result res)}]
                                       (deliver *broken-link-result total-report)))}]
     (link-checker/start-by-urls sitemap-urls sitemap-url config)))
-
-
-(defn format-report [broken-links]
-  (let [broken-links (mapcat (fn [link]
-                               (map (fn [from-link] (assoc from-link :bad-url (:url link)))
-                                    (:from link)))
-                             broken-links)]
-    broken-links))
