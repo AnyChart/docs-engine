@@ -7,7 +7,8 @@
             [wiki.data.playground :as pg-data]
             [wiki.components.notifier :as notifications]
             [wiki.generator.phantom.core :as phantom]
-            [version-clj.core :as version-clj]))
+            [version-clj.core :as version-clj]
+            [wiki.util.utils :as utils]))
 
 (defn get-tags [text]
   (if-let [matches (re-matches #"(?s).*(\{tags\}(.*)\{tags\}[\r\n]?).*" text)]
@@ -160,6 +161,18 @@
                             (fn [[_ link title]]
                               (str "<a class='method' href='//" reference "/" real-version "/" link "'>" title "</a>")))))
 
+(defn- add-pg-links [text version playground]
+  (let [real-version (if (utils/released-version? version)
+                       version "latest")]
+    (clojure.string/replace text
+                            #"\{pg:([^}]+)\}([^{]+)\{pg\}"
+                            (fn [[_ link title]]
+                              (let [link (clojure.string/replace link #"<i>|</i>|<em>|</em>" "_")
+                                    link-parts (clojure.string/split link #"/")
+                                    project (first link-parts)
+                                    link-url (clojure.string/join "/" (drop 1 link-parts))]
+                                (str "<a href='//" playground "/" project "/" real-version "/" link-url "'>" title "</a>"))))))
+
 (defn- add-tags [html tags]
   (let [tags-html (str "<div class='tags'>" (apply str (map #(str "<span>" % "</span>") tags)) "</div>")
         h1 "</h1>"
@@ -191,7 +204,7 @@
      state]))
 
 (defn to-html [notifier page-url source version samples api-versions
-               {:keys [playground reference reference-default-version] :as generator-config}
+               {:keys [playground playground-base reference reference-default-version] :as generator-config}
                generate-images page-report]
   (let [{tags :tags html-without-tags :html} (get-tags source)
         html (-> (md-to-html-string html-without-tags
@@ -202,7 +215,8 @@
                                                                       transformer-vector
                                                                       [(sample-transformer (atom 0) notifier page-url version samples
                                                                                            generator-config generate-images page-report)]))
-                 (add-api-links version reference api-versions reference-default-version))
+                 (add-api-links version reference api-versions reference-default-version)
+                 (add-pg-links version playground-base))
         html-tags (if (empty? tags) html
                                     (add-tags html tags))]
     {:html html-tags :tags tags}))

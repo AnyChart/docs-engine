@@ -99,6 +99,7 @@
                        :reference-versions        "http://api.anychart.stg/versions"
                        :reference-default-version "develop"
                        :playground                "playground.anychart.stg/docs"
+                       :playground-base           "playground.anychart.stg"
                        ;; page images generation, only for local and stg (to not generate images by prod and stg in one time)
                        :generate-images           true
                        :phantom-engine            "/usr/local/bin/phantomjs"
@@ -167,6 +168,7 @@
                                         :reference-versions        "https://api.anychart.com/versions"
                                         :reference-default-version "latest"
                                         :playground                "playground.anychart.com/docs"
+                                        :playground-base           "playground.anychart.com"
                                         :generate-images           false}
                     :offline-generator {:queue   "docs-zip-prod-queue"
                                         :zip-dir "/apps/docs-prod/data/zip"}
