@@ -125,29 +125,33 @@
    queue-index]
   (try
     (do
-      (fs/mkdirs (str data-dir "/versions"))
-      (let [actual-branches (vgen/update-branches show-branches git-ssh data-dir)
-            removed-branches (vgen/remove-branches jdbc (map :name actual-branches) data-dir)
-            branches (vgen/filter-for-rebuild jdbc actual-branches)
-            name-branches (map :name branches)
-            api-versions (api-versions/get-versions reference-versions)
-            last-version (last-version jdbc name-branches)]
-        (notifications/start-building notifier name-branches removed-branches queue-index)
-        (info "api versions:" api-versions)
-        (info "last version:" last-version)
-        ;(info "actual branches :" (pr-str actual-branches))
-        (let [result (doall (map #(generate-version %
-                                                    git-ssh
-                                                    api-versions
-                                                    generator
-                                                    generator-config
-                                                    queue-index
-                                                    (= (:name %) last-version))
-                                 branches))]
-          (fs/delete-dir (str data-dir "/versions"))
-          (if (some nil? result)
-            (notifications/complete-building-with-errors notifier name-branches queue-index)
-            (notifications/complete-building notifier name-branches removed-branches queue-index)))))
+      (let [repo-path (str data-dir "/repo/")
+            versions-path (str data-dir "/versions/")]
+        (fs/mkdirs versions-path)
+        (git/update-repo git-ssh repo-path)
+        (let [actual-branches (vgen/actual-branches show-branches git-ssh repo-path)
+              removed-branches (vgen/remove-branches jdbc (map :name actual-branches) data-dir)
+              branches (vgen/filter-for-rebuild jdbc actual-branches)
+              name-branches (map :name branches)
+              api-versions (api-versions/get-versions reference-versions)
+              last-version (last-version jdbc name-branches)]
+          (doall (pmap #(git/checkout git-ssh repo-path % (str versions-path %)) name-branches))
+          (notifications/start-building notifier name-branches removed-branches queue-index)
+          (info "api versions:" api-versions)
+          (info "last version:" last-version)
+          ;(info "actual branches :" (pr-str actual-branches))
+          (let [result (doall (map #(generate-version %
+                                                      git-ssh
+                                                      api-versions
+                                                      generator
+                                                      generator-config
+                                                      queue-index
+                                                      (= (:name %) last-version))
+                                   branches))]
+            (fs/delete-dir versions-path)
+            (if (some nil? result)
+              (notifications/complete-building-with-errors notifier name-branches queue-index)
+              (notifications/complete-building notifier name-branches removed-branches queue-index))))))
     (catch Exception e
       (do (error e)
           (error (.getMessage e))

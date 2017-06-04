@@ -8,15 +8,10 @@
             [me.raynes.fs :as fs]
             [taoensso.timbre :as timbre :refer [info error]]))
 
-(defn update-branches [show-branches git-ssh data-dir]
-  (let [repo-path (str data-dir "/repo/")
-        versions-path (str data-dir "/versions/")]
-    (git/update-repo git-ssh repo-path)
-    (let [branches (if show-branches
-                     (git/actual-branches git-ssh repo-path)
-                     (git/version-branches git-ssh repo-path))]
-      (doall (pmap #(git/checkout git-ssh repo-path % (str versions-path %)) branches))
-      (git/get-hashes git-ssh versions-path branches))))
+(defn actual-branches [show-branches git-ssh repo-path]
+  (if show-branches
+    (git/actual-branches-with-hashes git-ssh repo-path)
+    (git/version-branches-with-hashes git-ssh repo-path)))
 
 (defn- remove-branch [jdbc branch-key]
   (let [version-id (:id (vdata/version-by-key jdbc branch-key))]
