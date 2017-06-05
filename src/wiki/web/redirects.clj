@@ -16,7 +16,6 @@
     (update-in data [:redirect :redirects] parse-redirects)))
 
 (defn get-config [file-path]
-  (prn file-path)
   (when (.exists (io/file file-path))
     (-> file-path
         slurp
