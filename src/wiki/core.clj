@@ -141,6 +141,7 @@
                    base-config
                    {:notifications     {:slack {:domain "https://docs.anychart.com/" :channel "#notifications-prod" :prefix "prod"}
                                         :skype {:prefix "prod"}}
+                    :indexer           {:queue "docs-prod-search-queue"}
                     :web               {:debug           false
                                         :port            9011
                                         :queue           "docs-prod-queue"
