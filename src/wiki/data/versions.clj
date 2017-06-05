@@ -145,6 +145,7 @@
   (let [redirects (query jdbc (-> (select :config)
                                   (from :versions)
                                   (where [:= :hidden false])))
-        redirects* (->> redirects (filter (comp some? :config))
-                        (map (comp :redirects pg->clj :config)))]
+        redirects* (->> redirects
+                        (filter (comp some? :config))
+                        (map (comp :redirects :redirect pg->clj :config)))]
     (seq (set (apply concat redirects*)))))

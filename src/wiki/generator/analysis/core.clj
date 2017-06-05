@@ -24,7 +24,8 @@
     {:https-error true}))
 
 (defn check-direct [link]
-  (when (re-find #"(api.anychart|doc.anychart|pg.anychart|playground.anychart)" link)
+  (when (and (re-find #"(api.anychart|doc.anychart|pg.anychart|playground.anychart)" link)
+             (re-find #"/\d+\.\d+\.\d+" link))
     {:direct-error true}))
 
 (defn check-env [link]
@@ -36,12 +37,18 @@
         links (map second links-list)]
     links))
 
-(defn check-links [md]
+(defn check-links [md version-config]
   (let [all-links (get-links md)
         links (remove #(or (landing-link? %)
-                           (anchor-link? %)) all-links)
+                           (anchor-link? %)
+                           (some (fn [http-ignore]
+                                   (.contains % http-ignore))
+                                 (-> version-config :report :http-ignore))) all-links)
         canonical-links (filter check-canonical links)
-        https-links (filter check-https all-links)
+        https-links (filter check-https
+                            (remove #(some (fn [http-ignore]
+                                             (.contains % http-ignore))
+                                           (-> version-config :report :http-ignore)) all-links))
         direct-links (filter check-direct links)
         env-links (filter check-env links)]
     (reduce (fn [res [k coll]]
@@ -51,10 +58,6 @@
                           [:non-canonical-links canonical-links]
                           [:direct-links direct-links]
                           [:env-links env-links]])))
-
-(defn start [md]
-  (check-links md))
-
 
 (defn domain-url [domain]
   (case domain

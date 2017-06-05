@@ -5,6 +5,7 @@
                  [com.stuartsierra/component "0.3.2"]
                  [clj-time "0.13.0"]
                  [com.climate/claypoole "1.1.4"]
+                 [toml "0.1.2"]
                  ;; templates
                  [selmer "1.10.6"]
                  [hiccup "1.0.5"]
