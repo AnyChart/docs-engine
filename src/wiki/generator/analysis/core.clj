@@ -24,8 +24,12 @@
     {:https-error true}))
 
 (defn check-direct [link]
-  (when (and (re-find #"(api.anychart|doc.anychart|pg.anychart|playground.anychart)" link)
-             (re-find #"/\d+\.\d+\.\d+" link))
+  (when (or
+          (and (re-find #"(api.anychart|docs.anychart|pg.anychart|playground.anychart)" link)
+               (re-find #"/\d+\.\d+\.\d+" link))
+          (and (re-find #"docs.anychart" link)
+               (or (re-find #"/\d+\.\d+\.\d+" link)
+                   (.contains link "/latest"))))
     {:direct-error true}))
 
 (defn check-env [link]
