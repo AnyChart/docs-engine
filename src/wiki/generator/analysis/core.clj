@@ -78,7 +78,8 @@
                (or (and (.contains url "anychart.stg/")
                         (.contains url (:key version)))
                    (and (.contains url "anychart.com/")
-                        (.contains url (:key version))))
+                        (.contains url (:key version)))
+                   (.contains url "//anychart."))
                (seq (filter (fn [from-link]
                               (.contains
                                 (:url from-link)
