@@ -56,7 +56,7 @@
         msg (clojure.string/join "\n" (filter some? msg-coll))]
     (slack/complete-version-building notifier version queue-index)
     (if (= 0 direct-links canonical-links env-links http-links
-           sample-not-available sample-parsing-error image-format-error conflicts-with-develop)
+           sample-not-available sample-parsing-error image-format-error conflicts-with-develop broken-links-error)
       (skype/complete-version-building notifier version queue-index "good job, everything is ok!")
       (skype/complete-version-building-with-warnings notifier version queue-index msg))))
 
