@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{{title-prefix}} | AnyChart Documentation{% if is-url-version %} ver. {{version}}{% endif %}</title>
+    <title>{{title-prefix}}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:title" content="{{title-prefix}} | AnyChart Documentation{% if is-url-version %} ver. {{version}}{% endif %}"/>
+    <meta property="og:title" content="{{title-prefix}}"/>
     <meta name="description" content="{{description}}"/>
     <meta property="og:description" content="{{description}}"/>
     <meta property="og:image" content="http://static.anychart.com/docs/images/{{image-url}}.png"/>

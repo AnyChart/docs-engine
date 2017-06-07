@@ -9,11 +9,11 @@
               (str "/" version (escape-url (:url el)))
               (escape-url (:url el)))]
     (if (contains? el :children)
-     (str "<li>"
-          "<a href='" url "'><i class='ac ac-folder-open'></i> " (:title el) "</a>"
-          "<ul>" (reduce str (map #(tree-view % version is-url-version) (:children el))) "</ul>"
-          "</li>")
-     (str "<li> <a href='" url "'><i class='ac ac-file-text'></i> " (:title el) "</a></li>"))))
+      (str "<li>"
+           "<a href='" url "'><i class='ac ac-folder-open'></i> " (:title el) "</a>"
+           "<ul>" (reduce str (map #(tree-view % version is-url-version) (:children el))) "</ul>"
+           "</li>")
+      (str "<li> <a href='" url "'><i class='ac ac-file-text'></i> " (:title el) "</a></li>"))))
 
 
 (defn tree-view-local [el version path]

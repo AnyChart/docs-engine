@@ -50,7 +50,7 @@ function loadPage(link, needPushState) {
                             '</noscript>'+
                             '  <div class="col-lg-6 hidden-sm hidden-xs hidden-md visible-lg"><div id="table-of-content-large"></div></div>'+
                            '</div>');
-        document.title = res['title-prefix'] + " | AnyChart Documentation" + (res["is-url-version"] ? " ver. " + version : "");
+        document.title = res['title-prefix'];
         // scroll page to appropriate text
         if (location.hash.length > 1){
             var el = $('a[href="' + location.hash + '"]');

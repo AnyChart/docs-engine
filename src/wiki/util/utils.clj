@@ -51,8 +51,8 @@
 (defn page-description [html]
   (when html
     (when-let [doc (Jsoup/parse html)]
-      (when-let [p (first (.select doc "p"))]
-        (when-let [text (.text p)]
+      (when-let [ps (.select doc "p")]
+        (let [text (clojure.string/join " " (map #(.text %) ps))]
           (when (not-empty text)
             (subs text 0 (min 155 (count text)))))))))
 

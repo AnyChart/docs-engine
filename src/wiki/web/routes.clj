@@ -19,7 +19,8 @@
             [wiki.web.redirects :refer [wrap-redirect]]
             [criterium.core :refer [bench]]
             [wiki.data.versions :as vdata]
-            [wiki.generator.analysis.page :as analysis-page])
+            [wiki.generator.analysis.page :as analysis-page]
+            [clojure.string :as string])
   (:import (com.googlecode.htmlcompressor.compressor HtmlCompressor ClosureJavaScriptCompressor)
            (com.google.javascript.jscomp CompilationLevel)))
 
@@ -47,9 +48,18 @@
 (defn offline-generator [request]
   (-> request :component :offline-generator))
 
-(defn- title-prefix [page]
-  (or (-> page :config :title)
-      (-> page :url utils/url->title)))
+(defn- title-prefix [page is-url-version version-name]
+  (let [text (or (-> page :config :title)
+                 (-> page :url utils/url->title))
+        title (str text " | AnyChart Documentation")
+        title-parts (string/split title #" \| ")
+        title (reduce (fn [res part]
+                        (if (empty? res)
+                          part
+                          (if (< (count (str res " | " part)) 70)
+                            (str res " | " part)
+                            res))) "" title-parts)]
+    (str title (when is-url-version (str " | ver. " version-name)))))
 
 (defn- show-404 [request]
   (render-file "templates/404.selmer" {}))
@@ -105,7 +115,7 @@
                                                    :url                  (:url page)
                                                    :image-url            (utils/name->url (:url page))
                                                    :title                (:full_name page)
-                                                   :title-prefix         (title-prefix page)
+                                                   :title-prefix         (title-prefix page is-url-version (:key version))
                                                    :description          (or (utils/page-description (:content page))
                                                                              (:full_name page))
                                                    :page                 page
@@ -212,7 +222,7 @@
     (response {:url            (:url page)
                :page           page
                :title          (:full_name page)
-               :title-prefix   (title-prefix page)
+               :title-prefix   (title-prefix page (boolean url-version) (:key version))
                :versions       versions
                :is-url-version (boolean url-version)})
     (error-404 request)))
@@ -243,16 +253,16 @@
 (defn- show-page-middleware [request version versions page-url url-version]
   (let [url (-> request :route-params :*)]
     (if (empty? page-url)
-     (redirect (str "/" (:key version) "/Quick_Start"))
-     (if-let [page (pages-data/page-by-url (jdbc request) (:id version) (utils/drop-last-slash page-url))]
-       (if (.endsWith url "/")
-         (redirect (str "/" (utils/drop-last-slash url)) 301)
-         (show-page request version versions page (boolean url-version)))
-       (if-let [folder (folders-data/get-folder-by-url (jdbc request) (:id version) page-url)]
-         (redirect (str (when url-version (str "/" (:key version)))
-                        "/" (:url folder)
-                        "/" (:default_page folder)) 301)
-         (error-404 request))))))
+      (redirect (str "/" (:key version) "/Quick_Start"))
+      (if-let [page (pages-data/page-by-url (jdbc request) (:id version) (utils/drop-last-slash page-url))]
+        (if (.endsWith url "/")
+          (redirect (str "/" (utils/drop-last-slash url)) 301)
+          (show-page request version versions page (boolean url-version)))
+        (if-let [folder (folders-data/get-folder-by-url (jdbc request) (:id version) page-url)]
+          (redirect (str (when url-version (str "/" (:key version)))
+                         "/" (:url folder)
+                         "/" (:default_page folder)) 301)
+          (error-404 request))))))
 
 (defn report [request]
   (let [version-key (-> request :route-params :version)
