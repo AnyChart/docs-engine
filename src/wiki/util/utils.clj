@@ -1,5 +1,5 @@
 (ns wiki.util.utils
-  (:require [clojure.string :as s])
+  (:require [clojure.string :as string])
   (import [org.jsoup Jsoup]))
 
 (defn deep-merge [a b]
@@ -21,7 +21,7 @@
       (clojure.string/replace #"," "-")
       (clojure.string/replace #" " "-")
       (clojure.string/replace #"_" "-")
-      s/lower-case))
+      string/lower-case))
 
 (defn released-version? [version-key]
   (re-matches #"^\d+\.\d+\.\d+$" version-key))
@@ -38,10 +38,10 @@
 
 (defn url->title [url]
   (let [parts (-> url
-                  (s/replace #"_" " ")
-                  (s/split #"/")
+                  (string/replace #"_" " ")
+                  (string/split #"/")
                   reverse)]
-    (s/join " | " parts)))
+    (string/join " | " parts)))
 
 (defn drop-last-slash [s]
   (if (.endsWith s "/")
@@ -52,9 +52,17 @@
   (when html
     (when-let [doc (Jsoup/parse html)]
       (when-let [ps (.select doc "p")]
-        (let [text (clojure.string/join " " (map #(.text %) ps))]
+        (let [text (string/join " " (map #(.text %) ps))]
           (when (not-empty text)
-            (subs text 0 (min 155 (count text)))))))))
+            ;(subs text 0 (min 155 (count text)))
+            (let [words (string/split (subs text 0 (min (count text) 160)) #" ")
+                  result (reduce (fn [res part]
+                                   (if (empty? res)
+                                     part
+                                     (if (< (count (str res " " part)) 155)
+                                       (str res " " part)
+                                       res))) "" words)]
+              (string/trim result))))))))
 
 ;; select * from pages where version_id in (select id from versions where key = '7.13.0') AND content NOT LIKE '%sampleInit1%';
 ;; for og:image tag
