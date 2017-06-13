@@ -222,11 +222,13 @@
         var anychartScriptIsLoad;
         var mainScriptIsLoad;
         var updateSampleInit = function(){
-            if( anychartScriptIsLoad == false) return;
-            if( mainScriptIsLoad == false) return;
-            for( var i = 1; typeof window["sampleInit" + i] !== 'undefined'; i++){
-                window["sampleInit" + i]();
-                delete window["sampleInit" + i];
+            if (anychartScriptIsLoad == false) return;
+            if (mainScriptIsLoad == false) return;
+            for (var i = 1; i < 30; i++){
+                if (typeof window["sampleInit" + i] !== 'undefined'){
+                    window["sampleInit" + i]();
+                    delete window["sampleInit" + i];
+                }
             }
         };
         anychartScriptIsLoad = typeof anychart !== 'undefined';
