@@ -1,6 +1,5 @@
 (ns wiki.generator.struct
   (:require [clojure.java.io :refer [file]]
-            [wiki.web.redirects :as redirects]
             [wiki.generator.git :refer [file-last-commit-date]]))
 
 (defn- title [f]
@@ -96,9 +95,8 @@
     item))
 
 (defn get-struct [path]
-  [(-> (build-struct [] (file path) path)
-       last
-       filter-struct
-       sort-struct
-       :children)
-   (redirects/get-config (str path "/config.toml"))])
+  (-> (build-struct [] (file path) path)
+      last
+      filter-struct
+      sort-struct
+      :children))

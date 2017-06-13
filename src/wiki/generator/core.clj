@@ -18,7 +18,8 @@
             [version-clj.core :as version-clj]
             [clojure.java.shell :refer [sh]]
             [wiki.generator.git :as git]
-            [wiki.generator.analysis.core :as analysis]))
+            [wiki.generator.analysis.core :as analysis]
+            [wiki.web.redirects :as redirects]))
 
 (defn last-version? [jdbc branch-name]
   (let [last-version (vdata/default jdbc)]
@@ -46,7 +47,8 @@
       (notifications/start-version-building notifier branch queue-index)
       (let [branch-path (str data-dir "/versions/" (:name branch))
             samples (pgs/samples branch-path)
-            [data version-config] (get-struct branch-path)
+            data (get-struct branch-path)
+            version-config (redirects/get-config (str branch-path "/config.toml"))
             tree (tree-gen/generate-tree data)
             version-id (vdata/add-version jdbc
                                           (:name branch)
