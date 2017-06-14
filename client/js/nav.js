@@ -32,22 +32,9 @@ function loadPage(link, needPushState) {
                                '<span><i class="ac ac-net"></i></span> Improve this Doc'+
                                '</a>'
                            +res.page.content+'</div>'+
-                            '<div id="disqus_thread" class="col-lg-17"></div>'+
                             '<script>'+
-                            '(function() { '+
-                                'DISQUS.reset({' +
-                                'reload: true,' +
-                                'config: function () {' +
-                                    'this.page.url = "http://docs.anychart.com/' + res.page.url + '";' +
-                                    'this.page.identifier = "' + res.page.url + '".split("\/").join("_").split("%").join("_").toLowerCase();'+
-                                    'this.page.title = "' + res.page.url + '".split("_").join(" ").split("/").join(" - ");'+
-                                    'this.language = "en";'+
-                                '}});'+
-                            '})();'+
                             'tryUpdateSampleInit();' +
                             '</script>'+
-                            '<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="noclilow">comments powered by Disqus.</a>'+
-                            '</noscript>'+
                             '  <div class="col-lg-6 hidden-sm hidden-xs hidden-md visible-lg"><div id="table-of-content-large"></div></div>'+
                            '</div>');
         document.title = res['title-prefix'];
