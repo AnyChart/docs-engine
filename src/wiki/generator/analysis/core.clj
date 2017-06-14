@@ -14,9 +14,11 @@
 
 (defn check-canonical [link]
   (when (and
-          (not (.contains link ".com"))
+          (not-any? #(.contains link %) [".com" ".org" ".ru" ".neta"])
           (or (re-find #"/\d+\.\d+\.\d+" link)
-              (re-find #"/latest" link)))
+              (re-find #"/latest" link)
+              (and (.startsWith link "/")
+                   (not (.startsWith link "//")))))
     {:canonical-error true}))
 
 (defn check-https [link]
