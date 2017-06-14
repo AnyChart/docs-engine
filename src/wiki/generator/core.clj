@@ -37,6 +37,7 @@
   [branch
    git-ssh
    api-versions
+   docs-versions
    {:keys [jdbc notifier offline-generator] :as generator}
    {:keys [data-dir domain] :as generator-config}
    queue-index
@@ -94,8 +95,10 @@
 
               (timbre/info "Start check-broken-links")
 
-              (analysis/check-broken-links jdbc {:id  version-id
-                                                 :key (:name branch)} report domain *broken-link-result)
+              (analysis/check-broken-links jdbc
+                                           {:id  version-id
+                                            :key (:name branch)}
+                                           docs-versions report domain *broken-link-result)
               (let [total-report @*broken-link-result]
                 (timbre/info "Block until promise realised")
                 (vdata/add-report jdbc version-id total-report)
@@ -133,6 +136,7 @@
         (fs/mkdirs versions-path)
         (git/update-repo git-ssh repo-path)
         (let [actual-branches (vgen/actual-branches show-branches git-ssh repo-path)
+              docs-versions (map :name actual-branches)
               removed-branches (vgen/remove-branches jdbc (map :name actual-branches) data-dir)
               branches (vgen/filter-for-rebuild jdbc actual-branches)
               name-branches (map :name branches)
@@ -146,6 +150,7 @@
           (let [result (doall (map #(generate-version %
                                                       git-ssh
                                                       api-versions
+                                                      docs-versions
                                                       generator
                                                       generator-config
                                                       queue-index

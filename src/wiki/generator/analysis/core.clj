@@ -70,7 +70,7 @@
     :local "http://localhost:8080/"))
 
 
-(defn get-check-fn [domain version]
+(defn get-check-fn [domain version docs-versions]
   (fn [url data]
     (and (not (.contains url "export-server.jar"))
          (or (.contains url (str (domain-url domain) (:key version) "/"))
@@ -79,7 +79,10 @@
                         (.contains url (:key version)))
                    (and (.contains url "anychart.com/")
                         (.contains url (:key version)))
-                   (.contains url "//anychart."))
+                   (.contains url "//anychart.")
+                   (and (or (.contains url "docs.anychart.")
+                            (.contains url "localhost:8080"))
+                        (not-any? (fn [version-name] (.contains url version-name)) docs-versions)))
                (seq (filter (fn [from-link]
                               (.contains
                                 (:url from-link)
@@ -87,7 +90,7 @@
                             (:from data))))))))
 
 
-(defn check-broken-links [jdbc version report domain *broken-link-result]
+(defn check-broken-links [jdbc version docs-versions report domain *broken-link-result]
   (let [sitemap-url (str (domain-url domain) "sitemap/" (:key version))
         sitemap-urls (map link-checker.url/prepare-url (link-checker/urls-from-sitemap sitemap-url))
         sitemap-urls (map
@@ -98,7 +101,7 @@
                                           (clojure.string/replace #"https:" "http:"))
                                  :local (-> s (clojure.string/replace #"https://docs\.anychart\.com" "http://localhost:8080"))))
                        sitemap-urls)
-        config {:check-fn         (get-check-fn domain version)
+        config {:check-fn         (get-check-fn domain version docs-versions)
                 :iteration-fn     (fn [iteration urls-count urls-for-check-total-count total-count]
                                     (println "Iteration: " iteration urls-count urls-for-check-total-count total-count))
                 :max-loop-count   25
