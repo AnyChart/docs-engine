@@ -250,6 +250,9 @@
           page-url (if url-version short-url url)]
       (handler request version versions page-url url-version))))
 
+(defn version-that-has-this-page-url [versions page-url]
+  (first (filter #(.contains (:url %) page-url) versions)))
+
 (defn- show-page-middleware [request version versions page-url url-version]
   (let [url (-> request :route-params :*)]
     (if (empty? page-url)
@@ -262,7 +265,9 @@
           (redirect (str (when url-version (str "/" (:key version)))
                          "/" (:url folder)
                          "/" (:default_page folder)) 301)
-          (error-404 request))))))
+          (if-let [last-canonical-version (version-that-has-this-page-url versions page-url)]
+            (redirect (:url last-canonical-version) 301)
+            (error-404 request)))))))
 
 (defn report [request]
   (let [version-key (-> request :route-params :version)
