@@ -68,9 +68,11 @@
     (send-message (config notifier) msg)))
 
 (defn complete-building-with-errors [notifier branches queue-index e]
-  (let [msg (str "#" queue-index " docs " (-> notifier prefix (font "#cc0066" 11) u) " - " (-> "complete with errors!" (font "#d00000") b) "\n"
+  (let [msg (str "#" queue-index " docs " (-> notifier prefix (font "#cc0066" 11) u) " - " (-> "error during processing!" (font "#d00000") b) "\n"
                  (when (seq branches)
-                   (str (b "Branches: ") (s/join ", " branches))))]
+                   (str (b "Branches: ") (s/join ", " branches)))
+                 (when e
+                   (-> (utils/format-exception e) (font "#777777" 11) i)))]
     (send-message (config notifier) msg)))
 
 
