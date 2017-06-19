@@ -67,3 +67,20 @@ $menu.find("a").each(function() {
 
 expandMenu(location.pathname);
 
+// resize table content height
+window.addEventListener("resize", function(){
+    onResize();
+});
+var onResize = function(){
+    var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+    var tableOfContentLarge = $("#table-of-content-large");
+    var tableOfContent = $($(".table_of_content")[1]);
+    if (tableOfContent.height() + 120 + 85 > windowHeight){
+        tableOfContentLarge.height(windowHeight - 120 - 85);
+    }else{
+        tableOfContentLarge.height(tableOfContent.height());
+    }
+};
+window.onload = function(){
+    onResize();
+};
