@@ -19,7 +19,8 @@
             [clojure.java.shell :refer [sh]]
             [wiki.generator.git :as git]
             [wiki.generator.analysis.core :as analysis]
-            [wiki.web.redirects :as redirects]))
+            [wiki.web.redirects :as redirects]
+            [wiki.data.pages :as pages-data]))
 
 (defn last-version? [jdbc branch-name]
   (let [last-version (vdata/default jdbc)]
@@ -32,6 +33,37 @@
   (let [versions (vdata/versions jdbc)]
     (first (sort (comp - version-clj/version-compare)
                  (concat versions branches)))))
+
+(defn replace-vars [s vars]
+  (reduce (fn [s [key value]]
+            (clojure.string/replace s
+                                    (re-pattern (str "\\{\\{" (name key) "\\}\\}"))
+                                    (str value)))
+          s vars))
+
+(defn complete-config [jdbc version version-config branch-path]
+  (let [samples-count (dec (count (file-seq (clojure.java.io/file (str branch-path "/samples")))))
+        articles-count (count (pages-data/pages-urls jdbc (:id version)))]
+    (-> version-config
+        (assoc-in [:vars :branch-name] (:key version))
+        (assoc-in [:vars :samples-count] samples-count)
+        (assoc-in [:vars :articles-count] articles-count))))
+
+(defn generate-landing [jdbc version version-config branch-path]
+  (let [landing-file-path (str branch-path "/index.html")
+        landing-content (try
+                          (slurp (str branch-path "/index.html"))
+                          (catch Exception _ nil))
+        version-config (complete-config jdbc version version-config branch-path)]
+    (when landing-content
+      (pdata/add-page jdbc
+                      (:id version)
+                      ""
+                      "Landing"
+                      (replace-vars landing-content (:vars version-config))
+                      (git/file-last-commit-date branch-path (.getAbsolutePath (clojure.java.io/file landing-file-path)))
+                      []
+                      {}))))
 
 (defn- generate-version
   [branch
@@ -49,13 +81,16 @@
       (let [branch-path (str data-dir "/versions/" (:name branch))
             samples (pgs/samples branch-path)
             data (get-struct branch-path)
-            version-config (redirects/get-config (str branch-path "/config.toml"))
+            version-config (assoc-in (redirects/get-config (str branch-path "/config.toml"))
+                                     [:vars :branch-name] (:name branch))
             tree (tree-gen/generate-tree data)
             version-id (vdata/add-version jdbc
                                           (:name branch)
                                           (:commit branch)
                                           tree
-                                          version-config)]
+                                          version-config)
+            version {:id  version-id
+                     :key (:name branch)}]
         (try
           (let [static-branch-dir (str data-dir "/static/" (:name branch))
                 images-branch-dir (str branch-path "/images")]
@@ -69,8 +104,7 @@
               (fs/mkdirs (:images-dir generator-config)))
             (let [report (dgen/generate notifier
                                         jdbc
-                                        {:id  version-id
-                                         :key (:name branch)}
+                                        version
                                         samples
                                         data
                                         api-versions
@@ -81,6 +115,8 @@
                                            0
                                            (git/merge-conflicts git-ssh branch-path))
                   *broken-link-result (promise)]
+
+              (generate-landing jdbc version version-config branch-path)
 
               (when (and (:generate-images generator-config)
                          generate-images)

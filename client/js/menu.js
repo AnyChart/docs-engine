@@ -31,7 +31,9 @@ var expandMenu = function(target) {
             $el.find("i").removeClass('ac-folder').addClass('ac-folder-open');
         }
     }
-    $el.addClass("active");
+    if ($el){
+        $el.addClass("active");
+    }
 };
 
 $menu.find('ul').hide();

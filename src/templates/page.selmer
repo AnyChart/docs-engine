@@ -13,7 +13,7 @@
     <meta property="fb:admins" content="704106090"/>
     {% if page.tags|not-empty %}<meta name="keywords" content="{{page.tags|join:", "}}">{% endif %}
     <meta name="yandex-verification" content="c5fb5d43a81ea360"/>
-    <link rel="canonical" href="https://docs.anychart.com/{{url}}">
+    <link rel="canonical" href="https://docs.anychart.com{% if url|not-empty %}/{{url}}{% endif %}">
     <link rel="icon" href="/i/anychart.ico" type="image/x-icon">
     <!--[if IE]>
     <link rel="stylesheet" type="text/css" href="/main.css"/>
@@ -196,7 +196,8 @@
     window['isUrlVersion'] = {% if is-url-version %}true{% else %}false{% endif %};
     // change location for / landing page
     if (location.pathname != encodeURI("/{{version}}/" + '{{url}}') &&
-         location.pathname != encodeURI("/{{url}}") && window.history){
+         location.pathname != encodeURI("/{{url}}") && '{{url}}' != '' &&  window.history){
+        //console.log("Change location to : " + encodeURI("/{{url}}") + ", pathname: " +  location.pathname);
         window.history.replaceState(null, null, encodeURI("/{{url}}"));
     }
 </script>

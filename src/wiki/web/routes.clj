@@ -129,16 +129,21 @@
     (.compress html-compressor page)))
 
 (defn- show-landing [request]
-  (let [url "Quick_Start/Quick_Start"
+  (let [url ""
         versions (versions-data/get-page-versions (jdbc request) url)
         version (first versions)
         page (pages-data/page-by-url (jdbc request) (:id version) url)]
     (if page
-      (show-page request version versions page false)
-      (let [folder (folders-data/get-folder-by-url (jdbc request) (:id version) "Quick_Start")
-            page (pages-data/page-by-url (jdbc request) (:id version)
-                                         (str "Quick_Start/" (:default_page folder)))]
-        (show-page request version versions page false)))))
+      (do
+        (show-page request version versions page false))
+      (let [url "Quick_Start/Quick_Start"
+            page (pages-data/page-by-url (jdbc request) (:id version) url)]
+        (if page
+          (show-page request version versions page false)
+          (let [folder (folders-data/get-folder-by-url (jdbc request) (:id version) "Quick_Start")
+                page (pages-data/page-by-url (jdbc request) (:id version)
+                                             (str "Quick_Start/" (:default_page folder)))]
+            (show-page request version versions page false)))))))
 
 (defn download-zip [request version & [versions url is-url-version]]
   (if-let [zip (versions-data/get-zip (jdbc request) (:id version))]
@@ -256,7 +261,12 @@
 (defn- show-page-middleware [request version versions page-url url-version]
   (let [url (-> request :route-params :*)]
     (if (empty? page-url)
-      (redirect (str "/" (:key version) "/Quick_Start"))
+      (if-let [page (pages-data/page-by-url (jdbc request) (:id version) "")]
+        (do
+          (if (.endsWith url "/")
+            (redirect (str "/" (utils/drop-last-slash url)) 301)
+            (show-page request version versions page (boolean url-version))))
+        (redirect (str "/" (:key version) "/Quick_Start")))
       (if-let [page (pages-data/page-by-url (jdbc request) (:id version) (utils/drop-last-slash page-url))]
         (if (.endsWith url "/")
           (redirect (str "/" (utils/drop-last-slash url)) 301)
