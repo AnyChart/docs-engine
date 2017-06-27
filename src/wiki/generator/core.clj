@@ -111,9 +111,6 @@
                                         generator-config
                                         generate-images
                                         version-config)
-                  conflicts-with-develop (if (= "develop" (:name branch))
-                                           0
-                                           (git/merge-conflicts git-ssh branch-path))
                   *broken-link-result (promise)]
 
               (generate-landing jdbc version version-config branch-path)
@@ -135,7 +132,11 @@
                                            {:id  version-id
                                             :key (:name branch)}
                                            docs-versions report domain *broken-link-result)
-              (let [total-report @*broken-link-result]
+
+              (let [total-report @*broken-link-result
+                    conflicts-with-develop (if (= "develop" (:name branch))
+                                             0
+                                             (git/merge-conflicts git-ssh branch-path))]
                 (timbre/info "Block until promise realised")
                 (vdata/add-report jdbc version-id total-report)
 
