@@ -49,14 +49,17 @@
   (-> request :component :offline-generator))
 
 (defn- title-prefix [page is-url-version version-name]
-  (let [text (or (-> page :config :title)
+  (let [max-chars-count (if is-url-version
+                          (- 65 (count (str " | ver. " version-name)))
+                          65)
+        text (or (-> page :config :title)
                  (-> page :url utils/url->title))
         title (str text " | AnyChart Documentation")
         title-parts (string/split title #" \| ")
         title (reduce (fn [res part]
                         (if (empty? res)
                           part
-                          (if (< (count (str res " | " part)) 70)
+                          (if (< (count (str res " | " part)) max-chars-count)
                             (str res " | " part)
                             res))) "" title-parts)]
     (str title (when is-url-version (str " | ver. " version-name)))))
