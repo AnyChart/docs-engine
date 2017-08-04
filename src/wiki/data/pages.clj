@@ -12,7 +12,7 @@
 ;;   url varchar(255) not null,
 ;;   full_name varchar(255),
 ;;   content text,
-;;   last_modified biging,
+;;   last_modified bigint,
 ;;   tags varchar(255)[],
 ;;   config JSONB
 ;; );
