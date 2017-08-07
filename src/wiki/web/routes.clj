@@ -20,7 +20,8 @@
             [criterium.core :refer [bench]]
             [wiki.data.versions :as vdata]
             [wiki.generator.analysis.page :as analysis-page]
-            [clojure.string :as string])
+            [clojure.string :as string]
+            [wiki.views.main :as main-page])
   (:import (com.googlecode.htmlcompressor.compressor HtmlCompressor ClosureJavaScriptCompressor)
            (com.google.javascript.jscomp CompilationLevel)))
 
@@ -106,30 +107,36 @@
       "/")))
 
 (defn- show-page [request version versions page is-url-version]
-  (let [page (render-file "templates/page.selmer" {:version              (:key version)
-                                                   :actual-version       (:key (first versions))
-                                                   :is-url-version       is-url-version
-                                                   :anychart-url         (utils/anychart-bundle-path (:key version))
-                                                   :anychart-css-url     (utils/anychart-bundle-css-url (:key version))
-                                                   :old                  (and (not= (:key (first versions)) (:key version))
-                                                                              (utils/released-version? (:key version)))
-                                                   :old-url              (old-url versions (:url page))
-                                                   :tree                 (versions-data/tree-data (jdbc request) (:id version))
-                                                   :url                  (:url page)
-                                                   :image-url            (utils/name->url (:url page))
-                                                   :title                (:full_name page)
-                                                   :title-prefix         (title-prefix page is-url-version (:key version))
-                                                   :description          (or (utils/page-description (:content page))
-                                                                             (:full_name page))
-                                                   :page                 page
-                                                   :versions             versions
-                                                   :is-ga-speed-insights (:is-ga-speed-insights request)})
-        html-compressor (HtmlCompressor.)]
-    (.setRemoveIntertagSpaces html-compressor true)
-    (.setRemoveQuotes html-compressor true)
-    ;(.setJavaScriptCompressor html-compressor (ClosureJavaScriptCompressor. CompilationLevel/SIMPLE_OPTIMIZATIONS))
-    ;(.setCompressJavaScript html-compressor true)
-    (.compress html-compressor page)))
+  (let [data {:version              (:key version)
+              :actual-version       (:key (first versions))
+              :is-url-version       is-url-version
+              :anychart-url         (utils/anychart-bundle-path (:key version))
+              :anychart-css-url     (utils/anychart-bundle-css-url (:key version))
+              :old                  (and (not= (:key (first versions)) (:key version))
+                                         (utils/released-version? (:key version)))
+              :old-url              (old-url versions (:url page))
+              :tree                 (versions-data/tree-data (jdbc request) (:id version))
+              :url                  (:url page)
+              :image-url            (utils/name->url (:url page))
+              :title                (:full_name page)
+              :title-prefix         (title-prefix page is-url-version (:key version))
+              :description          (or (utils/page-description (:content page))
+                                        (:full_name page))
+              :page                 page
+              :versions             versions
+              :is-ga-speed-insights (:is-ga-speed-insights request)}
+        ;page (render-file "templates/page.selmer" data)
+        page (main-page/page data)
+        ;html-compressor (HtmlCompressor.)
+        ]
+    ;(.setRemoveIntertagSpaces html-compressor true)
+    ;(.setRemoveQuotes html-compressor true)
+    ;;(.setJavaScriptCompressor html-compressor (ClosureJavaScriptCompressor. CompilationLevel/SIMPLE_OPTIMIZATIONS))
+    ;;(.setCompressJavaScript html-compressor true)
+    ;(.compress html-compressor page)
+    page
+    )
+  )
 
 (defn- show-landing [request]
   (let [url ""
