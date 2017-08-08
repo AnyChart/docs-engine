@@ -13,11 +13,11 @@
     (if (contains? el :children)
       (str "<li>"
            ;"<a href='" url "'><i class='c ac-folder-open'></i> " (:title el) "</a>"
-           "<a href='" url "'><i class='folder-open'>+</i> " (:title el) "</a>"
+           "<a href='" url "'><i class='folder-open'>+ </i><b>" (:title el) "</b></a>"
            "<ul>" (reduce str (map #(tree-view % version is-url-version) (:children el))) "</ul>"
            "</li>")
       ;(str "<li> <a href='" url "'><i class='ac ac-file-text'></i> " (:title el) "</a></li>")
-      (str "<li> <a href='" url "'><i></i> " (:title el) "</a></li>")
+      (str "<li><a href='" url "'>" (:title el) "</a></li>")
       )))
 
 (defn tree [data]
@@ -67,8 +67,12 @@
   [:header
    [:div.container-fluid
     [:div.row
-     [:div.col-lg-22.col-lg-offset-1
-      [:a.sidebar-switcher.hidden-md.hidden-lg [:i.ac.ac-bars]]
+
+     ;:div.col-lg-22.col-lg-offset-1
+
+     ;[:a.sidebar-switcher.hidden-md.hidden-lg [:i.ac.ac-bars]]
+
+     [:div.col-lg-16.col-lg-offset-3
       [:a.navbar-brand {:rel "nofollow" :href "https://www.anychart.com"}
        [:img {:alt "AnyChart" :height "72" :width "300" :src "/i/logo-empty.png"}]
        [:div.chart-row
@@ -77,44 +81,51 @@
         [:span.chart-col.red]]]
       [:a.brand.hidden-super-small " Documentation"]
 
-      [:div.pull-right.helpers.hidden-830
+      [:div.dropdown.pull-right.version-select
+       [:button.btn.btn-blue.btn-sm {:data-toggle "dropdown" :type "button"}
+        [:span.version-label (str "Version " (:version data))]
+        [:span.caret]]
+       [:ul.dropdown-menu.version-menu {:role "menu"}
+        (for [v (:versions data)]
+          [:li [:a {:href (:url v)} (str "Version " (:key v))]])]]
+      ]
 
-       [:div.dropdown                                                ;.btn-group
-        [:button.btn.btn-blue.btn-sm {:data-toggle "dropdown" :type "button"}
-         [:span.version-label (str "Version " (:version data))]
-         [:span.caret]
-         ;[:span.glyphicon.glyphicon-chevron-down]
-         ]
-        [:ul.dropdown-menu.version-menu {:role "menu"}
-         (for [v (:versions data)]
-           [:li [:a {:href (:url v)} (str "Version " (:key v))]])]]
+     [:div.helpers.hidden-830
 
-       ;[:div.dropdown
-       ; [:button.btn.btn-primary {:data-toggle "dropdown" :type "button"}
-       ;  [:span.version-label (str "Version " (:version data))]
-       ;  [:span.caret]]
-       ; [:ul.dropdown-menu.version-menu {:role "menu"}
-       ;  (for [v (:versions data)]
-       ;    [:li [:a {:href (:url v)} (str "Version " (:key v))]])]]
+      ;[:div.dropdown
+      ; [:button.btn.btn-blue.btn-sm {:data-toggle "dropdown" :type "button"}
+      ;  [:span.version-label (str "Version " (:version data))]
+      ;  [:span.caret]]
+      ; [:ul.dropdown-menu.version-menu {:role "menu"}
+      ;  (for [v (:versions data)]
+      ;    [:li [:a {:href (:url v)} (str "Version " (:key v))]])]]
 
-       ;[:div.btn-group
-       ; {:style "padding-left: 15px;"}
-       ; [:button.btn.btn-default.btn-zip
-       ;  {:type "button" :role "button" :onclick (str "location.href='/" (:version data) "/download'")}
-       ;  [:span.ac.ac-download-zip {:aria-hidden "true"}]
-       ;  "Download .zip"]]
+      ;[:div.dropdown
+      ; [:button.btn.btn-primary {:data-toggle "dropdown" :type "button"}
+      ;  [:span.version-label (str "Version " (:version data))]
+      ;  [:span.caret]]
+      ; [:ul.dropdown-menu.version-menu {:role "menu"}
+      ;  (for [v (:versions data)]
+      ;    [:li [:a {:href (:url v)} (str "Version " (:key v))]])]]
 
-       [:div.text-muted.questions
-        [:a.text-support {:rel "nofollow" :href "http://support.anychart.com"}
-         ;[:i.ac.ac-support]
-         [:img {:src "/svg/support.svg" :width "27px" :style "color=white"}]
-         ]
-        [:span.hidden-super-small "Still have questions?"
-         [:br]
-         [:a {:rel "nofollow" :href "https://www.anychart.com/support/"}
-          " Contact support"]]]
+      ;[:div.btn-group
+      ; {:style "padding-left: 15px;"}
+      ; [:button.btn.btn-default.btn-zip
+      ;  {:type "button" :role "button" :onclick (str "location.href='/" (:version data) "/download'")}
+      ;  [:span.ac.ac-download-zip {:aria-hidden "true"}]
+      ;  "Download .zip"]]
 
-       ]]]]
+      [:div.text-muted.questions
+       [:a.text-support {:rel "nofollow" :href "http://support.anychart.com"}
+        ;[:i.ac.ac-support]
+        [:img {:src "/svg/support.svg" :width "27px" :style "color=white"}]
+        ]
+       [:span.hidden-super-small "Still have questions?"
+        [:br]
+        [:a {:rel "nofollow" :href "https://www.anychart.com/support/"}
+         " Contact support"]]]
+
+      ]]]
 
    ]
   )
@@ -174,7 +185,8 @@
 (defn main-content [data]
   [:div.wrapper.container-fluid
    [:div.row
-    [:div#bar-side.col-md-8.col-lg-5.col-lg-offset-1.hidden-xs.hidden-sm
+
+    [:div#bar-side.col-md-8.col-lg-5.col-lg-offset-3.hidden-xs.hidden-sm
      [:div.row.hidden-xs.hidden-sm                          ;.search-large-screen
       [:div.col-md-24.col-lg-24
 
@@ -223,14 +235,26 @@
         (:actual-version data)]
        " version to see the up to date information."])
 
-    [:section#page-content.col-md-16.col-lg-18.col-lg-offset-6.col-md-offset-8
-     [:div.row
-      [:div#article-content.col-lg-17
-       [:a#github-edit.btn.btn-default.btn-small.github-fork.pull-right.hidden-xs
-        {:href "https://github.com/AnyChart/docs.anychart.com"}
-        [:span [:i.ac.ac-net]] " Improve this Doc"] (-> data :page :content)]
-      [:div.col-lg-6.hidden-sm.hidden-xs.hidden-md.visible-lg
-       [:div#table-of-content-large]]]]]])
+    ;[:section#page-content.col-md-16.col-lg-18.col-lg-offset-6.col-md-offset-8
+    ; [:div.row
+    ;  [:div#article-content.col-lg-17
+    ;   [:a#github-edit.btn.btn-default.btn-small.github-fork.pull-right.hidden-xs
+    ;    {:href "https://github.com/AnyChart/docs.anychart.com"}
+    ;    [:span [:i.ac.ac-net]] " Improve this Doc"] (-> data :page :content)]
+    ;  [:div.col-lg-6.hidden-sm.hidden-xs.hidden-md.visible-lg
+    ;   [:div#table-of-content-large]]]
+    ; ]
+
+    [:div#article-content.col-lg-11.col-lg-offset-8
+     [:a#github-edit.btn.btn-default.btn-small.github-fork.pull-right.hidden-xs
+      {:href "https://github.com/AnyChart/docs.anychart.com"}
+      [:span [:i.ac.ac-net]] " Improve this Doc"] (-> data :page :content)]
+
+    [:div.col-lg-2.hidden-sm.hidden-xs.hidden-md.visible-lg
+     [:div#table-of-content-large
+      [:div "Hello"]]]
+
+    ]])
 
 
 
@@ -241,6 +265,7 @@
     (body data)
     [:div#shadow]
     (mobile-menu data)
+
     (main-content data)
     [:script {:type "text/javascript"}
      (str

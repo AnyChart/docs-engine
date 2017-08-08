@@ -46,8 +46,10 @@ $menu.find('a>i.folder-close').each(function() {
         $ul.toggle();
         if ($ul.is(":visible")) {
             $this.removeClass('folder-close').addClass('folder-open');
+            $this.html("- ");
         }else {
             $this.removeClass('folder-open').addClass('folder-close');
+            $this.html("+ ");
         }
         return false;
     });
