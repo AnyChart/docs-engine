@@ -34,13 +34,6 @@
     (first (sort (comp - version-clj/version-compare)
                  (concat versions branches)))))
 
-(defn replace-vars [s vars]
-  (reduce (fn [s [key value]]
-            (clojure.string/replace s
-                                    (re-pattern (str "\\{\\{" (name key) "\\}\\}"))
-                                    (str value)))
-          s vars))
-
 (defn complete-config [jdbc version version-config branch-path]
   (let [samples-count (dec (count (file-seq (clojure.java.io/file (str branch-path "/samples")))))
         articles-count (count (pages-data/pages-urls jdbc (:id version)))]
@@ -60,7 +53,7 @@
                       (:id version)
                       ""
                       "Landing"
-                      (replace-vars landing-content (:vars version-config))
+                      (dgen/replace-vars landing-content (:vars version-config))
                       (git/file-last-commit-date branch-path (.getAbsolutePath (clojure.java.io/file landing-file-path)))
                       []
                       {}))))
