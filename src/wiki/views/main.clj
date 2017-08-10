@@ -48,6 +48,7 @@
    [:link {:rel "stylesheet" :type "text/css" :href "/main.css"}]
    [:link {:rel "stylesheet" :type "text/css" :href (:anychart-css-url data)}]
    [:link {:rel "stylesheet" :type "text/css" :href "https://cdn.anychart.com/fonts/2.7.2/anychart.css"}]
+   [:link {:rel "stylesheet" :type "text/css" :href "https://fonts.googleapis.com/css?family=Open+Sans:400,600"}]
    [:link {:rel "apple-touch-icon" :sizes "57x57" :href "/icons/57.png"}]
    [:link {:rel "apple-touch-icon" :sizes "76x76" :href "/icons/76.png"}]
    [:link {:rel "apple-touch-icon" :sizes "120x120" :href "/icons/120.png"}]
@@ -72,7 +73,7 @@
 
      ;[:a.sidebar-switcher.hidden-md.hidden-lg [:i.ac.ac-bars]]
 
-     [:div.col-lg-16.col-lg-offset-3
+     [:div.col-lg-15.col-lg-offset-3
       [:a.navbar-brand {:rel "nofollow" :href "https://www.anychart.com"}
        [:img {:alt "AnyChart" :height "72" :width "300" :src "/i/logo-empty.png"}]
        [:div.chart-row
@@ -135,6 +136,7 @@
    [:link {:rel "stylesheet" :type "text/css" :href "/main.css"}]
    [:link {:rel "stylesheet" :type "text/css" :href (:anychart-css-url data)}]
    [:link {:rel "stylesheet" :type "text/css" :href "https://cdn.anychart.com/fonts/2.7.2/anychart.css"}]
+   [:link {:rel "stylesheet" :type "text/css" :href "https://fonts.googleapis.com/css?family=Open+Sans:400,600"}]
    [:link {:rel "apple-touch-icon" :sizes "57x57" :href "/icons/57.png"}]
    [:link {:rel "apple-touch-icon" :sizes "76x76" :href "/icons/76.png"}]
    [:link {:rel "apple-touch-icon" :sizes "120x120" :href "/icons/120.png"}]
@@ -186,7 +188,7 @@
   [:div.wrapper.container-fluid
    [:div.row
 
-    [:div#bar-side.col-md-8.col-lg-5.col-lg-offset-3.hidden-xs.hidden-sm
+    [:div#bar-side.col-md-8.col-lg-6.col-lg-offset-3.hidden-xs.hidden-sm
      [:div.row.hidden-xs.hidden-sm                          ;.search-large-screen
       [:div.col-md-24.col-lg-24
 
@@ -245,15 +247,26 @@
     ;   [:div#table-of-content-large]]]
     ; ]
 
-    [:div#article-content.col-lg-11.col-lg-offset-8
+    [:div#article-content.col-lg-9.col-lg-offset-9
      [:a#github-edit.btn.btn-default.btn-small.github-fork.pull-right.hidden-xs
       {:href "https://github.com/AnyChart/docs.anychart.com"}
       [:span [:i.ac.ac-net]] " Improve this Doc"] (-> data :page :content)]
 
-    [:div.col-lg-2.hidden-sm.hidden-xs.hidden-md.visible-lg
-     [:div#table-of-content-large
-      [:div "Hello"]]]
-
+    [:div.col-lg-3.hidden-sm.hidden-xs.hidden-md.visible-lg
+     [:div.right-bar-side
+      [:div#table-of-content-large]
+      [:div.right-buttons
+       [:a {:href (str "/" (:version data) "/download")}
+        [:div.icon.get-offline]
+        [:span "Get offline version"]]
+       [:a
+        [:div.icon.report2]
+        [:span "Report issue"]]
+       [:a {:href "https://github.com/AnyChart/docs.anychart.com"}
+        [:div.icon.edit]
+        [:span "Edit this page"]]
+       ]]
+     ]
     ]])
 
 

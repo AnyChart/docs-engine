@@ -82,7 +82,7 @@ var onResize = function(){
     if (tableOfContent.height() + 120 + 85 > windowHeight){
         tableOfContentLarge.height(windowHeight - 120 - 85);
     }else{
-        tableOfContentLarge.height(tableOfContent.height());
+        tableOfContentLarge.height(tableOfContent.height() + 30);
     }
 };
 window.onload = function(){
