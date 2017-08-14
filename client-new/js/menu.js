@@ -84,7 +84,15 @@ var onResize = function(){
     }else{
         tableOfContentLarge.height(tableOfContent.height() + 30);
     }
+
+    // left menu width to bootstrap column
+    var sidebarConainer = $($(".left-sidebar-container")[0]);
+    var sidebar = $($(".sidebar")[0]);
+    console.log("Width: " + sidebarConainer.width() + " : " + sidebar.width());
+    sidebar.width(sidebarConainer.width());
+
 };
 window.onload = function(){
     onResize();
 };
+onResize();

@@ -16,6 +16,11 @@
 sudo apt-get install phantomjs
 
 sudo apt-get install redis-server
+
+sudo apt-get install sphinxsearch
+# make path /var/data/sphinx/
+
+sudo npm install grunt-cli -g
 ```
 
 

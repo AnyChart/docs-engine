@@ -12,13 +12,10 @@
               (escape-url (:url el)))]
     (if (contains? el :children)
       (str "<li>"
-           ;"<a href='" url "'><i class='c ac-folder-open'></i> " (:title el) "</a>"
-           "<a href='" url "'><i class='folder-open'>+ </i><b>" (:title el) "</b></a>"
+           "<a href='" url "'><i class='folder-open'>+ </i>" (:title el) "</a>"
            "<ul>" (reduce str (map #(tree-view % version is-url-version) (:children el))) "</ul>"
            "</li>")
-      ;(str "<li> <a href='" url "'><i class='ac ac-file-text'></i> " (:title el) "</a></li>")
-      (str "<li><a href='" url "'>" (:title el) "</a></li>")
-      )))
+      (str "<li><a href='" url "'>" (:title el) "</a></li>"))))
 
 (defn tree [data]
   (let [entries (:tree data)]
@@ -70,10 +67,9 @@
     [:div.row
 
      ;:div.col-lg-22.col-lg-offset-1
-
      ;[:a.sidebar-switcher.hidden-md.hidden-lg [:i.ac.ac-bars]]
 
-     [:div.col-lg-15.col-lg-offset-3
+     [:div.col-md-20
       [:a.navbar-brand {:rel "nofollow" :href "https://www.anychart.com"}
        [:img {:alt "AnyChart" :height "72" :width "300" :src "/i/logo-empty.png"}]
        [:div.chart-row
@@ -88,8 +84,7 @@
         [:span.caret]]
        [:ul.dropdown-menu.version-menu {:role "menu"}
         (for [v (:versions data)]
-          [:li [:a {:href (:url v)} (str "Version " (:key v))]])]]
-      ]
+          [:li [:a {:href (:url v)} (str "Version " (:key v))]])]]]
 
      [:div.helpers.hidden-830
 
@@ -143,9 +138,7 @@
    [:link {:rel "apple-touch-icon" :sizes "120x120" :href "/icons/152.png"}]
    [:link {:rel "apple-touch-icon" :sizes "152x152" :href "/icons/167.png"}]
    [:link {:rel "apple-touch-icon" :sizes "167x167" :href "/icons/180.png"}]
-   (header data)
-   ]
-  )
+   (header data)])
 
 
 
@@ -188,35 +181,34 @@
   [:div.wrapper.container-fluid
    [:div.row
 
-    [:div#bar-side.col-md-8.col-lg-6.col-lg-offset-3.hidden-xs.hidden-sm
-     [:div.row.hidden-xs.hidden-sm                          ;.search-large-screen
-      [:div.col-md-24.col-lg-24
+    [:div.col-md-8.col-lg-7.all-height.hidden-xs.hidden-sm.left-sidebar-container    ;.col-lg-offset-3
 
+     [:div.sidebar
+      [:div.hidden-xs.hidden-sm                             ;.search-large-screen
        [:div.inner-addon.right-addon
         [:i.glyphicon.glyphicon-search]
         ;[:i.ac.ac-search]
-        [:input.form-control  {:placeholder "What are you looking for?" :type "text"}]
+        [:input.form-control {:placeholder "What are you looking for?" :type "text"}]
 
         ;[:span.input-group-btn
         ; [:button.btn.btn-default
         ;  {:type "button"}
         ;  [:span.ac.ac-search.form-control-feedback]]]
-
-        ]]]
-     [:ul.menu
-      (tree data)]
-     [:div.footer
-      [:div.footer-inner
-       [:a.soc-network
-        {:target "_blank" :rel "nofollow" :href "https://www.facebook.com/AnyCharts"}
-        [:span.soc-network-icon.fb [:i.sn-mini-icon.ac.ac-facebook]]]
-       [:a.soc-network
-        {:target "_blank" :rel "nofollow" :href "https://twitter.com/AnyChart"}
-        [:span.soc-network-icon.tw [:i.sn-mini-icon.ac.ac-twitter]]]
-       [:a.soc-network
-        {:target "_blank" :rel "nofollow" :href "https://www.linkedin.com/company/386660"}
-        [:span.soc-network-icon.in [:i.sn-mini-icon.ac.ac-linkedin]]]
-       [:p " © 2017 AnyChart.Com All rights reserved."]]]]
+        ]]
+      [:ul.menu
+       (tree data)]
+      [:div.footer
+       [:div.footer-inner
+        [:a.soc-network
+         {:target "_blank" :rel "nofollow" :href "https://www.facebook.com/AnyCharts"}
+         [:span.soc-network-icon.fb [:i.sn-mini-icon.ac.ac-facebook]]]
+        [:a.soc-network
+         {:target "_blank" :rel "nofollow" :href "https://twitter.com/AnyChart"}
+         [:span.soc-network-icon.tw [:i.sn-mini-icon.ac.ac-twitter]]]
+        [:a.soc-network
+         {:target "_blank" :rel "nofollow" :href "https://www.linkedin.com/company/386660"}
+         [:span.soc-network-icon.in [:i.sn-mini-icon.ac.ac-linkedin]]]
+        [:p " © 2017 AnyChart.Com All rights reserved."]]]]]
 
     [:div.row.helpers.hidden-lg.hidden-md
      [:div.col-xs-24.col-sm-12
@@ -247,12 +239,12 @@
     ;   [:div#table-of-content-large]]]
     ; ]
 
-    [:div#article-content.col-lg-9.col-lg-offset-9
+    [:div#article-content.col-md-12.col-lg-13                         ; .col-lg-offset-8
      [:a#github-edit.btn.btn-default.btn-small.github-fork.pull-right.hidden-xs
       {:href "https://github.com/AnyChart/docs.anychart.com"}
       [:span [:i.ac.ac-net]] " Improve this Doc"] (-> data :page :content)]
 
-    [:div.col-lg-3.hidden-sm.hidden-xs.hidden-md.visible-lg
+    [:div.col-md-4.hidden-sm.hidden-xs
      [:div.right-bar-side
       [:div#table-of-content-large]
       [:div.right-buttons
@@ -270,6 +262,41 @@
     ]])
 
 
+(defn fixed-content [data]
+  [:div.container-fluid.fixed-container
+   [:div.row.content-row
+    [:div.col-md-8.col-lg-8.all-height.hidden-xs.hidden-sm    ;.col-lg-offset-3
+     [:div.row.hidden-xs.hidden-sm                          ;.search-large-screen
+      [:div.col-md-24.col-lg-24
+
+       [:div.inner-addon.right-addon
+        [:i.glyphicon.glyphicon-search]
+        ;[:i.ac.ac-search]
+        [:input.form-control {:placeholder "What are you looking for?" :type "text"}]
+
+        ;[:span.input-group-btn
+        ; [:button.btn.btn-default
+        ;  {:type "button"}
+        ;  [:span.ac.ac-search.form-control-feedback]]]
+        ]]]
+     [:ul.menu
+      (tree data)]
+     [:div.footer
+      [:div.footer-inner
+       [:a.soc-network
+        {:target "_blank" :rel "nofollow" :href "https://www.facebook.com/AnyCharts"}
+        [:span.soc-network-icon.fb [:i.sn-mini-icon.ac.ac-facebook]]]
+       [:a.soc-network
+        {:target "_blank" :rel "nofollow" :href "https://twitter.com/AnyChart"}
+        [:span.soc-network-icon.tw [:i.sn-mini-icon.ac.ac-twitter]]]
+       [:a.soc-network
+        {:target "_blank" :rel "nofollow" :href "https://www.linkedin.com/company/386660"}
+        [:span.soc-network-icon.in [:i.sn-mini-icon.ac.ac-linkedin]]]
+       [:p " © 2017 AnyChart.Com All rights reserved."]]]]
+
+    ]]
+  )
+
 
 (defn page [data]
   (hiccup.page/html5
@@ -280,13 +307,12 @@
     (mobile-menu data)
 
     (main-content data)
+    ;(fixed-content data)
+
     [:script {:type "text/javascript"}
      (str
        "window['version'] = '" (:version data) "';
-        window['isUrlVersion'] = " (boolean (:is-url-version data)) ";")
-     ]
+        window['isUrlVersion'] = " (boolean (:is-url-version data)) ";")]
     [:script {:type "text/javascript" :src "/main.min.js"}]
 
-    )
-
-  )
+    ))
