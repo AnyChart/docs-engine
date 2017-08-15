@@ -156,7 +156,6 @@ a.brand {
 }
 
 
-
 .sidebar {
   top: 84px;
   bottom: 0;
@@ -168,6 +167,26 @@ a.brand {
     .input-sm{
       font-size: 13px;
       height: 27px;
+      outline: none;
+      box-shadow: none;
+      &:focus{
+        border-color: #85caff;
+        &::-webkit-input-placeholder{
+          color: #85caff;
+        }
+        &:-moz-placeholder{
+          color: #85caff;
+        }
+        &::-moz-placeholder{
+          color: #85caff;
+        }
+        &:-ms-input-placeholder{
+          color: #85caff;
+        }
+        &+.glyphicon-search{
+          color: #85caff;
+        }
+      }
     }
     .glyphicon {
       position: absolute;
@@ -593,6 +612,27 @@ div.container-fluid .row {
     font-size: 13px;
     font-family: 'Open Sans';
   }
+  ul {
+    list-style: none; /* Remove list bullets */
+    padding: 0;
+    margin: 0;
+    li:before{
+      content: "•";
+      font-size: 12px;
+      padding-right: 8px;
+      line-height: 15px;
+    }
+  }
+  // inner table of content
+  ul.table_of_content{
+    @media (min-width: 992px) {
+      display: none;
+    }
+    @media (max-width: 991px){
+      display: block;
+    }
+  }
+
 }
 
 
@@ -775,17 +815,7 @@ pre {
   overflow: hidden;
 }
 
-@media (min-width: 1200px) {
-  #article-content ul.table_of_content, #article-content ul:first-child {
-    display: none;
-  }
-}
 
-@media (max-width: 1199px) {
-  #article-content ul.table_of_content, #article-content ul:first-child {
-    display: block;
-  }
-}
 
 .footer {
   height: 100px;
@@ -893,33 +923,26 @@ a.soc-network:hover .soc-network-icon.in {
     right: 20px;
   }
 
-  .pull-right.helpers {
-    padding: 8px 20px 8px;
-  }
-
-  .helpers.bordered {
-    border-bottom: none;
-  }
-
-  .helpers .questions {
-    margin-left: 10px;
-    color: #d5edff;
-    line-height: 16px;
-    font-size: 13px;
-    font-weight: lighter;
-  }
-
-  .helpers .questions a {
-    color: #fff;
-    text-decoration: none;
+  .helpers {
+    padding: 8px 0;
+    .questions {
+      margin-left: 10px;
+      color: #d5edff;
+      line-height: 16px;
+      font-size: 11px;
+      font-weight: lighter;
+      a {
+        color: #fff;
+        text-decoration: none;
+      }
+    }
   }
 }
 
 @media (min-width: 992px) {
-  .helpers {
+  /*.helpers {
     padding: 8px 20px 8px;
-    max-width: 100%;
-  }
+  }*/
 
   #bar-side {
     position: fixed;

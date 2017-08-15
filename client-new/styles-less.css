@@ -6491,6 +6491,26 @@ a.brand {
 .sidebar .inner-addon .input-sm {
   font-size: 13px;
   height: 27px;
+  outline: none;
+  box-shadow: none;
+}
+.sidebar .inner-addon .input-sm:focus {
+  border-color: #85caff;
+}
+.sidebar .inner-addon .input-sm:focus::-webkit-input-placeholder {
+  color: #85caff;
+}
+.sidebar .inner-addon .input-sm:focus:-moz-placeholder {
+  color: #85caff;
+}
+.sidebar .inner-addon .input-sm:focus::-moz-placeholder {
+  color: #85caff;
+}
+.sidebar .inner-addon .input-sm:focus:-ms-input-placeholder {
+  color: #85caff;
+}
+.sidebar .inner-addon .input-sm:focus + .glyphicon-search {
+  color: #85caff;
 }
 .sidebar .inner-addon .glyphicon {
   position: absolute;
@@ -6856,6 +6876,28 @@ div.container-fluid .row {
   font-size: 13px;
   font-family: 'Open Sans';
 }
+#article-content ul {
+  list-style: none;
+  /* Remove list bullets */
+  padding: 0;
+  margin: 0;
+}
+#article-content ul li:before {
+  content: "•";
+  font-size: 12px;
+  padding-right: 8px;
+  line-height: 15px;
+}
+@media (min-width: 992px) {
+  #article-content ul.table_of_content {
+    display: none;
+  }
+}
+@media (max-width: 991px) {
+  #article-content ul.table_of_content {
+    display: block;
+  }
+}
 #page-content b {
   font-weight: bold;
   color: #000;
@@ -7014,18 +7056,6 @@ pre {
 .no-overflow {
   overflow: hidden;
 }
-@media (min-width: 1200px) {
-  #article-content ul.table_of_content,
-  #article-content ul:first-child {
-    display: none;
-  }
-}
-@media (max-width: 1199px) {
-  #article-content ul.table_of_content,
-  #article-content ul:first-child {
-    display: block;
-  }
-}
 .footer {
   height: 100px;
   bottom: 0;
@@ -7118,17 +7148,14 @@ a.soc-network:hover .soc-network-icon.in {
     top: 80px;
     right: 20px;
   }
-  .pull-right.helpers {
-    padding: 8px 20px 8px;
-  }
-  .helpers.bordered {
-    border-bottom: none;
+  .helpers {
+    padding: 8px 0;
   }
   .helpers .questions {
     margin-left: 10px;
     color: #d5edff;
     line-height: 16px;
-    font-size: 13px;
+    font-size: 11px;
     font-weight: lighter;
   }
   .helpers .questions a {
@@ -7137,10 +7164,9 @@ a.soc-network:hover .soc-network-icon.in {
   }
 }
 @media (min-width: 992px) {
-  .helpers {
+  /*.helpers {
     padding: 8px 20px 8px;
-    max-width: 100%;
-  }
+  }*/
   #bar-side {
     position: fixed;
     z-index: 900;

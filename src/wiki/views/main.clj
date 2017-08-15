@@ -104,21 +104,13 @@
       ;  (for [v (:versions data)]
       ;    [:li [:a {:href (:url v)} (str "Version " (:key v))]])]]
 
-      ;[:div.btn-group
-      ; {:style "padding-left: 15px;"}
-      ; [:button.btn.btn-default.btn-zip
-      ;  {:type "button" :role "button" :onclick (str "location.href='/" (:version data) "/download'")}
-      ;  [:span.ac.ac-download-zip {:aria-hidden "true"}]
-      ;  "Download .zip"]]
-
       [:div.text-muted.questions
        [:a.text-support {:rel "nofollow" :href "http://support.anychart.com"}
-        ;[:i.ac.ac-support]
-        [:img {:src "/svg/support.svg" :width "27px" :style "color=white"}]
-        ]
+        [:img {:src "/svg/support.svg" :width "27px" :style "color=white"}]]
        [:span.hidden-super-small "Still have questions?"
+        [:br]
         [:a {:rel "nofollow" :href "https://www.anychart.com/support/"}
-         " Contact support"]]]
+         "Contact support"]]]
 
       ]]]
 
@@ -185,10 +177,9 @@
      [:div.sidebar
       [:div.hidden-xs.hidden-sm                             ;.search-large-screen
        [:div.inner-addon.right-addon
-        [:i.glyphicon.glyphicon-search]
         ;[:i.ac.ac-search]
         [:input.form-control.input-sm {:placeholder "What are you looking for?" :type "text"}]
-
+        [:i.glyphicon.glyphicon-search]
         ]]
       [:ul.menu
        (tree data)]
