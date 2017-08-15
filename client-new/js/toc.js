@@ -28,6 +28,8 @@ function fixToc() {
         $next.addClass("table_of_content");
         $next.find("li").addClass("main");
         $("#table-of-content-large").append($next.clone());
+    }else{
+        $("#table-of-content-large").hide();
     }
 };
 

@@ -71,7 +71,7 @@
 
      [:div.col-md-20
       [:a.navbar-brand {:rel "nofollow" :href "https://www.anychart.com"}
-       [:img {:alt "AnyChart" :height "72" :width "300" :src "/i/logo-empty.png"}]
+       [:img {:alt "AnyChart" :src "/i/logo-empty.png"}]
        [:div.chart-row
         [:span.chart-col.green]
         [:span.chart-col.orange]
@@ -117,7 +117,6 @@
         [:img {:src "/svg/support.svg" :width "27px" :style "color=white"}]
         ]
        [:span.hidden-super-small "Still have questions?"
-        [:br]
         [:a {:rel "nofollow" :href "https://www.anychart.com/support/"}
          " Contact support"]]]
 
@@ -181,19 +180,15 @@
   [:div.wrapper.container-fluid
    [:div.row
 
-    [:div.col-md-8.col-lg-7.all-height.hidden-xs.hidden-sm.left-sidebar-container    ;.col-lg-offset-3
+    [:div.col-md-8.col-lg-7.all-height.hidden-xs.hidden-sm.left-sidebar-container
 
      [:div.sidebar
       [:div.hidden-xs.hidden-sm                             ;.search-large-screen
        [:div.inner-addon.right-addon
         [:i.glyphicon.glyphicon-search]
         ;[:i.ac.ac-search]
-        [:input.form-control {:placeholder "What are you looking for?" :type "text"}]
+        [:input.form-control.input-sm {:placeholder "What are you looking for?" :type "text"}]
 
-        ;[:span.input-group-btn
-        ; [:button.btn.btn-default
-        ;  {:type "button"}
-        ;  [:span.ac.ac-search.form-control-feedback]]]
         ]]
       [:ul.menu
        (tree data)]
@@ -229,20 +224,8 @@
         (:actual-version data)]
        " version to see the up to date information."])
 
-    ;[:section#page-content.col-md-16.col-lg-18.col-lg-offset-6.col-md-offset-8
-    ; [:div.row
-    ;  [:div#article-content.col-lg-17
-    ;   [:a#github-edit.btn.btn-default.btn-small.github-fork.pull-right.hidden-xs
-    ;    {:href "https://github.com/AnyChart/docs.anychart.com"}
-    ;    [:span [:i.ac.ac-net]] " Improve this Doc"] (-> data :page :content)]
-    ;  [:div.col-lg-6.hidden-sm.hidden-xs.hidden-md.visible-lg
-    ;   [:div#table-of-content-large]]]
-    ; ]
-
-    [:div#article-content.col-md-12.col-lg-13                         ; .col-lg-offset-8
-     [:a#github-edit.btn.btn-default.btn-small.github-fork.pull-right.hidden-xs
-      {:href "https://github.com/AnyChart/docs.anychart.com"}
-      [:span [:i.ac.ac-net]] " Improve this Doc"] (-> data :page :content)]
+    [:div#article-content.col-md-12.col-lg-13
+     (-> data :page :content)]
 
     [:div.col-md-4.hidden-sm.hidden-xs
      [:div.right-bar-side
@@ -257,45 +240,9 @@
        [:a {:href "https://github.com/AnyChart/docs.anychart.com"}
         [:div.icon.edit]
         [:span "Edit this page"]]
-       ]]
-     ]
+       ]]]
+
     ]])
-
-
-(defn fixed-content [data]
-  [:div.container-fluid.fixed-container
-   [:div.row.content-row
-    [:div.col-md-8.col-lg-8.all-height.hidden-xs.hidden-sm    ;.col-lg-offset-3
-     [:div.row.hidden-xs.hidden-sm                          ;.search-large-screen
-      [:div.col-md-24.col-lg-24
-
-       [:div.inner-addon.right-addon
-        [:i.glyphicon.glyphicon-search]
-        ;[:i.ac.ac-search]
-        [:input.form-control {:placeholder "What are you looking for?" :type "text"}]
-
-        ;[:span.input-group-btn
-        ; [:button.btn.btn-default
-        ;  {:type "button"}
-        ;  [:span.ac.ac-search.form-control-feedback]]]
-        ]]]
-     [:ul.menu
-      (tree data)]
-     [:div.footer
-      [:div.footer-inner
-       [:a.soc-network
-        {:target "_blank" :rel "nofollow" :href "https://www.facebook.com/AnyCharts"}
-        [:span.soc-network-icon.fb [:i.sn-mini-icon.ac.ac-facebook]]]
-       [:a.soc-network
-        {:target "_blank" :rel "nofollow" :href "https://twitter.com/AnyChart"}
-        [:span.soc-network-icon.tw [:i.sn-mini-icon.ac.ac-twitter]]]
-       [:a.soc-network
-        {:target "_blank" :rel "nofollow" :href "https://www.linkedin.com/company/386660"}
-        [:span.soc-network-icon.in [:i.sn-mini-icon.ac.ac-linkedin]]]
-       [:p " © 2017 AnyChart.Com All rights reserved."]]]]
-
-    ]]
-  )
 
 
 (defn page [data]
@@ -305,14 +252,17 @@
     (body data)
     [:div#shadow]
     (mobile-menu data)
-
     (main-content data)
-    ;(fixed-content data)
 
     [:script {:type "text/javascript"}
      (str
        "window['version'] = '" (:version data) "';
         window['isUrlVersion'] = " (boolean (:is-url-version data)) ";")]
-    [:script {:type "text/javascript" :src "/main.min.js"}]
+    [:script {:id "main_script" :type "text/javascript" :src "/main.min.js" :async true}]
+    [:script {:type "text/javascript"}
+     "
+         var tryUpdateSampleInit = function(){\n        var anychartScriptIsLoad;\n        var mainScriptIsLoad;\n        var updateSampleInit = function(){\n            if (anychartScriptIsLoad == false) return;\n            if (mainScriptIsLoad == false) return;\n            for (var i = 1; i < 30; i++){\n                if (typeof window[\"sampleInit\" + i] !== 'undefined'){\n                    window[\"sampleInit\" + i]();\n                    delete window[\"sampleInit\" + i];\n                }\n            }\n        };\n        anychartScriptIsLoad = typeof anychart !== 'undefined';\n        mainScriptIsLoad = typeof $ !== 'undefined';\n        if (anychartScriptIsLoad && mainScriptIsLoad){\n            updateSampleInit();\n        }else{\n            anychart_script.onload = function(){\n                anychartScriptIsLoad = true;\n                updateSampleInit();\n            };\n            main_script.onload = function(){\n                mainScriptIsLoad = true;\n                updateSampleInit();\n            };\n        }\n    };\n    tryUpdateSampleInit();
+     "
+     ]
 
     ))

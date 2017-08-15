@@ -1,7 +1,7 @@
 var page = location.pathname;
 
 function highlightCode() {
-    $("#page-content pre").addClass("prettyprint");
+    $("#article-content pre").addClass("prettyprint");
     prettyPrint();
 
     $("div.iframe .btns").each(function() {
