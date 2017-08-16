@@ -6582,11 +6582,6 @@ a.brand {
 .right-addon input {
   padding-right: 30px;
 }
-.btn-playground.btn {
-  color: #1f74b6;
-  background: none;
-  border: 0;
-}
 a.sidebar-switcher {
   display: block;
   float: left;
@@ -7061,15 +7056,18 @@ div.container-fluid .row {
 }
 .iframe .btns {
   position: absolute;
-  bottom: -36px;
+  bottom: -32px;
   right: -1px;
   background-color: #f5f5f5;
   border: 1px solid #ccc;
   border-radius: 0 0 4px 4px;
 }
-.iframe .btns a {
+.iframe .btns a.btn-playground.btn {
   float: right;
   margin-left: 5px;
+  background: none;
+  border: 0;
+  font-size: 13px;
 }
 .iframe-tag {
   border: none;
