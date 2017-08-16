@@ -172,8 +172,7 @@
   [:div.wrapper.container-fluid
    [:div.row
 
-    [:div.col-md-8.col-lg-7.all-height.hidden-xs.hidden-sm.left-sidebar-container
-
+    [:div.hidden-xs.hidden-sm.left-sidebar-container
      [:div.sidebar
       [:div.hidden-xs.hidden-sm                             ;.search-large-screen
        [:div.inner-addon.right-addon
@@ -215,10 +214,10 @@
         (:actual-version data)]
        " version to see the up to date information."])
 
-    [:div#article-content.col-md-12.col-lg-13
+    [:div#article-content.col-md-24
      (-> data :page :content)]
 
-    [:div.col-md-4.hidden-sm.hidden-xs
+    [:div.right-sidebar-container.pull-right                                             ;.col-md-4.hidden-sm.hidden-xs
      [:div.right-bar-side
       [:div#table-of-content-large]
       [:div.right-buttons
@@ -231,7 +230,8 @@
        [:a {:href "https://github.com/AnyChart/docs.anychart.com"}
         [:div.icon.edit]
         [:span "Edit this page"]]
-       ]]]
+       ]]
+     ]
 
     ]])
 

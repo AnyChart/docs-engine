@@ -18,24 +18,24 @@
       {:html (clojure.string/replace text source "") :tags tags})
     {:html text :tags []}))
 
-(defn- build-sample-embed [version playground sample-path custom-settings]
-  (let [width (:width custom-settings)
-        height (:height custom-settings)
-        div-style (if (not (= width nil))
-                    (str "style='width:" (+ width 10) "px;'")
-                    "")
-        style (if (and (not (= width nil))
-                       (not (= height nil)))
-                (str "style='width:" width "px;height:" height "px;'")
-                "")]
-    (str
-      "<div class='iframe' " div-style ">
-       <div class='no-overflow'>
-       <iframe " style " src='//" playground "/" version "/samples/" sample-path "-iframe'></iframe></div>
-       <div class='btns'>
-         <a class='btn-playground btn jsfiddle-btn' target='_blank'><i class='ac ac-jsfiddle'></i> JsFiddle</a>
-         <a class='btn-playground btn' target='_blank' href='//" playground "/" version "/samples/" sample-path "-plain'><i class='ac ac-play'></i> Playground</a>
-       </div></div>")))
+;(defn- build-sample-embed [version playground sample-path custom-settings]
+;  (let [width (:width custom-settings)
+;        height (:height custom-settings)
+;        div-style (if (not (= width nil))
+;                    (str "style='width:" (+ width 10) "px;'")
+;                    "")
+;        style (if (and (not (= width nil))
+;                       (not (= height nil)))
+;                (str "style='width:" width "px;height:" height "px;'")
+;                "")]
+;    (str
+;      "<div class='iframe' " div-style ">
+;       <div class='no-overflow'>
+;       <iframe " style " src='//" playground "/" version "/samples/" sample-path "-iframe'></iframe></div>
+;       <div class='btns'>
+;         <a class='btn-playground btn jsfiddle-btn' target='_blank'><i class='ac ac-jsfiddle'></i> JsFiddle</a>
+;         <a class='btn-playground btn' target='_blank' href='//" playground "/" version "/samples/" sample-path "-plain'><i class='ac ac-play'></i> Playground</a>
+;       </div></div>")))
 
 (defn get-code [id code scripts sample version-key]
   (condp = (count scripts)

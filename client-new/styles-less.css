@@ -6527,6 +6527,7 @@ a.brand {
   bottom: 0;
   position: fixed;
   width: 305px;
+  padding: 0 0 0 15px;
   z-index: 100;
 }
 .sidebar .inner-addon {
@@ -6569,10 +6570,10 @@ a.brand {
 }
 /* align icon */
 .left-addon .glyphicon {
-  left: 0px;
+  left: 0;
 }
 .right-addon .glyphicon {
-  right: 0px;
+  right: 0;
 }
 /* add padding  */
 .left-addon input {
@@ -6679,17 +6680,16 @@ ul.version-menu a:hover {
 ul.menu {
   background: #f6f6f6;
   color: #fff;
-  margin-right: 15px;
-  margin-bottom: 5px;
+  margin: 0 0 5px 0;
   padding: 14px 0;
   text-shadow: -1px 1px 0 rgba(255, 255, 255, 0.7);
   list-style: none;
   bottom: 100px;
   font-size: 12px;
-  width: 100%;
+  width: 290px;
   position: absolute;
   top: 52px;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 ul.menu a {
   color: #76797b;
@@ -6748,9 +6748,57 @@ ul.menu li ul {
   padding: 0;
   padding-top: 5px;
 }
+.right-sidebar-container {
+  margin-right: 145px;
+  z-index: 1000;
+}
 .right-bar-side {
   position: fixed;
   top: 80px;
+  width: 130px;
+}
+#table-of-content-large {
+  min-height: 100px;
+  overflow-y: auto;
+  background-color: #f6f6f6;
+  max-width: 150px;
+  overflow-x: hidden;
+  margin-bottom: 17px;
+}
+#table-of-content-large ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 11px;
+  line-height: normal;
+}
+#table-of-content-large ul.table_of_content > li > ul {
+  margin-left: 2px !important;
+}
+#table-of-content-large > ul > li > a {
+  font-weight: 600;
+}
+#table-of-content-large ul.table_of_content,
+ul.table_of_content {
+  overflow-y: visible;
+  padding: 15px;
+}
+#table-of-content-large ul.table_of_content li ul {
+  border-left: 1px dotted #929292;
+  margin-left: 22px;
+}
+#table-of-content-large ul.table_of_content li ul a {
+  padding-left: 20px;
+}
+#table-of-content-large ul a {
+  color: #76797b;
+  display: inline-block;
+  max-width: 100px;
+  padding: 4px 0;
+}
+#table-of-content-large ul a:hover {
+  color: #2485d0;
+  text-decoration: none;
 }
 .right-buttons {
   font-size: 11px;
@@ -6801,51 +6849,8 @@ ul.menu li ul {
   -webkit-mask-image: url(../svg/edit.svg);
   -webkit-mask-size: 18px 18px;
 }
-#table-of-content-large {
-  min-height: 100px;
-  overflow-y: auto;
-  background-color: #f6f6f6;
-  max-width: 150px;
-  overflow-x: hidden;
-  margin-bottom: 17px;
-}
-#table-of-content-large ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  font-size: 11px;
-  line-height: normal;
-}
-#table-of-content-large ul.table_of_content > li > ul {
-  margin-left: 2px !important;
-}
-#table-of-content-large > ul > li > a {
-  font-weight: 600;
-}
-#table-of-content-large ul.table_of_content,
-ul.table_of_content {
-  overflow-y: visible;
-  padding: 15px;
-}
-#table-of-content-large ul.table_of_content li ul {
-  border-left: 1px dotted #929292;
-  margin-left: 22px;
-}
-#table-of-content-large ul.table_of_content li ul a {
-  padding-left: 20px;
-}
-#table-of-content-large ul a {
-  color: #76797b;
-  display: inline-block;
-  max-width: 100px;
-  padding: 4px 0;
-}
-#table-of-content-large ul a:hover {
-  color: #2485d0;
-  text-decoration: none;
-}
 div.container-fluid .row {
-  max-width: 1200px;
+  max-width: 1100px;
   margin: 0 auto;
 }
 .content-row {
@@ -6873,14 +6878,41 @@ div.container-fluid .row {
   right: 0;
   overflow-y: scroll;
 }*/
+@keyframes anchor-animation {
+  0% {
+    color: #85caff;
+  }
+  100% {
+    color: #222222;
+  }
+}
 #article-content {
-  padding: 0 30px 20px 40px;
+  padding: 0 185px 20px 360px;
 }
 #article-content h1,
 #article-content h2,
 #article-content h3,
 #article-content h4 {
   margin: 0;
+  margin-top: -75px;
+}
+#article-content h1:before,
+#article-content h2:before,
+#article-content h3:before,
+#article-content h4:before {
+  display: block;
+  content: " ";
+  height: 75px;
+}
+#article-content h1:target,
+#article-content h2:target,
+#article-content h3:target,
+#article-content h4:target {
+  animation-name: anchor-animation;
+  animation-direction: normal;
+  animation-duration: .7s;
+  animation-iteration-count: 1;
+  animation-timing-function: ease;
 }
 #article-content h1 {
   font-size: 18px;
@@ -6899,7 +6931,6 @@ div.container-fluid .row {
   padding: 10px 0 10px 0;
   font-size: 14px;
   color: #000000;
-  margin: 0;
 }
 #article-content p ~ ul,
 #article-content p ~ ol {

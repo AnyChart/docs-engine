@@ -86,10 +86,10 @@ var onResize = function(){
     }
 
     // left menu width to bootstrap column
-    var sidebarConainer = $($(".left-sidebar-container")[0]);
+    /*var sidebarConainer = $($(".left-sidebar-container")[0]);
     var sidebar = $($(".sidebar")[0]);
     console.log("Width: " + sidebarConainer.width() + " : " + sidebar.width());
-    sidebar.width(sidebarConainer.width());
+    sidebar.width(sidebarConainer.width());*/
 
 };
 window.onload = function(){
