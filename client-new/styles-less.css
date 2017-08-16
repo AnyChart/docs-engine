@@ -6636,6 +6636,7 @@ ul.menu {
   background: #f6f6f6;
   color: #fff;
   margin-right: 15px;
+  margin-bottom: 5px;
   padding: 14px 0;
   text-shadow: -1px 1px 0 rgba(255, 255, 255, 0.7);
   list-style: none;
@@ -7063,38 +7064,48 @@ pre {
   position: absolute;
   overflow: hidden;
 }
+.footer .footer-inner {
+  margin: 0;
+  padding: 20px 0;
+}
+.footer .footer-inner a.soc-network {
+  display: inline-block;
+}
+.footer .footer-inner a.soc-network:hover,
+.footer .footer-inner a.soc-network:focus {
+  text-decoration: none;
+  color: #fff;
+}
+.footer .footer-inner a.soc-network:hover .soc-network-icon,
+.footer .footer-inner a.soc-network:focus .soc-network-icon {
+  border-color: #85caff;
+  color: #85caff;
+}
+.footer .footer-inner a.soc-network .soc-network-icon {
+  font-size: 16px;
+  display: inline-block;
+  margin-right: 7px;
+  vertical-align: middle;
+  width: 28px;
+  height: 28px;
+  line-height: 25px;
+  text-align: center;
+  border-radius: 50%;
+  color: #c3c3c3;
+  border: 1px solid #c3c3c3;
+}
+.footer .footer-inner a.soc-network .soc-network-icon.tw {
+  font-size: 17px;
+  line-height: 26px;
+}
+.footer .footer-inner p {
+  padding: 20px 0 15px 0;
+  font-size: 11px;
+  color: #999999;
+}
 #bar .footer {
   border-top: 1px solid #dddddd;
   position: relative;
-}
-.footer-inner {
-  margin: 0;
-  font-size: 12px;
-  padding: 20px 0;
-}
-.footer-inner p {
-  padding: 20px 0 15px 0;
-  color: #929292;
-}
-a.soc-network {
-  display: inline-block;
-}
-a.soc-network .soc-network-icon {
-  font-size: 16px;
-  display: inline-block;
-  margin-right: 10px;
-  vertical-align: middle;
-  width: 30px;
-  height: 30px;
-  line-height: 30px;
-  text-align: center;
-  border-radius: 50%;
-  color: #929292;
-  border: 2px solid #929292;
-}
-a.soc-network .soc-network-icon .sn-mini-icon {
-  /*font-size: 16px !important;
-  vertical-align: text-top;*/
 }
 /*.icon {
     font-family: 'AnyChart';
@@ -7120,28 +7131,6 @@ a.text-support {
 }
 a.text-support i {
   font-size: 35px;
-}
-a.soc-network:hover {
-  text-decoration: none;
-  color: #fff;
-}
-a.soc-network:focus .soc-network-icon.fb,
-a.soc-network:hover .soc-network-icon.fb {
-  background: #3a5bad;
-  border-color: #3a5bad;
-  color: #fff;
-}
-a.soc-network:focus .soc-network-icon.tw,
-a.soc-network:hover .soc-network-icon.tw {
-  background: #1dcbea;
-  border-color: #1dcbea;
-  color: #fff;
-}
-a.soc-network:focus .soc-network-icon.in,
-a.soc-network:hover .soc-network-icon.in {
-  background: #1182c9;
-  border-color: #1182c9;
-  color: #fff;
 }
 @media (min-width: 831px) {
   .warning-version {
