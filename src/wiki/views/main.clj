@@ -104,7 +104,7 @@
       ;  (for [v (:versions data)]
       ;    [:li [:a {:href (:url v)} (str "Version " (:key v))]])]]
 
-      [:div.text-muted.questions
+      [:div.questions
        [:a.text-support {:rel "nofollow" :href "http://support.anychart.com"}
         [:img {:src "/svg/support.svg" :width "27px" :style "color=white"}]]
        [:span.hidden-super-small "Still have questions?"
@@ -144,7 +144,7 @@
      [:ul.dropdown-menu.version-menu {:role "menu"}
       (for [version (:versions data)]
         [:ul [:li [:a {:href (:url version)} (str "Version " (:key version))]]])]]
-    [:div.text-muted.questions
+    [:div.questions
      [:a.text-support
       {:rel "nofollow" :href "http://support.anychart.com"}
       [:i.ac.ac-support]]
