@@ -69,7 +69,7 @@
      ;:div.col-lg-22.col-lg-offset-1
      ;[:a.sidebar-switcher.hidden-md.hidden-lg [:i.ac.ac-bars]]
 
-     [:div.col-md-20
+     [:div.col-sm-24
       [:a.navbar-brand {:rel "nofollow" :href "https://www.anychart.com"}
        [:img {:alt "AnyChart" :src "/i/logo-empty.png"}]
        [:div.chart-row
@@ -78,7 +78,7 @@
         [:span.chart-col.red]]]
       [:a.brand.hidden-super-small " Documentation"]
 
-      [:div.dropdown.pull-right.version-select
+      [:div.dropdown.pull-right.version-select.hidden-xs
        [:button.btn.btn-blue.btn-sm {:data-toggle "dropdown" :type "button"}
         [:span.version-label (str "Version " (:version data))]
         [:span.caret]]
@@ -86,25 +86,9 @@
         (for [v (:versions data)]
           [:li [:a {:href (:url v)} (str "Version " (:key v))]])]]]
 
-     [:div.helpers.hidden-830
+     [:div.helpers.hidden-xs.pull-right
 
-      ;[:div.dropdown
-      ; [:button.btn.btn-blue.btn-sm {:data-toggle "dropdown" :type "button"}
-      ;  [:span.version-label (str "Version " (:version data))]
-      ;  [:span.caret]]
-      ; [:ul.dropdown-menu.version-menu {:role "menu"}
-      ;  (for [v (:versions data)]
-      ;    [:li [:a {:href (:url v)} (str "Version " (:key v))]])]]
-
-      ;[:div.dropdown
-      ; [:button.btn.btn-primary {:data-toggle "dropdown" :type "button"}
-      ;  [:span.version-label (str "Version " (:version data))]
-      ;  [:span.caret]]
-      ; [:ul.dropdown-menu.version-menu {:role "menu"}
-      ;  (for [v (:versions data)]
-      ;    [:li [:a {:href (:url v)} (str "Version " (:key v))]])]]
-
-      [:div.questions
+      [:div.questions.affix
        [:a.text-support {:rel "nofollow" :href "http://support.anychart.com"}
         [:img {:src "/svg/support.svg" :width "27px" :style "color=white"}]]
        [:span.hidden-super-small "Still have questions?"
@@ -172,9 +156,9 @@
   [:div.wrapper.container-fluid
    [:div.row
 
-    [:div.hidden-xs.hidden-sm.left-sidebar-container
+    [:div.hidden-xs.left-sidebar-container
      [:div.sidebar
-      [:div.hidden-xs.hidden-sm                             ;.search-large-screen
+      [:div.hidden-xs                         ;.search-large-screen
        [:div.inner-addon.right-addon
         ;[:i.ac.ac-search]
         [:input.form-control.input-sm {:placeholder "What are you looking for?" :type "text"}]
@@ -195,15 +179,15 @@
          [:span.soc-network-icon.in [:i.sn-mini-icon.ac.ac-linkedin]]]
         [:p " © 2017 AnyChart.Com All rights reserved."]]]]]
 
-    [:div.row.helpers.hidden-lg.hidden-md
-     [:div.col-xs-24.col-sm-12
-      [:div.input-group.search
-       [:input.form-control
-        {:placeholder "What are you looking for?" :type "text"}]
-       [:span.input-group-btn
-        [:button.btn.btn-default
-         {:type "button"}
-         [:span.ac.ac-search.form-control-feedback]]]]]]
+    ;[:div.row.helpers.hidden-lg.hidden-md
+    ; [:div.col-xs-24.col-sm-12
+    ;  [:div.input-group.search
+    ;   [:input.form-control
+    ;    {:placeholder "What are you looking for?" :type "text"}]
+    ;   [:span.input-group-btn
+    ;    [:button.btn.btn-default
+    ;     {:type "button"}
+    ;     [:span.ac.ac-search.form-control-feedback]]]]]]
 
     (when (:old data)
       [:div#warning.warning-version.alert.alert-default.fade.in
@@ -217,7 +201,7 @@
     [:div#article-content.col-md-24
      (-> data :page :content)]
 
-    [:div.right-sidebar-container.pull-right                                             ;.col-md-4.hidden-sm.hidden-xs
+    [:div.right-sidebar-container.pull-right.hidden-sm.hidden-xs.hidden-1020                                             ;.col-md-4.hidden-sm.hidden-xs
      [:div.right-bar-side
       [:div#table-of-content-large]
       [:div.right-buttons
