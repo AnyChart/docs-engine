@@ -72,7 +72,7 @@ $menu.find("a").each(function() {
 expandMenu(location.pathname);
 
 // resize table content height
-window.addEventListener("resize", function(){
+/*window.addEventListener("resize", function(){
     onResize();
 });
 var onResize = function(){
@@ -81,22 +81,33 @@ var onResize = function(){
     var tableOfContent = $($(".table_of_content")[1]);
     if( tableOfContent.height() != null){
         if (tableOfContent.height() + 120 + 85 > windowHeight){
-            //console.log("More " +  tableOfContent.height());
             tableOfContentLarge.height(windowHeight - 120 - 85);
         }else{
-            //tableOfContentLarge.height(tableOfContent.height() + 30);
             console.log("Less " +  tableOfContent.height());
         }
     }
-
-    // left menu width to bootstrap column
-    /*var sidebarConainer = $($(".left-sidebar-container")[0]);
-    var sidebar = $($(".sidebar")[0]);
-    console.log("Width: " + sidebarConainer.width() + " : " + sidebar.width());
-    sidebar.width(sidebarConainer.width());*/
-
 };
 window.onload = function(){
     onResize();
 };
 onResize();
+*/
+
+// The function actually applying the offset
+/*function offsetAnchor() {
+    if (location.hash.length !== 0) {
+        window.scrollTo(window.scrollX, window.scrollY - 100);
+    }
+}
+
+// Captures click events of all <a> elements with href starting with #
+$(document).on('click', 'a[href^="#"]', function(event) {
+    // Click events are captured before hashchanges. Timeout
+    // causes offsetAnchor to be called after the page jump.
+    window.setTimeout(function() {
+        offsetAnchor();
+    }, 0);
+});
+
+// Set the offset when entering page with hash present in the url
+window.setTimeout(offsetAnchor, 0);*/

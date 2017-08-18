@@ -198,8 +198,9 @@
         (:actual-version data)]
        " version to see the up to date information."])
 
-    [:div#article-content.col-md-24
-     (-> data :page :content)]
+    [:div#page-content.col-md-24
+     [:div#article-content
+      (-> data :page :content)]]
 
     [:div.right-sidebar-container.pull-right.hidden-sm.hidden-xs.hidden-1020                                             ;.col-md-4.hidden-sm.hidden-xs
      [:div.right-bar-side
