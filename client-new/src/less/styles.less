@@ -1,6 +1,9 @@
 @import "bootstrap.less";
 @import "variables.less";
 
+@mobile-width: 864px;
+@tablet-width: 1020px;
+
 html, body {
   height: 100%;
   font-family: 'Open Sans', sans-serif;
@@ -25,6 +28,12 @@ header {
   position: fixed;
   width: 100%;
   z-index: 20;
+  top: 0;
+  .col-sm-24 {
+    @media (max-width: @mobile-width){
+      padding: 0;
+    }
+  }
 }
 
 .wrapper {
@@ -107,37 +116,35 @@ a.brand {
 
 
 .helpers {
-  padding: 8px 0;
   margin-right: 165px;
-  .questions {
-    top: 10px;
-    margin-left: 10px;
-    color: #d5edff;
-    line-height: 16px;
-    font-size: 11px;
-    font-weight: lighter;
-    a {
-      color: #fff;
-      text-decoration: none;
-      &.text-support {
-        display: block;
-        float: left;
-        width: 45px;
-        height: 50px;
-        line-height: 43px;
-        text-align: center;
-        border-radius: 50%;
-        color: #929292;
-        margin-top: -5px;
+}
+.questions {
+  top: 10px;
+  margin-left: 10px;
+  color: #d5edff;
+  line-height: 16px;
+  font-size: 11px;
+  font-weight: lighter;
+  a {
+    color: #fff;
+    text-decoration: none;
+    &.text-support {
+      display: block;
+      float: left;
+      width: 45px;
+      height: 50px;
+      line-height: 43px;
+      text-align: center;
+      border-radius: 50%;
+      color: #929292;
+      margin-top: -5px;
+      font-size: 35px;
+      i {
         font-size: 35px;
-        i {
-          font-size: 35px;
-        }
       }
     }
   }
 }
-
 
 /*#bar .helpers {
   padding: 15px 15px 15px;
@@ -169,9 +176,43 @@ a.brand {
 .open .btn-blue {
   background: #43a0e6;
 }
+.btn-white {
+  color: #43a0e6 !important;
+  background-color: white !important;
+  border: 1px solid #43a0e6;
+  .caret {
+    margin-left: 10px;
+  }
+}
 
+/*.left-addon {
+  .glyphicon {
+    left: 0;
+  }
+  input {
+    padding-left: 30px;
+  }
+}*/
 
-
+/*.right-addon {
+  .glyphicon {
+    right: 0;
+  }
+  input {
+    padding-right: 30px;
+  }
+}*/
+.mobile-search-container{
+  top: 57px;
+  padding: 16px 0 5px;
+  position: fixed;
+  width: 100%;
+  z-index: 18;
+  background-color: white;
+  .col-xs-24{
+    padding: 0;
+  }
+}
 
 .sidebar {
   top: 84px;
@@ -180,66 +221,52 @@ a.brand {
   width: 305px;
   padding: 0 0 0 15px;
   z-index: 100;
-  .inner-addon {
-    position: relative;
-    .input-sm{
-      font-size: 13px;
-      height: 27px;
-      outline: none;
-      box-shadow: none;
-      &:focus{
-        border-color: #85caff;
-        &::-webkit-input-placeholder{
-          color: #85caff;
-        }
-        &:-moz-placeholder{
-          color: #85caff;
-        }
-        &::-moz-placeholder{
-          color: #85caff;
-        }
-        &:-ms-input-placeholder{
-          color: #85caff;
-        }
-        &+.glyphicon-search{
-          color: #85caff;
-        }
-      }
-    }
-    .glyphicon {
-      position: absolute;
-      padding: 10px;
-      pointer-events: none;
-      &.glyphicon-search {
-        color: #cccccc;
-        font-size: 16px;
-        padding: 8px !important;
-        top: -2px;
-      }
-    }
+  .buttons-container{
+    background-color: #f9f9f9;
+    padding: 17px;
   }
 }
 
-
-
-/* align icon */
-.left-addon .glyphicon {
-  left: 0;
+.inner-addon {
+  position: relative;
+  .input-sm{
+    font-size: 13px;
+    height: 27px;
+    outline: none;
+    box-shadow: none;
+    padding-right: 30px;
+    &:focus{
+      border-color: #85caff;
+      &::-webkit-input-placeholder{
+        color: #85caff;
+      }
+      &:-moz-placeholder{
+        color: #85caff;
+      }
+      &::-moz-placeholder{
+        color: #85caff;
+      }
+      &:-ms-input-placeholder{
+        color: #85caff;
+      }
+      &+.glyphicon-search{
+        color: #85caff;
+      }
+    }
+  }
+  .glyphicon {
+    position: absolute;
+    right: 0;
+    padding: 10px;
+    pointer-events: none;
+    &.glyphicon-search {
+      color: #cccccc;
+      font-size: 16px;
+      padding: 8px !important;
+      top: -2px;
+    }
+  }
 }
-
-.right-addon .glyphicon {
-  right: 0;
-}
-
-/* add padding  */
-.left-addon input {
-  padding-left: 30px;
-}
-
-.right-addon input {
-  padding-right: 30px;
-}
-
 
 
 
@@ -253,16 +280,10 @@ a.sidebar-switcher {
   border-radius: 50%;
   color: #d5edff;
   margin-top: 0;
-  margin-right: 5px;
+  //margin-right: 5px;
   font-size: 30px;
 }
 
-section {
-  background: #ffffff;
-  border-radius: 2px;
-  padding: 0 40px;
-  margin-bottom: 40px;
-}
 
 #bar {
   display: none;
@@ -285,7 +306,7 @@ section {
   bottom: 0;
   right: 0;
   overflow: hidden;
-  background: rgba(0, 0, 0, 0.75);
+  background: rgba(255, 255, 255, 0.75);
   z-index: 19;
   display: none;
 }
@@ -317,8 +338,9 @@ section {
 // Versions select button
 //======================================================================================================================
 .version-select {
-  margin-top: 14px;
-  margin-right: 158px;
+  @media (min-width: @mobile-width){
+    margin: 14px 158px 0 0;
+  }
   button {
     padding: 3px 10px;
     .version-label {
@@ -586,7 +608,7 @@ div.container-fluid .row {
   .right-buttons, ul.table_of_content{
     display: none;
   }
-  @media (max-width: 1020px){
+  @media (max-width: @tablet-width){
     padding: 0 15px 20px 360px;
     .right-buttons{
       display: block;
@@ -597,8 +619,8 @@ div.container-fluid .row {
       padding: 20px;
     }
   }
-  @media (max-width: 864px){
-    padding: 0 0px 20px 20px;
+  @media (max-width: @mobile-width){
+    padding: 37px 0 20px 20px;
   }
   h1 {
     font-size: 18px;
@@ -739,10 +761,10 @@ div.container-fluid .row {
   }
   // inner table of content
   ul.table_of_content, .right-buttons{
-    @media (min-width: 1020px) {
+    @media (min-width: @tablet-width) {
       display: none;
     }
-    @media (max-width: 1020px){
+    @media (max-width: @tablet-width){
       display: block;
     }
   }
@@ -889,6 +911,11 @@ div.container-fluid .row {
   width: 100%;
   position: absolute;
   overflow: hidden;
+  background-color: white;
+  @media (max-width: @mobile-width){
+    background-color: #f6f6f6;
+    padding: 0 15px;
+  }
   .footer-inner {
     margin: 0;
     padding: 20px 0;
@@ -977,9 +1004,6 @@ div.container-fluid .row {
     display: none !important;
   }
 
-  #shadow {
-    display: none !important;
-  }
 }
 
 
@@ -989,39 +1013,45 @@ div.container-fluid .row {
   }
 }
 
-.visible-830 {
+/*.visible-830 {
   display: none;
-}
+}*/
 
-.hidden-1020{
-  @media (max-width: 1020px) {
+.hidden-tablet{
+  @media (max-width: @tablet-width) {
     display: none;
   }
 }
-.visible-1020{
-  @media (min-width: 1021px){
+.visible-tablet{
+  @media (min-width: (@tablet-width + 1px)){
     display: block;
   }
 }
 
 
-.hidden-864{
-  @media (max-width: 864px) {
+.hidden-mobile{
+  @media (max-width: @mobile-width) {
     display: none;
   }
+  @media (min-width: (@mobile-width + 1px)){
+    display: block  !important;
+  }
 }
-.visible-864{
-  @media (min-width: 865px){
+.visible-mobile{
+  @media (max-width: @mobile-width){
     display: block;
+  }
+  @media (min-width: (@mobile-width + 1px)){
+    display: none !important;
   }
 }
 
 
-@media (max-width: 830px) {
+/*@media (max-width: 830px) {
   .hidden-830 {
     display: none !important;
   }
   .visible-830 {
     display: block !important;
   }
-}
+}*/

@@ -78,28 +78,42 @@
         [:span.chart-col.red]]]
       [:a.brand.hidden-super-small " Documentation"]
 
-      [:div.dropdown.pull-right.version-select.hidden-xs
+      [:div.dropdown.pull-right.version-select.hidden-mobile
        [:button.btn.btn-blue.btn-sm {:data-toggle "dropdown" :type "button"}
         [:span.version-label (str "Version " (:version data))]
         [:span.caret]]
        [:ul.dropdown-menu.version-menu {:role "menu"}
         (for [v (:versions data)]
-          [:li [:a {:href (:url v)} (str "Version " (:key v))]])]]]
+          [:li [:a {:href (:url v)} (str "Version " (:key v))]])]]
 
-     [:div.helpers.hidden-xs.pull-right
+      [:div.visible-mobile.pull-right
+       [:a.sidebar-switcher [:i.ac.ac-bars]]]
+      ]
 
+     [:div.helpers.pull-right.hidden-mobile
       [:div.questions.affix
        [:a.text-support {:rel "nofollow" :href "http://support.anychart.com"}
         [:img {:src "/svg/support.svg" :width "27px" :style "color=white"}]]
        [:span.hidden-super-small "Still have questions?"
         [:br]
         [:a {:rel "nofollow" :href "https://www.anychart.com/support/"}
-         "Contact support"]]]
+         "Contact support"]]]]
+     ]
 
-      ]]]
-
+    ]
    ]
   )
+
+(defn mobile-search [data]
+  [:div.mobile-search-container.visible-mobile
+   [:div.container-fluid
+    [:div.row
+     [:div.col-xs-24
+      [:div.inner-addon.right-addon
+       ;[:i.ac.ac-search]
+       [:input.form-control.input-sm {:placeholder "What are you looking for?" :type "text"}]
+       [:i.glyphicon.glyphicon-search]
+       ]]]]])
 
 (defn body [data]
   [:body
@@ -113,57 +127,78 @@
    [:link {:rel "apple-touch-icon" :sizes "120x120" :href "/icons/152.png"}]
    [:link {:rel "apple-touch-icon" :sizes "152x152" :href "/icons/167.png"}]
    [:link {:rel "apple-touch-icon" :sizes "167x167" :href "/icons/180.png"}]
-   (header data)])
+   (header data)
+   (mobile-search data)
+   ])
 
 
 
-(defn mobile-menu [data]
-  [:div#bar
-   [:div.helpers.visible-830.bordered
-    [:div.btn-group
-     [:button.btn.btn-default.btn-blue.dropdown-toggle
-      {:data-toggle "dropdown" :type "button"}
-      [:span.version-label (str "Version " (:version data))]
-      [:span.caret]]
-     [:ul.dropdown-menu.version-menu {:role "menu"}
-      (for [version (:versions data)]
-        [:ul [:li [:a {:href (:url version)} (str "Version " (:key version))]]])]]
-    [:div.questions
-     [:a.text-support
-      {:rel "nofollow" :href "http://support.anychart.com"}
-      [:i.ac.ac-support]]
-     [:span.hidden-super-small " Still have questions?"
-      [:br] " "
-      [:a {:rel "nofollow" :href "https://www.anychart.com/support/"} " Contact support"]]]]
-   [:ul.menu
-    (tree data)]
-   [:div.footer
-    [:div.footer-inner
-     [:a.soc-network
-      {:target "_blank" :rel "nofollow" :href "https://www.facebook.com/AnyCharts"}
-      [:span.soc-network-icon.fb [:i.sn-mini-icon.ac.ac-facebook]]]
-     [:a.soc-network
-      {:target "_blank" :rel "nofollow" :href "https://twitter.com/AnyChart"}
-      [:span.soc-network-icon.tw [:i.sn-mini-icon.ac.ac-twitter]]]
-     [:a.soc-network
-      {:target "_blank" :rel "nofollow" :href "https://www.linkedin.com/company/386660"}
-      [:span.soc-network-icon.in [:i.sn-mini-icon.ac.ac-linkedin]]]
-     [:p " © 2017 AnyChart.Com All rights reserved."]]]]
-  )
+;(defn mobile-menu [data]
+;  [:div#bar
+;   [:div.helpers.visible-830.bordered
+;    [:div.btn-group
+;     [:button.btn.btn-default.btn-blue.dropdown-toggle
+;      {:data-toggle "dropdown" :type "button"}
+;      [:span.version-label (str "Version " (:version data))]
+;      [:span.caret]]
+;     [:ul.dropdown-menu.version-menu {:role "menu"}
+;      (for [version (:versions data)]
+;        [:ul [:li [:a {:href (:url version)} (str "Version " (:key version))]]])]]
+;    [:div.questions
+;     [:a.text-support
+;      {:rel "nofollow" :href "http://support.anychart.com"}
+;      [:i.ac.ac-support]]
+;     [:span.hidden-super-small " Still have questions?"
+;      [:br] " "
+;      [:a {:rel "nofollow" :href "https://www.anychart.com/support/"} " Contact support"]]]]
+;   [:ul.menu
+;    (tree data)]
+;   [:div.footer
+;    [:div.footer-inner
+;     [:a.soc-network
+;      {:target "_blank" :rel "nofollow" :href "https://www.facebook.com/AnyCharts"}
+;      [:span.soc-network-icon.fb [:i.sn-mini-icon.ac.ac-facebook]]]
+;     [:a.soc-network
+;      {:target "_blank" :rel "nofollow" :href "https://twitter.com/AnyChart"}
+;      [:span.soc-network-icon.tw [:i.sn-mini-icon.ac.ac-twitter]]]
+;     [:a.soc-network
+;      {:target "_blank" :rel "nofollow" :href "https://www.linkedin.com/company/386660"}
+;      [:span.soc-network-icon.in [:i.sn-mini-icon.ac.ac-linkedin]]]
+;     [:p " © 2017 AnyChart.Com All rights reserved."]]]]
+;  )
 
 
 (defn main-content [data]
   [:div.wrapper.container-fluid
    [:div.row
 
-    [:div.hidden-xs.left-sidebar-container
+    [:div.left-sidebar-container.hidden-mobile
      [:div.sidebar
-      [:div.hidden-xs                         ;.search-large-screen
-       [:div.inner-addon.right-addon
-        ;[:i.ac.ac-search]
-        [:input.form-control.input-sm {:placeholder "What are you looking for?" :type "text"}]
-        [:i.glyphicon.glyphicon-search]
-        ]]
+
+      ;; search inputh
+      [:div.inner-addon.hidden-mobile
+       [:input.form-control.input-sm {:placeholder "What are you looking for?" :type "text"}]
+       [:i.glyphicon.glyphicon-search]]
+
+      ;; version select dropdown
+      [:div.buttons-container.visible-mobile
+       [:div.dropdown.version-select
+        [:button.btn.btn-white.btn-sm {:data-toggle "dropdown" :type "button"}
+         [:span.version-label (str "Version " (:version data))]
+         [:span.caret]]
+        [:ul.dropdown-menu.version-menu {:role "menu"}
+         (for [v (:versions data)]
+           [:li [:a {:href (:url v)} (str "Version " (:key v))]])]]
+
+       ;; support link
+       [:div.questions.pull-right
+        [:a.text-support {:rel "nofollow" :href "http://support.anychart.com"}
+         [:img {:src "/svg/support.svg" :width "27px" :style "color=white"}]]
+        [:span.hidden-super-small "Still have questions?"
+         [:br]
+         [:a {:rel "nofollow" :href "https://www.anychart.com/support/"}
+          "Contact support"]]]]
+
       [:ul.menu
        (tree data)]
       [:div.footer
@@ -202,7 +237,7 @@
      [:div#article-content
       (-> data :page :content)]]
 
-    [:div.right-sidebar-container.pull-right.hidden-sm.hidden-xs.hidden-1020                                             ;.col-md-4.hidden-sm.hidden-xs
+    [:div.right-sidebar-container.pull-right.hidden-sm.hidden-xs.hidden-tablet
      [:div.right-bar-side
       [:div#table-of-content-large]
       [:div.right-buttons
@@ -226,8 +261,8 @@
     {:lang "en"}
     (head data)
     (body data)
-    [:div#shadow]
-    (mobile-menu data)
+    [:div#shadow.visible-mobile]
+    ;(mobile-menu data)
     (main-content data)
 
     [:script {:type "text/javascript"}
