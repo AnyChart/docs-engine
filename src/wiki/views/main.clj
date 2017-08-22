@@ -110,7 +110,7 @@
    [:div.container-fluid
     [:div.row
      [:div.col-xs-24
-      [:div.inner-addon.right-addon
+      [:div.search.inner-addon.right-addon
        ;[:i.ac.ac-search]
        [:input.form-control.input-sm {:placeholder "What are you looking for?" :type "text"}]
        [:i.glyphicon.glyphicon-search]
@@ -177,7 +177,7 @@
      [:div.sidebar
 
       ;; search inputh
-      [:div.inner-addon.hidden-mobile
+      [:div.search.inner-addon.hidden-mobile
        [:input.form-control.input-sm {:placeholder "What are you looking for?" :type "text"}]
        [:i.glyphicon.glyphicon-search]]
 

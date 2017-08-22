@@ -18,13 +18,13 @@ function searchFor(query, needPushState) {
             window.history.pushState(null, null, url);
         }
         $.post("/" + version + "/search-data", {"q": query}, function (res) {
-            $("#page-content").html('<div class="row"><div class="col-lg-17"><button type="button" class="btn btn-default btn-blue visible-xs"> <i class="ac ac-arrow-left-thin"></i> Back</button><h1 class="search"><button type="button" class="btn btn-default btn-blue hidden-xs"> <i class="ac ac-arrow-left-thin"></i> Back</button>Search results for <span>' + query + '</span> </div></div></h1>');
+            $("#page-content").html('<div id="article-content"><div id="search-content"><button type="button" class="btn btn-default btn-white btn-sm visible-xs"> <i class="ac ac-arrow-left-thin"></i> Back</button><h1 class="search"><button type="button" class="btn btn-default btn-white btn-sm hidden-xs"> <i class="ac ac-arrow-left-thin"></i> Back</button>Search results for <span>' + query + '</span></h1></div></div>');
             if (res.length) {
                 $(res).each(function () {
-                    $("#page-content .col-lg-17").append('<div class="result-block"><h2>' + this.title + '</a></h2><p>' + this.sn + '</p></div>');
+                    $("#search-content").append('<div class="result-block"><h2>' + this.title + '</a></h2><p>' + this.sn + '</p></div>');
                 });
             } else {
-                $("#page-content").append('Nothing found');
+                $("#search-content").append('Nothing found');
             }
             initSearch();
         });

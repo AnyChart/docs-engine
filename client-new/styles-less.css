@@ -7135,8 +7135,28 @@ div.container-fluid .row {
     height: 270px !important;
   }
 }
+#article-content #search-content button {
+  margin: 0 0 15px 0;
+}
+#article-content #search-content h1.search button {
+  margin: 0 15px 0 0;
+}
+#article-content #search-content h1.search span {
+  color: #76797b;
+}
+#article-content #search-content .result-block {
+  padding: 20px 0 0 0;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+}
+#article-content #search-content .result-block .match {
+  font-weight: 600;
+}
+#article-content #search-content .result-block h2 {
+  text-transform: none;
+  padding: 0 0 15px;
+}
 /*
-// SEARCH PAGE
 #page-content .result-block {
   padding-bottom: 10px;
   margin-bottom: 10px;
