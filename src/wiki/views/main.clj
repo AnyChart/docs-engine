@@ -93,7 +93,8 @@
      [:div.helpers.pull-right.hidden-mobile
       [:div.questions.affix
        [:a.text-support {:rel "nofollow" :href "http://support.anychart.com"}
-        [:img {:src "/svg/support.svg" :width "27px" :style "color=white"}]]
+        ;[:img {:src "/svg/support.svg" :width "27px" :style "color=white"}]
+        [:div]]
        [:span.hidden-super-small "Still have questions?"
         [:br]
         [:a {:rel "nofollow" :href "https://www.anychart.com/support/"}
@@ -193,7 +194,9 @@
        ;; support link
        [:div.questions.pull-right
         [:a.text-support {:rel "nofollow" :href "http://support.anychart.com"}
-         [:img {:src "/svg/support.svg" :width "27px" :style "color=white"}]]
+         ;[:img {:src "/svg/support.svg" :width "27px" :style "color=white"}]
+         [:div]
+         ]
         [:span.hidden-super-small "Still have questions?"
          [:br]
          [:a {:rel "nofollow" :href "https://www.anychart.com/support/"}

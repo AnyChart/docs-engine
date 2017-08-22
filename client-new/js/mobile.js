@@ -1,16 +1,19 @@
-$(".sidebar-switcher").click(function() {
+function toggleMobileMenu(){
     $(".left-sidebar-container").toggle();
     $("#shadow").toggle();
+    $("#page-content").toggle();
+}
+
+$(".sidebar-switcher").click(function() {
+    toggleMobileMenu();
 });
 
 $("#shadow").click(function() {
-    $(".left-sidebar-container").toggle();
-    $("#shadow").toggle();
+    toggleMobileMenu();
 });
 
 $(window).keyup(function(e) {
     if (e.keyCode == 27) {
-        $(".left-sidebar-container").hide();
-        $("#shadow").hide();
+        toggleMobileMenu();
     }
 });

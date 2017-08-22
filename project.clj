@@ -31,7 +31,7 @@
                  [clojure.jdbc/clojure.jdbc-c3p0 "0.3.2"]
                  [honeysql "0.8.2"]
                  ;; markdown
-                 [markdown-clj "0.9.98"]
+                 [markdown-clj "0.9.99"]
                  ;; filesystem
                  [me.raynes/fs "1.4.6"]
                  [cpath-clj "0.1.2"]

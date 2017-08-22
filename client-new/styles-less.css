@@ -6458,14 +6458,26 @@ a.brand {
   font-size: 11px;
   font-weight: lighter;
 }
+@media (max-width: 864px) {
+  .questions {
+    color: #2485d0;
+    margin-top: -2px;
+  }
+}
 .questions a {
   color: #fff;
+  font-weight: 600;
   text-decoration: none;
+}
+@media (max-width: 864px) {
+  .questions a {
+    color: #2485d0;
+  }
 }
 .questions a.text-support {
   display: block;
   float: left;
-  width: 45px;
+  width: 43px;
   height: 50px;
   line-height: 43px;
   text-align: center;
@@ -6476,6 +6488,23 @@ a.brand {
 }
 .questions a.text-support i {
   font-size: 35px;
+}
+.questions a.text-support div {
+  height: 27px;
+  width: 27px;
+  display: inline-block;
+  background-color: white;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  mask-image: url(../svg/support.svg);
+  mask-size: 27px 27px;
+  -webkit-mask-image: url(../svg/support.svg);
+  -webkit-mask-size: 27px 27px;
+}
+@media (max-width: 864px) {
+  .questions a.text-support div {
+    background-color: #2485d0;
+  }
 }
 /*#bar .helpers {
   padding: 15px 15px 15px;
@@ -6547,8 +6576,18 @@ a.brand {
   z-index: 100;
 }
 .sidebar .buttons-container {
-  background-color: #f9f9f9;
-  padding: 17px;
+  background-color: #f3f3f3;
+  padding: 14px 17px;
+  display: flex;
+  height: 56px;
+}
+@media (max-width: 864px) {
+  .sidebar {
+    top: 60px;
+    left: 0;
+    padding: 0;
+    width: 100%;
+  }
 }
 .inner-addon {
   position: relative;
@@ -6602,7 +6641,7 @@ a.sidebar-switcher {
   margin-top: 0;
   font-size: 30px;
 }
-#bar {
+/*#bar {
   display: none;
   position: fixed;
   top: 50px;
@@ -6614,7 +6653,7 @@ a.sidebar-switcher {
   z-index: 25;
   overflow: scroll;
   background: #f6f6f6;
-}
+}*/
 #shadow {
   position: fixed;
   top: 0;
@@ -6622,7 +6661,7 @@ a.sidebar-switcher {
   bottom: 0;
   right: 0;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.75);
+  background: #ffffff;
   z-index: 19;
   display: none;
 }
@@ -6648,7 +6687,7 @@ a.sidebar-switcher {
   color: #ff6c00;
   text-decoration: underline;
 }
-@media (min-width: 864px) {
+@media (min-width: 865px) {
   .version-select {
     margin: 14px 158px 0 0;
   }
@@ -6676,7 +6715,7 @@ ul.version-menu a:hover {
   color: #2485d0;
 }
 ul.menu {
-  background: #f6f6f6;
+  background: #f3f3f3;
   color: #fff;
   margin: 0 0 5px 0;
   padding: 14px 0;
@@ -6688,6 +6727,12 @@ ul.menu {
   position: absolute;
   top: 52px;
   overflow-y: auto;
+}
+@media (max-width: 864px) {
+  ul.menu {
+    top: 60px;
+    width: 100%;
+  }
 }
 ul.menu a {
   color: #76797b;
@@ -6717,6 +6762,9 @@ ul.menu > li > a {
   padding-left: 40px;
   font-weight: 600;
   line-height: 26px;
+}
+ul.menu > li > a:hover {
+  color: #80bdeb;
 }
 ul.menu > li > a:hover {
   background: #FFFFFF;
@@ -6764,7 +6812,7 @@ ul.menu li ul {
 ul.table_of_content {
   font-size: 11px;
   line-height: normal;
-  background-color: #f6f6f6;
+  background-color: #f3f3f3;
   overflow-y: visible;
   list-style: none;
   margin: 0 0 0 0;
@@ -6808,7 +6856,7 @@ ul.table_of_content + .right-buttons,
   margin-top: 18px;
 }
 .right-buttons a {
-  color: #a5a5a5;
+  color: #76797b;
   display: block;
   padding: 6px 0;
   position: relative;
@@ -6821,7 +6869,7 @@ ul.table_of_content + .right-buttons,
 }
 .right-buttons a:hover {
   text-decoration: none;
-  color: #2485d0;
+  color: #80bdeb;
   cursor: pointer;
 }
 .right-buttons a:hover div {
@@ -6895,6 +6943,11 @@ div.container-fluid .row {
 @media (max-width: 864px) {
   #page-content {
     padding: 37px 0 20px 20px;
+  }
+}
+@media (min-width: 865px) {
+  #page-content {
+    display: block !important;
   }
 }
 #page-content h1 {
@@ -7176,7 +7229,7 @@ div.container-fluid .row {
 }
 @media (max-width: 864px) {
   .footer {
-    background-color: #f6f6f6;
+    background-color: #f3f3f3;
     padding: 0 15px;
   }
 }
@@ -7219,10 +7272,10 @@ div.container-fluid .row {
   font-size: 11px;
   color: #999999;
 }
-#bar .footer {
+/*#bar .footer {
   border-top: 1px solid #dddddd;
   position: relative;
-}
+}*/
 /*.icon {
     font-family: 'AnyChart';
     speak: none;
@@ -7255,9 +7308,9 @@ div.container-fluid .row {
   #table_of_content_place {
     float: right;
   }
-  #bar {
+  /*#bar {
     display: none !important;
-  }
+  }*/
 }
 @media (min-width: 1200px) {
   .warning-version {

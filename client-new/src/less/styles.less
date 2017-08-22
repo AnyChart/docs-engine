@@ -122,16 +122,24 @@ a.brand {
   top: 10px;
   margin-left: 10px;
   color: #d5edff;
+  @media (max-width: @mobile-width){
+    color:  #2485d0;;
+    margin-top: -2px
+  }
   line-height: 16px;
   font-size: 11px;
   font-weight: lighter;
   a {
     color: #fff;
+    @media (max-width: @mobile-width){
+      color:  #2485d0;;
+    }
+    font-weight: 600;
     text-decoration: none;
     &.text-support {
       display: block;
       float: left;
-      width: 45px;
+      width: 43px;
       height: 50px;
       line-height: 43px;
       text-align: center;
@@ -141,6 +149,22 @@ a.brand {
       font-size: 35px;
       i {
         font-size: 35px;
+      }
+      div{
+        height: 27px;
+        width: 27px;
+        display: inline-block;
+        background-color: white;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+
+        mask-image: url(../svg/support.svg);
+        mask-size: 27px 27px;
+        -webkit-mask-image: url(../svg/support.svg);
+        -webkit-mask-size: 27px 27px;
+        @media (max-width: @mobile-width){
+          background-color:  #2485d0;;
+        }
       }
     }
   }
@@ -222,8 +246,16 @@ a.brand {
   padding: 0 0 0 15px;
   z-index: 100;
   .buttons-container{
-    background-color: #f9f9f9;
-    padding: 17px;
+    background-color: #f3f3f3;
+    padding: 14px 17px;
+    display: flex;
+    height: 56px;
+  }
+  @media (max-width: @mobile-width){
+    top: 60px;
+    left: 0;
+    padding: 0;
+    width: 100%;
   }
 }
 
@@ -285,7 +317,7 @@ a.sidebar-switcher {
 }
 
 
-#bar {
+/*#bar {
   display: none;
   position: fixed;
   top: 50px;
@@ -297,7 +329,7 @@ a.sidebar-switcher {
   z-index: 25;
   overflow: scroll;
   background: #f6f6f6;
-}
+}*/
 
 #shadow {
   position: fixed;
@@ -306,7 +338,7 @@ a.sidebar-switcher {
   bottom: 0;
   right: 0;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 1);
   z-index: 19;
   display: none;
 }
@@ -338,7 +370,7 @@ a.sidebar-switcher {
 // Versions select button
 //======================================================================================================================
 .version-select {
-  @media (min-width: @mobile-width){
+  @media (min-width: (@mobile-width + 1px)){
     margin: 14px 158px 0 0;
   }
   button {
@@ -369,7 +401,7 @@ ul.version-menu {
 // Left menu : START
 //======================================================================================================================
 ul.menu {
-  background: #f6f6f6;
+  background: #f3f3f3;
   color: #fff;
   margin: 0 0 5px 0;
   padding: 14px 0;
@@ -383,6 +415,10 @@ ul.menu {
   top: 52px;
   //bottom: 0;
   overflow-y: auto;
+  @media (max-width: @mobile-width){
+    top: 60px;
+    width: 100%;
+  }
 }
 
 ul.menu a {
@@ -416,6 +452,9 @@ ul.menu > li > a {
   padding-left: 40px;
   font-weight: 600;
   line-height: 26px;
+  &:hover{
+    color: #80bdeb;
+  }
 }
 
 ul.menu > li > a:hover {
@@ -480,7 +519,7 @@ ul.menu li ul {
 ul.table_of_content {
   font-size: 11px;
   line-height: normal;
-  background-color: #f6f6f6;
+  background-color: #f3f3f3;
   overflow-y: visible;
   list-style: none;
 
@@ -527,7 +566,7 @@ ul.table_of_content {
     margin-top: 18px;
   }
   a {
-    color: #a5a5a5;
+    color: #76797b;
     display: block;
     padding: 6px 0;
     position: relative;
@@ -540,7 +579,7 @@ ul.table_of_content {
   }
   a:hover {
     text-decoration: none;
-    color: #2485d0;
+    color: #80bdeb;
     cursor: pointer;
     div {
       background-color: #2485d0;
@@ -621,6 +660,9 @@ div.container-fluid .row {
   }
   @media (max-width: @mobile-width){
     padding: 37px 0 20px 20px;
+  }
+  @media (min-width: (@mobile-width + 1px)){
+    display: block !important;
   }
   h1 {
     font-size: 18px;
@@ -913,7 +955,7 @@ div.container-fluid .row {
   overflow: hidden;
   background-color: white;
   @media (max-width: @mobile-width){
-    background-color: #f6f6f6;
+    background-color: #f3f3f3;
     padding: 0 15px;
   }
   .footer-inner {
@@ -955,10 +997,10 @@ div.container-fluid .row {
   }
 }
 
-#bar .footer {
+/*#bar .footer {
   border-top: 1px solid #dddddd;
   position: relative;
-}
+}*/
 
 
 /*.icon {
@@ -1000,9 +1042,9 @@ div.container-fluid .row {
     float: right;
   }
 
-  #bar {
+  /*#bar {
     display: none !important;
-  }
+  }*/
 
 }
 
