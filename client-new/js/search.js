@@ -18,10 +18,19 @@ function searchFor(query, needPushState) {
             window.history.pushState(null, null, url);
         }
         $.post("/" + version + "/search-data", {"q": query}, function (res) {
-            $("#page-content").html('<div id="article-content"><div id="search-content"><button type="button" class="btn btn-default btn-white btn-sm visible-xs"> <i class="ac ac-arrow-left-thin"></i> Back</button><h1 class="search"><button type="button" class="btn btn-default btn-white btn-sm hidden-xs"> <i class="ac ac-arrow-left-thin"></i> Back</button>Search results for <span>' + query + '</span></h1></div></div>');
+            $("#page-content").html('<div id="article-content">' +
+                                        '<div id="search-content">' +
+                                            '<button type="button" class="btn btn-default btn-white btn-sm visible-xs">' +
+                                                '<i class="ac ac-arrow-left-thin"></i> Back</button>' +
+                                            '<h1 class="search">' +
+                                                '<button type="button" class="btn btn-default btn-white btn-sm hidden-xs">' +
+                                                    '<i class="ac ac-arrow-left-thin"></i> Back</button>Search results for <span>' + query + '</span>' +
+                                            '</h1>' +
+                                        '</div>' +
+                                    '</div>');
             if (res.length) {
                 $(res).each(function () {
-                    $("#search-content").append('<div class="result-block"><h2>' + this.title + '</a></h2><p>' + this.sn + '</p></div>');
+                    $("#search-content").append('<div class="result-block"><h2>' + this.title + '</h2><p>' + this.sn + '</p></div>');
                 });
             } else {
                 $("#search-content").append('Nothing found');

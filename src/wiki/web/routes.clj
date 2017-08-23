@@ -21,7 +21,9 @@
             [wiki.data.versions :as vdata]
             [wiki.generator.analysis.page :as analysis-page]
             [clojure.string :as string]
-            [wiki.views.main :as main-page])
+            [wiki.views.main :as main-page]
+            [wiki.web.helpers :refer :all]
+            [wiki.web.search :as web-search])
   (:import (com.googlecode.htmlcompressor.compressor HtmlCompressor ClosureJavaScriptCompressor)
            (com.google.javascript.jscomp CompilationLevel)))
 
@@ -34,20 +36,6 @@
                                    path (get context-map (keyword (second args)))]
                                (reduce str (map #(tree-view-local % (:version context-map) path) entries)))))
 
-(defn- jdbc [request]
-  (-> request :component :jdbc))
-
-(defn- sphinx [request]
-  (-> request :component :sphinx))
-
-(defn- redis [request]
-  (-> request :component :redis))
-
-(defn- notifier [request]
-  (-> request :component :notifier))
-
-(defn offline-generator [request]
-  (-> request :component :offline-generator))
 
 (defn- title-prefix [page is-url-version version-name]
   (let [max-chars-count (if is-url-version
@@ -144,8 +132,7 @@
         version (first versions)
         page (pages-data/page-by-url (jdbc request) (:id version) url)]
     (if page
-      (do
-        (show-page request version versions page false))
+      (show-page request version versions page false)
       (let [url "Quick_Start/Quick_Start"
             page (pages-data/page-by-url (jdbc request) (:id version) url)]
         (if page
@@ -172,47 +159,23 @@
                    (-> request :component :config :zip-queue)
                    {:command "generate" :version version}))
 
-(defn- format-search-result [result query version]
-  (let [words (clojure.string/split query #" ")
-        url (:url result)
-        title (reduce (fn [res q]
-                        (clojure.string/replace res
-                                                (re-pattern (str "(?i)" (clojure.string/re-quote-replacement q)))
-                                                #(str "{b}" % "{eb}")))
-                      (:url result) words)
-        title (-> title
-                  (clojure.string/replace #"_" " ")
-                  (clojure.string/split #"/"))
-        title (map #(-> %
-                        (clojure.string/replace #"\{b\}" "<span class='match'>")
-                        (clojure.string/replace #"\{eb\}" "</span>"))
-                   title)]
-    (assoc result
-      :title (str (clojure.string/join " / " (drop-last 1 title))
-                  " / <a href='/" version "/" url "'>" (first (take-last 1 title)) "</a>"))))
-
-(defn- search-results [request version]
-  (map #(format-search-result % (-> request :params :q) (:key version))
-       (search/search-for (sphinx request)
-                          (-> request :params :q)
-                          (:id version)
-                          (:key version)
-                          (-> request :component :sphinx :config :table))))
 
 (defn- search-page [request version & [versions url is-url-version]]
   (if-let [query (-> request :params :q)]
-    (render-file "templates/search.selmer" {:version          (:key version)
-                                            :anychart-url     (utils/anychart-bundle-path (:key version))
-                                            :anychart-css-url (utils/anychart-bundle-css-url (:key version))
-                                            :is-url-version   is-url-version
-                                            :tree             (versions-data/tree-data (jdbc request) (:id version))
-                                            :query            query
-                                            :versions         (versions-data/versions (jdbc request))
-                                            :results          (search-results request version)})
+    (let [page-data {:id            -1
+                     :version_id    (:id version)
+                     :url           ""
+                     :full_name     "Search page"
+                     :content       (web-search/search-results-html request version query)
+                     :last_modified (quot (System/currentTimeMillis) 1000)
+                     :tags          [],
+                     :config        {}}]
+      (show-page request version versions page-data false))
     (error-404 request)))
 
+
 (defn- search-data [request version & [versions url is-url-version]]
-  (response (search-results request version)))
+  (response (web-search/search-results request version)))
 
 (defn- show-sitemap [request]
   (-> (response (sitemap/generate-sitemap (jdbc request)))
