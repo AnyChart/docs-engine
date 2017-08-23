@@ -66,9 +66,6 @@
    [:div.container-fluid
     [:div.row
 
-     ;:div.col-lg-22.col-lg-offset-1
-     ;[:a.sidebar-switcher.hidden-md.hidden-lg [:i.ac.ac-bars]]
-
      [:div.col-sm-24
       [:a.navbar-brand {:rel "nofollow" :href "https://www.anychart.com"}
        [:img {:alt "AnyChart" :src "/i/logo-empty.png"}]
@@ -133,42 +130,6 @@
    ])
 
 
-
-;(defn mobile-menu [data]
-;  [:div#bar
-;   [:div.helpers.visible-830.bordered
-;    [:div.btn-group
-;     [:button.btn.btn-default.btn-blue.dropdown-toggle
-;      {:data-toggle "dropdown" :type "button"}
-;      [:span.version-label (str "Version " (:version data))]
-;      [:span.caret]]
-;     [:ul.dropdown-menu.version-menu {:role "menu"}
-;      (for [version (:versions data)]
-;        [:ul [:li [:a {:href (:url version)} (str "Version " (:key version))]]])]]
-;    [:div.questions
-;     [:a.text-support
-;      {:rel "nofollow" :href "http://support.anychart.com"}
-;      [:i.ac.ac-support]]
-;     [:span.hidden-super-small " Still have questions?"
-;      [:br] " "
-;      [:a {:rel "nofollow" :href "https://www.anychart.com/support/"} " Contact support"]]]]
-;   [:ul.menu
-;    (tree data)]
-;   [:div.footer
-;    [:div.footer-inner
-;     [:a.soc-network
-;      {:target "_blank" :rel "nofollow" :href "https://www.facebook.com/AnyCharts"}
-;      [:span.soc-network-icon.fb [:i.sn-mini-icon.ac.ac-facebook]]]
-;     [:a.soc-network
-;      {:target "_blank" :rel "nofollow" :href "https://twitter.com/AnyChart"}
-;      [:span.soc-network-icon.tw [:i.sn-mini-icon.ac.ac-twitter]]]
-;     [:a.soc-network
-;      {:target "_blank" :rel "nofollow" :href "https://www.linkedin.com/company/386660"}
-;      [:span.soc-network-icon.in [:i.sn-mini-icon.ac.ac-linkedin]]]
-;     [:p " © 2017 AnyChart.Com All rights reserved."]]]]
-;  )
-
-
 (defn main-content [data]
   [:div.wrapper.container-fluid
    [:div.row
@@ -217,16 +178,6 @@
          [:span.soc-network-icon.in [:i.sn-mini-icon.ac.ac-linkedin]]]
         [:p " © 2017 AnyChart.Com All rights reserved."]]]]]
 
-    ;[:div.row.helpers.hidden-lg.hidden-md
-    ; [:div.col-xs-24.col-sm-12
-    ;  [:div.input-group.search
-    ;   [:input.form-control
-    ;    {:placeholder "What are you looking for?" :type "text"}]
-    ;   [:span.input-group-btn
-    ;    [:button.btn.btn-default
-    ;     {:type "button"}
-    ;     [:span.ac.ac-search.form-control-feedback]]]]]]
-
     (when (:old data)
       [:div#warning.warning-version.alert.alert-default.fade.in
        [:button.close {:aria-hidden "true" :data-dismiss "alert" :type "button"} "×"]
@@ -255,7 +206,6 @@
         [:span "Edit this page"]]
        ]]
      ]
-
     ]])
 
 
@@ -265,7 +215,6 @@
     (head data)
     (body data)
     [:div#shadow.visible-mobile]
-    ;(mobile-menu data)
     (main-content data)
 
     [:script {:type "text/javascript"}
@@ -274,9 +223,7 @@
         window['isUrlVersion'] = " (boolean (:is-url-version data)) ";")]
     [:script {:id "main_script" :type "text/javascript" :src "/main.min.js" :async true}]
     [:script {:type "text/javascript"}
-     "
-         var tryUpdateSampleInit = function(){\n        var anychartScriptIsLoad;\n        var mainScriptIsLoad;\n        var updateSampleInit = function(){\n            if (anychartScriptIsLoad == false) return;\n            if (mainScriptIsLoad == false) return;\n            for (var i = 1; i < 30; i++){\n                if (typeof window[\"sampleInit\" + i] !== 'undefined'){\n                    window[\"sampleInit\" + i]();\n                    delete window[\"sampleInit\" + i];\n                }\n            }\n        };\n        anychartScriptIsLoad = typeof anychart !== 'undefined';\n        mainScriptIsLoad = typeof $ !== 'undefined';\n        if (anychartScriptIsLoad && mainScriptIsLoad){\n            updateSampleInit();\n        }else{\n            anychart_script.onload = function(){\n                anychartScriptIsLoad = true;\n                updateSampleInit();\n            };\n            main_script.onload = function(){\n                mainScriptIsLoad = true;\n                updateSampleInit();\n            };\n        }\n    };\n    tryUpdateSampleInit();
+     "var tryUpdateSampleInit = function(){\n        var anychartScriptIsLoad;\n        var mainScriptIsLoad;\n        var updateSampleInit = function(){\n            if (anychartScriptIsLoad == false) return;\n            if (mainScriptIsLoad == false) return;\n            for (var i = 1; i < 30; i++){\n                if (typeof window[\"sampleInit\" + i] !== 'undefined'){\n                    window[\"sampleInit\" + i]();\n                    delete window[\"sampleInit\" + i];\n                }\n            }\n        };\n        anychartScriptIsLoad = typeof anychart !== 'undefined';\n        mainScriptIsLoad = typeof $ !== 'undefined';\n        if (anychartScriptIsLoad && mainScriptIsLoad){\n            updateSampleInit();\n        }else{\n            anychart_script.onload = function(){\n                anychartScriptIsLoad = true;\n                updateSampleInit();\n            };\n            main_script.onload = function(){\n                mainScriptIsLoad = true;\n                updateSampleInit();\n            };\n        }\n    };\n    tryUpdateSampleInit();
      "
      ]
-
     ))

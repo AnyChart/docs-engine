@@ -7024,6 +7024,11 @@ div.container-fluid .row {
   height: 14px;
   width: 14px;
 }
+#article-content h1 {
+  font-size: 18px;
+  padding: 10px 0 15px;
+  margin: 0;
+}
 #article-content h2 {
   font-size: 15px;
   text-transform: uppercase;
@@ -7156,35 +7161,14 @@ div.container-fluid .row {
   text-transform: none;
   padding: 0 0 15px;
 }
-/*
-#page-content .result-block {
-  padding-bottom: 10px;
-  margin-bottom: 10px;
-  border-bottom: 1px solid #ddd;
+.content404 {
+  max-width: 420px;
+  margin: 0 auto;
 }
-
-#page-content .result-block h2 {
-  padding: 0 0 5px 0;
-  font-size: 22px;
-  font-weight: normal;
+.content404 .search404 {
+  margin: 20px 0 0 0;
+  display: block !important;
 }
-
-#page-content .result-block .match {
-  font-weight: bold;
-}
-
-#page-content h1.search {
-  margin: 5px 0 20px 0;
-  font-size: 28px;
-  line-height: 32px;
-}
-
-#page-content h1 .btn {
-  height: 32px;
-  margin-top: -7px;
-  margin-right: 10px;
-}
-*/
 #article-content table {
   width: 100%;
   margin-bottom: 20px;
@@ -7232,10 +7216,6 @@ div.container-fluid .row {
     }
   }
 }*/
-.content404 {
-  max-width: 720px;
-  margin: 0 auto;
-}
 .no-overflow {
   overflow: hidden;
 }

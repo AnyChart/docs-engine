@@ -22,6 +22,7 @@
             [wiki.generator.analysis.page :as analysis-page]
             [clojure.string :as string]
             [wiki.views.main :as main-page]
+            [wiki.views.page404 :as page-404]
             [wiki.web.helpers :refer :all]
             [wiki.web.search :as web-search])
   (:import (com.googlecode.htmlcompressor.compressor HtmlCompressor ClosureJavaScriptCompressor)
@@ -54,7 +55,7 @@
     (str title (when is-url-version (str " | ver. " version-name)))))
 
 (defn- show-404 [request]
-  (render-file "templates/404.selmer" {}))
+  (page-404/page))
 
 (defn- error-404 [request]
   (let [referrer (get-in request [:headers "referer"])
@@ -113,7 +114,6 @@
               :page                 page
               :versions             versions
               :is-ga-speed-insights (:is-ga-speed-insights request)}
-        ;page (render-file "templates/page.selmer" data)
         page (main-page/page data)
         ;html-compressor (HtmlCompressor.)
         ]
@@ -122,9 +122,7 @@
     ;;(.setJavaScriptCompressor html-compressor (ClosureJavaScriptCompressor. CompilationLevel/SIMPLE_OPTIMIZATIONS))
     ;;(.setCompressJavaScript html-compressor true)
     ;(.compress html-compressor page)
-    page
-    )
-  )
+    page))
 
 (defn- show-landing [request]
   (let [url ""

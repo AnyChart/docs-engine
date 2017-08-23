@@ -40,24 +40,24 @@ function searchFor(query, needPushState) {
     }
 }
 
-$search.find("button").click(function () {
+/*$search.find("button").click(function () {
     var query = $(this).parent().parent().find("input").val();
     searchFor(query);
     return false;
-});
+});*/
 
 $search.find("input").keypress(function (e) {
     if (e.which == 13)
         searchFor($(this).val());
 });
 
-$(".404-search").find("button").click(function () {
+/*$(".404-search").find("button").click(function () {
     var query = $(this).parent().parent().find("input").val();
     location.href = "/latest/search?q=" + query;
     return false;
-});
+});*/
 
-$(".404-search").find('input').keypress(function (e) {
+$(".search404").find('input').keypress(function (e) {
     if (e.which == 13) {
         var query = $(this).val();
         location.href = "/latest/search?q=" + query;
