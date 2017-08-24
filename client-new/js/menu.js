@@ -111,3 +111,27 @@ $(document).on('click', 'a[href^="#"]', function(event) {
 
 // Set the offset when entering page with hash present in the url
 window.setTimeout(offsetAnchor, 0);*/
+
+/*var docs = {config: {}};
+docs.config.scrollSettings = (function() {
+    var scrollAmount = 80;
+    var scrollKeyAmount = 100;
+    if (navigator.platform.match(/(Mac|iPhone|iPod|iPad)/i)) {
+        scrollAmount = 2;
+        scrollKeyAmount = 15;
+    }
+    return {
+        scrollInertia: 0,
+        theme: "docs-theme",
+        mouseWheel: {
+            enable: true,
+            scrollAmount: scrollAmount
+        },
+        keyboard: {
+            enable: true,
+            scrollAmount: scrollKeyAmount,
+            scrollType: 'stepless'
+        }};
+})();
+$("ul.menu").mCustomScrollbar(docs.config.scrollSettings);
+$("body").mCustomScrollbar(docs.config.scrollSettings);*/

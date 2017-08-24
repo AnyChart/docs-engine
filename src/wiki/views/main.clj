@@ -53,7 +53,7 @@
    [:link {:rel "stylesheet" :type "text/css" :href (:anychart-css-url data)}]
    [:link {:rel "stylesheet" :type "text/css" :href "https://cdn.anychart.com/fonts/2.7.2/anychart.css"}]
    [:link {:rel "stylesheet" :type "text/css" :href "https://fonts.googleapis.com/css?family=Open+Sans:400,600"}]
-   [:link {:rel "stylesheet" :type "text/css" :href "/lib/jquery-custom-content-scroller/jquery.mCustomScrollbar.min.css"}]
+   ;[:link {:rel "stylesheet" :type "text/css" :href "/lib/jquery-custom-content-scroller/jquery.mCustomScrollbar.min.css"}]
    [:link {:rel "apple-touch-icon" :sizes "57x57" :href "/icons/57.png"}]
    [:link {:rel "apple-touch-icon" :sizes "76x76" :href "/icons/76.png"}]
    [:link {:rel "apple-touch-icon" :sizes "120x120" :href "/icons/120.png"}]
@@ -199,7 +199,7 @@
    [:link {:rel "stylesheet" :type "text/css" :href (:anychart-css-url data)}]
    [:link {:rel "stylesheet" :type "text/css" :href "https://cdn.anychart.com/fonts/2.7.2/anychart.css"}]
    [:link {:rel "stylesheet" :type "text/css" :href "https://fonts.googleapis.com/css?family=Open+Sans:400,600"}]
-   [:link {:rel "stylesheet" :type "text/css" :href "/lib/jquery-custom-content-scroller/jquery.mCustomScrollbar.min.css"}]
+   ;[:link {:rel "stylesheet" :type "text/css" :href "/lib/jquery-custom-content-scroller/jquery.mCustomScrollbar.min.css"}]
    [:link {:rel "apple-touch-icon" :sizes "57x57" :href "/icons/57.png"}]
    [:link {:rel "apple-touch-icon" :sizes "76x76" :href "/icons/76.png"}]
    [:link {:rel "apple-touch-icon" :sizes "120x120" :href "/icons/120.png"}]
@@ -222,7 +222,7 @@
    ; "
    ; ]
    samples-script
-   (when-not (:is-ga-speed-insights data) ga-script)
+   ;(when-not (:is-ga-speed-insights data) ga-script)
    ])
 
 

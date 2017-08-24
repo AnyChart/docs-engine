@@ -30,6 +30,7 @@ module.exports = function(grunt) {
             build: {
                 files: [{
                     src: ['bower_components/jquery/dist/jquery.min.js',
+                        //'bower_components/jquery-custom-content-scroller/jquery.mCustomScrollbar.min.js',
                         'bower_components/bootstrap/dist/js/bootstrap.min.js',
                         'bower_components/google-code-prettify/bin/prettify.min.js',
                         'js/*.js'],
