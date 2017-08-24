@@ -521,6 +521,7 @@ ul.menu li ul {
   position: fixed;
   top: 80px;
   width: 130px;
+  z-index: 100;
 }
 
 #table-of-content-large {
@@ -657,6 +658,7 @@ div.container-fluid .row {
 // START: Page content styles
 //======================================================================================================================
 #page-content{
+  z-index: 1; // some tooltips from samples are on top of header without it
   padding: 0 185px 20px 360px;
   .right-buttons, ul.table_of_content{
     display: none;

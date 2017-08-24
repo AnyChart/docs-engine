@@ -55,7 +55,7 @@ $menu.find('a>i.folder-close').each(function() {
     });
 });
 $menu.find("a").each(function() {
-    if ($(this).find(">i.ac-file-text").length) {
+    if ($(this).find(">i").length == 0) {
         $(this).click(function(e) {
             var url = $(this).attr("href");
             if (e.ctrlKey || e.metaKey){

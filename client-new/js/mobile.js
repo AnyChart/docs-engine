@@ -4,6 +4,12 @@ function toggleMobileMenu(){
     $("#page-content").toggle();
 }
 
+function hideMobileMenu(){
+    $(".left-sidebar-container").hide();
+    $("#shadow").hide();
+    $("#page-content").show();
+}
+
 $(".sidebar-switcher").click(function() {
     toggleMobileMenu();
 });

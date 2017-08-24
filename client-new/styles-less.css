@@ -6819,6 +6819,7 @@ ul.menu li ul {
   position: fixed;
   top: 80px;
   width: 130px;
+  z-index: 100;
 }
 #table-of-content-large {
   min-height: 100px;
@@ -6938,6 +6939,7 @@ div.container-fluid .row {
   height: 100%;
 }
 #page-content {
+  z-index: 1;
   padding: 0 185px 20px 360px;
 }
 #page-content .right-buttons,

@@ -34,6 +34,7 @@ function fixToc() {
         $("#table-of-content-large").append($next.clone());
         // copy menu from #article-content to #page-content
         $next.insertBefore($articleContent);
+        $("#table-of-content-large").show();
     } else {
         $("#table-of-content-large").hide();
     }
