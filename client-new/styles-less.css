@@ -6991,6 +6991,9 @@ div.container-fluid .row {
     position: relative;
   }*/
 }
+#article-content img {
+  width: 100%;
+}
 #article-content h2,
 #article-content h3,
 #article-content h4 {
