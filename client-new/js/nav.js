@@ -64,6 +64,7 @@ function fixLinks() {
             if ($this.attr("href").indexOf("#") >= 0) return;
             if ($this.attr("href").indexOf("http://") == 0) return;
             if ($this.attr("href").indexOf("https://") == 0) return;
+            if ($this.attr("href").indexOf("//") == 0) return;
 
             $this.click(function () {
                 var res = false;
