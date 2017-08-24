@@ -95,12 +95,7 @@
        [:span.hidden-super-small "Still have questions?"
         [:br]
         [:a {:rel "nofollow" :href "https://www.anychart.com/support/"}
-         "Contact support"]]]]
-     ]
-
-    ]
-   ]
-  )
+         "Contact support"]]]]]]])
 
 (defn mobile-search [data]
   [:div.mobile-search-container.visible-mobile
@@ -110,24 +105,7 @@
       [:div.search.inner-addon.right-addon
        ;[:i.ac.ac-search]
        [:input.form-control.input-sm {:placeholder "What are you looking for?" :type "text"}]
-       [:i.glyphicon.glyphicon-search]
-       ]]]]])
-
-(defn body [data]
-  [:body
-   [:link {:rel "stylesheet" :type "text/css" :href "/main.css"}]
-   [:link {:rel "stylesheet" :type "text/css" :href (:anychart-css-url data)}]
-   [:link {:rel "stylesheet" :type "text/css" :href "https://cdn.anychart.com/fonts/2.7.2/anychart.css"}]
-   [:link {:rel "stylesheet" :type "text/css" :href "https://fonts.googleapis.com/css?family=Open+Sans:400,600"}]
-   [:link {:rel "apple-touch-icon" :sizes "57x57" :href "/icons/57.png"}]
-   [:link {:rel "apple-touch-icon" :sizes "76x76" :href "/icons/76.png"}]
-   [:link {:rel "apple-touch-icon" :sizes "120x120" :href "/icons/120.png"}]
-   [:link {:rel "apple-touch-icon" :sizes "120x120" :href "/icons/152.png"}]
-   [:link {:rel "apple-touch-icon" :sizes "152x152" :href "/icons/167.png"}]
-   [:link {:rel "apple-touch-icon" :sizes "167x167" :href "/icons/180.png"}]
-   (header data)
-   (mobile-search data)
-   ])
+       [:i.glyphicon.glyphicon-search]]]]]])
 
 
 (defn main-content [data]
@@ -178,18 +156,19 @@
          [:span.soc-network-icon.in [:i.sn-mini-icon.ac.ac-linkedin]]]
         [:p " © 2017 AnyChart.Com All rights reserved."]]]]]
 
-    (when (:old data)
-      [:div#warning.warning-version.alert.alert-default.fade.in
-       [:button.close {:aria-hidden "true" :data-dismiss "alert" :type "button"} "×"]
-       [:i.ac.ac-exclamation]
-       (str " You are looking at an outdated " (:version data) " version of this document. Switch to the ")
-       [:a {:href (:old-url data) :data-last-version "latest"}
-        (:actual-version data)]
-       " version to see the up to date information."])
-
     [:div#page-content.col-md-24
      [:div#article-content
       (-> data :page :content)]]
+
+    [:div.pull-right.warning-container
+     (when (:old data)
+       [:div#warning.warning-version.alert.alert-default.fade.in
+        [:button.close {:aria-hidden "true" :data-dismiss "alert" :type "button"} "×"]
+        [:i.ac.ac-exclamation]
+        (str " You are looking at an outdated " (:version data) " version of this document. Switch to the ")
+        [:a {:href (:old-url data) :data-last-version "latest"}
+         (:actual-version data)]
+        " version to see the up to date information."])]
 
     [:div.right-sidebar-container.pull-right.hidden-sm.hidden-xs.hidden-tablet
      [:div.right-bar-side
@@ -203,9 +182,34 @@
         [:span "Report issue"]]
        [:a {:href "https://github.com/AnyChart/docs.anychart.com"}
         [:div.icon.edit]
-        [:span "Edit this page"]]
-       ]]
-     ]
+        [:span "Edit this page"]]]]]]])
+
+(defn body [data]
+  [:body
+   [:link {:rel "stylesheet" :type "text/css" :href "/main.css"}]
+   [:link {:rel "stylesheet" :type "text/css" :href (:anychart-css-url data)}]
+   [:link {:rel "stylesheet" :type "text/css" :href "https://cdn.anychart.com/fonts/2.7.2/anychart.css"}]
+   [:link {:rel "stylesheet" :type "text/css" :href "https://fonts.googleapis.com/css?family=Open+Sans:400,600"}]
+   [:link {:rel "apple-touch-icon" :sizes "57x57" :href "/icons/57.png"}]
+   [:link {:rel "apple-touch-icon" :sizes "76x76" :href "/icons/76.png"}]
+   [:link {:rel "apple-touch-icon" :sizes "120x120" :href "/icons/120.png"}]
+   [:link {:rel "apple-touch-icon" :sizes "120x120" :href "/icons/152.png"}]
+   [:link {:rel "apple-touch-icon" :sizes "152x152" :href "/icons/167.png"}]
+   [:link {:rel "apple-touch-icon" :sizes "167x167" :href "/icons/180.png"}]
+   (header data)
+   ;(warn data)
+   (mobile-search data)
+   [:div#shadow.visible-mobile]
+   (main-content data)
+
+   [:script {:type "text/javascript"}
+    (str
+      "window['version'] = '" (:version data) "';
+        window['isUrlVersion'] = " (boolean (:is-url-version data)) ";")]
+   [:script {:id "main_script" :type "text/javascript" :src "/main.min.js" :async true}]
+   [:script {:type "text/javascript"}
+    "var tryUpdateSampleInit = function(){\n        var anychartScriptIsLoad;\n        var mainScriptIsLoad;\n        var updateSampleInit = function(){\n            if (anychartScriptIsLoad == false) return;\n            if (mainScriptIsLoad == false) return;\n            for (var i = 1; i < 30; i++){\n                if (typeof window[\"sampleInit\" + i] !== 'undefined'){\n                    window[\"sampleInit\" + i]();\n                    delete window[\"sampleInit\" + i];\n                }\n            }\n        };\n        anychartScriptIsLoad = typeof anychart !== 'undefined';\n        mainScriptIsLoad = typeof $ !== 'undefined';\n        if (anychartScriptIsLoad && mainScriptIsLoad){\n            updateSampleInit();\n        }else{\n            anychart_script.onload = function(){\n                anychartScriptIsLoad = true;\n                updateSampleInit();\n            };\n            main_script.onload = function(){\n                mainScriptIsLoad = true;\n                updateSampleInit();\n            };\n        }\n    };\n    tryUpdateSampleInit();
+    "
     ]])
 
 
@@ -213,17 +217,4 @@
   (hiccup.page/html5
     {:lang "en"}
     (head data)
-    (body data)
-    [:div#shadow.visible-mobile]
-    (main-content data)
-
-    [:script {:type "text/javascript"}
-     (str
-       "window['version'] = '" (:version data) "';
-        window['isUrlVersion'] = " (boolean (:is-url-version data)) ";")]
-    [:script {:id "main_script" :type "text/javascript" :src "/main.min.js" :async true}]
-    [:script {:type "text/javascript"}
-     "var tryUpdateSampleInit = function(){\n        var anychartScriptIsLoad;\n        var mainScriptIsLoad;\n        var updateSampleInit = function(){\n            if (anychartScriptIsLoad == false) return;\n            if (mainScriptIsLoad == false) return;\n            for (var i = 1; i < 30; i++){\n                if (typeof window[\"sampleInit\" + i] !== 'undefined'){\n                    window[\"sampleInit\" + i]();\n                    delete window[\"sampleInit\" + i];\n                }\n            }\n        };\n        anychartScriptIsLoad = typeof anychart !== 'undefined';\n        mainScriptIsLoad = typeof $ !== 'undefined';\n        if (anychartScriptIsLoad && mainScriptIsLoad){\n            updateSampleInit();\n        }else{\n            anychart_script.onload = function(){\n                anychartScriptIsLoad = true;\n                updateSampleInit();\n            };\n            main_script.onload = function(){\n                mainScriptIsLoad = true;\n                updateSampleInit();\n            };\n        }\n    };\n    tryUpdateSampleInit();
-     "
-     ]
-    ))
+    (body data)))
