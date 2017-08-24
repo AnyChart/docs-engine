@@ -1,0 +1,31 @@
+<script type="text/javascript">
+    var tryUpdateSampleInit = function(){
+        var anychartScriptIsLoad;
+        var mainScriptIsLoad;
+        var updateSampleInit = function(){
+            if (anychartScriptIsLoad == false) return;
+            if (mainScriptIsLoad == false) return;
+            for (var i = 1; i < 30; i++){
+                if (typeof window["sampleInit" + i] !== 'undefined'){
+                    window["sampleInit" + i]();
+                    delete window["sampleInit" + i];
+                }
+            }
+        };
+        anychartScriptIsLoad = typeof anychart !== 'undefined';
+        mainScriptIsLoad = typeof $ !== 'undefined';
+        if (anychartScriptIsLoad && mainScriptIsLoad){
+            updateSampleInit();
+        }else{
+            anychart_script.onload = function(){
+                anychartScriptIsLoad = true;
+                updateSampleInit();
+            };
+            main_script.onload = function(){
+                mainScriptIsLoad = true;
+                updateSampleInit();
+            };
+        }
+    };
+    tryUpdateSampleInit();
+</script>

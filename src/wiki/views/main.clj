@@ -1,7 +1,14 @@
 (ns wiki.views.main
-  (:require [hiccup.core :as h]
+  (:require [clojure.java.io :as io]
+            [hiccup.core :as h]
             [hiccup.page]
-            [clojure.string :as s]))
+            [clojure.string :as s]
+            [selmer.util :as selmer-utils]))
+
+(def samples-script (slurp (io/resource "templates/samples-update.selmer")))
+(def ga-script (slurp (io/resource "templates/google-analytics.selmer")))
+
+;(def ga (selmer-utils/resource-path "templates/samples-update.selmer"))
 
 (defn escape-url [str]
   (s/escape str {\% "%25"}))
@@ -60,7 +67,6 @@
    [:script#anychart_script {:async "true" :src (:anychart-url data)}]])
 
 
-
 (defn header [data]
   [:header
    [:div.container-fluid
@@ -96,6 +102,7 @@
         [:br]
         [:a {:rel "nofollow" :href "https://www.anychart.com/support/"}
          "Contact support"]]]]]]])
+
 
 (defn mobile-search [data]
   [:div.mobile-search-container.visible-mobile
@@ -184,6 +191,7 @@
         [:div.icon.edit]
         [:span "Edit this page"]]]]]]])
 
+
 (defn body [data]
   [:body
    [:link {:rel "stylesheet" :type "text/css" :href "/main.css"}]
@@ -197,7 +205,6 @@
    [:link {:rel "apple-touch-icon" :sizes "152x152" :href "/icons/167.png"}]
    [:link {:rel "apple-touch-icon" :sizes "167x167" :href "/icons/180.png"}]
    (header data)
-   ;(warn data)
    (mobile-search data)
    [:div#shadow.visible-mobile]
    (main-content data)
@@ -205,12 +212,16 @@
    [:script {:type "text/javascript"}
     (str
       "window['version'] = '" (:version data) "';
-        window['isUrlVersion'] = " (boolean (:is-url-version data)) ";")]
+       window['isUrlVersion'] = " (boolean (:is-url-version data)) ";")]
    [:script {:id "main_script" :type "text/javascript" :src "/main.min.js" :async true}]
-   [:script {:type "text/javascript"}
-    "var tryUpdateSampleInit = function(){\n        var anychartScriptIsLoad;\n        var mainScriptIsLoad;\n        var updateSampleInit = function(){\n            if (anychartScriptIsLoad == false) return;\n            if (mainScriptIsLoad == false) return;\n            for (var i = 1; i < 30; i++){\n                if (typeof window[\"sampleInit\" + i] !== 'undefined'){\n                    window[\"sampleInit\" + i]();\n                    delete window[\"sampleInit\" + i];\n                }\n            }\n        };\n        anychartScriptIsLoad = typeof anychart !== 'undefined';\n        mainScriptIsLoad = typeof $ !== 'undefined';\n        if (anychartScriptIsLoad && mainScriptIsLoad){\n            updateSampleInit();\n        }else{\n            anychart_script.onload = function(){\n                anychartScriptIsLoad = true;\n                updateSampleInit();\n            };\n            main_script.onload = function(){\n                mainScriptIsLoad = true;\n                updateSampleInit();\n            };\n        }\n    };\n    tryUpdateSampleInit();
-    "
-    ]])
+
+   ;[:script {:type "text/javascript"}
+   ; "var tryUpdateSampleInit = function(){\n        var anychartScriptIsLoad;\n        var mainScriptIsLoad;\n        var updateSampleInit = function(){\n            if (anychartScriptIsLoad == false) return;\n            if (mainScriptIsLoad == false) return;\n            for (var i = 1; i < 30; i++){\n                if (typeof window[\"sampleInit\" + i] !== 'undefined'){\n                    window[\"sampleInit\" + i]();\n                    delete window[\"sampleInit\" + i];\n                }\n            }\n        };\n        anychartScriptIsLoad = typeof anychart !== 'undefined';\n        mainScriptIsLoad = typeof $ !== 'undefined';\n        if (anychartScriptIsLoad && mainScriptIsLoad){\n            updateSampleInit();\n        }else{\n            anychart_script.onload = function(){\n                anychartScriptIsLoad = true;\n                updateSampleInit();\n            };\n            main_script.onload = function(){\n                mainScriptIsLoad = true;\n                updateSampleInit();\n            };\n        }\n    };\n    tryUpdateSampleInit();
+   ; "
+   ; ]
+   samples-script
+   (when-not (:is-ga-speed-insights data) ga-script)
+   ])
 
 
 (defn page [data]
