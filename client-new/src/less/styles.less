@@ -103,7 +103,7 @@ a.brand {
   font-size: 18px;
   color: #ffffff;
   text-decoration: none;
-  padding: 14px 0;
+  padding: 13px 0;
   height: 50px;
   float: left;
   font-weight: 600;
@@ -531,6 +531,7 @@ ul.menu li ul {
   overflow-y: auto;
   max-width: 150px;
   overflow-x: hidden;
+  margin-bottom: 18px;
 }
 
 ul.table_of_content {
@@ -566,7 +567,7 @@ ul.table_of_content {
   a {
     color: #76797b;
     display: inline-block;
-    max-width: 100px;
+    //max-width: 100px;
     padding: 4px 0;
     &:hover {
       color: #2485d0;
@@ -579,9 +580,9 @@ ul.table_of_content {
 .right-buttons {
   font-size: 11px;
   margin: 0 0 10px 0;
-  ul.table_of_content + &, #table-of-content-large + & {
+  /*ul.table_of_content + &, #table-of-content-large + & {
     margin-top: 18px;
-  }
+  }*/
   a {
     color: #76797b;
     display: block;
@@ -662,6 +663,9 @@ div.container-fluid .row {
 #page-content{
   z-index: 1; // some tooltips from samples are on top of header without it
   padding: 0 185px 20px 360px;
+  ul.table_of_content{
+    margin-bottom: 18px;
+  }
   .right-buttons, ul.table_of_content{
     display: none;
     // for article anchors

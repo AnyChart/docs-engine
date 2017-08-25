@@ -72,26 +72,20 @@ $menu.find("a").each(function() {
 expandMenu(location.pathname);
 
 // resize table content height
-/*window.addEventListener("resize", function(){
+window.addEventListener("resize", function(){
     onResize();
 });
 var onResize = function(){
     var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
     var tableOfContentLarge = $("#table-of-content-large");
-    var tableOfContent = $($(".table_of_content")[1]);
-    if( tableOfContent.height() != null){
-        if (tableOfContent.height() + 120 + 85 > windowHeight){
-            tableOfContentLarge.height(windowHeight - 120 - 85);
-        }else{
-            console.log("Less " +  tableOfContent.height());
-        }
-    }
+    //var tableOfContent = $($(".table_of_content")[1]);
+    tableOfContentLarge.css('max-height', (windowHeight - 200) + 'px');
 };
 window.onload = function(){
     onResize();
 };
 onResize();
-*/
+
 
 // The function actually applying the offset
 /*function offsetAnchor() {

@@ -6437,7 +6437,7 @@ a.brand {
   font-size: 18px;
   color: #ffffff;
   text-decoration: none;
-  padding: 14px 0;
+  padding: 13px 0;
   height: 50px;
   float: left;
   font-weight: 600;
@@ -6828,6 +6828,7 @@ ul.menu li ul {
   overflow-y: auto;
   max-width: 150px;
   overflow-x: hidden;
+  margin-bottom: 18px;
 }
 ul.table_of_content {
   font-size: 11px;
@@ -6860,7 +6861,6 @@ ul.table_of_content > li > a {
 ul.table_of_content a {
   color: #76797b;
   display: inline-block;
-  max-width: 100px;
   padding: 4px 0;
 }
 ul.table_of_content a:hover {
@@ -6870,10 +6870,9 @@ ul.table_of_content a:hover {
 .right-buttons {
   font-size: 11px;
   margin: 0 0 10px 0;
-}
-ul.table_of_content + .right-buttons,
-#table-of-content-large + .right-buttons {
-  margin-top: 18px;
+  /*ul.table_of_content + &, #table-of-content-large + & {
+    margin-top: 18px;
+  }*/
 }
 .right-buttons a {
   color: #76797b;
@@ -6943,6 +6942,9 @@ div.container-fluid .row {
 #page-content {
   z-index: 1;
   padding: 0 185px 20px 360px;
+}
+#page-content ul.table_of_content {
+  margin-bottom: 18px;
 }
 #page-content .right-buttons,
 #page-content ul.table_of_content {
