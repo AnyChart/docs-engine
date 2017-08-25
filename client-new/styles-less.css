@@ -6641,6 +6641,12 @@ a.sidebar-switcher {
   margin-top: 0;
   font-size: 30px;
 }
+a.sidebar-switcher:hover {
+  text-decoration: none;
+}
+a.sidebar-switcher i.ac.ac-remove {
+  display: none;
+}
 /*#bar {
   display: none;
   position: fixed;

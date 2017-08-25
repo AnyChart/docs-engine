@@ -51,6 +51,7 @@
    "<!--[if IE]>"
    [:link {:rel "stylesheet" :type "text/css" :href "/main.css"}]
    [:link {:rel "stylesheet" :type "text/css" :href (:anychart-css-url data)}]
+   ; http://cdn.anychart.com/fonts/2.7.5/demo.html
    [:link {:rel "stylesheet" :type "text/css" :href "https://cdn.anychart.com/fonts/2.7.2/anychart.css"}]
    [:link {:rel "stylesheet" :type "text/css" :href "https://fonts.googleapis.com/css?family=Open+Sans:400,600"}]
    ;[:link {:rel "stylesheet" :type "text/css" :href "/lib/jquery-custom-content-scroller/jquery.mCustomScrollbar.min.css"}]
@@ -91,8 +92,9 @@
           [:li [:a {:href (:url v)} (str "Version " (:key v))]])]]
 
       [:div.visible-mobile.pull-right
-       [:a.sidebar-switcher [:i.ac.ac-bars]]]
-      ]
+       [:a.sidebar-switcher
+        [:i.ac.ac-bars]
+        [:i.ac.ac-remove]]]]
 
      [:div.helpers.pull-right.hidden-mobile
       [:div.questions.affix
