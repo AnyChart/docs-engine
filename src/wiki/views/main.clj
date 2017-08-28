@@ -230,10 +230,6 @@
        window['isUrlVersion'] = " (boolean (:is-url-version data)) ";")]
    [:script {:id "main_script" :type "text/javascript" :src "/main.min.js" :async true}]
 
-   ;[:script {:type "text/javascript"}
-   ; "var tryUpdateSampleInit = function(){\n        var anychartScriptIsLoad;\n        var mainScriptIsLoad;\n        var updateSampleInit = function(){\n            if (anychartScriptIsLoad == false) return;\n            if (mainScriptIsLoad == false) return;\n            for (var i = 1; i < 30; i++){\n                if (typeof window[\"sampleInit\" + i] !== 'undefined'){\n                    window[\"sampleInit\" + i]();\n                    delete window[\"sampleInit\" + i];\n                }\n            }\n        };\n        anychartScriptIsLoad = typeof anychart !== 'undefined';\n        mainScriptIsLoad = typeof $ !== 'undefined';\n        if (anychartScriptIsLoad && mainScriptIsLoad){\n            updateSampleInit();\n        }else{\n            anychart_script.onload = function(){\n                anychartScriptIsLoad = true;\n                updateSampleInit();\n            };\n            main_script.onload = function(){\n                mainScriptIsLoad = true;\n                updateSampleInit();\n            };\n        }\n    };\n    tryUpdateSampleInit();
-   ; "
-   ; ]
    samples-script
    ;(when-not (:is-ga-speed-insights data) ga-script)
    ])
