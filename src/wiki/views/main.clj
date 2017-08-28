@@ -3,6 +3,7 @@
             [hiccup.core :as h]
             [hiccup.page]
             [clojure.string :as s]
+            [clj-time.core :as t]
             [selmer.util :as selmer-utils]))
 
 (def samples-script (slurp (io/resource "templates/samples-update.selmer")))
@@ -164,7 +165,7 @@
         [:a.soc-network
          {:target "_blank" :rel "nofollow" :href "https://www.linkedin.com/company/386660"}
          [:span.soc-network-icon.in [:i.sn-mini-icon.ac.ac-linkedin]]]
-        [:p " © 2017 AnyChart.Com All rights reserved."]]]]]
+        [:p (str "© " (t/year (t/now)) " AnyChart.Com All rights reserved.")]]]]]
 
     [:div#page-content.col-md-24
      [:div#article-content
