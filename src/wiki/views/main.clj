@@ -184,13 +184,24 @@
      [:div.right-bar-side
       [:div#table-of-content-large]
       [:div.right-buttons
-       [:a {:href (str "/" (:version data) "/download")}
+       [:a {:href     (str "/" (:version data) "/download")
+            :rel      "nofollow"
+            :title    "Get offline version"
+            :download true}
         [:div.icon.get-offline]
         [:span "Get offline version"]]
-       [:a
+
+       [:a {:href   "https://github.com/anychart/anychart/issues"
+            :rel    "nofollow"
+            :target "_blank"
+            :title  "Report issue"}
         [:div.icon.report2]
         [:span "Report issue"]]
-       [:a {:href "https://github.com/AnyChart/docs.anychart.com"}
+
+       [:a {:href   "https://github.com/AnyChart/docs.anychart.com#overview"
+            :rel    "nofollow"
+            :target "_blank"
+            :title  "Edit this page"}
         [:div.icon.edit]
         [:span "Edit this page"]]]]]]])
 

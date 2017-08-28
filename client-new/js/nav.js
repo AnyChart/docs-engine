@@ -40,6 +40,7 @@ function loadPage(link, needPushState) {
         }
         fixLinks();
         fixToc();
+        fixHeaders();
         highlightCode();
         updateMenu(res.versions);
 
@@ -80,6 +81,15 @@ function fixLinks() {
         }
     });
 }
+
+function fixHeaders() {
+    $("#page-content h2, #page-content h3, #page-content h4,#page-content h5,#page-content h6").each(function () {
+        var $this = $(this);
+        $this.prepend("<a href='#"+ $this.attr('id') +"' class='header-anchor'></a>");
+    });
+}
+
+fixHeaders();
 
 window.onpopstate = function (e) {
     if (location.pathname == page) return;
