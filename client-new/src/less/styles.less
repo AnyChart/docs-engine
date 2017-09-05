@@ -7,7 +7,7 @@
 html, body {
   height: 100%;
   font-family: 'Open Sans', sans-serif;
-  font-size: 13px;
+  font-size: 15px;
   color: #222222;
 }
 
@@ -46,12 +46,18 @@ a.navbar-brand {
   position: relative;
   float: left;
   font-size: 16px;
-  padding: 13px 5px 0 0;
+  padding: 13px 12px 0 0;
   color: #d5edff;
   height: 50px;
   & > img {
     height: 28px;
     width: 117px;
+  }
+  div.border-icon{
+    width: 28px;
+    height: 28px;
+    border: 1px solid #b1daf8;
+    border-radius: 2px;
   }
   .chart-row {
     position: absolute;
@@ -99,19 +105,24 @@ a.navbar-brand {
     }
   }
 }
-a.brand {
-  font-size: 18px;
-  color: #ffffff;
-  text-decoration: none;
+.brand-label{
+  display: inline-block;
+  font-size: 20px;
   padding: 13px 0;
-  height: 50px;
-  float: left;
+  color: #ffffff;
   font-weight: 600;
+  a.brand {
+    color: #c9e8ff;
+    font-weight: normal;
+    text-decoration: none;
+    float: left;
+    margin-right: 5px;
+  }
 }
 
 
 .helpers {
-  margin-right: 165px;
+  margin-right: 180px;
 }
 .questions {
   top: 10px;
@@ -122,7 +133,7 @@ a.brand {
     margin-top: -2px
   }
   line-height: 16px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: lighter;
   a {
     color: #fff;
@@ -257,11 +268,11 @@ a.brand {
 .inner-addon {
   position: relative;
   .input-sm{
-    font-size: 13px;
+    font-size: 15px;
     height: 27px;
     outline: none;
     box-shadow: none;
-    padding-right: 30px;
+    padding: 3px 30px 4px 10px;
     &:focus{
       border-color: #85caff;
       &::-webkit-input-placeholder{
@@ -386,7 +397,7 @@ a.sidebar-switcher {
 //======================================================================================================================
 .version-select {
   @media (min-width: (@mobile-width + 1px)){
-    margin: 14px 158px 0 0;
+    margin: 14px 173px 0 0;
   }
   button {
     padding: 3px 10px;
@@ -423,7 +434,7 @@ ul.menu {
   text-shadow: -1px 1px 0 rgba(255, 255, 255, 0.7);
   list-style: none;
   bottom: 100px;
-  font-size: 12px;
+  font-size: 13px;
   width: 290px;
 
   position: absolute;
@@ -515,14 +526,14 @@ ul.menu li ul {
 // START: Table of content - right small menu
 //======================================================================================================================
 .right-sidebar-container{
-  margin-right: 145px;
+  margin-right: 160px;
   z-index: 1000;
 }
 
 .right-bar-side {
   position: fixed;
   top: 80px;
-  width: 130px;
+  width: 145px;
   z-index: 100;
 }
 
@@ -535,27 +546,30 @@ ul.menu li ul {
 }
 
 ul.table_of_content {
-  font-size: 11px;
+  font-size: 13px;
   line-height: normal;
   background-color: #f3f3f3;
   overflow-y: visible;
   list-style: none;
 
   margin: 0 0 0 0;
-  padding: 15px;
+  padding: 12px 20px;
 
   ul{
     list-style: none;
     padding: 0;
     border-left: 1px dotted #929292;
-    margin-left: 22px;
+    margin: 5px 0 5px 20px;
     a {
       padding-left: 20px;
     }
   }
-  li:before{
-    content: '' !important;
-    padding-right: 0;
+  li{
+    //margin-bottom: 15px;
+    &:before{
+      content: '' !important;
+      padding-right: 0;
+    }
   }
 
   & > li > ul {
@@ -563,10 +577,12 @@ ul.table_of_content {
   }
   & > li > a {
     font-weight: 600;
+    padding: 6px 0;
   }
   a {
     color: #76797b;
     display: inline-block;
+    line-height: 14px;
     //max-width: 100px;
     padding: 4px 0;
     &:hover {
@@ -578,7 +594,7 @@ ul.table_of_content {
 
 
 .right-buttons {
-  font-size: 11px;
+  font-size: 13px;
   margin: 0 0 10px 0;
   /*ul.table_of_content + &, #table-of-content-large + & {
     margin-top: 18px;
@@ -662,7 +678,7 @@ div.container-fluid .row {
 //======================================================================================================================
 #page-content{
   z-index: 1; // some tooltips from samples are on top of header without it
-  padding: 0 185px 20px 360px;
+  padding: 0 200px 20px 360px;
   ul.table_of_content{
     margin-bottom: 18px;
   }
@@ -691,7 +707,7 @@ div.container-fluid .row {
     display: block !important;
   }
   h1 {
-    font-size: 18px;
+    font-size: 20px;
     padding: 10px 0 15px;
     margin: 0;
     // for article anchors
@@ -776,22 +792,22 @@ div.container-fluid .row {
     }
   }
   h1 {
-    font-size: 18px;
+    font-size: 20px;
     padding: 10px 0 15px;
     margin: 0;
   }
   h2 {
-    font-size: 15px;
+    font-size: 17px;
     text-transform: uppercase;
     padding: 15px 0;
   }
   h3 {
     padding: 10px 0 15px 0;
-    font-size: 15px;
+    font-size: 17px;
   }
   h4 {
     padding: 10px 0 10px 0;
-    font-size: 14px;
+    font-size: 16px;
     &:after{
       bottom: 10px;
     }
@@ -822,23 +838,26 @@ div.container-fluid .row {
   }
   pre {
     border-radius: 0;
-    padding-left: 10px;
+    padding: 11px 15px;
+    border: none;
   }
   code{
-    font-size: 13px;
-    font-family: 'Open Sans';
+    font-size: 15px;
+    font-family: 'Open Sans', sans-serif;
   }
   //:not(.table_of_content)
   ul {
-    list-style: none; /* Remove list bullets */
-    padding: 0;
-    margin: 0;
+    list-style: none;
     li:before{
-      content: "•";
-      font-size: 12px;
+      content:'\2022';
+      font-size: 14px;
       padding-right: 8px;
       line-height: 15px;
     }
+  }
+  & > ul{
+    padding: 0;
+    margin: 0 0 20px 0;
   }
   ol {
     padding: 0 0 0 15px;
@@ -1039,7 +1058,7 @@ div.container-fluid .row {
     }
     p {
       padding: 20px 0 15px 0;
-      font-size: 11px;
+      font-size: 12px;
       color: #999999;
     }
   }

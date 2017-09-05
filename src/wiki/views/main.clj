@@ -77,12 +77,15 @@
 
      [:div.col-sm-24
       [:a.navbar-brand {:rel "nofollow" :href "https://www.anychart.com"}
-       [:img {:alt "AnyChart" :src "/i/logo-empty.png"}]
+       ;[:img {:alt "AnyChart" :src "/i/logo-empty.png"}]
+       [:div.border-icon]
        [:div.chart-row
         [:span.chart-col.green]
         [:span.chart-col.orange]
         [:span.chart-col.red]]]
-      [:a.brand.hidden-super-small " Documentation"]
+      [:span.brand-label
+       [:a.brand {:rel "nofollow" :href "https://www.anychart.com"} "AnyChart"]
+       [:span " Documentation"]]
 
       [:div.dropdown.pull-right.version-select.hidden-mobile
        [:button.btn.btn-blue.btn-sm {:data-toggle "dropdown" :type "button"}
