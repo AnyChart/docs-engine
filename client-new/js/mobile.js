@@ -1,14 +1,23 @@
+var showPage = true;
+
 function toggleMobileMenu(){
-    $(".left-sidebar-container").toggle();
-    $("#shadow").toggle();
-    $("#page-content").toggle();
-    $(".ac.ac-bars").toggle();
-    $(".ac.ac-remove").toggle();
+    showPage = !showPage;
+    if (showPage){
+        hideMobileMenu();
+    }else{
+        showMobileMenu();
+    }
+}
+
+function showMobileMenu(){
+    $(".left-sidebar-container").show();
+    $("#page-content").hide();
+    $(".ac.ac-bars").hide();
+    $(".ac.ac-remove").show();
 }
 
 function hideMobileMenu(){
     $(".left-sidebar-container").hide();
-    $("#shadow").hide();
     $("#page-content").show();
     $(".ac.ac-bars").show();
     $(".ac.ac-remove").hide();
@@ -18,7 +27,7 @@ $(".sidebar-switcher").click(function() {
     toggleMobileMenu();
 });
 
-$("#shadow").click(function() {
+$(".white-shadow").click(function() {
     toggleMobileMenu();
 });
 

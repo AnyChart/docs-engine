@@ -85,9 +85,9 @@
         [:span.chart-col.red]]]
       [:span.brand-label
        [:a.brand {:rel "nofollow" :href "https://www.anychart.com"} "AnyChart"]
-       [:span " Documentation"]]
+       [:span.hidden-extra-mobile " Documentation"]]
 
-      [:div.dropdown.pull-right.version-select.hidden-mobile
+      [:div.dropdown.pull-right.version-select.hidden-tablet
        [:button.btn.btn-blue.btn-sm {:data-toggle "dropdown" :type "button"}
         [:span.version-label (str "Version " (:version data))]
         [:span.caret]]
@@ -95,12 +95,14 @@
         (for [v (:versions data)]
           [:li [:a {:href (:url v)} (str "Version " (:key v))]])]]
 
-      [:div.visible-mobile.pull-right
+      [:div.visible-tablet.pull-right
        [:a.sidebar-switcher
         [:i.ac.ac-bars]
-        [:i.ac.ac-remove]]]]
+        [:i.ac.ac-remove]]]
+      ;; without this chrome sometimes puts sidebar-switcher on new line
+      [:div {:style "display: inline-block;"} ""]]
 
-     [:div.helpers.pull-right.hidden-mobile
+     [:div.helpers.pull-right.hidden-tablet
       [:div.questions.affix
        [:a.text-support {:rel "nofollow" :href "http://support.anychart.com"}
         ;[:img {:src "/svg/support.svg" :width "27px" :style "color=white"}]
@@ -112,7 +114,7 @@
 
 
 (defn mobile-search [data]
-  [:div.mobile-search-container.visible-mobile
+  [:div.mobile-search-container.visible-tablet
    [:div.container-fluid
     [:div.row
      [:div.col-xs-24
@@ -126,16 +128,17 @@
   [:div.wrapper.container-fluid
    [:div.row
 
-    [:div.left-sidebar-container.hidden-mobile
+    [:div.left-sidebar-container.hidden-tablet
+     [:div.white-shadow.visible-tablet]
      [:div.sidebar
 
       ;; search inputh
-      [:div.search.inner-addon.hidden-mobile
+      [:div.search.inner-addon.hidden-tablet
        [:input.form-control.input-sm {:placeholder "What are you looking for?" :type "text"}]
        [:i.glyphicon.glyphicon-search]]
 
       ;; version select dropdown
-      [:div.buttons-container.visible-mobile
+      [:div.buttons-container.visible-tablet
        [:div.dropdown.version-select
         [:button.btn.btn-white.btn-sm {:data-toggle "dropdown" :type "button"}
          [:span.version-label (str "Version " (:version data))]
@@ -184,7 +187,7 @@
          (:actual-version data)]
         " version to see the up to date information."])]
 
-    [:div.right-sidebar-container.pull-right.hidden-sm.hidden-xs.hidden-tablet
+    [:div.right-sidebar-container.pull-right.hidden-sm.hidden-xs.hidden-mobile
      [:div.right-bar-side
       [:div#table-of-content-large]
       [:div.right-buttons
@@ -225,7 +228,6 @@
    [:link {:rel "apple-touch-icon" :sizes "167x167" :href "/icons/180.png"}]
    (header data)
    (mobile-search data)
-   [:div#shadow.visible-mobile]
    (main-content data)
 
    [:script {:type "text/javascript"}
