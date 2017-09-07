@@ -7051,7 +7051,7 @@ div.container-fluid .row {
 }
 #page-content h1 {
   font-size: 20px;
-  padding: 10px 0 15px;
+  padding: 10px 0 14px;
   margin: 0;
   z-index: 2;
   position: relative;
@@ -7145,16 +7145,16 @@ div.container-fluid .row {
 }
 #article-content h1 {
   font-size: 20px;
-  padding: 10px 0 15px;
+  padding: 10px 0 14px;
   margin: 0;
 }
 #article-content h2 {
   font-size: 17px;
   text-transform: uppercase;
-  padding: 15px 0;
+  padding: 13px 0;
 }
 #article-content h3 {
-  padding: 10px 0 15px 0;
+  padding: 10px 0 13px 0;
   font-size: 17px;
 }
 #article-content h4 {
