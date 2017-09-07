@@ -76,7 +76,10 @@
     [:div.row
 
      [:div.col-sm-24
-      [:a.navbar-brand {:rel "nofollow" :href "https://www.anychart.com"}
+      [:a.navbar-brand {:title  "AnyChart Home"
+                        :target "_blank"
+                        :rel    "nofollow"
+                        :href   "https://www.anychart.com"}
        ;[:img {:alt "AnyChart" :src "/i/logo-empty.png"}]
        [:div.border-icon]
        [:div.chart-row
@@ -84,7 +87,10 @@
         [:span.chart-col.orange]
         [:span.chart-col.red]]]
       [:span.brand-label
-       [:a.brand {:rel "nofollow" :href "https://www.anychart.com"} "AnyChart"]
+       [:a.brand {:title  "AnyChart Home"
+                  :target "_blank"
+                  :rel    "nofollow"
+                  :href   "https://www.anychart.com"} "AnyChart"]
        [:span.hidden-extra-mobile " Documentation"]]
 
       [:div.dropdown.pull-right.version-select.hidden-tablet
@@ -104,12 +110,15 @@
 
      [:div.helpers.pull-right.hidden-tablet
       [:div.questions.affix
-       [:a.text-support {:rel "nofollow" :href "http://support.anychart.com"}
-        ;[:img {:src "/svg/support.svg" :width "27px" :style "color=white"}]
+       [:a.text-support {:title "AnyChart Support"
+                         :rel   "nofollow"
+                         :href  "http://support.anychart.com"}
         [:div]]
        [:span.hidden-super-small "Still have questions?"
         [:br]
-        [:a {:rel "nofollow" :href "https://www.anychart.com/support/"}
+        [:a {:title "AnyChart Support"
+             :rel   "nofollow"
+             :href  "https://www.anychart.com/support/"}
          "Contact support"]]]]]]])
 
 
@@ -149,13 +158,15 @@
 
        ;; support link
        [:div.questions.pull-right
-        [:a.text-support {:rel "nofollow" :href "http://support.anychart.com"}
-         ;[:img {:src "/svg/support.svg" :width "27px" :style "color=white"}]
-         [:div]
-         ]
+        [:a.text-support {:title "AnyChart Support"
+                          :rel   "nofollow"
+                          :href  "http://support.anychart.com"}
+         [:div]]
         [:span.hidden-super-small "Still have questions?"
          [:br]
-         [:a {:rel "nofollow" :href "https://www.anychart.com/support/"}
+         [:a {:title "AnyChart Support"
+              :rel   "nofollow"
+              :href  "https://www.anychart.com/support/"}
           "Contact support"]]]]
 
       [:ul.menu
@@ -163,15 +174,27 @@
       [:div.footer
        [:div.footer-inner
         [:a.soc-network
-         {:target "_blank" :rel "nofollow" :href "https://www.facebook.com/AnyCharts"}
+         {:title  "AnyChart Facebook"
+          :target "_blank"
+          :rel    "nofollow"
+          :href   "https://www.facebook.com/AnyCharts"}
          [:span.soc-network-icon.fb [:i.sn-mini-icon.ac.ac-facebook]]]
         [:a.soc-network
-         {:target "_blank" :rel "nofollow" :href "https://twitter.com/AnyChart"}
+         {:title  "AnyChart Twitter"
+          :target "_blank"
+          :rel    "nofollow"
+          :href   "https://twitter.com/AnyChart"}
          [:span.soc-network-icon.tw [:i.sn-mini-icon.ac.ac-twitter]]]
         [:a.soc-network
-         {:target "_blank" :rel "nofollow" :href "https://www.linkedin.com/company/386660"}
+         {:title  "AnyChart LinkedIn"
+          :target "_blank"
+          :rel    "nofollow"
+          :href   "https://www.linkedin.com/company/386660"}
          [:span.soc-network-icon.in [:i.sn-mini-icon.ac.ac-linkedin]]]
-        [:p (str "© " (t/year (t/now)) " AnyChart.Com All rights reserved.")]]]]]
+        [:p (str "© " (t/year (t/now)) " ")
+         [:a {:href   "https://www.anychart.com"
+              :rel    "nofollow"
+              :target "_blank"} "AnyChart.Com"] " All rights reserved."]]]]]
 
     [:div#page-content.col-md-24
      [:div#article-content

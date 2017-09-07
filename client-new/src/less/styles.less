@@ -1,7 +1,7 @@
 @import "bootstrap.less";
 @import "variables.less";
 
-@mobile-width: 870px;
+@mobile-width: 860px;
 @tablet-width: 1120px;
 
 html, body {
@@ -235,13 +235,13 @@ a.navbar-brand {
 }*/
 .mobile-search-container{
   @media (min-width: @mobile-width){
-    padding: 16px 200px 5px 20px;
+    padding: 23px 200px 5px 20px;
     .search{
       width: 400px;
     }
   }
   top: 57px;
-  padding: 16px 0 5px;
+  padding: 23px 0 5px;
   position: fixed;
   width: 100%;
   z-index: 18;
@@ -254,6 +254,7 @@ a.navbar-brand {
 .left-sidebar-container {
   .white-shadow{
     position: fixed;
+    top: 60px;
     width: 100%;
     height: 100%;
     background-color: rgba(255, 255, 255, 0.5);
@@ -340,6 +341,7 @@ a.sidebar-switcher {
   margin-top: 0;
   //margin-right: 5px;
   font-size: 30px;
+  cursor: pointer;
   &:hover{
     text-decoration: none;
   }
@@ -905,7 +907,7 @@ div.container-fluid .row {
     max-width: 100%;
     .btns {
       position: absolute;
-      bottom: -32px;
+      bottom: -35px;
       right: -1px;
       background-color: #f5f5f5;
       border: 1px solid #ccc;
@@ -915,7 +917,7 @@ div.container-fluid .row {
         margin-left: 5px;
         background: none;
         border: 0;
-        font-size: 13px;
+        font-size: 15px;
       }
     }
   }
@@ -1083,9 +1085,12 @@ div.container-fluid .row {
       }
     }
     p {
-      padding: 20px 0 15px 0;
+      padding: 15px 0 15px 0;
       font-size: 12px;
       color: #999999;
+      a {
+        color: #999999;
+      }
     }
   }
 }
