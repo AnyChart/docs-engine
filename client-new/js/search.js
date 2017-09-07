@@ -35,6 +35,7 @@ function searchFor(query, needPushState) {
             } else {
                 $("#search-content").append('Nothing found');
             }
+            $("#table-of-content-large").hide();
             initSearch();
         });
     }
