@@ -3,6 +3,8 @@
 
 @mobile-width: 860px;
 @tablet-width: 1120px;
+@desktop-width: 1280px;
+@lg-desktop-width: 1560px;
 
 html, body {
   height: 100%;
@@ -30,9 +32,10 @@ header {
   z-index: 20;
   top: 0;
   .col-sm-24 {
-    @media (max-width: @tablet-width){
+    padding: 0;
+    /*@media (max-width: @tablet-width){
       padding: 0;
-    }
+    }*/
   }
 }
 
@@ -123,7 +126,7 @@ a.navbar-brand {
 
 
 .helpers {
-  margin-right: 180px;
+  margin-right: 165px;
 }
 .questions {
   top: 10px;
@@ -265,8 +268,8 @@ a.navbar-brand {
   top: 84px;
   bottom: 0;
   position: fixed;
-  width: 305px;
-  padding: 0 0 0 15px;
+  width: 290px;
+  //padding: 0 0 0 15px;
   z-index: 100;
   background-color: white;
   .buttons-container{
@@ -457,7 +460,7 @@ ul.menu {
   list-style: none;
   bottom: 100px;
   font-size: 13px;
-  width: 290px;
+  width: 100%;
 
   position: absolute;
   top: 52px;
@@ -548,19 +551,19 @@ ul.menu li ul {
 // START: Table of content - right small menu
 //======================================================================================================================
 .right-sidebar-container{
-  margin-right: 160px;
-  @media (max-width: @tablet-width){
+  margin-right: 145px;
+  /*@media (max-width: @tablet-width){
     margin-right: 145px;
-  }
+  }*/
   z-index: 1000;
+  .right-bar-side {
+    position: fixed;
+    top: 80px;
+    width: 145px;
+    z-index: 98;
+  }
 }
 
-.right-bar-side {
-  position: fixed;
-  top: 80px;
-  width: 145px;
-  z-index: 98;
-}
 
 #table-of-content-large {
   min-height: 60px;
@@ -677,8 +680,16 @@ ul.table_of_content {
 //======================================================================================================================
 
 div.container-fluid .row {
-  max-width: 1250px;
-  margin: 0 auto;
+  //max-width: 1250px;
+  max-width: 1375px;
+  //margin: 0 auto;
+  margin: 0;
+  @media (min-width: @desktop-width){
+    margin-right: 40px;
+  }
+  @media (min-width: @lg-desktop-width){
+    margin-right: 0px;
+  }
 }
 
 .content-row {
@@ -703,7 +714,9 @@ div.container-fluid .row {
 //======================================================================================================================
 #page-content{
   z-index: 1; // some tooltips from samples are on top of header without it
-  padding: 0 200px 20px 360px;
+  //padding: 0 200px 20px 360px;
+  //padding: 0 175px 20px 320px;
+  padding: 0 175px 20px 320px;
   ul.table_of_content{
     margin-bottom: 18px;
   }
@@ -722,8 +735,14 @@ div.container-fluid .row {
     ul.table_of_content{
       display: block;
       margin-left: -20px;
-      padding: 20px;
+      //padding: 20px;
     }
+  }
+  @media (min-width: @desktop-width){
+    padding: 0 195px 20px 340px;
+  }
+  @media (min-width: @lg-desktop-width){
+    padding: 0 240px 20px 385px;
   }
   @media (max-width: @tablet-width){
     padding: 37px 165px 20px 20px;
@@ -944,7 +963,7 @@ div.container-fluid .row {
 //======================================================================================================================
 #article-content #search-content{
   button{
-    margin: 0 0 15px 0;
+    margin: 10px 0 15px 0;
   }
   h1.search{
     button {

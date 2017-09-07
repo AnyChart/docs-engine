@@ -6368,10 +6368,11 @@ header {
   z-index: 20;
   top: 0;
 }
-@media (max-width: 1120px) {
-  header .col-sm-24 {
-    padding: 0;
-  }
+header .col-sm-24 {
+  padding: 0;
+  /*@media (max-width: @tablet-width){
+      padding: 0;
+    }*/
 }
 .wrapper {
   padding-top: 80px;
@@ -6455,7 +6456,7 @@ a.navbar-brand:hover .chart-row .chart-col.red {
   margin-right: 5px;
 }
 .helpers {
-  margin-right: 180px;
+  margin-right: 165px;
 }
 .questions {
   top: 10px;
@@ -6594,8 +6595,7 @@ a.navbar-brand:hover .chart-row .chart-col.red {
   top: 84px;
   bottom: 0;
   position: fixed;
-  width: 305px;
-  padding: 0 0 0 15px;
+  width: 290px;
   z-index: 100;
   background-color: white;
 }
@@ -6776,7 +6776,7 @@ ul.menu {
   list-style: none;
   bottom: 100px;
   font-size: 13px;
-  width: 290px;
+  width: 100%;
   position: absolute;
   top: 52px;
   overflow-y: auto;
@@ -6849,15 +6849,13 @@ ul.menu li ul {
   padding-top: 5px;
 }
 .right-sidebar-container {
-  margin-right: 160px;
+  margin-right: 145px;
+  /*@media (max-width: @tablet-width){
+    margin-right: 145px;
+  }*/
   z-index: 1000;
 }
-@media (max-width: 1120px) {
-  .right-sidebar-container {
-    margin-right: 145px;
-  }
-}
-.right-bar-side {
+.right-sidebar-container .right-bar-side {
   position: fixed;
   top: 80px;
   width: 145px;
@@ -6963,8 +6961,18 @@ ul.table_of_content a:hover {
   -webkit-mask-size: 18px 18px;
 }
 div.container-fluid .row {
-  max-width: 1250px;
-  margin: 0 auto;
+  max-width: 1375px;
+  margin: 0;
+}
+@media (min-width: 1280px) {
+  div.container-fluid .row {
+    margin-right: 40px;
+  }
+}
+@media (min-width: 1560px) {
+  div.container-fluid .row {
+    margin-right: 0px;
+  }
 }
 .content-row {
   max-width: 1200px;
@@ -6983,7 +6991,7 @@ div.container-fluid .row {
 }
 #page-content {
   z-index: 1;
-  padding: 0 200px 20px 360px;
+  padding: 0 175px 20px 320px;
 }
 #page-content ul.table_of_content {
   margin-bottom: 18px;
@@ -7001,7 +7009,16 @@ div.container-fluid .row {
   #page-content ul.table_of_content {
     display: block;
     margin-left: -20px;
-    padding: 20px;
+  }
+}
+@media (min-width: 1280px) {
+  #page-content {
+    padding: 0 195px 20px 340px;
+  }
+}
+@media (min-width: 1560px) {
+  #page-content {
+    padding: 0 240px 20px 385px;
   }
 }
 @media (max-width: 1120px) {
@@ -7228,7 +7245,7 @@ div.container-fluid .row {
   overflow: hidden;
 }
 #article-content #search-content button {
-  margin: 0 0 15px 0;
+  margin: 10px 0 15px 0;
 }
 #article-content #search-content h1.search button {
   margin: 0 15px 0 0;
