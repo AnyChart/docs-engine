@@ -681,14 +681,15 @@ ul.table_of_content {
 
 div.container-fluid .row {
   //max-width: 1250px;
-  max-width: 1375px;
+  //max-width: 1375px;
   //margin: 0 auto;
   margin: 0;
   @media (min-width: @desktop-width){
     margin-right: 40px;
   }
   @media (min-width: @lg-desktop-width){
-    margin-right: 0px;
+    margin-right: 0;
+    max-width: 1375px;
   }
 }
 
@@ -735,7 +736,6 @@ div.container-fluid .row {
     ul.table_of_content{
       display: block;
       margin-left: -20px;
-      //padding: 20px;
     }
   }
   @media (min-width: @desktop-width){
