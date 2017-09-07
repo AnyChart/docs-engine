@@ -243,6 +243,11 @@ a.navbar-brand {
       width: 400px;
     }
   }
+  @media (max-width: @tablet-width) {
+    &.show-tablet-menu {
+      display: none;
+    }
+  }
   top: 57px;
   padding: 23px 0 5px;
   position: fixed;
@@ -561,6 +566,11 @@ ul.menu li ul {
     top: 80px;
     width: 145px;
     z-index: 98;
+    @media (max-width: @tablet-width) {
+      &.show-tablet-menu {
+        display: none;
+      }
+    }
   }
 }
 
@@ -746,6 +756,10 @@ div.container-fluid .row {
   }
   @media (max-width: @tablet-width){
     padding: 37px 165px 20px 20px;
+    &.show-tablet-menu{
+      //padding: 37px 0 20px 335px;
+      padding: 0 0 20px 335px;
+    }
   }
   @media (max-width: @mobile-width){
     padding: 37px 0 20px 20px;

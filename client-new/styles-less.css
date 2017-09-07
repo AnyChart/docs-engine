@@ -6580,6 +6580,11 @@ a.navbar-brand:hover .chart-row .chart-col.red {
     width: 400px;
   }
 }
+@media (max-width: 1120px) {
+  .mobile-search-container.show-tablet-menu {
+    display: none;
+  }
+}
 .mobile-search-container .col-xs-24 {
   padding: 0;
 }
@@ -6861,6 +6866,11 @@ ul.menu li ul {
   width: 145px;
   z-index: 98;
 }
+@media (max-width: 1120px) {
+  .right-sidebar-container .right-bar-side.show-tablet-menu {
+    display: none;
+  }
+}
 #table-of-content-large {
   min-height: 60px;
   overflow-y: auto;
@@ -7024,6 +7034,9 @@ div.container-fluid .row {
 @media (max-width: 1120px) {
   #page-content {
     padding: 37px 165px 20px 20px;
+  }
+  #page-content.show-tablet-menu {
+    padding: 0 0 20px 335px;
   }
 }
 @media (max-width: 860px) {
