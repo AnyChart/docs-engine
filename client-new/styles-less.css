@@ -6456,7 +6456,7 @@ a.navbar-brand:hover .chart-row .chart-col.red {
   margin-right: 5px;
 }
 .helpers {
-  margin-right: 165px;
+  margin-right: 220px;
 }
 .questions {
   top: 10px;
@@ -6747,7 +6747,7 @@ a.sidebar-switcher i.ac.ac-remove {
 }
 @media (min-width: 1121px) {
   .version-select {
-    margin: 14px 173px 0 0;
+    margin: 14px 228px 0 0;
   }
 }
 .version-select button {
@@ -6854,17 +6854,20 @@ ul.menu li ul {
   padding-top: 5px;
 }
 .right-sidebar-container {
-  margin-right: 145px;
-  /*@media (max-width: @tablet-width){
-    margin-right: 145px;
-  }*/
+  margin-right: 200px;
   z-index: 1000;
 }
 .right-sidebar-container .right-bar-side {
   position: fixed;
   top: 134px;
-  width: 145px;
+  width: 200px;
   z-index: 98;
+}
+@media (min-width: 1560px) {
+  .right-sidebar-container .right-bar-side {
+    max-width: 290px;
+    width: initial;
+  }
 }
 @media (max-width: 1120px) {
   .right-sidebar-container .right-bar-side.show-tablet-menu {
@@ -6874,7 +6877,6 @@ ul.menu li ul {
 #table-of-content-large {
   min-height: 60px;
   overflow-y: auto;
-  max-width: 150px;
   overflow-x: hidden;
   margin-bottom: 18px;
 }
@@ -6981,7 +6983,7 @@ div.container-fluid .row {
 @media (min-width: 1560px) {
   div.container-fluid .row {
     margin-right: 0;
-    max-width: 1375px;
+    max-width: 1430px;
   }
 }
 .content-row {
@@ -7001,7 +7003,7 @@ div.container-fluid .row {
 }
 #page-content {
   z-index: 1;
-  padding: 0 175px 20px 320px;
+  padding: 0 230px 20px 320px;
 }
 #page-content ul.table_of_content {
   margin-bottom: 8px;
@@ -7025,17 +7027,17 @@ div.container-fluid .row {
 }
 @media (min-width: 1280px) {
   #page-content {
-    padding: 0 195px 20px 340px;
+    padding: 0 250px 20px 340px;
   }
 }
 @media (min-width: 1560px) {
   #page-content {
-    padding: 0 240px 20px 385px;
+    padding: 0 295px 20px 385px;
   }
 }
 @media (max-width: 1120px) {
   #page-content {
-    padding: 47px 165px 20px 20px;
+    padding: 47px 220px 20px 20px;
   }
   #page-content.show-tablet-menu {
     padding: 0 0 20px 335px;
@@ -7405,10 +7407,6 @@ div.container-fluid .row {
 .footer .footer-inner p a {
   color: #999999;
 }
-/*#bar .footer {
-  border-top: 1px solid #dddddd;
-  position: relative;
-}*/
 /*.icon {
     font-family: 'AnyChart';
     speak: none;
@@ -7418,9 +7416,6 @@ div.container-fluid .row {
     text-transform: none;
     line-height: 1;
     -webkit-font-smoothing: antialiased;
-}*/
-/*.visible-830 {
-  display: none;
 }*/
 @media (max-width: 1120px) {
   .hidden-tablet {
@@ -7467,11 +7462,3 @@ div.container-fluid .row {
     display: none;
   }
 }
-/*@media (max-width: 830px) {
-  .hidden-830 {
-    display: none !important;
-  }
-  .visible-830 {
-    display: block !important;
-  }
-}*/

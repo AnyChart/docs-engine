@@ -126,7 +126,7 @@ a.navbar-brand {
 
 
 .helpers {
-  margin-right: 165px;
+  margin-right: 220px;
 }
 .questions {
   top: 10px;
@@ -347,7 +347,6 @@ a.sidebar-switcher {
   border-radius: 50%;
   color: #d5edff;
   margin-top: 0;
-  //margin-right: 5px;
   font-size: 30px;
   cursor: pointer;
   &:hover{
@@ -427,7 +426,7 @@ a.sidebar-switcher {
 //======================================================================================================================
 .version-select {
   @media (min-width: (@tablet-width + 1px)){
-    margin: 14px 173px 0 0;
+    margin: 14px 228px 0 0;
   }
   button {
     padding: 3px 10px;
@@ -556,16 +555,18 @@ ul.menu li ul {
 // START: Table of content - right small menu
 //======================================================================================================================
 .right-sidebar-container{
-  margin-right: 145px;
-  /*@media (max-width: @tablet-width){
-    margin-right: 145px;
-  }*/
+  margin-right: 200px;
   z-index: 1000;
   .right-bar-side {
     position: fixed;
     top: 134px;
-    width: 145px;
+    width: 200px;
     z-index: 98;
+    @media (min-width: @lg-desktop-width){
+      //min-width: 200px;
+      max-width: 290px;
+      width: initial;
+    }
     @media (max-width: @tablet-width) {
       &.show-tablet-menu {
         display: none;
@@ -578,7 +579,6 @@ ul.menu li ul {
 #table-of-content-large {
   min-height: 60px;
   overflow-y: auto;
-  max-width: 150px;
   overflow-x: hidden;
   margin-bottom: 18px;
 }
@@ -699,7 +699,7 @@ div.container-fluid .row {
   }
   @media (min-width: @lg-desktop-width){
     margin-right: 0;
-    max-width: 1375px;
+    max-width: 1430px;
   }
 }
 
@@ -727,7 +727,7 @@ div.container-fluid .row {
   z-index: 1; // some tooltips from samples are on top of header without it
   //padding: 0 200px 20px 360px;
   //padding: 0 175px 20px 320px;
-  padding: 0 175px 20px 320px;
+  padding: 0 230px 20px 320px;
   ul.table_of_content{
     margin-bottom: 8px;
   }
@@ -748,13 +748,13 @@ div.container-fluid .row {
     }
   }
   @media (min-width: @desktop-width){
-    padding: 0 195px 20px 340px;
+    padding: 0 250px 20px 340px;
   }
   @media (min-width: @lg-desktop-width){
-    padding: 0 240px 20px 385px;
+    padding: 0 295px 20px 385px;
   }
   @media (max-width: @tablet-width){
-    padding: 47px 165px 20px 20px;
+    padding: 47px 220px 20px 20px;
     &.show-tablet-menu{
       padding: 0 0 20px 335px;
     }
@@ -1134,11 +1134,6 @@ div.container-fluid .row {
   }
 }
 
-/*#bar .footer {
-  border-top: 1px solid #dddddd;
-  position: relative;
-}*/
-
 
 /*.icon {
     font-family: 'AnyChart';
@@ -1151,11 +1146,6 @@ div.container-fluid .row {
     -webkit-font-smoothing: antialiased;
 }*/
 
-
-
-/*.visible-830 {
-  display: none;
-}*/
 
 .hidden-tablet{
   @media (max-width: @tablet-width) {
@@ -1197,16 +1187,6 @@ div.container-fluid .row {
     display: none;
   }
 }
-
-
-/*@media (max-width: 830px) {
-  .hidden-830 {
-    display: none !important;
-  }
-  .visible-830 {
-    display: block !important;
-  }
-}*/
 
 
 //.mCS-docs-theme.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar{ background-color: #2485d0; }
