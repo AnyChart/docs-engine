@@ -6597,7 +6597,7 @@ a.navbar-brand:hover .chart-row .chart-col.red {
   z-index: 99;
 }
 .sidebar {
-  top: 84px;
+  top: 85px;
   bottom: 0;
   position: fixed;
   width: 290px;
@@ -6783,7 +6783,7 @@ ul.menu {
   font-size: 13px;
   width: 100%;
   position: absolute;
-  top: 52px;
+  top: 49px;
   overflow-y: auto;
 }
 @media (max-width: 1120px) {
