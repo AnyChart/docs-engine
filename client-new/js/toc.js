@@ -50,7 +50,7 @@ fixToc();
 
 // move to top on scroll
 window.addEventListener('scroll', function(e) {
-    var top = Math.max(85, 139 - window.scrollY);
+    var top = Math.max(85, 134 - window.scrollY);
     $('.right-bar-side').css('top', top + 'px');
     onResize();
 });
@@ -58,7 +58,7 @@ window.addEventListener('scroll', function(e) {
 // resize table content height
 var onResize = function(){
     var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-    $("#table-of-content-large").css('max-height', (windowHeight - 130 - Math.max(85, 139 - window.scrollY)) + 'px');
+    $("#table-of-content-large").css('max-height', (windowHeight - 130 - Math.max(85, 134 - window.scrollY)) + 'px');
 };
 window.addEventListener("resize", function(){
     onResize();
