@@ -7374,21 +7374,27 @@ div.container-fluid .row {
   color: #85caff;
 }
 .footer .footer-inner a.soc-network .soc-network-icon {
-  font-size: 16px;
   display: inline-block;
   margin-right: 7px;
   vertical-align: middle;
   width: 28px;
   height: 28px;
-  line-height: 25px;
   text-align: center;
   border-radius: 50%;
   color: #c3c3c3;
   border: 1px solid #c3c3c3;
 }
+.footer .footer-inner a.soc-network .soc-network-icon.fb {
+  font-size: 16px;
+  line-height: 25px;
+}
 .footer .footer-inner a.soc-network .soc-network-icon.tw {
   font-size: 17px;
   line-height: 26px;
+}
+.footer .footer-inner a.soc-network .soc-network-icon.in {
+  font-size: 15px;
+  line-height: 24px;
 }
 .footer .footer-inner p {
   padding: 14px 0 7px 0;
