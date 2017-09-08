@@ -71,41 +71,6 @@ $menu.find("a").each(function() {
 
 expandMenu(location.pathname);
 
-// resize table content height
-window.addEventListener("resize", function(){
-    onResize();
-});
-var onResize = function(){
-    var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-    var tableOfContentLarge = $("#table-of-content-large");
-    //var tableOfContent = $($(".table_of_content")[1]);
-    tableOfContentLarge.css('max-height', (windowHeight - 200) + 'px');
-};
-window.onload = function(){
-    onResize();
-};
-onResize();
-
-
-// The function actually applying the offset
-/*function offsetAnchor() {
-    if (location.hash.length !== 0) {
-        window.scrollTo(window.scrollX, window.scrollY - 100);
-    }
-}
-
-// Captures click events of all <a> elements with href starting with #
-$(document).on('click', 'a[href^="#"]', function(event) {
-    // Click events are captured before hashchanges. Timeout
-    // causes offsetAnchor to be called after the page jump.
-    window.setTimeout(function() {
-        offsetAnchor();
-    }, 0);
-});
-
-// Set the offset when entering page with hash present in the url
-window.setTimeout(offsetAnchor, 0);*/
-
 /*var docs = {config: {}};
 docs.config.scrollSettings = (function() {
     var scrollAmount = 80;

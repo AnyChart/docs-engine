@@ -6862,7 +6862,7 @@ ul.menu li ul {
 }
 .right-sidebar-container .right-bar-side {
   position: fixed;
-  top: 80px;
+  top: 139px;
   width: 145px;
   z-index: 98;
 }
@@ -7064,6 +7064,9 @@ div.container-fluid .row {
     color: #222222;
   }
 }
+#article-content {
+  font-size: 14px;
+}
 #article-content > img,
 #article-content > p > img,
 #article-content > p > a > img {
@@ -7181,8 +7184,9 @@ div.container-fluid .row {
   color: #000;
 }
 #article-content a.method {
-  font-weight: bold;
+  font-weight: 700;
   color: #428bca;
+  font-size: 13px;
 }
 #article-content a.method:hover {
   color: #2E618D;
@@ -7193,7 +7197,7 @@ div.container-fluid .row {
   border: none;
 }
 #article-content code {
-  font-size: 15px;
+  font-size: 13px;
   font-family: 'Open Sans', sans-serif;
 }
 #article-content ul {
