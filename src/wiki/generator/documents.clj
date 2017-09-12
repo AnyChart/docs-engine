@@ -5,7 +5,8 @@
             [com.climate.claypoole :as cp]
             [taoensso.timbre :as timbre :refer [info]]
             [net.cgrand.enlive-html :as html]
-            [wiki.generator.analysis.core :as analyzer]))
+            [wiki.generator.analysis.core :as analyzer]
+            [wiki.generator.toc :as toc]))
 
 (defn- fix-url [url]
   (-> url
@@ -37,7 +38,7 @@
                       page-report)]
       (pdata/add-page jdbc (:id version) page-url
                       (:title item)
-                      html
+                      (toc/add-toc html)
                       (:last-modified item)
                       tags
                       (:config item))
