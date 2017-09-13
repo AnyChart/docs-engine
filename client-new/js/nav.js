@@ -92,6 +92,12 @@ function fixHeaders() {
 fixHeaders();
 
 window.onpopstate = function (e) {
+    // if return to search page - make search request
+    if (location.pathname == "/search"){
+        var q = location.href.split("?q=")[1];
+        searchFor(q, false);
+        return;
+    }
     if (location.pathname == page) return;
     loadPage(location.pathname, false);
 };
