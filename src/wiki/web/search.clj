@@ -21,7 +21,7 @@
                    title)]
     (assoc result
       :title (str (clojure.string/join " / " (drop-last 1 title))
-                  " / <a href='/" version "/" url "'>" (first (take-last 1 title)) "</a>"))))
+                  " / <a href='./" url "'>" (first (take-last 1 title)) "</a>"))))
 
 
 (defn search-results [request version]
