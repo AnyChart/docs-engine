@@ -25,7 +25,7 @@
   ;;(info "generating" (dissoc item :content))
   (if-let [content (:content item)]
     (let [page-url (fix-url (str base-path "/" (:name item)))
-          page-report (atom (analyzer/check-links content version-config))
+          *page-report (atom (analyzer/check-links content version-config))
           {html :html tags :tags}
           (md/to-html notifier
                       page-url
@@ -35,16 +35,16 @@
                       api-versions
                       generator-config
                       generate-images
-                      page-report)]
+                      *page-report)]
       (pdata/add-page jdbc (:id version) page-url
                       (:title item)
-                      (toc/add-toc html)
+                      (toc/add-toc html *page-report page-url)
                       (:last-modified item)
                       tags
                       (:config item))
-      ;(prn "report: " (:title item) (:name item) @page-report)
-      (when (not-empty @page-report)
-        (swap! report conj (assoc @page-report :page-url page-url))))
+      ;(prn "report: " (:title item) (:name item) @*page-report)
+      (when (not-empty @*page-report)
+        (swap! report conj (assoc @*page-report :page-url page-url))))
     (let [items (:children item)]
       (when (seq items)
         (fdata/add-folder jdbc (:id version) (fix-url (str base-path "/" (:name item)))

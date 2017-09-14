@@ -30,7 +30,7 @@
       [:h2 "Report for version " [:b version-key] " "
        [:small
         [:a {:href (str "/" version-key "/report.json")} "json version"]]]
-      [:h3 "Pages with bad links"]
+      [:h3 "Pages with errors"]
       (if (empty? error-links)
         [:p {:style "color: green;"} "Not found."]
         (for [link (map-indexed #(assoc %2 :id (inc %1)) error-links)]

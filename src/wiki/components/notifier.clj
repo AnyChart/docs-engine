@@ -42,6 +42,7 @@
         sample-not-available (count (set (mapcat :sample-not-available report)))
         sample-parsing-error (count (set (mapcat :sample-parsing-error report)))
         image-format-error (count (set (mapcat :image-format-error report)))
+        toc-error (count (set (mapcat :toc-error report)))
         broken-links-error (count broken-links)
         msg-coll [(when (pos? direct-links) (str "Direct links: " direct-links))
                   (when (pos? canonical-links) (str "Non canonical links: " canonical-links))
@@ -50,12 +51,13 @@
                   (when (pos? sample-not-available) (str "Unavailable samples: " sample-not-available))
                   (when (pos? sample-parsing-error) (str "Parsing samples errors: " sample-parsing-error))
                   (when (pos? image-format-error) (str "Parsing images errors: " image-format-error))
+                  (when (pos? toc-error) (str "TOC errors: " toc-error))
                   (when (pos? conflicts-with-develop) (str "Conflicts with develop: " conflicts-with-develop))
                   (when (pos? broken-links-error) (str "404 errors: " broken-links-error))]
         msg (clojure.string/join "\n" (filter some? msg-coll))]
     (slack/complete-version-building notifier version queue-index)
     (if (= 0 direct-links canonical-links env-links http-links
-           sample-not-available sample-parsing-error image-format-error conflicts-with-develop broken-links-error)
+           sample-not-available sample-parsing-error image-format-error conflicts-with-develop toc-error broken-links-error)
       (skype/complete-version-building notifier version queue-index "good job, everything is ok!")
       (skype/complete-version-building-with-warnings notifier version queue-index msg))))
 
