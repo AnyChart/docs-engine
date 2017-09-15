@@ -7202,7 +7202,7 @@ div.container-fluid .row {
 }
 #article-content code {
   font-size: 13px;
-  font-family: 'Open Sans', sans-serif;
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 #article-content ul {
   list-style: none;
