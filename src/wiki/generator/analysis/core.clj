@@ -76,12 +76,16 @@
   (fn [url data]
     (and (not (.contains url "export-server.jar"))
          (not (.endsWith url (str "/" (:key version) "/download")))
+         (not (.endsWith url ".jpg"))
+         (not (.endsWith url ".png"))
          (or (.contains url (str (domain-url domain) (:key version) "/"))
              (and
                (or (and (.contains url "anychart.stg/")
-                        (.contains url (:key version)))
+                        ;(.contains url (:key version))
+                        )
                    (and (.contains url "anychart.com/")
-                        (.contains url (:key version)))
+                        ;(.contains url (:key version))
+                        )
                    (.contains url "//anychart.")
                    (and (or (.contains url "docs.anychart.")
                             (.contains url "localhost:8080"))
@@ -107,7 +111,7 @@
         config {:check-fn         (get-check-fn domain version docs-versions)
                 :iteration-fn     (fn [iteration urls-count urls-for-check-total-count total-count]
                                     (println "Iteration: " iteration urls-count urls-for-check-total-count total-count))
-                :max-loop-count   25
+                :max-loop-count   30
                 :default-protocol "http"
                 :end-fn           (fn [res]
                                     (let [total-report {:error-links  report
