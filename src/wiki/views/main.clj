@@ -38,7 +38,7 @@
 
    [:meta {:property "og:title" :content (:title-prefix data)}]
    [:meta {:property "og:description" :content (:description data)}]
-   [:meta {:property "og:image" :content "http://static.anychart.com/docs/images/{{image-url}}.png"}]
+   [:meta {:property "og:image" :content (str "http://static.anychart.com/docs/images/" (:image-url data) ".png")}]
    [:meta {:property "og:type" :content "article"}]
    [:meta {:property "og:site_name" :content "AnyChart Documentation"}]
    [:meta {:property "article:publisher" :content "https://www.facebook.com/AnyCharts"}]
