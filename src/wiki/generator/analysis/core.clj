@@ -76,16 +76,12 @@
   (fn [url data]
     (and (not (.contains url "export-server.jar"))
          (not (.endsWith url (str "/" (:key version) "/download")))
-         (not (.endsWith url ".jpg"))
-         (not (.endsWith url ".png"))
          (or (.contains url (str (domain-url domain) (:key version) "/"))
              (and
                (or (and (.contains url "anychart.stg/")
-                        ;(.contains url (:key version))
-                        )
+                        (.contains url (:key version)))
                    (and (.contains url "anychart.com/")
-                        ;(.contains url (:key version))
-                        )
+                        (.contains url (:key version)))
                    (.contains url "//anychart.")
                    (and (or (.contains url "docs.anychart.")
                             (.contains url "localhost:8080"))
