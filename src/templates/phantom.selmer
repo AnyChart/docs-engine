@@ -40,20 +40,24 @@
       var {{export}} = null;
 
       {{code|safe}}
-      anychart.onDocumentReady(function() {
-        if ({{export}} && {{export}}.listenOnce) {
-          {{export}}.listenOnce(anychart.enums.EventType.CHART_DRAW, function() {
-            console.log('chart draw');
-          });
-	  setTimeout(function() { //roma blya! blya! blya!
-            console.log('chart draw');
-          }, 15000);
-      }else {
-        setTimeout(function() { //roma blya!
-            console.log('chart draw');
-        }, 9000);
-        }
-      });
+
+      window.onload = function() {
+          var checkRenderCount = 0;
+          var checkRender = function(){
+              var svgs = document.getElementsByTagName('svg');
+              if (svgs.length > 0) {
+                  setTimeout(function(){
+                      console.log('chart draw');
+                  }, 500);
+              }else {
+                  checkRenderCount++;
+                  if (checkRenderCount > 500) {
+                      console.log('chart draw');
+                  }
+              }
+          };
+          setInterval(checkRender, 20);
+      };
     </script>
 </body>
 </html>

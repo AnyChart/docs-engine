@@ -31,7 +31,8 @@
                                               (str "https://cdn.anychart.com/js/" version "/anychart-bundle.min.js"))})
         tmp-file (java.io.File/createTempFile "sample" ".html")
         tmp-json (java.io.File/createTempFile "sample" ".json")
-        image-path (str images-folder "/" (utils/name->url page-url) ".png")]
+        image-path (str images-folder "/" (utils/name->url page-url) ".png")
+        *sh-result (volatile! nil)]
     (info "generate-img::" tmp-file tmp-json image-path)
     (info "generating" (.getAbsolutePath tmp-file) "for" (:name sample) "to" image-path)
     (with-open [f (clojure.java.io/writer tmp-file)]
@@ -39,13 +40,14 @@
         (println code)))
     (try
       (do
-        (sh phantom-engine
-            "--web-security=false"
-            phantom-generator
-            (.getAbsolutePath tmp-file)
-            image-path
-            "'chart draw'"
-            (.getAbsolutePath tmp-json))
+        (let [sh-result (sh phantom-engine
+                            "--web-security=false"
+                            phantom-generator
+                            (.getAbsolutePath tmp-file)
+                            image-path
+                            "'chart draw'"
+                            (.getAbsolutePath tmp-json))]
+          (vreset! *sh-result sh-result))
         (let [image (ImageIO/read (file image-path))
               res (Scalr/resize image
                                 Scalr$Method/ULTRA_QUALITY
@@ -61,7 +63,7 @@
         nil)
       (catch Exception e
         (do
-          (info "generation failed for" (:url sample) "html:" (.getAbsolutePath tmp-file))
+          (info "generation failed for" (:url sample) "html:" (.getAbsolutePath tmp-file) @*sh-result e)
           {:sample (:url sample) :code (.getAbsolutePath tmp-file)})))))
 
 
