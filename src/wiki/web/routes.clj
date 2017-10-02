@@ -129,16 +129,16 @@
         versions (versions-data/get-page-versions (jdbc request) url)
         version (first versions)
         page (pages-data/page-by-url (jdbc request) (:id version) url)]
-    (if page
-      (show-page request version versions page false)
-      (let [url "Quick_Start/Quick_Start"
-            page (pages-data/page-by-url (jdbc request) (:id version) url)]
-        (if page
-          (show-page request version versions page false)
-          (let [folder (folders-data/get-folder-by-url (jdbc request) (:id version) "Quick_Start")
-                page (pages-data/page-by-url (jdbc request) (:id version)
-                                             (str "Quick_Start/" (:default_page folder)))]
-            (show-page request version versions page false)))))))
+    ;if page
+    ;(show-page request version versions page false)
+    (let [url "Quick_Start/Quick_Start"
+          page (pages-data/page-by-url (jdbc request) (:id version) url)]
+      (if page
+        (show-page request version versions page false)
+        (let [folder (folders-data/get-folder-by-url (jdbc request) (:id version) "Quick_Start")
+              page (pages-data/page-by-url (jdbc request) (:id version)
+                                           (str "Quick_Start/" (:default_page folder)))]
+          (show-page request version versions page false))))))
 
 (defn download-zip [request version & [versions url is-url-version]]
   (if-let [zip (versions-data/get-zip (jdbc request) (:id version))]
@@ -230,25 +230,27 @@
   (first (filter #(.contains (:url %) page-url) versions)))
 
 (defn- show-page-middleware [request version versions page-url url-version]
-  (let [url (-> request :route-params :*)]
-    (if (empty? page-url)
-      (if-let [page (pages-data/page-by-url (jdbc request) (:id version) "")]
-        (do
+  (if (= "" page-url)
+    (redirect (str "/" (:key version) "/Quick_Start"))
+    (let [url (-> request :route-params :*)]
+      (if (empty? page-url)
+        (if-let [page (pages-data/page-by-url (jdbc request) (:id version) "")]
+          (do
+            (if (.endsWith url "/")
+              (redirect (str "/" (utils/drop-last-slash url)) 301)
+              (show-page request version versions page (boolean url-version))))
+          (redirect (str "/" (:key version) "/Quick_Start")))
+        (if-let [page (pages-data/page-by-url (jdbc request) (:id version) (utils/drop-last-slash page-url))]
           (if (.endsWith url "/")
             (redirect (str "/" (utils/drop-last-slash url)) 301)
-            (show-page request version versions page (boolean url-version))))
-        (redirect (str "/" (:key version) "/Quick_Start")))
-      (if-let [page (pages-data/page-by-url (jdbc request) (:id version) (utils/drop-last-slash page-url))]
-        (if (.endsWith url "/")
-          (redirect (str "/" (utils/drop-last-slash url)) 301)
-          (show-page request version versions page (boolean url-version)))
-        (if-let [folder (folders-data/get-folder-by-url (jdbc request) (:id version) page-url)]
-          (redirect (str (when url-version (str "/" (:key version)))
-                         "/" (:url folder)
-                         "/" (:default_page folder)) 301)
-          (if-let [last-canonical-version (version-that-has-this-page-url versions page-url)]
-            (redirect (:url last-canonical-version) 301)
-            (error-404 request)))))))
+            (show-page request version versions page (boolean url-version)))
+          (if-let [folder (folders-data/get-folder-by-url (jdbc request) (:id version) page-url)]
+            (redirect (str (when url-version (str "/" (:key version)))
+                           "/" (:url folder)
+                           "/" (:default_page folder)) 301)
+            (if-let [last-canonical-version (version-that-has-this-page-url versions page-url)]
+              (redirect (:url last-canonical-version) 301)
+              (error-404 request))))))))
 
 (defn report [request]
   (let [version-key (-> request :route-params :version)

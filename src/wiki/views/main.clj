@@ -256,7 +256,11 @@
    [:script {:type "text/javascript"}
     (str
       "window['version'] = '" (:version data) "';
-       window['isUrlVersion'] = " (boolean (:is-url-version data)) ";")]
+       window['isUrlVersion'] = " (boolean (:is-url-version data)) ";"
+      "if (location.pathname != encodeURI('/" (:version data) "/' + '" (:url data) "') &&
+              location.pathname != encodeURI('/" (:url data) "')  &&  window.history){
+         window.history.replaceState(null, null, encodeURI('/" (:url data) "'));}"
+      )]
    [:script {:id "main_script" :type "text/javascript" :src "/main.min.js" :async true}]
 
    samples-script
