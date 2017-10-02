@@ -20,6 +20,9 @@
                               (println command res)
                               (:out res)))))
 
+(defn current-commit [git-ssh path]
+  (subs (run-git git-ssh path "rev-parse" "HEAD") 0 7))
+
 (defn set-user [git-ssh path]
   (run-git git-ssh path "config" "user.name" "docs-engine")
   (run-git git-ssh path "config" "user.email" "support@anychart.com"))

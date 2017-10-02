@@ -6,12 +6,23 @@
             [wiki.components.sphinx :as sphinx]
             [wiki.components.indexer :as indexer]
             [wiki.components.web :as web]
+            [wiki.generator.git :as git]
             [wiki.components.offline-generator :as offline-generator]
             [wiki.util.utils :as utils]
             [com.stuartsierra.component :as component]
             [taoensso.timbre :as timbre]
             [taoensso.timbre.appenders.core :as appenders])
   (:gen-class :main :true))
+
+(defn git-commit []
+  (try
+    (git/current-commit "/apps/keys/git" (.getAbsolutePath (clojure.java.io/file "")))
+    (catch Exception _ (quot (System/currentTimeMillis) 1000))))
+
+(defmacro parse-data-compile-time []
+  `'~(git-commit))
+
+(def commit (parse-data-compile-time))
 
 (defn dev-system [config]
   (component/system-map
@@ -71,7 +82,8 @@
                        :redirects-queue "redirects-queue"
                        :zip-queue       "docs-zip-queue"
                        :reference       "api.anychart.stg"
-                       :playground      "playground.anychart.stg"}
+                       :playground      "playground.anychart.stg"
+                       :commit          commit}
    :jdbc              {:subprotocol "postgresql"
                        :subname     "//localhost:5432/docs_db"
                        :classname   "org.postgresql.Driver"

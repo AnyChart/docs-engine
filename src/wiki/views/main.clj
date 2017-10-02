@@ -50,7 +50,7 @@
                                        (when (:url data) (str "/" (:url data))))}]
    [:link {:type "image/x-icon" :href "/i/anychart.ico" :rel "icon"}]
    "<!--[if IE]>"
-   [:link {:rel "stylesheet" :type "text/css" :href "/main.css"}]
+   [:link {:rel "stylesheet" :type "text/css" :href (str "/main.css?v=" (:commit data))}]
    [:link {:rel "stylesheet" :type "text/css" :href (:anychart-css-url data)}]
    ; http://cdn.anychart.com/fonts/2.7.5/demo.html
    [:link {:rel "stylesheet" :type "text/css" :href "https://cdn.anychart.com/fonts/2.7.2/anychart.css"}]
@@ -238,7 +238,7 @@
 
 (defn body [data]
   [:body
-   [:link {:rel "stylesheet" :type "text/css" :href "/main.css"}]
+   [:link {:rel "stylesheet" :type "text/css" :href (str "/main.css?v=" (:commit data))}]
    [:link {:rel "stylesheet" :type "text/css" :href (:anychart-css-url data)}]
    [:link {:rel "stylesheet" :type "text/css" :href "https://cdn.anychart.com/fonts/2.7.2/anychart.css"}]
    [:link {:rel "stylesheet" :type "text/css" :href "https://fonts.googleapis.com/css?family=Open+Sans:400,600"}]
@@ -261,7 +261,7 @@
               location.pathname != encodeURI('/" (:url data) "')  &&  window.history){
          window.history.replaceState(null, null, encodeURI('/" (:url data) "'));}"
       )]
-   [:script {:id "main_script" :type "text/javascript" :src "/main.min.js" :async true}]
+   [:script {:id "main_script" :type "text/javascript" :src (str "/main.min.js?v=" (:commit data)) :async true}]
 
    samples-script
    ;(when-not (:is-ga-speed-insights data) ga-script)

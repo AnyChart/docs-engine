@@ -113,7 +113,8 @@
                                         (:full_name page))
               :page                 page
               :versions             versions
-              :is-ga-speed-insights (:is-ga-speed-insights request)}
+              :is-ga-speed-insights (:is-ga-speed-insights request)
+              :commit               (:commit (config request))}
         page (main-page/page data)
         ;html-compressor (HtmlCompressor.)
         ]
