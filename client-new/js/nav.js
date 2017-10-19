@@ -35,8 +35,7 @@ function loadPage(link, needPushState) {
                 el[0].click();
             }
         } else {
-            //$("#page-content").scrollTop(0);
-            $("body").scrollTop(0);
+            $(window).scrollTop(0);
         }
         fixLinks();
         fixToc();
