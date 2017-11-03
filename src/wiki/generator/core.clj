@@ -121,10 +121,12 @@
 
               (timbre/info "Start check-broken-links")
 
-              (analysis/check-broken-links jdbc
-                                           {:id  version-id
-                                            :key (:name branch)}
-                                           docs-versions report domain *broken-link-result)
+              ;(analysis/check-broken-links jdbc
+              ;                             {:id  version-id
+              ;                              :key (:name branch)}
+              ;                             docs-versions report domain *broken-link-result)
+              ;(prn "DOCS VERSIONS:" docs-versions)
+              (analysis/check-broken-links (:name branch) report domain *broken-link-result)
 
               (let [total-report @*broken-link-result
                     conflicts-with-develop (if (= "develop" (:name branch))

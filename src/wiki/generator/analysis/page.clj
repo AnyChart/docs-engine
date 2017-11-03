@@ -58,7 +58,8 @@
           [:th "broken links (href - text)"]
           ;[:th "404"]
           ]
-         (for [item (map-indexed #(assoc %2 :id (inc %1)) broken-links)]
+         (for [item (map-indexed #(assoc %2 :id (inc %1))
+                                 (sort-by :url broken-links))]
            [:tr
             [:td (:id item)]
             [:td {:style "padding-right: 5px;"}
