@@ -6709,20 +6709,10 @@ a.sidebar-switcher i.ac.ac-remove {
 .warning-container {
   margin-right: 495px;
 }
-@media (max-width: 1120px) {
-  .warning-container {
-    margin-right: 270px;
-  }
-}
-@media (max-width: 860px) {
-  .warning-container {
-    margin-right: 270px;
-  }
-}
 .warning-container .warning-version {
   position: fixed;
   z-index: 100;
-  top: 80px;
+  top: 85px;
   width: 270px;
   line-height: 18px;
   padding: 10px;
@@ -6744,6 +6734,19 @@ a.sidebar-switcher i.ac.ac-remove {
 .warning-container .warning-version a {
   color: #ff6c00;
   text-decoration: underline;
+}
+@media (max-width: 1120px) {
+  .warning-container {
+    margin-right: 270px;
+  }
+  .warning-container .warning-version {
+    top: 80px;
+  }
+}
+@media (max-width: 860px) {
+  .warning-container {
+    margin-right: 270px;
+  }
 }
 @media (min-width: 1121px) {
   .version-select {

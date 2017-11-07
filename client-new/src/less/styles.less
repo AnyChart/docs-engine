@@ -389,16 +389,10 @@ a.sidebar-switcher {
 //======================================================================================================================
 .warning-container{
   margin-right: 495px;
-  @media (max-width: @tablet-width){
-    margin-right: 270px;
-  }
-  @media (max-width: @mobile-width){
-    margin-right: 270px;
-  }
   .warning-version {
     position: fixed;
     z-index: 100;
-    top: 80px;
+    top: 85px;
     @media (max-width: @mobile-width){
       top: 120px;
     }
@@ -418,6 +412,15 @@ a.sidebar-switcher {
       color: #ff6c00;
       text-decoration: underline;
     }
+  }
+  @media (max-width: @tablet-width){
+    margin-right: 270px;
+    .warning-version {
+      top: 80px;
+    }
+  }
+  @media (max-width: @mobile-width){
+    margin-right: 270px;
   }
 }
 
