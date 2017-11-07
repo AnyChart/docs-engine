@@ -1,5 +1,6 @@
 (ns wiki.generator.toc
-  (:require [clojure.string :as string])
+  (:require [clojure.string :as string]
+            [taoensso.timbre :as timbre])
   (import [org.jsoup Jsoup]))
 
 
@@ -39,7 +40,7 @@
       (vreset! *cur-tag (.tagName h))
       (vswap! *res #(str % (li h))))
     (vreset! *res (str @*res (apply str (repeat @*ul-count "</li></ul>"))))
-    (when @*error (println "TOC error: " page-url))
+    (when @*error (timbre/error "TOC error: " page-url))
     @*res))
 
 
@@ -55,7 +56,14 @@
 
 
 (defn add-toc [html *page-report page-url]
-  (let [h1-index (+ 5 (string/index-of html "</h1>"))
-        h1 (subs html 0 h1-index)
-        content (string/trim (subs html h1-index))]
-    (str h1 (drop-hand-written-toc content *page-report page-url))))
+  (if-let [h1-index (string/index-of html "</h1>")]
+    (let [h1-index (+ 5 h1-index)
+          h1 (subs html 0 h1-index)
+          content (string/trim (subs html h1-index))]
+      (str h1 (drop-hand-written-toc content *page-report page-url)))
+    (do
+      (timbre/error "TOC error - h1 not found: " page-url)
+      (swap! *page-report (fn [page-report]
+                            (update page-report :toc-error conj
+                                    "h1 - not found")))
+      html)))

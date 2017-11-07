@@ -6707,11 +6707,11 @@ a.sidebar-switcher i.ac.ac-remove {
   display: none;
 }
 .warning-container {
-  margin-right: 440px;
+  margin-right: 495px;
 }
 @media (max-width: 1120px) {
   .warning-container {
-    margin-right: 285px;
+    margin-right: 270px;
   }
 }
 @media (max-width: 860px) {
@@ -6721,7 +6721,7 @@ a.sidebar-switcher i.ac.ac-remove {
 }
 .warning-container .warning-version {
   position: fixed;
-  z-index: 6;
+  z-index: 100;
   top: 80px;
   width: 270px;
   line-height: 18px;
