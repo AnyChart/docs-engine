@@ -2,8 +2,15 @@
   (:require [hiccup.page :as hiccup-page]))
 
 (defn drop-base-path [url version-key]
-  (let [index (.indexOf url version-key)]
-    (subs url (+ index (count version-key) 1))))
+  (let [index (.indexOf url version-key)
+        url (if (>= index 0)
+              (subs url (+ index (count version-key)))
+              url)
+        url (if (.startsWith url "/")
+              (subs url 1)
+              url)
+        url (if (= url "") "/" url)]
+    url))
 
 
 (defn page [{:keys [broken-links error-links]}
