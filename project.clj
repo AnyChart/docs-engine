@@ -12,7 +12,7 @@
                  ;; html
                  [enlive "1.1.6"]
                  [org.apache.commons/commons-lang3 "3.5"]
-                 [com.anychart/playground-samples-parser "0.1.3"]
+                 [com.anychart/playground-samples-parser "0.1.8"]
                  [com.anychart/link-checker "0.2.4"]
                  [org.jsoup/jsoup "1.10.2"]
                  ;; web

@@ -72,10 +72,10 @@
       (info "building" branch)
       (notifications/start-version-building notifier branch queue-index)
       (let [branch-path (str data-dir "/versions/" (:name branch))
-            samples (pgs/samples branch-path)
-            data (get-struct branch-path)
             version-config (assoc-in (redirects/get-config (str branch-path "/config.toml"))
                                      [:vars :branch-name] (:name branch))
+            samples (pgs/samples branch-path (:vars version-config))
+            data (get-struct branch-path)
             tree (tree-gen/generate-tree data)
             version-id (vdata/add-version jdbc
                                           (:name branch)
