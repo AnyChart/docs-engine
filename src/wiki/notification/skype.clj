@@ -12,7 +12,7 @@
 (defn get-access-token [id key]
   (let [url "https://login.microsoftonline.com/common/oauth2/v2.0/token"
         data {"client_id"     id
-              "scope"         "https://graph.microsoft.com/.default"
+              "scope"         "https://api.botframework.com/.default"
               "grant_type"    "client_credentials"
               "client_secret" key}
         resp @(http/post url {:form-params data})
