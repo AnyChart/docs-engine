@@ -67,7 +67,8 @@
    [:script {:scr "https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"}]
    [:script {:scr "https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"}]
    "<![endif]-->"
-   [:script#anychart_script {:async "true" :src (:anychart-url data)}]])
+   ;[:script#anychart_script {:async "true" :src (:anychart-url data)}]
+   ])
 
 
 (defn header [data]
