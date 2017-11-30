@@ -1,0 +1,14 @@
+<div id="iframe{{id|safe}}" class='iframe' {{div-style|safe}} >
+    <div class='no-overflow'>
+        <iframe id="iframe-{{id|safe}}" class="iframe-tag" {{style|safe}}></iframe>
+        <script type="text/javascript">
+            {{code|safe}}
+        </script>
+    </div>
+    <fieldset class='btns'>
+        <a class='btn-playground btn jsfiddle-btn' target='_blank'><i class='ac ac-jsfiddle'></i> JsFiddle</a>
+        <a class='btn-playground btn' target='_blank' href='//{{playground|safe}}/{{version|safe}}/samples/{{sample-path|safe}}-plain'>
+            <i class='ac ac-play'></i> Playground
+        </a>
+    </fieldset>
+</div>

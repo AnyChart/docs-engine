@@ -8,7 +8,10 @@
             [wiki.components.notifier :as notifications]
             [wiki.generator.phantom.core :as phantom]
             [version-clj.core :as version-clj]
-            [wiki.util.utils :as utils]))
+            [wiki.util.utils :as utils]
+            [hiccup.core :as h]
+            [wiki.views.iframe :as iframe-view]
+            [clojure.string :as string]))
 
 (defn get-tags [text]
   (if-let [matches (re-matches #"(?s).*(\{tags\}(.*)\{tags\}[\r\n]?).*" text)]
@@ -37,6 +40,9 @@
 ;         <a class='btn-playground btn' target='_blank' href='//" playground "/" version "/samples/" sample-path "-plain'><i class='ac ac-play'></i> Playground</a>
 ;       </div></div>")))
 
+;; =====================================================================================================================
+;; Sample insertion
+;; =====================================================================================================================
 (defn get-code [id code scripts sample version-key]
   (condp = (count scripts)
     0 (str "(function(){
@@ -59,7 +65,7 @@
        (get-code id code scripts sample version-key)
        "}"))
 
-(defn build-sample-div [notifier page-url id version samples playground sample-path custom-settings page-report]
+(defn build-sample-div-old [notifier page-url id version samples playground sample-path custom-settings page-report]
   (let [width (if (:width custom-settings)
                 (if (string? (:width custom-settings))
                   (:width custom-settings)
@@ -90,9 +96,7 @@
                 (clojure.string/replace #"\$\(.body.\)" "\\$('.iframe-tag')")
                 (clojure.string/replace #"var\s+chart\s*=" "chart =")
                 (clojure.string/replace #"\"fixed\"" "\"absolute\"")
-                (clojure.string/replace #"anychart\.onDocumentReady" "setTimeout")
-                ;(clojure.string/replace  #"anychart\.onDocumentReady\(function\(\)\s*\{" "setTimeout(function(){if (anychart.hasOwnProperty('theme')) {anychart.theme('defaultTheme');}\n ")
-                )]
+                (clojure.string/replace #"anychart\.onDocumentReady" "setTimeout"))]
         (render-file "templates/sample.selmer" (assoc sample
                                                  :div-style div-style
                                                  :style style
@@ -107,6 +111,66 @@
         (swap! page-report (fn [page-report] (update page-report :sample-not-available conj page-url)))
         (info "Sample isn't available:  " page-url url id full-id)
         (format "<div class=\"alert alert-warning\"><strong>Sample not available!</strong><p>%s</p></div>" url)))))
+
+;; =====================================================================================================================
+;; Sample insertion EMBEDED IFRAME
+;; =====================================================================================================================
+
+(defn doc-code [id sample]
+  (let [html (str "<!DOCTYPE html>" (h/html (iframe-view/iframe (assoc sample
+                                                                  :markup "<div id='container'/>"
+                                                                  :style "html, body, #container {width:100%;height:100%;margin:0;padding:0;}"))))
+        ;html (string/replace html #"/" "\\\\/")
+        ;html (string/replace html #"\"" "\\\\\"")
+        ;html (string/replace html #"\\n" "\\\\\\\\n")
+        ;html (string/replace html #"\n" "\\\\n")
+        html (StringEscapeUtils/escapeEcmaScript html)]
+    (str "(function(){\n"
+         "var doc = document.getElementById('iframe-" id "').contentWindow.document;\n"
+         "doc.open();\n"
+         "doc.write(\"" html "\");\n"
+         "doc.close();\n})();")))
+
+
+(defn build-sample-div [notifier page-url id version samples playground sample-path custom-settings page-report]
+  (let [width (if (:width custom-settings)
+                (if (string? (:width custom-settings))
+                  (:width custom-settings)
+                  (str (:width custom-settings) "px"))
+                "100%")
+        height (if (:height custom-settings)
+                 (if (string? (:height custom-settings))
+                   (:height custom-settings)
+                   (str (:height custom-settings) "px"))
+                 "400px")
+        div-style (str "style='width:" width ";'")
+        style (str "style='display:block;position:relative;margin:0px;height:" height ";'")
+        url (str "/samples/" (StringEscapeUtils/unescapeHtml4 sample-path))
+        ;sample (pg-data/sample-by-url pg-jdbc (:id pg-version) url)
+        sample (first (filter #(= url (:url %)) samples))
+        full-id (str "container" id)]
+    (if (some? sample)
+      (let [code (doc-code id sample)]
+        (render-file "templates/doc_sample.selmer" (assoc sample
+                                                     :div-style div-style
+                                                     :style style
+                                                     :id id
+                                                     :code code
+                                                     :playground playground
+                                                     :version version
+                                                     :sample-path sample-path
+                                                     :engine-version version)))
+      (do
+        (notifications/sample-not-available notifier version page-url)
+        (swap! page-report (fn [page-report] (update page-report :sample-not-available conj page-url)))
+        (info "Sample isn't available:  " page-url url id full-id)
+        (format "<div class=\"alert alert-warning\"><strong>Sample not available!</strong><p>%s</p></div>" url)))))
+
+
+;; =====================================================================================================================
+;; Sample insertion EMBEDED IFRAME END
+;; =====================================================================================================================
+
 
 (defn generate-img [generator-config sample-path page-url samples version]
   (let [url (str "/samples/" (StringEscapeUtils/unescapeHtml4 sample-path))
