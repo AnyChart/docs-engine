@@ -116,13 +116,7 @@
 ;; =====================================================================================================================
 
 (defn doc-code [id sample]
-  (let [html (str "<!DOCTYPE html>" (h/html (iframe-view/iframe (assoc sample
-                                                                  :markup "<div id='container'/>"
-                                                                  :style "html, body, #container {width:100%;height:100%;margin:0;padding:0;}"))))
-        ;html (string/replace html #"/" "\\\\/")
-        ;html (string/replace html #"\"" "\\\\\"")
-        ;html (string/replace html #"\\n" "\\\\\\\\n")
-        ;html (string/replace html #"\n" "\\\\n")
+  (let [html (str "<!DOCTYPE html>" (h/html (iframe-view/iframe sample)))
         html (StringEscapeUtils/escapeEcmaScript html)]
     (str "(function(){\n"
          "var doc = document.getElementById('iframe-" id "').contentWindow.document;\n"
@@ -144,7 +138,7 @@
                  "400px")
         div-style (str "style='width:" width ";'")
         style (str "style='display:block;position:relative;margin:0px;height:" height ";'")
-        url (str "/samples/" (StringEscapeUtils/unescapeHtml4 sample-path))
+        url (str "samples/" (StringEscapeUtils/unescapeHtml4 sample-path))
         ;sample (pg-data/sample-by-url pg-jdbc (:id pg-version) url)
         sample (first (filter #(= url (:url %)) samples))
         full-id (str "container" id)]
@@ -207,8 +201,10 @@
                                                        version samples
                                                        (:playground generator-config)
                                                        sample-path custom-settings page-report)))
-           (catch Exception _
+           (catch Exception e
              (do
+               (prn "SAMPLE PARSING ERROR ========================================================================================================")
+               (prn e)
                (notifications/sample-parsing-error notifier version page-url)
                (swap! page-report (fn [page-report] (update page-report :sample-parsing-error conj page-url)))
                (format "<div class=\"alert alert-danger\"><strong>Sample parsing error!</strong><p>%s</p></div>"

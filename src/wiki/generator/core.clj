@@ -9,7 +9,7 @@
             [wiki.data.versions :as vdata]
             [wiki.data.playground :as pg-data]
             [wiki.generator.api-versions :as api-versions]
-            [playground-samples-parser.fs :as pgs]
+            [playground-samples-parser.new.group-parser :as pgs]
             [wiki.components.offline-generator :refer [generate-zip]]
             [me.raynes.fs :as fs]
             [com.climate.claypoole :as cp]
