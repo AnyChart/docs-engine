@@ -130,7 +130,7 @@
                 :add-fn           (get-add-fn version-key domain)
                 :iteration-fn     (fn [iteration urls-count urls-for-check-total-count total-count]
                                     (println "Iteration: " iteration urls-count urls-for-check-total-count total-count))
-                :max-loop-count   40
+                :max-loop-count   45
                 :default-protocol "http"
                 :end-fn           (fn [res]
                                     (let [total-report {:error-links  report
