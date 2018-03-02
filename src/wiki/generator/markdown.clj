@@ -13,6 +13,7 @@
             [wiki.views.iframe :as iframe-view]
             [clojure.string :as string]))
 
+
 (defn get-tags [text]
   (if-let [matches (re-matches #"(?s).*(\{tags\}(.*)\{tags\}[\r\n]?).*" text)]
     (let [source (second matches)
@@ -59,10 +60,12 @@
       " (get-code id code (drop 1 scripts) sample version-key) "
       }});")))
 
+
 (defn get-wrapped-code [id code scripts sample version-key]
   (str "sampleInit" id " = function(){"
        (get-code id code scripts sample version-key)
        "}"))
+
 
 (defn build-sample-div-old [notifier page-url id version samples playground sample-path custom-settings page-report]
   (let [width (if (:width custom-settings)
@@ -177,6 +180,7 @@
          (catch Exception e
            (prn "ERROR img gen: " e)))))
 
+
 (defn- sample-transformer [id-counter notifier page-url version samples generator-config generate-images page-report]
   (fn [text state]
     [(if (or (:code state) (:codeblock state))
@@ -212,13 +216,15 @@
          text))
      state]))
 
+
 (defn- add-api-links [text version reference api-versions api-default-version]
   (let [real-version (if (some #{version} api-versions)
                        version api-default-version)]
     (clojure.string/replace text
                             #"\{api:([^}]+)\}([^{]+)\{api\}"
                             (fn [[_ link title]]
-                              (str "<a class='method' href='//" reference "/" real-version "/" link "'>" title "</a>")))))
+                              (str "<a class='method' target='_blank' href='//" reference "/" real-version "/" link "'>" title "</a>")))))
+
 
 (defn- add-pg-links [text version playground]
   (let [real-version (if (utils/released-version? version)
@@ -230,7 +236,8 @@
                                     link-parts (clojure.string/split link #"/")
                                     project (first link-parts)
                                     link-url (clojure.string/join "/" (drop 1 link-parts))]
-                                (str "<a href='//" playground "/" project "/" real-version "/" link-url "'>" title "</a>"))))))
+                                (str "<a target='_blank' href='//" playground "/" project "/" real-version "/" link-url "'>" title "</a>"))))))
+
 
 (defn- add-tags [html tags]
   (let [tags-html (str "<div class='tags'>" (apply str (map #(str "<span>" % "</span>") tags)) "</div>")
@@ -238,9 +245,11 @@
         index (+ (.indexOf html h1) (count h1))]
     (str (subs html 0 index) tags-html (subs html index))))
 
+
 (defn branch-name-transformer [version]
   (fn [text state]
     [(clojure.string/replace text #"\{branch_name\}" version) state]))
+
 
 (defn- image-format-error [notifier version page-url text page-report]
   (info "image error:" page-url text)
@@ -248,6 +257,7 @@
   (swap! page-report (fn [page-report] (update page-report :image-format-error conj page-url)))
   (format "<div class=\"alert alert-danger\"><strong>Image format error!</strong><p>%s</p></div>"
           (clojure.string/trim text)))
+
 
 (defn- image-checker [notifier page-url version page-report]
   (fn [text state]
@@ -261,6 +271,7 @@
            text)
          (catch Exception _ (image-format-error notifier version page-url "exception caught" page-report))))
      state]))
+
 
 (defn to-html [notifier page-url source version samples api-versions
                {:keys [playground playground-base reference reference-default-version] :as generator-config}
