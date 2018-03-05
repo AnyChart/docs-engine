@@ -6,13 +6,16 @@
             [clj-time.core :as t]
             [selmer.util :as selmer-utils]))
 
+
 (def samples-script (slurp (io/resource "templates/samples-update.selmer")))
 (def ga-script (slurp (io/resource "templates/google-analytics.selmer")))
 
 ;(def ga (selmer-utils/resource-path "templates/samples-update.selmer"))
 
+
 (defn escape-url [str]
   (s/escape str {\% "%25"}))
+
 
 (defn tree-view [el version is-url-version]
   (let [url (if is-url-version
@@ -28,6 +31,17 @@
 (defn tree [data]
   (let [entries (:tree data)]
     (reduce str (map #(tree-view % (:version data) (:is-url-version data)) entries))))
+
+
+(defn version-that-has-this-page-url [versions page-url]
+  (first (filter #(.endsWith (:url %) page-url) versions)))
+
+
+(defn canonical-page-url [versions page-url]
+  (let [last-page-url-version (version-that-has-this-page-url versions page-url)]
+    (if (= (:key last-page-url-version) (:key (first versions)))
+      (str "https://docs.anychart.com" (when page-url (str "/" page-url)))
+      (str "https://docs.anychart.com/" (:key last-page-url-version) (when page-url (str "/" page-url))))))
 
 
 (defn head [data]
@@ -46,8 +60,7 @@
    (when (seq (-> data :page :tags))
      [:meta {:name "keywords" :content (s/join ", " (-> data :page :tags))}])
    [:meta {:content "c5fb5d43a81ea360" :name "yandex-verification"}]
-   [:link {:rel "canonical" :href (str "https://docs.anychart.com"
-                                       (when (:url data) (str "/" (:url data))))}]
+   [:link {:rel "canonical" :href (canonical-page-url (:versions data) (:url data))}]
    [:link {:type "image/x-icon" :href "/i/anychart.ico" :rel "icon"}]
    "<!--[if IE]>"
    [:link {:rel "stylesheet" :type "text/css" :href (str "/main.css?v=" (:commit data))}]
