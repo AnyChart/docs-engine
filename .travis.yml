@@ -11,7 +11,8 @@ cache:
 services:
 - redis-server
 before_install:
-  - openssl aes-256-cbc -K $encrypted_831d2a0628ae_key -iv $encrypted_831d2a0628ae_iv -in id_rsa.enc -out id_rsa -d
+- openssl aes-256-cbc -K $encrypted_b78600e252ed_key -iv $encrypted_b78600e252ed_iv -in .travis/id_rsa.enc -out id_rsa -d
+- mv id_rsa .travis/id_rsa
 after_success:
 - if [ "$TRAVIS_BRANCH" == "master" ]; then export APP="docs-prod"; fi
 - if [ "$TRAVIS_BRANCH" == "staging" ]; then export APP="docs-stg"; fi
