@@ -7,11 +7,12 @@ branches:
   - staging
 cache:
   directories:
-  - $HOME/.m2
+  - "$HOME/.m2"
 services:
 - redis-server
 before_install:
-- openssl aes-256-cbc -K $encrypted_b78600e252ed_key -iv $encrypted_b78600e252ed_iv -in .travis/id_rsa.enc -out id_rsa -d
+- openssl aes-256-cbc -K $encrypted_b78600e252ed_key -iv $encrypted_b78600e252ed_iv
+  -in .travis/id_rsa.enc -out id_rsa -d
 - mv id_rsa .travis/id_rsa
 after_success:
 - if [ "$TRAVIS_BRANCH" == "master" ]; then export APP="docs-prod"; fi
@@ -27,4 +28,5 @@ after_success:
 - ssh root@104.236.66.244 "supervisorctl restart $APP"
 - ssh root@104.131.17.78 "supervisorctl restart $APP"
 notifications:
-  slack: anychart-team:sJRPhNn8Ur8yVdhvhgp6EbDM
+  slack:
+    secure: GlKpceHLcrwqZ/k3hhYyAkZEE/g6Hrv/I7XwEebXt3sCExalhHP8kDDtQdEJuDlo7juz7c8yN14PCb7QBOJoYs64YR1JhYz4BNGpp4BTdEs3W22rzGJEpmrJNIL2M4YeC5st0F8tmDTcgfL/lt2yiIjyZEXrxmkg0r1HW3OP8F8=
