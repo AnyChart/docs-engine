@@ -19,9 +19,9 @@
   (let [priority (get-priority idx)
         entries (pages-urls jdbc (:id version))]
     (map (fn [entry]
-           {:tag :url
+           {:tag     :url
             :content [{:tag :loc :content
-                       [(str "https://docs.anychart.com/" (when show-version (str (:key version) "/")) (:url entry))]}
+                            [(str "https://docs.anychart.com/" (when show-version (str (:key version) "/")) (:url entry))]}
                       {:tag :priority :content [(format "%.1f" priority)]}
                       {:tag :changefreq :content ["monthly"]}
                       {:tag :lastmod :content [(f/unparse formatter
@@ -30,12 +30,12 @@
 
 (defn generate-sitemap [jdbc]
   (with-out-str
-    (emit {:tag :urlset :attrs {:xmlns "http://www.sitemaps.org/schemas/sitemap/0.9"}
+    (emit {:tag     :urlset :attrs {:xmlns "http://www.sitemaps.org/schemas/sitemap/0.9"}
            :content (generate-version-sitemap jdbc 0 (first (vdata/versions-full-info jdbc)))})))
 
 (defn generate-sitemap-version [jdbc version-name]
   (let [versions (vdata/versions-full-info jdbc)
         version (first (filter #(= version-name (:key %)) versions))]
     (with-out-str
-     (emit {:tag     :urlset :attrs {:xmlns "http://www.sitemaps.org/schemas/sitemap/0.9"}
-            :content (generate-version-sitemap jdbc 0 version true)}))))
+      (emit {:tag     :urlset :attrs {:xmlns "http://www.sitemaps.org/schemas/sitemap/0.9"}
+             :content (generate-version-sitemap jdbc 0 version true)}))))

@@ -73,7 +73,7 @@
 
 (def stg-config nil)
 
-(def prod-config )
+(def prod-config)
 
 
 (defn update-config [conf]

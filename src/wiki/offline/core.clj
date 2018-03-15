@@ -210,26 +210,26 @@
       4 "../../../")))
 
 (defn replace-ajax [code main-path path links]
-  (clojure.string/replace code  #"\$\.ajax\(\{url: '([-a-zA-Z0-9\/\._:\(\)]+)'"
+  (clojure.string/replace code #"\$\.ajax\(\{url: '([-a-zA-Z0-9\/\._:\(\)]+)'"
                           #(let [url (get-url (% 1))
-                                name (get-file-name url)
-                                absolute-name (str main-path "/deps/" name)]
-                            (start-load-link-if-need url absolute-name links)
-                            (str "$.ajax({url: '" path "deps/" name "'"))))
+                                 name (get-file-name url)
+                                 absolute-name (str main-path "/deps/" name)]
+                             (start-load-link-if-need url absolute-name links)
+                             (str "$.ajax({url: '" path "deps/" name "'"))))
 
 (defn save-page [page tree version versions main-path links]
   (let [path (get-relative-prefix-path (:url page))
         file-name (str main-path "/" (:url page) ".html")
-        html (render-file "templates/local-page.selmer" {:version  (:key version)
+        html (render-file "templates/local-page.selmer" {:version      (:key version)
                                                          ;:actual-version (first versions)
                                                          ;:old            (not= (first versions) (:key version))
                                                          :anychart-url (utils/anychart-bundle-path (:key version))
-                                                         :tree     tree
-                                                         :url      (:url page)
-                                                         :title    (:full_name page)
-                                                         :page     page
-                                                         :versions versions
-                                                         :path     path})
+                                                         :tree         tree
+                                                         :url          (:url page)
+                                                         :title        (:full_name page)
+                                                         :page         page
+                                                         :versions     versions
+                                                         :path         path})
         processed-html (-> html
                            (replace-ajax main-path path links)
                            html2node

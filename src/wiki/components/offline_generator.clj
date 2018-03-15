@@ -56,5 +56,5 @@
         jdbc (:jdbc offline-generator)
         new-state (generate-if-need state config jdbc version)
         is-start-generate (get new-state (is-start-key version))]
-    (info "Is start generate for " version  ": " is-start-generate)
+    (info "Is start generate for " version ": " is-start-generate)
     is-start-generate))

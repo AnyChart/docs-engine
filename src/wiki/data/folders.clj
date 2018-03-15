@@ -11,8 +11,8 @@
 ;; );
 
 (defn add-folder [jdbc version-id url default-page]
-  (insert! jdbc :folders {:version_id version-id
-                          :url url
+  (insert! jdbc :folders {:version_id   version-id
+                          :url          url
                           :default_page default-page}))
 
 (defn delete-version-folders [jdbc version-id]

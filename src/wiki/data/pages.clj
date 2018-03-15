@@ -20,13 +20,13 @@
 (defn page-by-url [jdbc version-id page-url]
   (if version-id
     (when-let [page (one jdbc (-> (select :*)
-                             (from :pages)
-                             (where [:= :version_id version-id]
-                                    [:= :url page-url])))]
+                                  (from :pages)
+                                  (where [:= :version_id version-id]
+                                         [:= :url page-url])))]
       (-> page
           (clojure.core/update :tags #(when % (vec (.getArray %))))
           (clojure.core/update :config #(when % (pg->clj %)))))))
-    
+
 (defn pages-urls [jdbc version-id]
   (query jdbc (-> (select :url :last_modified)
                   (from :pages)

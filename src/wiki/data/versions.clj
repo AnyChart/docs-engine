@@ -26,8 +26,8 @@
 
 (defn add-report [jdbc version-id report]
   (exec jdbc (-> (honey/update :versions)
-                  (sset {:report (clj->jsonb report)})
-                  (where [:= :id version-id]))))
+                 (sset {:report (clj->jsonb report)})
+                 (where [:= :id version-id]))))
 
 (defn version-by-key [jdbc key]
   (one jdbc (-> (select :key :id)
@@ -43,8 +43,8 @@
 
 (defn version-report [jdbc version-key]
   (let [res (one jdbc (-> (select :report)
-                      (from :versions)
-                      (where [:= :key version-key])))]
+                          (from :versions)
+                          (where [:= :key version-key])))]
     (when (:report res)
       (pg->clj (:report res)))))
 
@@ -136,7 +136,7 @@
                            sorted-versions)]
      url-versions))
   ([jdbc url]
-    (get-page-versions jdbc url url)))
+   (get-page-versions jdbc url url)))
 
 (defn current-version [version-key versions]
   (first (filter #(= version-key (:key %)) versions)))

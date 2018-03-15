@@ -23,9 +23,9 @@
 
 (defn- create-web-app [component]
   (wrap-json-response
-   (wrap-json-body
-    (component-middleware component #'app)
-    {:keywords? true})))
+    (wrap-json-body
+      (component-middleware component #'app)
+      {:keywords? true})))
 
 (defrecord Web [config web-server jdbc redis shpinx]
   component/Lifecycle
@@ -34,8 +34,8 @@
     (let [comp (assoc this :redirects (atom (version-data/get-redirects jdbc)))]
       (assoc comp :web-server (server/run-server (create-web-app comp) config)
                   :engine (redisc/create-worker redis
-                                               (-> this :config :redirects-queue)
-                                               (message-processor comp)))))
+                                                (-> this :config :redirects-queue)
+                                                (message-processor comp)))))
 
   (stop [this]
     (if web-server
