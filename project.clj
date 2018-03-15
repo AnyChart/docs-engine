@@ -20,6 +20,8 @@
                  [compojure "1.5.2"]
                  [ring/ring-json "0.4.0"]
                  [ring/ring-core "1.5.1"]
+                 [toml "0.1.2"]
+                 [com.rpl/specter "1.1.0"]
                  ;; logging
                  [com.taoensso/timbre "4.8.0"]
                  ;; databases

@@ -2,6 +2,13 @@
 
 # AnyChart Docs Engine
 
+[AnyChart Documentation](https://docs.anychart.com/) is a service with all the reference information that users might
+ need while working with AnyChart products. The application consists of two parts: the web part and the generator.
+The Web part is just a site responsible for displaying the content, and the generator is a parser whose main task is
+to parse the [corresponding repository](https://github.com/AnyChart/docs.anychart.com). Each article there is written
+using Markdown format. The application backend is written on Clojure and the frontend on Javascript with jQuery.
+
+
 
 [![Build Status](https://travis-ci.com/AnyChart/docs-engine.svg?token=ERMLfyrvWdA8g6gi11Vp&branch=master)](https://travis-ci.com/AnyChart/docs-engine)
 [Production](http://docs.anychart.com)
@@ -18,7 +25,7 @@ sudo apt-get install phantomjs
 sudo apt-get install redis-server
 
 sudo apt-get install sphinxsearch
-# make path /var/data/sphinx/
+sudo mkdir -p /var/data/sphinx/
 
 sudo npm install grunt-cli -g
 ```
