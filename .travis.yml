@@ -23,8 +23,8 @@ after_success:
 - chmod 400 ~/.ssh/id_rsa
 - chmod 400 ~/.ssh/id_rsa.pub
 - ssh-add ~/.ssh/id_rsa
-- scp -i ~/.ssh/id_rsa target/uberjar/wiki-2.0-standalone.jar root@104.236.66.244:/apps/$APP/docs-2.0-standalone.jar
-- scp -i ~/.ssh/id_rsa target/uberjar/wiki-2.0-standalone.jar root@104.131.17.78:/apps/$APP/docs-2.0-standalone.jar
+- scp target/uberjar/wiki-2.0-standalone.jar root@104.236.66.244:/apps/$APP/docs-2.0-standalone.jar
+- scp target/uberjar/wiki-2.0-standalone.jar root@104.131.17.78:/apps/$APP/docs-2.0-standalone.jar
 - ssh root@104.236.66.244 "supervisorctl restart $APP"
 - ssh root@104.131.17.78 "supervisorctl restart $APP"
 notifications:
