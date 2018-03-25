@@ -228,7 +228,7 @@
 
 (defn- add-pg-links [text version playground]
   (let [real-version (if (utils/released-version? version)
-                       version "latest")]
+                       version "develop")]
     (clojure.string/replace text
                             #"\{pg:([^}]+)\}([^{]+)\{pg\}"
                             (fn [[_ link title]]
