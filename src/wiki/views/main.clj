@@ -228,12 +228,13 @@
      [:div.right-bar-side
       [:div#table-of-content-large]
       [:div.right-buttons
-       [:a {:href     (str "/" (:version data) "/download")
-            :rel      "nofollow"
-            :title    "Get offline version"
-            :download true}
-        [:div.icon.get-offline]
-        [:span "Get offline version"]]
+
+       ;[:a {:href     (str "/" (:version data) "/download")
+       ;     :rel      "nofollow"
+       ;     :title    "Get offline version"
+       ;     :download true}
+       ; [:div.icon.get-offline]
+       ; [:span "Get offline version"]]
 
        [:a {:href   "https://github.com/anychart/anychart/issues"
             :rel    "nofollow"
