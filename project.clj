@@ -11,7 +11,7 @@
                  [hiccup "1.0.5"]
                  ;; html
                  [enlive "1.1.6"]
-                 [org.apache.commons/commons-lang3 "3.5"]
+                 [org.apache.commons/commons-lang3 "3.7"]
                  [com.anychart/playground-samples-parser "0.2.5"]
                  [com.anychart/link-checker "0.2.7"]
                  [org.jsoup/jsoup "1.11.2"]
@@ -24,12 +24,12 @@
                  ;; logging
                  [com.taoensso/timbre "4.10.0"]
                  ;; databases
-                 [com.taoensso/carmine "2.15.1"]
+                 [com.taoensso/carmine "2.18.0"]
                  ;; there are some problems with new jdbc using sphinx
-                 [org.clojure/java.jdbc "0.3.6"]
+                 [org.clojure/java.jdbc "0.7.5"]
                  [mysql/mysql-connector-java "5.1.36"]
                  [postgresql/postgresql "9.3-1102.jdbc41"]
-                 [clojure.jdbc/clojure.jdbc-c3p0 "0.3.2"]
+                 [clojure.jdbc/clojure.jdbc-c3p0 "0.3.3"]
                  [honeysql "0.9.2"]
                  ;; markdown
                  [markdown-clj "1.0.2"]
