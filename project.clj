@@ -1,29 +1,28 @@
 (defproject wiki "2.0"
-  :dependencies [[org.clojure/clojure "1.8.0"]
+  :dependencies [[org.clojure/clojure "1.9.0"]
                  [version-clj "0.1.2"]
                  ;; general
                  [com.stuartsierra/component "0.3.2"]
-                 [clj-time "0.13.0"]
+                 [clj-time "0.14.2"]
                  [com.climate/claypoole "1.1.4"]
-                 [toml "0.1.2"]
+                 [toml "0.1.3"]
                  ;; templates
-                 [selmer "1.10.6"]
+                 [selmer "1.11.7"]
                  [hiccup "1.0.5"]
                  ;; html
                  [enlive "1.1.6"]
                  [org.apache.commons/commons-lang3 "3.5"]
-                 [com.anychart/playground-samples-parser "0.2.1"]
-                 [com.anychart/link-checker "0.2.6"]
-                 [org.jsoup/jsoup "1.10.2"]
+                 [com.anychart/playground-samples-parser "0.2.5"]
+                 [com.anychart/link-checker "0.2.7"]
+                 [org.jsoup/jsoup "1.11.2"]
                  ;; web
                  [http-kit "2.2.0"]
-                 [compojure "1.5.2"]
+                 [compojure "1.6.0"]
                  [ring/ring-json "0.4.0"]
-                 [ring/ring-core "1.5.1"]
-                 [toml "0.1.2"]
+                 [ring/ring-core "1.6.3"]
                  [com.rpl/specter "1.1.0"]
                  ;; logging
-                 [com.taoensso/timbre "4.8.0"]
+                 [com.taoensso/timbre "4.10.0"]
                  ;; databases
                  [com.taoensso/carmine "2.15.1"]
                  ;; there are some problems with new jdbc using sphinx
@@ -31,9 +30,9 @@
                  [mysql/mysql-connector-java "5.1.36"]
                  [postgresql/postgresql "9.3-1102.jdbc41"]
                  [clojure.jdbc/clojure.jdbc-c3p0 "0.3.2"]
-                 [honeysql "0.8.2"]
+                 [honeysql "0.9.2"]
                  ;; markdown
-                 [markdown-clj "0.9.99"]
+                 [markdown-clj "1.0.2"]
                  ;; filesystem
                  [me.raynes/fs "1.4.6"]
                  [cpath-clj "0.1.2"]
@@ -45,8 +44,8 @@
                  [com.googlecode.htmlcompressor/htmlcompressor "1.5.2"]]
   :plugins [[lein-ancient "0.6.10"]
             [lein-kibit "0.1.3"]]
-  :main wiki.core
+  :main ^:aot wiki.core
   :target-path "target/%s"
   :aot :all
-  :profiles {:dev {:jvm-opts ["-Ddev=true"]}
+  :profiles {:dev     {:jvm-opts ["-Ddev=true"]}
              :uberjar {:jvm-opts []}})

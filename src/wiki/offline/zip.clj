@@ -1,6 +1,6 @@
 (ns wiki.offline.zip
-  (import [java.util.zip ZipEntry ZipOutputStream])
-  (:require [clojure.java.io :as io]))
+  (:require [clojure.java.io :as io])
+  (:import (java.util.zip ZipOutputStream ZipEntry)))
 
 (defn get-entry-name [folder-path file-path prefix]
   (str prefix (subs file-path (count folder-path))))

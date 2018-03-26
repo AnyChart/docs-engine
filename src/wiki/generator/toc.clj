@@ -1,7 +1,7 @@
 (ns wiki.generator.toc
   (:require [clojure.string :as string]
             [taoensso.timbre :as timbre])
-  (import [org.jsoup Jsoup]))
+  (:import (org.jsoup Jsoup)))
 
 
 (defn li [h]

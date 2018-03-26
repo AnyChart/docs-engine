@@ -12,7 +12,7 @@
             [com.stuartsierra.component :as component]
             [taoensso.timbre :as timbre]
             [toml.core :as toml])
-  (:gen-class :main :true))
+  (:gen-class))
 
 
 (defn git-commit []

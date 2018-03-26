@@ -1,6 +1,6 @@
 (ns wiki.util.utils
   (:require [clojure.string :as string])
-  (import [org.jsoup Jsoup]))
+  (:import (org.jsoup Jsoup)))
 
 (defn deep-merge [a b]
   (merge-with (fn [x y]
