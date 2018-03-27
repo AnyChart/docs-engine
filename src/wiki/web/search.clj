@@ -1,27 +1,29 @@
 (ns wiki.web.search
   (:require [wiki.data.search :as search]
             [wiki.web.helpers :refer :all]
-            [hiccup.core :as hiccup]))
+            [wiki.util.utils :as utils]
+            [hiccup.core :as hiccup]
+            [clojure.string :as string]))
 
 
 (defn- format-search-result [result query version]
-  (let [words (clojure.string/split query #" ")
+  (let [words (string/split query #" ")
         url (:url result)
         title (reduce (fn [res q]
-                        (clojure.string/replace res
-                                                (re-pattern (str "(?i)" (clojure.string/re-quote-replacement q)))
-                                                #(str "{b}" % "{eb}")))
+                        (string/replace res
+                                        (re-pattern (str "(?i)" (string/re-quote-replacement q)))
+                                        #(str "{b}" % "{eb}")))
                       (:url result) words)
         title (-> title
-                  (clojure.string/replace #"_" " ")
-                  (clojure.string/split #"/"))
+                  (string/replace #"_" " ")
+                  (string/split #"/"))
         title (map #(-> %
-                        (clojure.string/replace #"\{b\}" "<span class='match'>")
-                        (clojure.string/replace #"\{eb\}" "</span>"))
+                        (string/replace #"\{b\}" "<span class='match'>")
+                        (string/replace #"\{eb\}" "</span>"))
                    title)]
     (assoc result
-      :title (str (clojure.string/join " / " (drop-last 1 title))
-                  " / <a href='./" url "'>" (first (take-last 1 title)) "</a>"))))
+      :title (str (string/join " / " (drop-last 1 title))
+                  " / <a href='./" (utils/escape-url url) "'>" (last title) "</a>"))))
 
 
 (defn search-results [request version]

@@ -1,6 +1,12 @@
 (ns wiki.util.utils
-  (:require [clojure.string :as string])
+  (:require [clojure.string :as string]
+            [clojure.string :as s])
   (:import (org.jsoup Jsoup)))
+
+
+(defn escape-url [str]
+  (s/escape str {\% "%25"}))
+
 
 (defn deep-merge [a b]
   (merge-with (fn [x y]
@@ -9,8 +15,10 @@
                       :else y))
               a b))
 
+
 (defn format-exception [e]
   (str e "\n\n" (apply str (interpose "\n" (.getStackTrace e)))))
+
 
 (defn name->url [name]
   (-> name
@@ -23,18 +31,22 @@
       (clojure.string/replace #"_" "-")
       string/lower-case))
 
+
 (defn released-version? [version-key]
   (re-matches #"^\d+\.\d+\.\d+$" version-key))
+
 
 (defn anychart-bundle-path [version-key]
   (if (released-version? version-key)
     (str "https://cdn.anychart.com/js/" version-key "/anychart-bundle.min.js")
     (str "http://static.anychart.com/js/" version-key "/anychart-bundle.min.js")))
 
+
 (defn anychart-bundle-css-url [version-key]
   (if (released-version? version-key)
     (str "https://cdn.anychart.com/css/" version-key "/anychart-ui.min.css")
     (str "http://static.anychart.com/css/" version-key "/anychart-ui.min.css")))
+
 
 (defn url->title [url]
   (let [parts (-> url
@@ -43,10 +55,12 @@
                   reverse)]
     (string/join " | " parts)))
 
+
 (defn drop-last-slash [s]
   (if (.endsWith s "/")
     (subs s 0 (dec (count s)))
     s))
+
 
 (defn page-description [html]
   (when html
@@ -63,6 +77,7 @@
                                        (str res " " part)
                                        res))) "" words)]
               (string/trim result))))))))
+
 
 ;; select * from pages where version_id in (select id from versions where key = '7.13.0') AND content NOT LIKE '%sampleInit1%';
 ;; for og:image tag

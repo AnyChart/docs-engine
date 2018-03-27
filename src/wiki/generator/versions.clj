@@ -8,16 +8,19 @@
             [me.raynes.fs :as fs]
             [taoensso.timbre :as timbre :refer [info error]]))
 
+
 (defn actual-branches [show-branches git-ssh repo-path]
   (if show-branches
     (git/actual-branches-with-hashes git-ssh repo-path)
     (git/version-branches-with-hashes git-ssh repo-path)))
+
 
 (defn- remove-branch [jdbc branch-key]
   (let [version-id (:id (vdata/version-by-key jdbc branch-key))]
     (pdata/delete-version-pages jdbc version-id)
     (fdata/delete-version-folders jdbc version-id)
     (vdata/delete-by-id jdbc version-id)))
+
 
 (defn remove-branches [jdbc actual-branches data-dir]
   (info "actual branches" (vec actual-branches))
@@ -31,8 +34,10 @@
         (remove-branch jdbc branch-key)))
     removed-branches))
 
+
 (defn filter-for-rebuild [jdbc branches]
   (filter #(vdata/need-rebuild? jdbc (:name %) (:commit %)) branches))
+
 
 (defn remove-previous-versions [jdbc actual-id key]
   (let [ids (vdata/version-ids jdbc key)

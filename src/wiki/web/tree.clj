@@ -1,13 +1,12 @@
 (ns wiki.web.tree
-  (:require [clojure.string :refer [escape]]))
+  (:require [clojure.string :refer [escape]]
+            [wiki.util.utils :as utils]))
 
-(defn escape-url [str]
-  (escape str {\% "%25"}))
 
 (defn tree-view [el version is-url-version]
   (let [url (if is-url-version
-              (str "/" version (escape-url (:url el)))
-              (escape-url (:url el)))]
+              (str "/" version (utils/escape-url (:url el)))
+              (utils/escape-url (:url el)))]
     (if (contains? el :children)
       (str "<li>"
            "<a href='" url "'><i class='ac ac-folder-open'></i> " (:title el) "</a>"

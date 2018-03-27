@@ -4,7 +4,7 @@
             [hiccup.page]
             [clojure.string :as s]
             [clj-time.core :as t]
-            [selmer.util :as selmer-utils]))
+            [wiki.util.utils :as utils]))
 
 
 (def samples-script (slurp (io/resource "templates/samples-update.selmer")))
@@ -13,20 +13,17 @@
 ;(def ga (selmer-utils/resource-path "templates/samples-update.selmer"))
 
 
-(defn escape-url [str]
-  (s/escape str {\% "%25"}))
-
-
 (defn tree-view [el version is-url-version]
   (let [url (if is-url-version
-              (str "/" version (escape-url (:url el)))
-              (escape-url (:url el)))]
+              (str "/" version (utils/escape-url (:url el)))
+              (utils/escape-url (:url el)))]
     (if (contains? el :children)
       (str "<li>"
            "<a href='" url "'><i class='folder-open'>+ </i>" (:title el) "</a>"
            "<ul>" (reduce str (map #(tree-view % version is-url-version) (:children el))) "</ul>"
            "</li>")
       (str "<li><a href='" url "'>" (:title el) "</a></li>"))))
+
 
 (defn tree [data]
   (let [entries (:tree data)]
