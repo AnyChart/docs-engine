@@ -28,7 +28,7 @@
 (def commit (parse-data-compile-time))
 
 
-(defn dev-system [config]
+(defn all-system [config]
   (component/system-map
     :notifier (notifier/new-notifier (:notifications config))
     :jdbc (jdbc/new-jdbc (:jdbc config))
@@ -67,13 +67,13 @@
                                 [:jdbc :redis :notifier :offline-generator])))
 
 
-(def all-config nil)
+;(def all-config nil)
 
 (def config nil)
 
-(def stg-config nil)
+;(def stg-config nil)
 
-(def prod-config)
+;(def prod-config)
 
 
 (defn update-config [conf]
@@ -83,10 +83,12 @@
 
 
 (defn set-configs [config-path]
-  (alter-var-root #'all-config (constantly (toml/read (slurp config-path) :keywordize)))
-  (alter-var-root #'config (constantly (-> all-config :base update-config)))
-  (alter-var-root #'stg-config (constantly (update-config (utils/deep-merge config (:stg all-config)))))
-  (alter-var-root #'prod-config (constantly (update-config (utils/deep-merge config (:prod all-config))))))
+  (alter-var-root #'config (constantly (update-config (toml/read (slurp config-path) :keywordize))))
+  ;(alter-var-root #'all-config (constantly (toml/read (slurp config-path) :keywordize)))
+  ;(alter-var-root #'config (constantly (-> all-config :base update-config)))
+  ;(alter-var-root #'stg-config (constantly (update-config (utils/deep-merge config (:stg all-config)))))
+  ;(alter-var-root #'prod-config (constantly (update-config (utils/deep-merge config (:prod all-config)))))
+  )
 
 
 (defn init-logger []
@@ -98,7 +100,7 @@
         (timbre/error ex "Uncaught exception on" (.getName thread))))))
 
 
-(def dev (dev-system config))
+(def dev (all-system config))
 
 
 (defn start []
@@ -114,15 +116,14 @@
   ([mode config-path]
    (init-logger)
    (set-configs config-path)
-   (if (= mode "dev")
-     (component/start (dev-system config))
-     (timbre/warn "Unknown mode")))
-  ([domain mode config-path]
-   (init-logger)
-   (set-configs config-path)
    (cond
-     (and (= domain "stg") (= mode "frontend")) (component/start (frontend-system stg-config))
-     (and (= domain "stg") (= mode "backend")) (component/start (generator-system stg-config))
-     (and (= domain "prod") (= mode "frontend")) (component/start (frontend-system prod-config))
-     (and (= domain "prod") (= mode "backend")) (component/start (generator-system prod-config))
+     (= mode "all") (component/start (all-system config))
+     (= mode "frontend") (component/start (frontend-system config))
+     (= mode "backend") (component/start (generator-system config))
+
+     ;(and (= domain "stg") (= mode "frontend")) (component/start (frontend-system stg-config))
+     ;(and (= domain "stg") (= mode "backend")) (component/start (generator-system stg-config))
+     ;(and (= domain "prod") (= mode "frontend")) (component/start (frontend-system prod-config))
+     ;(and (= domain "prod") (= mode "backend")) (component/start (generator-system prod-config))
+
      :else (timbre/info "Unknown domain or mode"))))
