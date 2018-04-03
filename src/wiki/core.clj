@@ -9,6 +9,7 @@
             [wiki.generator.git :as git]
             [wiki.components.offline-generator :as offline-generator]
             [wiki.util.utils :as utils]
+            [wiki.config.core :as c]
             [com.stuartsierra.component :as component]
             [taoensso.timbre :as timbre]
             [toml.core :as toml])
@@ -77,7 +78,12 @@
 
 
 (defn set-configs [config-path]
-  (alter-var-root #'config (constantly (update-config (toml/read (slurp config-path) :keywordize)))))
+  (let [config-data (toml/read (slurp config-path) :keywordize)]
+    (if (c/check-config config-data)
+      (alter-var-root #'config (constantly (update-config (toml/read (slurp config-path) :keywordize))))
+      (do
+        (timbre/error (c/explain-config config-data))
+          (System/exit 1)))))
 
 
 (defn init-logger []
