@@ -1,46 +1,29 @@
 <!doctype html>
 <html>
 <head>
-    <script>
-        {{anychart_script|safe}}
-    </script>
-    {% for lib in libs %}{% ifequal lib ":jquery" %}<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>{% endifequal %}{% endfor %}
     {% for script in scripts %}
-    <script>
-        {{script|safe}}
-    </script>
+    <script>{{script|safe}}</script>
     {% endfor %}
-    {% for css in css_libs %}
-    <style>
-        {{css|safe}}
-    </style>
+
+    {% for style in styles %}
+    <style>{{style|safe}}</style>
     {% endfor %}
+
   <style>
-    html, body, #container, #c1 {
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-    }
+     {{style|safe}}
     .anychart-credits { display: none; }
   </style>
-  <script>
-    window.getJSON = function() {
-        return JSON.stringify(window.{{export}}.toJson(),null, 2);
-    };
-  </script>
+
 </head>
 <body>
-    <div id="container"></div>
+    {{markup|safe}}
     <script type="text/javascript">
 
-      anychart.licenseKey('anychart-adb3c9ca-df1c254d');
-
-      var {{export}} = null;
+      if (typeof anychart !== 'undefined') {
+          anychart.licenseKey('anychart-adb3c9ca-df1c254d');
+      }
 
       {{code|safe}}
-
       window.onload = function() {
           var checkRenderCount = 0;
           var checkRender = function(){

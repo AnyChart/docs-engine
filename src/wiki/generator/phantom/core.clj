@@ -10,10 +10,12 @@
            [java.awt.image BufferedImageOp BufferedImage]
            [javax.imageio ImageIO]))
 
+
 (defn- fix-code [code]
   (clojure.string/replace code
                           (clojure.string/re-quote-replacement ".animation(true")
                           ".animation(false"))
+
 
 (defn generate-img [phantom-engine
                     phantom-generator
@@ -23,17 +25,14 @@
                     sample]
   (info "generate-img:" page-url phantom-engine phantom-generator version images-folder sample)
   (let [code (render-file "templates/phantom.selmer"
-                          {:export          (:exports sample)
-                           :scripts         (download/get-urls (:scripts sample))
-                           :css_libs        (download/get-urls (:css_libs sample))
-                           :code            (fix-code (:code sample))
-                           :anychart_script (download/get-url
-                                              (str "https://cdn.anychart.com/js/" version "/anychart-bundle.min.js"))})
+                          {:scripts (download/get-urls (:scripts sample))
+                           :styles  (download/get-urls (:styles sample))
+                           :code    (fix-code (:code sample))
+                           :style   (:style sample)
+                           :markup  (:markup sample)})
         tmp-file (java.io.File/createTempFile "sample" ".html")
-        tmp-json (java.io.File/createTempFile "sample" ".json")
         image-path (str images-folder "/" (utils/name->url page-url) ".png")
         *sh-result (volatile! nil)]
-    (info "generate-img::" tmp-file tmp-json image-path)
     (info "generating" (.getAbsolutePath tmp-file) "for" (:name sample) "to" image-path)
     (with-open [f (clojure.java.io/writer tmp-file)]
       (binding [*out* f]
@@ -45,8 +44,7 @@
                             phantom-generator
                             (.getAbsolutePath tmp-file)
                             image-path
-                            "'chart draw'"
-                            (.getAbsolutePath tmp-json))]
+                            "'chart draw'")]
           (vreset! *sh-result sh-result))
         (let [image (ImageIO/read (file image-path))
               res (Scalr/resize image
@@ -59,11 +57,10 @@
         (sh "pngquant" "--force" "--ext" ".png" image-path)
         (info "generated" image-path)
         (.delete tmp-file)
-        (.delete tmp-json)
         nil)
       (catch Exception e
         (do
-          (info "generation failed for" (:url sample) "html:" (.getAbsolutePath tmp-file) @*sh-result e)
+          (timbre/error "generation failed for" (:url sample) "html:" (.getAbsolutePath tmp-file) @*sh-result e)
           {:sample (:url sample) :code (.getAbsolutePath tmp-file)})))))
 
 

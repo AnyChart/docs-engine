@@ -169,7 +169,7 @@
 
 
 (defn generate-img [generator-config sample-path page-url samples version]
-  (let [url (str "/samples/" (StringEscapeUtils/unescapeHtml4 sample-path))
+  (let [url (str "samples/" (StringEscapeUtils/unescapeHtml4 sample-path))
         sample (first (filter #(= url (:url %)) samples))]
     (try (phantom/generate-img (:phantom-engine generator-config)
                                (:generator generator-config)
@@ -177,8 +177,7 @@
                                page-url
                                version
                                sample)
-         (catch Exception e
-           (prn "ERROR img gen: " e)))))
+         (catch Exception e (timbre/error "ERROR img gen: " e)))))
 
 
 (defn- sample-transformer [id-counter notifier page-url version samples generator-config generate-images page-report]
