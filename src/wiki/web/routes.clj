@@ -152,7 +152,8 @@
         (let [folder (folders-data/get-folder-by-url (jdbc request) (:id version) "Quick_Start")
               page (pages-data/page-by-url (jdbc request) (:id version)
                                            (str "Quick_Start/" (:default_page folder)))]
-          (show-page request version versions page false))))))
+          (when page
+            (show-page request version versions page false)))))))
 
 
 (defn download-zip [request version & [versions url is-url-version]]
