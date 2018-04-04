@@ -83,7 +83,7 @@
       (alter-var-root #'config (constantly (update-config (toml/read (slurp config-path) :keywordize))))
       (do
         (timbre/error (c/explain-config config-data))
-          (System/exit 1)))))
+        (System/exit 1)))))
 
 
 (defn init-logger []
