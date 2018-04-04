@@ -1,13 +1,13 @@
-CREATE SEQUENCE page_id_seq;
-CREATE TABLE pages (
-  id            INTEGER PRIMARY KEY DEFAULT nextval('page_id_seq'),
-  version_id    INTEGER REFERENCES versions (id),
-  url           VARCHAR(255) NOT NULL,
-  full_name     VARCHAR(255),
-  content       TEXT,
-  last_modified BIGINT,
-  tags          VARCHAR(255) [],
-  config        JSONB
+CREATE SEQUENCE version_id_seq;
+CREATE TABLE versions (
+  id     INTEGER PRIMARY KEY DEFAULT nextval('version_id_seq'),
+  key    VARCHAR(255) NOT NULL,
+  commit VARCHAR(40)  NOT NULL,
+  hidden BOOLEAN             DEFAULT FALSE,
+  tree   TEXT,
+  zip    BYTEA,
+  config JSONB,
+  report JSONB
 );
 
 
@@ -20,14 +20,14 @@ CREATE TABLE folders (
 );
 
 
-CREATE SEQUENCE version_id_seq;
-CREATE TABLE versions (
-  id     INTEGER PRIMARY KEY DEFAULT nextval('version_id_seq'),
-  key    VARCHAR(255) NOT NULL,
-  commit VARCHAR(40)  NOT NULL,
-  hidden BOOLEAN             DEFAULT FALSE,
-  tree   TEXT,
-  zip    BYTEA,
-  config JSONB,
-  report JSONB
+CREATE SEQUENCE page_id_seq;
+CREATE TABLE pages (
+  id            INTEGER PRIMARY KEY DEFAULT nextval('page_id_seq'),
+  version_id    INTEGER REFERENCES versions (id),
+  url           VARCHAR(255) NOT NULL,
+  full_name     VARCHAR(255),
+  content       TEXT,
+  last_modified BIGINT,
+  tags          VARCHAR(255) [],
+  config        JSONB
 );
