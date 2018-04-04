@@ -119,13 +119,13 @@
      state]))
 
 
-(defn- add-api-links [text version reference api-versions api-default-version]
+(defn- add-api-links [text version api-versions api-default-version]
   (let [real-version (if (some #{version} api-versions)
                        version api-default-version)]
     (string/replace text
                     #"\{api:([^}]+)\}([^{]+)\{api\}"
                     (fn [[_ link title]]
-                      (str "<a class='method' target='_blank' href='//" reference "/" real-version "/" link "'>" title "</a>")))))
+                      (str "<a class='method' target='_blank' href='//" (c/reference) "/" real-version "/" link "'>" title "</a>")))))
 
 
 (defn- add-pg-links [text version]
@@ -176,7 +176,7 @@
 
 
 (defn to-html [notifier page-url source version samples api-versions
-               {:keys [reference reference-default-version] :as generator-config}
+               {:keys [reference-default-version] :as generator-config}
                generate-images page-report]
   (let [{tags :tags html-without-tags :html} (get-tags source)
         html (-> (md-to-html-string html-without-tags
@@ -187,7 +187,7 @@
                                                                       transformer-vector
                                                                       [(sample-transformer (atom 0) notifier page-url version samples
                                                                                            generator-config generate-images page-report)]))
-                 (add-api-links version reference api-versions reference-default-version)
+                 (add-api-links version api-versions reference-default-version)
                  (add-pg-links version))
         html-tags (if (empty? tags) html
                                     (add-tags html tags))]

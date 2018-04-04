@@ -59,7 +59,6 @@
 (s/def :config.generator/images-dir string?)
 (s/def :config.generator/git-ssh string?)
 (s/def :config.generator/data-dir string?)
-(s/def :config.generator/reference string?)
 (s/def :config.generator/reference-versions string?)
 (s/def :config.generator/phantom-engine string?)
 (s/def :config.generator/generator string?)
@@ -74,7 +73,6 @@
                                           :config.generator/images-dir
                                           :config.generator/git-ssh
                                           :config.generator/data-dir
-                                          :config.generator/reference
                                           :config.generator/reference-versions
                                           :config.generator/phantom-engine
                                           :config.generator/generator
@@ -86,7 +84,6 @@
 (s/def :config.web/static pos-int?)
 (s/def :config.web/debug boolean?)
 (s/def :config.web/port pos-int?)
-(s/def :config.web/reference string?)
 (s/def :config.web/zip-queue string?)
 (s/def :config.web/max-line pos-int?)
 (s/def :config/web (s/keys :req-un [:config.web/redirects-queue
@@ -94,7 +91,6 @@
                                     :config.web/static
                                     :config.web/debug
                                     :config.web/port
-                                    :config.web/reference
                                     :config.web/zip-queue
                                     :config.web/max-line]))
 
