@@ -4,7 +4,8 @@
             [hiccup.page]
             [clojure.string :as s]
             [clj-time.core :as t]
-            [wiki.util.utils :as utils]))
+            [wiki.util.utils :as utils]
+            [wiki.config.core :as c]))
 
 
 (def samples-script (slurp (io/resource "templates/samples-update.selmer")))
@@ -37,8 +38,8 @@
 (defn canonical-page-url [versions page-url]
   (let [last-page-url-version (version-that-has-this-page-url versions page-url)]
     (if (= (:key last-page-url-version) (:key (first versions)))
-      (str "https://docs.anychart.com" (when page-url (str "/" page-url)))
-      (str "https://docs.anychart.com/" (:key last-page-url-version) (when page-url (str "/" page-url))))))
+      (str (c/domain) page-url)
+      (str (c/domain) (:key last-page-url-version) (when page-url (str "/" page-url))))))
 
 
 (defn head [data]
