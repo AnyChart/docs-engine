@@ -5,6 +5,7 @@ branches:
   only:
   - master
   - staging
+  - bible
 cache:
   directories:
   - "$HOME/.m2"
@@ -16,6 +17,7 @@ before_install:
 after_success:
 - if [ "$TRAVIS_BRANCH" == "master" ]; then export APP="docs-prod"; fi
 - if [ "$TRAVIS_BRANCH" == "staging" ]; then export APP="docs-stg"; fi
+- if [ "$TRAVIS_BRANCH" == "bible" ]; then export APP="bible-stg"; fi
 - echo "Deploying to $SERVER"
 - mv .travis/known_hosts ~/.ssh/known_hosts
 - mv .travis/id_rsa.pub ~/.ssh/id_rsa.pub
