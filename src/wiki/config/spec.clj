@@ -57,7 +57,6 @@
 (s/def :config.generator/static-dir string?)
 (s/def :config.generator/indexer-queue string?)
 (s/def :config.generator/images-dir string?)
-(s/def :config.generator/playground string?)
 (s/def :config.generator/git-ssh string?)
 (s/def :config.generator/data-dir string?)
 (s/def :config.generator/reference string?)
@@ -73,7 +72,6 @@
                                           :config.generator/static-dir
                                           :config.generator/indexer-queue
                                           :config.generator/images-dir
-                                          :config.generator/playground
                                           :config.generator/git-ssh
                                           :config.generator/data-dir
                                           :config.generator/reference
@@ -88,7 +86,6 @@
 (s/def :config.web/static pos-int?)
 (s/def :config.web/debug boolean?)
 (s/def :config.web/port pos-int?)
-(s/def :config.web/playground string?)
 (s/def :config.web/reference string?)
 (s/def :config.web/zip-queue string?)
 (s/def :config.web/max-line pos-int?)
@@ -97,7 +94,6 @@
                                     :config.web/static
                                     :config.web/debug
                                     :config.web/port
-                                    :config.web/playground
                                     :config.web/reference
                                     :config.web/zip-queue
                                     :config.web/max-line]))
@@ -115,10 +111,12 @@
 (s/def :config.common/domain string?)
 (s/def :config.common/reference string?)
 (s/def :config.common/playground string?)
+(s/def :config.common/playground-project string?)
 (s/def :config/common (s/keys :req-un [:config.common/prefix
                                        :config.common/domain
                                        :config.common/reference
-                                       :config.common/playground]))
+                                       :config.common/playground
+                                       :config.common/playground-project]))
 
 
 (s/def ::config (s/keys :req-un [:config/common

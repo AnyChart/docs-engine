@@ -35,7 +35,7 @@
          "doc.close();\n})();")))
 
 
-(defn build-sample-div [notifier page-url id version samples playground sample-path custom-settings page-report]
+(defn build-sample-div [notifier page-url id version samples sample-path custom-settings page-report]
   (let [width (if (:width custom-settings)
                 (if (string? (:width custom-settings))
                   (:width custom-settings)
@@ -59,7 +59,7 @@
                                                      :style style
                                                      :id id
                                                      :code code
-                                                     :playground playground
+                                                     :playground (c/playground-project)
                                                      :version version
                                                      :sample-path sample-path
                                                      :engine-version version)))
@@ -102,12 +102,10 @@
                (generate-img generator-config sample-path page-url samples version))
              (string/replace text
                              source
-                             ;(build-sample-embed version playground sample-path custom-settings)
                              (build-sample-div notifier
                                                page-url
                                                (swap! id-counter inc)
                                                version samples
-                                               (:playground generator-config)
                                                sample-path custom-settings page-report)))
            (catch Exception e
              (do

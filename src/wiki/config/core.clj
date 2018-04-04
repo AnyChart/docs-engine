@@ -12,6 +12,7 @@
 (defn domain [] (:domain common))
 (defn reference [] (:reference common))
 (defn playground [] (:playground common))
+(defn playground-project [] (:playground-project common))
 
 
 
