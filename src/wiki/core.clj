@@ -73,7 +73,6 @@
 
 (defn update-config [conf]
   (-> conf
-      (update-in [:generator :domain] keyword)
       (assoc-in [:web :commit] commit)))
 
 
@@ -117,4 +116,4 @@
      (= mode "all") (component/start (all-system config))
      (= mode "frontend") (component/start (frontend-system config))
      (= mode "backend") (component/start (generator-system config))
-     :else (timbre/info "Unknown domain or mode"))))
+     :else (timbre/info "Unknown mode"))))

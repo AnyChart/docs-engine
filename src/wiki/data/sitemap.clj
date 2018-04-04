@@ -1,12 +1,13 @@
 (ns wiki.data.sitemap
-  (:require [clojure.xml :refer [emit emit-element]]
-            [clj-time.core :as t]
-            [clj-time.coerce :as c]
-            [clj-time.format :as f]
-            [honeysql.helpers :refer :all]
-            [wiki.components.jdbc :refer [query one insert! exec]]
+  (:require [wiki.components.jdbc :refer [query one insert! exec]]
             [wiki.data.versions :as vdata]
-            [wiki.data.pages :refer [pages-urls]]))
+            [wiki.data.pages :refer [pages-urls]]
+            [wiki.config.core :as c]
+            [clojure.xml :refer [emit emit-element]]
+            [clj-time.core :as t]
+            [clj-time.coerce :as ct]
+            [clj-time.format :as f]
+            [honeysql.helpers :refer :all]))
 
 (def formatter (f/formatter "YYYY-MM-dd'T'hh:mm:ss'Z'"))
 
@@ -21,11 +22,11 @@
     (map (fn [entry]
            {:tag     :url
             :content [{:tag :loc :content
-                            [(str "https://docs.anychart.com/" (when show-version (str (:key version) "/")) (:url entry))]}
+                            [(str (c/domain) (when show-version (str (:key version) "/")) (:url entry))]}
                       {:tag :priority :content [(format "%.1f" priority)]}
                       {:tag :changefreq :content ["monthly"]}
                       {:tag :lastmod :content [(f/unparse formatter
-                                                          (c/from-long (* 1000 (:last_modified entry))))]}]})
+                                                          (ct/from-long (* 1000 (:last_modified entry))))]}]})
          entries)))
 
 (defn generate-sitemap [jdbc]

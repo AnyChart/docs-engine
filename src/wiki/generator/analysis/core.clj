@@ -1,9 +1,9 @@
 (ns wiki.generator.analysis.core
-  (:require [clojure.string :as s]
+  (:require [wiki.config.core :as c]
+            [clojure.string :as s]
             [link-checker.core :as link-checker]
             [link-checker.url]
-            [link-checker.utils :as link-checker-utils]
-            [wiki.data.versions :as vdata]))
+            [link-checker.utils :as link-checker-utils]))
 
 
 (defn landing-link? [link]
@@ -77,24 +77,14 @@
 ;; =====================================================================================================================
 ;; Check version links
 ;; =====================================================================================================================
-(defn domain-url [domain]
-  (case domain
-    :stg "http://docs.anychart.stg/"
-    :prod "https://docs.anychart.com/"
-    :local "http://localhost:8080/"))
-
-
-;; =====================================================================================================================
-;; Check version links
-;; =====================================================================================================================
-(defn get-check-fn [version-key domain]
+(defn get-check-fn [version-key]
   (fn [url]
     (and (not (.contains url "export-server.jar"))
          (not (.endsWith url (str "/" version-key "/download")))
-         (.contains url (str (domain-url domain) version-key "/")))))
+         (.contains url (str (c/domain) version-key "/")))))
 
 
-(defn get-add-fn [version-key domain]
+(defn get-add-fn [version-key]
   (fn [url]
     (cond
       ;; cause it's not ready when it checks
@@ -104,30 +94,22 @@
       ;; cause github's anchor without id="overview"
       (= url "https://github.com/AnyChart/docs.anychart.com#overview") false
       ;; allow only current version urls for deep analysis
-      (.startsWith url (str (domain-url domain) version-key "/")) true
-      (.startsWith url (domain-url domain)) false
+      (.startsWith url (str (c/domain) version-key "/")) true
+      (.startsWith url (c/domain)) false
       :else true)))
 
 
-(defn get-sitemap-urls [version-key domain]
-  (let [sitemap-url (str (domain-url domain) "sitemap/" version-key)
-        sitemap-urls (map link-checker.url/prepare-url (link-checker/urls-from-sitemap sitemap-url))
-        sitemap-urls (map
-                       (fn [s] (case domain
-                                 :prod s
-                                 :stg (-> s
-                                          (clojure.string/replace #"\.com" ".stg")
-                                          (clojure.string/replace #"https:" "http:"))
-                                 :local (-> s (clojure.string/replace #"https://docs\.anychart\.com" "http://localhost:8080"))))
-                       sitemap-urls)]
+(defn get-sitemap-urls [version-key]
+  (let [sitemap-url (str (c/domain) "sitemap/" version-key)
+        sitemap-urls (map link-checker.url/prepare-url (link-checker/urls-from-sitemap sitemap-url))]
     sitemap-urls))
 
 
-(defn check-broken-links [version-key report domain *broken-link-result]
-  (let [sitemap-url (str (domain-url domain) "sitemap/" version-key)
-        sitemap-urls (get-sitemap-urls version-key domain)
-        config {:check-fn         (get-check-fn version-key domain)
-                :add-fn           (get-add-fn version-key domain)
+(defn check-broken-links [version-key report *broken-link-result]
+  (let [sitemap-url (str (c/domain) "sitemap/" version-key)
+        sitemap-urls (get-sitemap-urls version-key)
+        config {:check-fn         (get-check-fn version-key)
+                :add-fn           (get-add-fn version-key)
                 :iteration-fn     (fn [iteration urls-count urls-for-check-total-count total-count]
                                     (println "Iteration: " iteration urls-count urls-for-check-total-count total-count))
                 :max-loop-count   45

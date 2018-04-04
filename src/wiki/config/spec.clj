@@ -66,7 +66,6 @@
 (s/def :config.generator/generator string?)
 (s/def :config.generator/generate-images boolean?)
 (s/def :config.generator/playground-base string?)
-(s/def :config.generator/domain string?)
 (s/def :config/generator (s/keys :req-un [:config.generator/reference-default-version
                                           :config.generator/max-processes
                                           :config.generator/show-branches
@@ -83,8 +82,7 @@
                                           :config.generator/phantom-engine
                                           :config.generator/generator
                                           :config.generator/generate-images
-                                          :config.generator/playground-base
-                                          :config.generator/domain]))
+                                          :config.generator/playground-base]))
 
 
 (s/def :config.web/redirects-queue string?)
