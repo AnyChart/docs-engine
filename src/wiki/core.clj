@@ -80,7 +80,9 @@
 (defn set-configs [config-path]
   (let [config-data (toml/read (slurp config-path) :keywordize)]
     (if (c/check-config config-data)
-      (alter-var-root #'config (constantly (update-config (toml/read (slurp config-path) :keywordize))))
+      (do
+        (alter-var-root #'config (constantly (update-config (toml/read (slurp config-path) :keywordize))))
+        (c/set-config config-data))
       (do
         (timbre/error (c/explain-config config-data))
         (System/exit 1)))))
