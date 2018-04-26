@@ -2,10 +2,12 @@ var $menu = $("ul.menu");
 $(window).scroll(function(e) {
     return;
     if ($(window).scrollTop() > 50) {
-        $menu.css({"position": "absolute",
-                   "top": $(window).scrollTop(),
-                   "height": $(window).height()});
-    }else {
+        $menu.css({
+            "position": "absolute",
+            "top": $(window).scrollTop(),
+            "height": $(window).height()
+        });
+    } else {
         $menu.removeAttr("style");
     }
 });
@@ -24,7 +26,7 @@ var expandMenu = function(target) {
     var str = "/" + version;
     for (var i = 0; i < path.length; i++) {
         str += "/" + path[i];
-        $el = $menu.find("a[href='"+str+"']");
+        $el = $menu.find("a[href='" + str + "']");
         var $ul = $el.parent().find(">ul");
         if ($ul.length && !$ul.is(":visible")) {
             $ul.toggle();
@@ -44,7 +46,7 @@ $menu.find('a>i.ac-folder').each(function() {
         $ul.toggle();
         if ($ul.is(":visible")) {
             $this.removeClass('ac-folder').addClass('ac-folder-open');
-        }else {
+        } else {
             $this.removeClass('ac-folder-open').addClass('ac-folder');
         }
         return false;

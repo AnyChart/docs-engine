@@ -20,7 +20,7 @@ function loadPage(link, needPushState) {
         }
     }
     expandMenu(location.pathname);
-    $.get(link + "-json", function (res) {
+    $.get(link + "-json", function(res) {
         $("#page-content").html('<div id="article-content">' + res.page.content + '</div><script>tryUpdateSampleInit();</script>');
         document.title = res['title-prefix'];
         // scroll page to appropriate text
@@ -47,24 +47,24 @@ function loadPage(link, needPushState) {
 
 function updateMenu(versions) {
     var menu = $("ul.dropdown-menu").empty();
-    versions.forEach(function (item, i, arr) {
+    versions.forEach(function(item, i, arr) {
         menu.append("<li><a href=" + item.url + ">Version " + item.key + "</a></li>");
     })
 }
 
 function fixLinks() {
-    $("#page-content a").each(function () {
+    $("#page-content a").each(function() {
         var $this = $(this);
         if ($this.attr("href") /*&& $this.attr("href").match(/^[a-zA-Z\(\)]/gi)*/) {
             if ($this.attr("href").indexOf("http://") == 0 ||
                 $this.attr("href").indexOf("https://") == 0 ||
-                $this.attr("href").indexOf("//") == 0){
+                $this.attr("href").indexOf("//") == 0) {
                 $this.attr('target', '_blank');
                 return;
             }
             if ($this.attr("href").indexOf("#") >= 0) return;
 
-            $this.click(function () {
+            $this.click(function() {
                 var res = false;
                 try {
                     var current = location.pathname.split("/");
@@ -80,17 +80,17 @@ function fixLinks() {
 }
 
 function fixHeaders() {
-    $("#page-content h2, #page-content h3, #page-content h4,#page-content h5,#page-content h6").each(function () {
+    $("#page-content h2, #page-content h3, #page-content h4,#page-content h5,#page-content h6").each(function() {
         var $this = $(this);
-        $this.prepend("<a href='#"+ $this.attr('id') +"' class='header-anchor'></a>");
+        $this.prepend("<a href='#" + $this.attr('id') + "' class='header-anchor'></a>");
     });
 }
 
 fixHeaders();
 
-window.onpopstate = function (e) {
+window.onpopstate = function(e) {
     // if return to search page - make search request
-    if (location.pathname == "/search"){
+    if (location.pathname == "/search") {
         var q = location.href.split("?q=")[1];
         searchFor(q, false);
         return;

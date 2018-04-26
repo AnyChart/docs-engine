@@ -29,6 +29,6 @@ function fixToc() {
         $next.find("li").addClass("main");
         $("#table-of-content-large").append($next.clone());
     }
-};
+}
 
 fixToc();

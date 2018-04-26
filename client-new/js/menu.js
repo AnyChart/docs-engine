@@ -2,10 +2,12 @@ var $menu = $("ul.menu");
 $(window).scroll(function(e) {
     return;
     if ($(window).scrollTop() > 50) {
-        $menu.css({"position": "absolute",
-                   "top": $(window).scrollTop(),
-                   "height": $(window).height()});
-    }else {
+        $menu.css({
+            "position": "absolute",
+            "top": $(window).scrollTop(),
+            "height": $(window).height()
+        });
+    } else {
         $menu.removeAttr("style");
     }
 });
@@ -24,14 +26,14 @@ var expandMenu = function(target) {
     for (var i = 0; i < path.length; i++) {
         str += "/" + path[i];
         // for both links: /Quick_Start/Quick_start - default page and /7.12.0/Quick_Start/Quick_Start - version page
-        $el = $menu.find("a[href='"+str+"'], a[href='"+ "/" + version + str+"']");
+        $el = $menu.find("a[href='" + str + "'], a[href='" + "/" + version + str + "']");
         var $ul = $el.parent().find(">ul");
         if ($ul.length && !$ul.is(":visible")) {
             $ul.toggle();
             $el.find("i").removeClass('folder-close').addClass('folder-open');
         }
     }
-    if ($el){
+    if ($el) {
         $el.addClass("active");
     }
 };
@@ -47,7 +49,7 @@ $menu.find('a>i.folder-close').each(function() {
         if ($ul.is(":visible")) {
             $this.removeClass('folder-close').addClass('folder-open');
             $this.html("- ");
-        }else {
+        } else {
             $this.removeClass('folder-open').addClass('folder-close');
             $this.html("+ ");
         }
@@ -58,10 +60,10 @@ $menu.find("a").each(function() {
     if ($(this).find(">i").length == 0) {
         $(this).click(function(e) {
             var url = $(this).attr("href");
-            if (e.ctrlKey || e.metaKey){
+            if (e.ctrlKey || e.metaKey) {
                 var win = window.open(url, '_blank');
                 return false;
-            }else{
+            } else {
                 return loadPage(url);
             }
         });

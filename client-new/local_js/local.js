@@ -1,8 +1,8 @@
 //Because in Firefox data isn't saved between pages when using localStorage
-Object.defineProperty(window, "cookieStorage", new (function () {
+Object.defineProperty(window, "cookieStorage", new (function() {
     var aKeys = [], oStorage = {};
     Object.defineProperty(oStorage, "getItem", {
-        value: function (sKey) {
+        value: function(sKey) {
             return sKey ? this[sKey] : null;
         },
         writable: false,
@@ -10,7 +10,7 @@ Object.defineProperty(window, "cookieStorage", new (function () {
         enumerable: false
     });
     Object.defineProperty(oStorage, "key", {
-        value: function (nKeyId) {
+        value: function(nKeyId) {
             return aKeys[nKeyId];
         },
         writable: false,
@@ -18,7 +18,7 @@ Object.defineProperty(window, "cookieStorage", new (function () {
         enumerable: false
     });
     Object.defineProperty(oStorage, "setItem", {
-        value: function (sKey, sValue) {
+        value: function(sKey, sValue) {
             if (!sKey) {
                 return;
             }
@@ -29,14 +29,14 @@ Object.defineProperty(window, "cookieStorage", new (function () {
         enumerable: false
     });
     Object.defineProperty(oStorage, "length", {
-        get: function () {
+        get: function() {
             return aKeys.length;
         },
         configurable: false,
         enumerable: false
     });
     Object.defineProperty(oStorage, "removeItem", {
-        value: function (sKey) {
+        value: function(sKey) {
             if (!sKey) {
                 return;
             }
@@ -46,7 +46,7 @@ Object.defineProperty(window, "cookieStorage", new (function () {
         configurable: false,
         enumerable: false
     });
-    this.get = function () {
+    this.get = function() {
         var iThisIndx;
         for (var sKey in oStorage) {
             iThisIndx = aKeys.indexOf(sKey);
@@ -152,12 +152,12 @@ function removeFolder(href) {
 }
 
 function addListeners(prefix_path) {
-    $menu.find('a>i.ac-folder').each(function () {
+    $menu.find('a>i.ac-folder').each(function() {
         var $this = $(this);
         var $link = $this.parent();
         var $ul = $link.parent().find(">ul");
         var href = $link.attr("href").substr(prefix_path.length);
-        $link.click(function () {
+        $link.click(function() {
             if ($ul.is(":visible")) {
                 addFolder(href);
             } else {

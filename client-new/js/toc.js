@@ -44,7 +44,7 @@ function fixToc() {
     $rightButtons.clone().insertBefore($articleContent);
     // copy h1 from #article-content to #page-content
     $("#page-content").prepend($articleContent.children()[0]);
-};
+}
 
 fixToc();
 
@@ -56,14 +56,14 @@ window.addEventListener('scroll', function(e) {
 });
 
 // resize table content height
-var onResize = function(){
+var onResize = function() {
     var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
     $("#table-of-content-large").css('max-height', (windowHeight - 130 - Math.max(85, 134 - window.scrollY)) + 'px');
 };
-window.addEventListener("resize", function(){
+window.addEventListener("resize", function() {
     onResize();
 });
-window.onload = function(){
+window.onload = function() {
     onResize();
 };
 onResize();

@@ -3,11 +3,11 @@ var page = location.pathname;
 function highlightCode() {
     $("#page-content pre").addClass("prettyprint");
     prettyPrint();
-};
+}
 
 function loadPage(link) {
     if (page == link) return true;
-    
+
     page = link;
     //window.history.pushState(null, null, link);
 
@@ -52,7 +52,7 @@ function loadPage(link) {
     $("#bar").hide();
     $("#shadow").hide();
     return false;
-};
+}
 
 function fixLinks() {
     $("#page-content a").each(function() {
@@ -61,7 +61,7 @@ function fixLinks() {
             if ($this.attr("href").indexOf("#") == 0) return;
             if ($this.attr("href").indexOf("http://") == 0) return;
             if ($this.attr("href").indexOf("https://") == 0) return;
-    
+
             /*$this.click(function() {
                 var res = false;
                 try {
@@ -76,7 +76,7 @@ function fixLinks() {
             });*/
         }
     });
-};
+}
 
 window.onpopstate = function(e) {
     if (location.pathname == page) return;

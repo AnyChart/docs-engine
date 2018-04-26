@@ -21,8 +21,8 @@ module.exports = function(grunt) {
             target: {
                 files: {
                     "../resources/public/main.css":
-                      ["styles-less.css",
-                       "src/prettify-tomorrow.css"]
+                        ["styles-less.css",
+                            "src/prettify-tomorrow.css"]
                 }
             }
         },
@@ -48,11 +48,16 @@ module.exports = function(grunt) {
             main: {
                 files: [
                     {expand: true, flatten: true, src: ["./media/i/*"], dest: '../resources/public/i/'},
-                    {expand: true, flatten: true, src: ["./media/fonts/*", "./bower_components/font-awesome/fonts/*"], dest: '../resources/public/fonts'},
+                    {
+                        expand: true,
+                        flatten: true,
+                        src: ["./media/fonts/*", "./bower_components/font-awesome/fonts/*"],
+                        dest: '../resources/public/fonts'
+                    },
                 ]
             }
         }
     });
 
-    grunt.registerTask('default',['less', 'cssmin', 'copy', 'uglify', 'uglify_local'])
+    grunt.registerTask('default', ['less', 'cssmin', 'copy', 'uglify', 'uglify_local'])
 };

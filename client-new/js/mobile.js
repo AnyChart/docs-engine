@@ -1,15 +1,15 @@
 var showPage = true;
 
-function toggleMobileMenu(){
+function toggleMobileMenu() {
     showPage = !showPage;
-    if (showPage){
+    if (showPage) {
         hideMobileMenu();
-    }else{
+    } else {
         showMobileMenu();
     }
 }
 
-function showMobileMenu(){
+function showMobileMenu() {
     showPage = false;
     $(".left-sidebar-container").show();
     $("#page-content").hide();
@@ -21,7 +21,7 @@ function showMobileMenu(){
     $(".mobile-search-container").addClass("show-tablet-menu");
 }
 
-function hideMobileMenu(){
+function hideMobileMenu() {
     showPage = true;
     $(".left-sidebar-container").hide();
     $("#page-content").show();
