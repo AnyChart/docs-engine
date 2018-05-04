@@ -7185,7 +7185,7 @@ div.container-fluid .row {
 #article-content h5 {
   padding: 10px 0;
   font-size: 14px;
-  font-weight: bold;
+  font-weight: 600;
 }
 #article-content p ~ ul,
 #article-content p ~ ol {
