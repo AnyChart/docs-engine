@@ -7085,7 +7085,8 @@ div.container-fluid .row {
 }
 #article-content h2,
 #article-content h3,
-#article-content h4 {
+#article-content h4,
+#article-content h5 {
   margin: 0;
   /*margin-top: -75px;
     &:before {
@@ -7098,20 +7099,23 @@ div.container-fluid .row {
 }
 #article-content h2:target,
 #article-content h3:target,
-#article-content h4:target {
+#article-content h4:target,
+#article-content h5:target {
   z-index: 1;
   margin-top: -75px;
 }
 @media (max-width: 1120px) {
   #article-content h2:target,
   #article-content h3:target,
-  #article-content h4:target {
+  #article-content h4:target,
+  #article-content h5:target {
     margin-top: -110px;
   }
 }
 #article-content h2:target:before,
 #article-content h3:target:before,
-#article-content h4:target:before {
+#article-content h4:target:before,
+#article-content h5:target:before {
   display: block;
   content: "";
   height: 75px;
@@ -7119,13 +7123,15 @@ div.container-fluid .row {
 @media (max-width: 1120px) {
   #article-content h2:target:before,
   #article-content h3:target:before,
-  #article-content h4:target:before {
+  #article-content h4:target:before,
+  #article-content h5:target:before {
     height: 110px;
   }
 }
 #article-content h2:target,
 #article-content h3:target,
-#article-content h4:target {
+#article-content h4:target,
+#article-content h5:target {
   animation-name: anchor-animation;
   animation-direction: normal;
   animation-duration: .7s;
@@ -7134,7 +7140,8 @@ div.container-fluid .row {
 }
 #article-content h2 .header-anchor,
 #article-content h3 .header-anchor,
-#article-content h4 .header-anchor {
+#article-content h4 .header-anchor,
+#article-content h5 .header-anchor {
   display: block;
   opacity: 0;
   position: absolute;
@@ -7150,7 +7157,8 @@ div.container-fluid .row {
 }
 #article-content h2:hover .header-anchor,
 #article-content h3:hover .header-anchor,
-#article-content h4:hover .header-anchor {
+#article-content h4:hover .header-anchor,
+#article-content h5:hover .header-anchor {
   opacity: 1;
 }
 #article-content h1 {
@@ -7173,6 +7181,11 @@ div.container-fluid .row {
 }
 #article-content h4:after {
   bottom: 10px;
+}
+#article-content h5 {
+  padding: 10px 0;
+  font-size: 14px;
+  font-weight: bold;
 }
 #article-content p ~ ul,
 #article-content p ~ ol {
