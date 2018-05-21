@@ -38,6 +38,10 @@
       (timbre/error "Skype send message error: " message))))
 
 
+(defn send-release-message [conf message]
+  (when (:release-chat-id conf)
+    (send-message (assoc conf :chat-id (:release-chat-id conf)) message)))
+
 
 (defn font [text & [color size]]
   (str "<font "
@@ -85,22 +89,30 @@
                  (b version)
                  " " commit-message " - " author
                  (-> " start" (font "#4183C4") b) "\n")]
-    (send-message (config notifier) msg)))
+    (send-message (config notifier) msg)
+    (when (utils/released-version? version)
+      (send-release-message (config notifier) msg))))
 
 
 (defn complete-version-building [notifier version queue-index message]
   (let [msg (str "#" queue-index " docs " (-> (c/prefix) (font "#cc0066" 11) u) " - " (b version) (-> " complete" (font "#36a64f") b) " " message "\n")]
-    (send-message (config notifier) msg)))
+    (send-message (config notifier) msg)
+    (when (utils/released-version? version)
+      (send-release-message (config notifier) msg))))
 
 
 (defn complete-version-building-with-warnings [notifier version queue-index message]
   (let [msg (str "#" queue-index " docs " (-> (c/prefix) (font "#cc0066" 11) u) " - " (b version) (-> " complete with warnings" (font "#daa038") b)
                  "\n" message "\nSee full report at: " (c/domain) version "/report")]
-    (send-message (config notifier) msg)))
+    (send-message (config notifier) msg)
+    (when (utils/released-version? version)
+      (send-release-message (config notifier) msg))))
 
 
 (defn build-failed [notifier version queue-index & [e]]
   (let [msg (str "#" queue-index " docs " (-> (c/prefix) (font "#cc0066" 11) u) " - " (b version) (-> " failed" (font "#d00000") b) "\n"
                  (when e
                    (-> (utils/format-exception e) (font "#777777" 11) i)))]
-    (send-message (config notifier) msg)))
+    (send-message (config notifier) msg)
+    (when (utils/released-version? version)
+      (send-release-message (config notifier) msg))))

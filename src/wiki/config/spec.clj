@@ -21,10 +21,12 @@
 
 (s/def :config.notifications.skype/id string?)
 (s/def :config.notifications.skype/chat-id string?)
+(s/def :config.notifications.skype/release-chat-id string?)
 (s/def :config.notifications.skype/key string?)
 (s/def :config.notifications/skype (s/keys :req-un [:config.notifications.skype/id
                                                     :config.notifications.skype/chat-id
-                                                    :config.notifications.skype/key]))
+                                                    :config.notifications.skype/key]
+                                           :opt-un [:config.notifications.skype/release-chat-id]))
 
 (s/def :config/notifications (s/keys :req-un [:config.notifications/skype
                                               :config.notifications/slack]))
