@@ -54,7 +54,7 @@
 
 
 (defn start-building [notifier branches removed-branches queue-index]
-  (let [msg (str "#" queue-index " docs " (-> (c/prefix) (font "#cc0066" 11) u) " - " (-> "start" (font "#4183C4") b) "\n"
+  (let [msg (str "[Docs " (c/prefix) "] #" queue-index " - " (-> "start" (font "#4183C4") b) "\n"
                  (when (seq branches)
                    (str (b "Branches: ") (s/join ", " branches)))
                  (when (and (seq branches)
@@ -65,7 +65,7 @@
 
 
 (defn complete-building [notifier branches removed-branches queue-index]
-  (let [msg (str "#" queue-index " docs " (-> (c/prefix) (font "#cc0066" 11) u) " - " (-> "complete" (font "#36a64f") b) "\n"
+  (let [msg (str "[Docs " (c/prefix) "] #" queue-index " - " (-> "complete" (font "#36a64f") b) "\n"
                  (when (seq branches)
                    (str (b "Branches: ") (s/join ", " branches)))
                  (when (and (seq branches)
@@ -76,7 +76,7 @@
 
 
 (defn complete-building-with-errors [notifier branches queue-index e]
-  (let [msg (str "#" queue-index " docs " (-> (c/prefix) (font "#cc0066" 11) u) " - " (-> "error during processing!" (font "#d00000") b) "\n"
+  (let [msg (str "[Docs " (c/prefix) "] #" queue-index " - " (-> "error during processing!" (font "#d00000") b) "\n"
                  (when (seq branches)
                    (str (b "Branches: ") (s/join ", " branches)))
                  (when e
@@ -85,32 +85,33 @@
 
 
 (defn start-version-building [notifier {author :author commit-message :message version :name} queue-index]
-  (let [msg (str "#" queue-index " docs " (-> (c/prefix) (font "#cc0066" 11) u) " - "
-                 (b version)
-                 " " commit-message " - " author
-                 (-> " start" (font "#4183C4") b) "\n")]
+  (let [msg (str "[Docs " (c/prefix) "] #" queue-index " " (b version)
+                 " \"" commit-message "\" @" author " - " (-> "start" (font "#4183C4")) "\n")]
     (send-message (config notifier) msg)
     (when (utils/released-version? version)
       (send-release-message (config notifier) msg))))
 
 
-(defn complete-version-building [notifier version queue-index message]
-  (let [msg (str "#" queue-index " docs " (-> (c/prefix) (font "#cc0066" 11) u) " - " (b version) (-> " complete" (font "#36a64f") b) " " message "\n")]
+(defn complete-version-building [notifier {author :author commit-message :message version :name} queue-index message]
+  (let [msg (str "[Docs " (c/prefix) "] #" queue-index " " (b version)
+                 " \"" commit-message "\" @" author " - " (-> message (font "#4183C4")) "\n")]
     (send-message (config notifier) msg)
     (when (utils/released-version? version)
       (send-release-message (config notifier) msg))))
 
 
-(defn complete-version-building-with-warnings [notifier version queue-index message]
-  (let [msg (str "#" queue-index " docs " (-> (c/prefix) (font "#cc0066" 11) u) " - " (b version) (-> " complete with warnings" (font "#daa038") b)
+(defn complete-version-building-with-warnings [notifier {author :author commit-message :message version :name} queue-index message]
+  (let [msg (str "[Docs " (c/prefix) "] #" queue-index " " (b version)
+                 " \"" commit-message "\" @" author " - " (-> "complete with warnings" (font "#4183C4")) "\n"
                  "\n" message "\nSee full report at: " (c/domain) version "/report")]
     (send-message (config notifier) msg)
     (when (utils/released-version? version)
       (send-release-message (config notifier) msg))))
 
 
-(defn build-failed [notifier version queue-index & [e]]
-  (let [msg (str "#" queue-index " docs " (-> (c/prefix) (font "#cc0066" 11) u) " - " (b version) (-> " failed" (font "#d00000") b) "\n"
+(defn build-failed [notifier {author :author commit-message :message version :name} queue-index & [e]]
+  (let [msg (str "[Docs " (c/prefix) "] #" queue-index " " (b version)
+                 " \"" commit-message "\" @" author " - " (-> "failed" (font "#d00000") b) "\n"
                  (when e
                    (-> (utils/format-exception e) (font "#777777" 11) i)))]
     (send-message (config notifier) msg)

@@ -128,7 +128,7 @@
                 (timbre/info "Block until promise realised")
                 (vdata/add-report jdbc version-id total-report)
 
-                (notifications/complete-version-building notifier (:name branch) queue-index
+                (notifications/complete-version-building notifier branch queue-index
                                                          report
                                                          conflicts-with-develop
                                                          (:broken-links total-report)))
@@ -142,12 +142,12 @@
                   (pdata/delete-version-pages jdbc version-id)
                   (fdata/delete-version-folders jdbc version-id)
                   (vdata/delete-by-id jdbc version-id))
-                (notifications/build-failed notifier (:name branch) queue-index e)
+                (notifications/build-failed notifier branch queue-index e)
                 nil)))))
     (catch Exception e
       (do (error e)
           (error (.getMessage e))
-          (notifications/build-failed notifier (:name branch) queue-index e)
+          (notifications/build-failed notifier branch queue-index e)
           nil))))
 
 (defn generate

@@ -31,7 +31,7 @@
   (slack/start-version-building notifier (:name branch) queue-index)
   (skype/start-version-building notifier branch queue-index))
 
-(defn complete-version-building [notifier version queue-index
+(defn complete-version-building [notifier {version :name :as branch} queue-index
                                  report
                                  conflicts-with-develop
                                  broken-links]
@@ -58,12 +58,12 @@
     (slack/complete-version-building notifier version queue-index)
     (if (= 0 direct-links canonical-links env-links http-links
            sample-not-available sample-parsing-error image-format-error conflicts-with-develop toc-error broken-links-error)
-      (skype/complete-version-building notifier version queue-index "good job, everything is ok!")
-      (skype/complete-version-building-with-warnings notifier version queue-index msg))))
+      (skype/complete-version-building notifier branch queue-index "good job, everything is ok!")
+      (skype/complete-version-building-with-warnings notifier branch queue-index msg))))
 
-(defn build-failed [notifier version queue-index & [e]]
-  (slack/build-failed notifier version queue-index e)
-  (skype/build-failed notifier version queue-index e))
+(defn build-failed [notifier branch queue-index & [e]]
+  (slack/build-failed notifier (:name branch) queue-index e)
+  (skype/build-failed notifier branch queue-index e))
 
 (defn sample-parsing-error [notifier version page-url]
   (slack/sample-parsing-error notifier version page-url))
