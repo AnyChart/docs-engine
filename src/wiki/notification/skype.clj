@@ -106,7 +106,7 @@
   (let [msg (str "[Docs " (c/prefix) "] #" queue-index " " (b version)
                  " \"" commit-message "\" @" author " (" (subs commit 0 7) ") - "
                  (-> "complete with warnings" (font "#ff9800")) "\n"
-                 "\n" message "\nSee full report at: " (c/domain) version "/report")]
+                 message "\n<a href=\"" (c/domain) version "/report\">See full report</a>")]
     (send-message (config notifier) msg)
     (send-release-message (config notifier) version msg)))
 
