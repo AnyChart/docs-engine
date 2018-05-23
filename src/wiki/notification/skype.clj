@@ -84,34 +84,34 @@
     (send-message (config notifier) msg)))
 
 
-(defn start-version-building [notifier {author :author commit-message :message version :name} queue-index]
+(defn start-version-building [notifier {author :author commit-message :message version :name commit :commit} queue-index]
   (let [msg (str "[Docs " (c/prefix) "] #" queue-index " " (b version)
-                 " \"" commit-message "\" @" author " - " (-> "start" (font "#4183C4")) "\n")]
+                 " \"" commit-message "\" @" author " (" (subs commit 0 7) ") - " (-> "start" (font "#4183C4")) "\n")]
     (send-message (config notifier) msg)
     (when (utils/released-version? version)
       (send-release-message (config notifier) msg))))
 
 
-(defn complete-version-building [notifier {author :author commit-message :message version :name} queue-index message]
+(defn complete-version-building [notifier {author :author commit-message :message version :name commit :commit} queue-index message]
   (let [msg (str "[Docs " (c/prefix) "] #" queue-index " " (b version)
-                 " \"" commit-message "\" @" author " - " (-> message (font "#4183C4")) "\n")]
+                 " \"" commit-message "\" @" author " (" (subs commit 0 7) ") - " (-> message (font "#4183C4")) "\n")]
     (send-message (config notifier) msg)
     (when (utils/released-version? version)
       (send-release-message (config notifier) msg))))
 
 
-(defn complete-version-building-with-warnings [notifier {author :author commit-message :message version :name} queue-index message]
+(defn complete-version-building-with-warnings [notifier {author :author commit-message :message version :name commit :commit} queue-index message]
   (let [msg (str "[Docs " (c/prefix) "] #" queue-index " " (b version)
-                 " \"" commit-message "\" @" author " - " (-> "complete with warnings" (font "#4183C4")) "\n"
+                 " \"" commit-message "\" @" author " (" (subs commit 0 7) ") - " (-> "complete with warnings" (font "#4183C4")) "\n"
                  "\n" message "\nSee full report at: " (c/domain) version "/report")]
     (send-message (config notifier) msg)
     (when (utils/released-version? version)
       (send-release-message (config notifier) msg))))
 
 
-(defn build-failed [notifier {author :author commit-message :message version :name} queue-index & [e]]
+(defn build-failed [notifier {author :author commit-message :message version :name commit :commit} queue-index & [e]]
   (let [msg (str "[Docs " (c/prefix) "] #" queue-index " " (b version)
-                 " \"" commit-message "\" @" author " - " (-> "failed" (font "#d00000") b) "\n"
+                 " \"" commit-message "\" @" author " (" (subs commit 0 7) ") - " (-> "failed" (font "#d00000") b) "\n"
                  (when e
                    (-> (utils/format-exception e) (font "#777777" 11) i)))]
     (send-message (config notifier) msg)
