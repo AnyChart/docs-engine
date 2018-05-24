@@ -19,7 +19,9 @@
             [com.climate.claypoole :as cp]
             [taoensso.timbre :as timbre :refer [info error]]
             [version-clj.core :as version-clj]
-            [clojure.java.shell :refer [sh]]))
+            [clojure.java.shell :refer [sh]]
+            [clojure.string :as string]))
+
 
 (defn last-version? [jdbc branch-name]
   (let [last-version (vdata/default jdbc)]
@@ -28,10 +30,12 @@
            (= 0 (version-clj/version-compare branch-name last-version))
            (= 1 (version-clj/version-compare branch-name last-version))))))
 
+
 (defn last-version [jdbc branches]
   (let [versions (vdata/versions jdbc)]
     (first (sort (comp - version-clj/version-compare)
                  (concat versions branches)))))
+
 
 (defn complete-config [jdbc version version-config branch-path]
   (let [samples-count (dec (count (file-seq (clojure.java.io/file (str branch-path "/samples")))))
@@ -40,6 +44,7 @@
         (assoc-in [:vars :branch-name] (:key version))
         (assoc-in [:vars :samples-count] samples-count)
         (assoc-in [:vars :articles-count] articles-count))))
+
 
 (defn generate-landing [jdbc version version-config branch-path]
   (let [landing-file-path (str branch-path "/index.html")
@@ -57,7 +62,16 @@
                       []
                       {}))))
 
-(defn- generate-version
+
+(defn need-check-links [branch]
+  (or (utils/released-version? (:name branch))
+      (= (:name branch) "develop")
+      (= (:name branch) "master")
+      (string/includes? (:message branch) "#links")
+      (string/includes? (:message branch) "#all")))
+
+
+(defn generate-version
   [branch
    git-ssh
    api-versions
@@ -118,8 +132,9 @@
               (generate-zip offline-generator {:id  version-id
                                                :key (:name branch)})
 
-              (timbre/info "Start check-broken-links")
-              (analysis/check-broken-links (:name branch) report *broken-link-result)
+              (if (need-check-links branch)
+                (analysis/check-broken-links (:name branch) report *broken-link-result)
+                (deliver *broken-link-result {:error-links report :check-broken-links-disabled true}))
 
               (let [total-report @*broken-link-result
                     conflicts-with-develop (if (= "develop" (:name branch))
@@ -150,8 +165,9 @@
           (notifications/build-failed notifier branch queue-index e)
           nil))))
 
+
 (defn generate
-  [{:keys [jdbc notifier offline-generator] :as generator
+  [{:keys                                                                            [jdbc notifier offline-generator] :as generator
     {:keys [show-branches git-ssh data-dir reference-versions] :as generator-config} :config}
    queue-index]
   (try
@@ -169,7 +185,7 @@
               last-version (last-version jdbc name-branches)]
           (doall (pmap #(git/checkout git-ssh repo-path % (str versions-path %)) name-branches))
           (notifications/start-building notifier name-branches removed-branches queue-index)
-          (info "api versions:" api-versions)
+          (info "api versions:" (pr-str api-versions))
           (info "last version:" last-version)
           ;(info "actual branches :" (pr-str actual-branches))
           (let [result (doall (map #(generate-version %

@@ -3,7 +3,8 @@
             [clojure.string :as s]
             [link-checker.core :as link-checker]
             [link-checker.url]
-            [link-checker.utils :as link-checker-utils]))
+            [link-checker.utils :as link-checker-utils]
+            [taoensso.timbre :as timbre]))
 
 
 (defn landing-link? [link]
@@ -106,6 +107,7 @@
 
 
 (defn check-broken-links [version-key report *broken-link-result]
+  (timbre/info "Start check-broken-links")
   (let [sitemap-url (str (c/domain) "sitemap/" version-key)
         sitemap-urls (get-sitemap-urls version-key)
         config {:check-fn         (get-check-fn version-key)

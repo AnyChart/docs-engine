@@ -13,7 +13,7 @@
     url))
 
 
-(defn page [{:keys [broken-links error-links]}
+(defn page [{:keys [broken-links error-links] :as report}
             version-key]
   (hiccup-page/html5
     {:lang "en"}
@@ -52,32 +52,34 @@
                                [:div bad-link])]]))]]))
 
       [:h3 "Pages with 404 links"]
-      (if (empty? broken-links)
-        [:p {:style "color: green;"} "Not found."]
-        [:table {:cell-padding   10
-                 :cell-spacing   10
-                 :border-spacing "5px 15px"
-                 ;:border 1
-                 :style          "padding: 5px; margin: 10px;"}
-         [:tr
-          [:th "№"]
-          [:th "URL"]
-          [:th "broken links (href - text)"]
-          ;[:th "404"]
-          ]
-         (for [item (map-indexed #(assoc %2 :id (inc %1))
-                                 (sort-by :url broken-links))]
+      (if (:check-broken-links-disabled report)
+        [:p {:style "color: gray;"} "Checker not started. Use flags #links or #all in a commit message.<br>Always ON in develop, master and release version."]
+        (if (empty? broken-links)
+          [:p {:style "color: green;"} "Not found."]
+          [:table {:cell-padding   10
+                   :cell-spacing   10
+                   :border-spacing "5px 15px"
+                   ;:border 1
+                   :style          "padding: 5px; margin: 10px;"}
            [:tr
-            [:td (:id item)]
-            [:td {:style "padding-right: 5px;"}
-             [:a {:href (:url item)}
-              (drop-base-path (:url item) version-key)]]
-            [:td
-             (for [link (:links item)]
-               [:div
-                [:a {:href (:bad-url item)} (:href link)]
-                [:span {:style "color: #AAAAAA;"} " - "]
-                [:span (:text link)]]
-               )]
-            ;[:td (:bad-url link)]
-            ])])]]))
+            [:th "№"]
+            [:th "URL"]
+            [:th "broken links (href - text)"]
+            ;[:th "404"]
+            ]
+           (for [item (map-indexed #(assoc %2 :id (inc %1))
+                                   (sort-by :url broken-links))]
+             [:tr
+              [:td (:id item)]
+              [:td {:style "padding-right: 5px;"}
+               [:a {:href (:url item)}
+                (drop-base-path (:url item) version-key)]]
+              [:td
+               (for [link (:links item)]
+                 [:div
+                  [:a {:href (:bad-url item)} (:href link)]
+                  [:span {:style "color: #AAAAAA;"} " - "]
+                  [:span (:text link)]]
+                 )]
+              ;[:td (:bad-url link)]
+              ])]))]]))
