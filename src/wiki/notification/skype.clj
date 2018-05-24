@@ -94,18 +94,25 @@
     (send-release-message (config notifier) version msg)))
 
 
-(defn complete-version-building [notifier {author :author commit-message :message version :name commit :commit} queue-index]
+(defn complete-version-building [notifier {author :author commit-message :message version :name commit :commit}
+                                 queue-index report]
   (let [msg (str "[Docs " (c/prefix) "] #" queue-index " " (b version)
                  " \"" commit-message "\" @" author " (" (subs commit 0 7) ") - "
-                 (-> "complete" (font "#36a64f")) "\n")]
+                 (-> "complete" (font "#36a64f"))
+                 (when (:check-broken-links-disabled report) " (link-checker OFF)")
+                 "\n")]
     (send-message (config notifier) msg)
     (send-release-message (config notifier) version msg)))
 
 
-(defn complete-version-building-with-warnings [notifier {author :author commit-message :message version :name commit :commit} queue-index message]
+(defn complete-version-building-with-warnings [notifier {author :author commit-message :message version :name commit :commit}
+                                               queue-index report message]
+  (println )
   (let [msg (str "[Docs " (c/prefix) "] #" queue-index " " (b version)
                  " \"" commit-message "\" @" author " (" (subs commit 0 7) ") - "
-                 (-> "complete with warnings" (font "#ff9800")) "\n"
+                 (-> "complete with warnings" (font "#ff9800"))
+                 (when (:check-broken-links-disabled report) " (link-checker OFF)")
+                 "\n"
                  message "\n<a href=\"" (c/domain) version "/report\">See full report</a>")]
     (send-message (config notifier) msg)
     (send-release-message (config notifier) version msg)))

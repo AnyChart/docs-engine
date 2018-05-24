@@ -142,11 +142,7 @@
                                              (git/merge-conflicts git-ssh branch-path))]
                 (timbre/info "Block until promise realised")
                 (vdata/add-report jdbc version-id total-report)
-
-                (notifications/complete-version-building notifier branch queue-index
-                                                         report
-                                                         conflicts-with-develop
-                                                         (:broken-links total-report)))
+                (notifications/complete-version-building notifier branch queue-index total-report conflicts-with-develop))
               version-id))
           (catch Exception e
             (do (error e)

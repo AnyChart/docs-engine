@@ -39,17 +39,16 @@
 
 
 (defn complete-version-building [notifier {version :name :as branch} queue-index
-                                 report
-                                 conflicts-with-develop
-                                 broken-links]
-  (let [direct-links (count (set (mapcat :direct-links report)))
-        canonical-links (count (set (mapcat :non-canonical-links report)))
-        http-links (count (set (mapcat :http-links report)))
-        env-links (count (set (mapcat :env-links report)))
-        sample-not-available (count (set (mapcat :sample-not-available report)))
-        sample-parsing-error (count (set (mapcat :sample-parsing-error report)))
-        image-format-error (count (set (mapcat :image-format-error report)))
-        toc-error (count (set (mapcat :toc-error report)))
+                                 {broken-links :broken-links error-links :error-links :as report}
+                                 conflicts-with-develop]
+  (let [direct-links (count (set (mapcat :direct-links error-links)))
+        canonical-links (count (set (mapcat :non-canonical-links error-links)))
+        http-links (count (set (mapcat :http-links error-links)))
+        env-links (count (set (mapcat :env-links error-links)))
+        sample-not-available (count (set (mapcat :sample-not-available error-links)))
+        sample-parsing-error (count (set (mapcat :sample-parsing-error error-links)))
+        image-format-error (count (set (mapcat :image-format-error error-links)))
+        toc-error (count (set (mapcat :toc-error error-links)))
         broken-links-error (count broken-links)
         msg-coll [(when (pos? direct-links) (str "Direct links: " direct-links))
                   (when (pos? canonical-links) (str "Non canonical links: " canonical-links))
@@ -65,8 +64,8 @@
     (slack/complete-version-building notifier version queue-index)
     (if (= 0 direct-links canonical-links env-links http-links
            sample-not-available sample-parsing-error image-format-error conflicts-with-develop toc-error broken-links-error)
-      (skype/complete-version-building notifier branch queue-index)
-      (skype/complete-version-building-with-warnings notifier branch queue-index msg))))
+      (skype/complete-version-building notifier branch queue-index report)
+      (skype/complete-version-building-with-warnings notifier branch queue-index report msg))))
 
 
 (defn build-failed [notifier branch queue-index & [e]]
