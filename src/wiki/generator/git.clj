@@ -64,6 +64,7 @@
                          (string/replace #"^([^/]*)/(.*)$" "$2")))
                    (sort (distinct (concat branch-lines tag-lines))))
         filtered-lines (filter (fn [s] (and (some? s)
+                                            (seq s)
                                             (not (string/starts-with? s "HEAD")))) lines)
         branches (map (fn [s]
                         (let [[name commit author message] (string/split s #"\|-\|")]
