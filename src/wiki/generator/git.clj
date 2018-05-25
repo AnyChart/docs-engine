@@ -1,6 +1,7 @@
 (ns wiki.generator.git
   (:require [clojure.java.shell :refer [sh with-sh-env with-sh-dir]]
-            [clojure.string :refer [split]]))
+            [clojure.string :as string :refer [split]]
+            [wiki.util.utils :as utils]))
 
 
 (defn run-sh [& command]
@@ -12,7 +13,7 @@
                (let [res (sh "git" "--no-pager" "log" "-1" "--format=%ct" "--" path)]
                  (-> res
                      :out
-                     (clojure.string/trim)
+                     (string/trim)
                      read-string))))
 
 
@@ -48,21 +49,25 @@
   (set-user git-ssh path)
   (run-git git-ssh path "checkout" "develop")
   (run-git git-ssh path "pull" "origin" "develop")
-  (run-git git-ssh path "checkout" (last (clojure.string/split path #"/")))
+  (run-git git-ssh path "checkout" (last (string/split path #"/")))
   (let [git-resp (run-git git-ssh path "merge" "--no-commit" "--no-ff" "develop")
         result (count (re-seq #"CONFLICT" git-resp))]
     result))
 
 
-(defn remote-branches [git-ssh path pred]
-  (let [raw-lines (split (run-git git-ssh path "branch" "-r" "--format='%(refname:short)|-|%(objectname)|-|%(authorname)|-|%(contents:subject)'") #"\n")
-        lines (map #(clojure.string/replace % #"'" "") raw-lines)
+(defn remote-branches [git-ssh path]
+  (let [branch-lines (split (run-git git-ssh path "branch" "-r" "--format='%(refname:short)|-|%(objectname)|-|%(authorname)|-|%(contents:subject)'") #"\n")
+        tag-lines (split (run-git git-ssh path "for-each-ref" "--format='%(refname:short)|-|%(objectname)|-|%(authorname)|-|%(contents:subject)'" "refs/tags") #"\n")
+        lines (map (fn [line]
+                     (-> line
+                         (string/replace #"^(')(.*)(')$" "$2") ;; delete start and end quotes ' ;; delete ?origin/"
+                         (string/replace #"^([^/]*)/(.*)$" "$2")))
+                   (sort (distinct (concat branch-lines tag-lines))))
         filtered-lines (filter (fn [s] (and (some? s)
-                                            (not (.contains s "origin/HEAD"))
-                                            (pred s))) lines)
+                                            (not (string/starts-with? s "HEAD")))) lines)
         branches (map (fn [s]
-                        (let [[raw-name commit author message] (clojure.string/split s #"\|-\|")]
-                          {:name    (last (re-matches #"origin/(.+)" raw-name))
+                        (let [[name commit author message] (string/split s #"\|-\|")]
+                          {:name    name
                            :commit  commit
                            :author  author
                            :message message})) filtered-lines)]
@@ -70,8 +75,9 @@
 
 
 (defn actual-branches-with-hashes [git-ssh path]
-  (remote-branches git-ssh path (constantly true)))
+  (remote-branches git-ssh path))
 
 
 (defn version-branches-with-hashes [git-ssh path]
-  (remote-branches git-ssh path (fn [s] (re-find #"origin/\d+\.\d+\.\d+" s))))
+  (let [all-branches (actual-branches-with-hashes git-ssh path)]
+    (filter #(utils/released-version? (:name %)) all-branches)))

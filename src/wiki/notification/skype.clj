@@ -107,7 +107,6 @@
 
 (defn complete-version-building-with-warnings [notifier {author :author commit-message :message version :name commit :commit}
                                                queue-index report message]
-  (println )
   (let [msg (str "[Docs " (c/prefix) "] #" queue-index " " (b version)
                  " \"" commit-message "\" @" author " (" (subs commit 0 7) ") - "
                  (-> "complete with warnings" (font "#ff9800"))
