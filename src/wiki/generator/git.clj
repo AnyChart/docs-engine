@@ -35,7 +35,7 @@
 
 
 (defn update-repo [git-ssh repo]
-  (run-git git-ssh repo "fetch" "-p"))
+  (run-git git-ssh repo "fetch" "-p" "-P"))
 
 
 (defn checkout [git-ssh repo version target-path]
