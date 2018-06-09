@@ -210,8 +210,9 @@
       (response "Redirects empty")
       (response
         (->> redirects
+             (sort-by first)
              (map #(str (first %) "\t >> \t" (second %)))
-             (clojure.string/join "\n"))))))
+             (string/join "\n"))))))
 
 
 (defn- show-page-data [request version versions url url-version & _]
@@ -240,9 +241,9 @@
 (defn- check-version-middleware-by-url [handler]
   (fn [request]
     (let [url (-> request :route-params :*)
-          url-parts (filter seq (clojure.string/split url #"/"))
+          url-parts (filter seq (string/split url #"/"))
           possible-version-key (first url-parts)
-          short-url (clojure.string/join "/" (drop 1 url-parts))]
+          short-url (string/join "/" (drop 1 url-parts))]
       (if (versions-data/version-by-key (jdbc request) possible-version-key)
         (let [versions (versions-data/get-page-versions (jdbc request) short-url)
               url-version (first (filter #(= possible-version-key (:key %)) versions))]
