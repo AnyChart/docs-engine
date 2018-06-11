@@ -7,14 +7,18 @@
             [clj-time.core :as t]
             [clj-time.coerce :as ct]
             [clj-time.format :as f]
-            [honeysql.helpers :refer :all]))
+            [honeysql.helpers :refer :all]
+            [wiki.util.utils :as utils]))
+
 
 (def formatter (f/formatter "YYYY-MM-dd'T'hh:mm:ss'Z'"))
+
 
 (defn- get-priority [idx]
   (cond
     (> idx 5) 0.1
     :else (- 0.6 (/ idx 10))))
+
 
 (defn- generate-version-sitemap [jdbc idx version & [show-version]]
   (let [priority (get-priority idx)
@@ -22,17 +26,21 @@
     (map (fn [entry]
            {:tag     :url
             :content [{:tag :loc :content
-                            [(str (c/domain) (when show-version (str (:key version) "/")) (:url entry))]}
+                            [(str (c/domain)
+                                  (when show-version (str (:key version) "/"))
+                                  (utils/escape-url (:url entry)))]}
                       {:tag :priority :content [(format "%.1f" priority)]}
                       {:tag :changefreq :content ["monthly"]}
                       {:tag :lastmod :content [(f/unparse formatter
                                                           (ct/from-long (* 1000 (:last_modified entry))))]}]})
          entries)))
 
+
 (defn generate-sitemap [jdbc]
   (with-out-str
     (emit {:tag     :urlset :attrs {:xmlns "http://www.sitemaps.org/schemas/sitemap/0.9"}
            :content (generate-version-sitemap jdbc 0 (first (vdata/versions-full-info jdbc)))})))
+
 
 (defn generate-sitemap-version [jdbc version-name]
   (let [versions (vdata/versions-full-info jdbc)
