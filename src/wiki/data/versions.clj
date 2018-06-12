@@ -4,7 +4,8 @@
             [honeysql.helpers :refer :all :as honey]
             [clojure.java.jdbc :as clj-jdbc]
             [cheshire.core :refer [generate-string parse-string]]
-            [wiki.data.utils :refer [pg->clj clj->jsonb]]))
+            [wiki.data.utils :refer [pg->clj clj->jsonb]]
+            [wiki.util.utils :as utils]))
 
 
 (defn add-version [jdbc key commit tree config]
@@ -121,7 +122,8 @@
                                              [:= :versions.id :v.id])))
          sorted-versions (sort (comp - #(version-compare (:key %1) (:key %2))) versions)
          url-versions (map #(assoc % :url (str "/" (:key %)
-                                               (when (:url %) (str "/" (:url %)))))
+                                               (when (:url %)
+                                                 (str "/" (utils/escape-url (:url %))))))
                            sorted-versions)]
      url-versions))
   ([jdbc url]
