@@ -102,7 +102,7 @@
 
 (defn get-sitemap-urls [version-key]
   (let [sitemap-url (str (c/domain) "sitemap/" version-key)
-        sitemap-urls (map link-checker.url/prepare-url (link-checker/urls-from-sitemap sitemap-url))]
+        sitemap-urls (link-checker/urls-from-sitemap sitemap-url)]
     sitemap-urls))
 
 
