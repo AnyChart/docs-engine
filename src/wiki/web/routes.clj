@@ -24,7 +24,9 @@
             [wiki.views.main :as main-page]
             [wiki.views.page404 :as page-404]
             [wiki.web.helpers :refer :all]
-            [wiki.web.search :as web-search])
+            [wiki.web.search :as web-search]
+            [wiki.views.admin :as admin-view]
+            [taoensso.timbre :as timbre])
   (:import (com.googlecode.htmlcompressor.compressor HtmlCompressor ClosureJavaScriptCompressor)
            (com.google.javascript.jscomp CompilationLevel)))
 
@@ -296,11 +298,27 @@
     (analysis-page/page report version-key)))
 
 
+(defn admin-panel [request]
+  (let [versions (vdata/versions-full-info (jdbc request))]
+    (admin-view/page versions)))
+
+
+(defn delete-version [request]
+  (let [version-key (-> request :params :version)]
+    (timbre/info "DELETE version request:" version-key)
+    (vdata/remove-branch-by-key (jdbc request) version-key)
+    (redirect "/_admin_")))
+
+
 (defroutes app-routes
            (route/resources "/")
+           ;; management/admin routes
+           (GET "/_admin_" [] admin-panel)
            (GET "/_update_" [] request-update)
            (GET "/_redirects_" [] request-redirects)
            (POST "/_update_" [] request-update)
+           (POST "/_delete_/:version" [] delete-version)
+
            (GET "/" [] show-landing)
            (GET "/sitemap" [] show-sitemap)
            (GET "/sitemap.xml" [] show-sitemap)

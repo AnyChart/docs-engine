@@ -15,6 +15,7 @@
                  [com.anychart/playground-samples-parser "0.2.5"]
                  [com.anychart/link-checker "0.2.10"]
                  [org.jsoup/jsoup "1.11.3"]
+                 [garden "1.3.5"]
                  ;; web
                  [http-kit "2.3.0"]
                  [compojure "1.6.1"]
