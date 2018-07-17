@@ -1,6 +1,7 @@
 (ns wiki.data.folders
   (:require [wiki.components.jdbc :refer [one exec insert!]]
-            [honeysql.helpers :refer :all]))
+            [honeysql.helpers :refer :all]
+            [clojure.string :as string]))
 
 
 (defn add-folder [jdbc version-id url default-page]
@@ -20,8 +21,8 @@
                       (from :folders)
                       (where [:= :version_id version-id]
                              [:= :url (-> url
-                                          (clojure.string/replace #"^/" "")
-                                          (clojure.string/replace #"/$" ""))]))))))
+                                          (string/replace #"^/" "")
+                                          (string/replace #"/$" ""))]))))))
 
 
 (defn folder-exists? [jdbc version-id url]

@@ -1,4 +1,6 @@
-(ns wiki.views.iframe)
+(ns wiki.views.iframe
+  (:require [clojure.string :as string]))
+
 
 (defn iframe [sample]
   [:html {:lang "en"}
@@ -12,7 +14,7 @@
 
     (when (seq (:tags sample))
       [:meta {:name    "keywords"
-              :content (clojure.string/join "," (:tags sample))}])
+              :content (string/join "," (:tags sample))}])
 
     [:meta {:name    "description"
             :content "AnyChart - JavaScript Charts designed to be embedded and integrated"}]

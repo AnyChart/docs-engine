@@ -1,11 +1,10 @@
 (ns wiki.util.utils
-  (:require [clojure.string :as string]
-            [clojure.string :as s])
+  (:require [clojure.string :as string])
   (:import (org.jsoup Jsoup)))
 
 
 (defn escape-url [str]
-  (s/escape str {\% "%25"}))
+  (string/escape str {\% "%25"}))
 
 
 (defn deep-merge [a b]
@@ -22,13 +21,13 @@
 
 (defn name->url [name]
   (-> name
-      (clojure.string/replace #"^/" "")
-      (clojure.string/replace #"/" "-")
-      (clojure.string/replace #", " "-")
-      (clojure.string/replace #",_" "-")
-      (clojure.string/replace #"," "-")
-      (clojure.string/replace #" " "-")
-      (clojure.string/replace #"_" "-")
+      (string/replace #"^/" "")
+      (string/replace #"/" "-")
+      (string/replace #", " "-")
+      (string/replace #",_" "-")
+      (string/replace #"," "-")
+      (string/replace #" " "-")
+      (string/replace #"_" "-")
       string/lower-case))
 
 
@@ -82,7 +81,7 @@
 ;; select * from pages where version_id in (select id from versions where key = '7.13.0') AND content NOT LIKE '%sampleInit1%';
 ;; for og:image tag
 (defn articles-without-samples [file-name]
-  (let [articles (-> file-name slurp clojure.string/split-lines)
+  (let [articles (-> file-name slurp string/split-lines)
         articles-with-urls (map (fn [a] [a (str (name->url a) ".png")]) articles)]
     (doseq [a articles-with-urls]
       (println (a 0) " " (a 1)))))

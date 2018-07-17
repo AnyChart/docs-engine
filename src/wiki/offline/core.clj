@@ -13,13 +13,14 @@
             [me.raynes.fs :as fs]
             [cpath-clj.core :as cp]
             [wiki.offline.zip :as zip]
-            [taoensso.timbre :as timbre :refer [info error]]))
+            [taoensso.timbre :as timbre :refer [info error]]
+            [clojure.string :as string]))
 
 (def ^:const doctype "<!doctype html>")
 (def ^:const doctype-lenght (count doctype))
 
 (defn remove-doctype [html]
-  (if (= (-> html (subs 0 doctype-lenght) clojure.string/lower-case) doctype)
+  (if (= (-> html (subs 0 doctype-lenght) string/lower-case) doctype)
     (subs html doctype-lenght)
     html))
 
@@ -33,12 +34,12 @@
   (first (html/html-resource (java.io.StringReader. html))))
 
 (defn get-file-name [url]
-  (str (clojure.string/replace url #"[:\./]" "_") (fs/extension url)))
+  (str (string/replace url #"[:\./]" "_") (fs/extension url)))
 
 (defn copy-style [main-path]
   "replace paths in main.css: ../fonts -> fonts"
   (let [data (slurp (io/resource "public/main.css"))
-        replaced-data (clojure.string/replace data #"../fonts" "fonts")]
+        replaced-data (string/replace data #"../fonts" "fonts")]
     (spit (str main-path "/deps/main.css") replaced-data)))
 
 (defn copy-from-resource [resource-dir output-dir]
@@ -137,10 +138,10 @@
     (assoc-in node [:attrs :src] (str path "samples/" (:name iframe) ".html"))))
 
 (defn replace-external-links [html]
-  (-> html (clojure.string/replace #"href=\"//" "href=\"http://")))
+  (-> html (string/replace #"href=\"//" "href=\"http://")))
 
 (defn add-html [path]
-  (let [parts (clojure.string/split path #"#")]
+  (let [parts (string/split path #"#")]
     (if (= 2 (count parts))
       (if (empty? (first parts))
         path
@@ -202,7 +203,7 @@
            [:img] (partial replace-img-node main-path path links)))
 
 (defn get-relative-prefix-path [page-url]
-  (let [parts (clojure.string/split page-url (re-pattern "/"))]
+  (let [parts (string/split page-url (re-pattern "/"))]
     (condp = (count parts)
       1 "./"
       2 "../"
@@ -210,12 +211,12 @@
       4 "../../../")))
 
 (defn replace-ajax [code main-path path links]
-  (clojure.string/replace code #"\$\.ajax\(\{url: '([-a-zA-Z0-9\/\._:\(\)]+)'"
-                          #(let [url (get-url (% 1))
-                                 name (get-file-name url)
-                                 absolute-name (str main-path "/deps/" name)]
-                             (start-load-link-if-need url absolute-name links)
-                             (str "$.ajax({url: '" path "deps/" name "'"))))
+  (string/replace code #"\$\.ajax\(\{url: '([-a-zA-Z0-9\/\._:\(\)]+)'"
+                  #(let [url (get-url (% 1))
+                         name (get-file-name url)
+                         absolute-name (str main-path "/deps/" name)]
+                     (start-load-link-if-need url absolute-name links)
+                     (str "$.ajax({url: '" path "deps/" name "'"))))
 
 (defn save-page [page tree version versions main-path links]
   (let [path (get-relative-prefix-path (:url page))

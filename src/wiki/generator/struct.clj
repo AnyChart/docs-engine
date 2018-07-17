@@ -1,11 +1,12 @@
 (ns wiki.generator.struct
-  (:require [clojure.java.io :refer [file]]
-            [wiki.generator.git :refer [file-last-commit-date]]))
+  (:require [wiki.generator.git :refer [file-last-commit-date]]
+            [clojure.java.io :refer [file]]
+            [clojure.string :as string]))
 
 (defn- title [f]
   (-> f .getName
-      (clojure.string/replace #"_" " ")
-      (clojure.string/replace #"\.md$" "")))
+      (string/replace #"_" " ")
+      (string/replace #"\.md$" "")))
 
 (defn- is-doc [f]
   (and (re-matches #".*\.md$" (-> f .getName .toLowerCase))
@@ -13,7 +14,7 @@
 
 (defn- get-name [f]
   (-> f .getName
-      (clojure.string/replace #"\.md$" "")))
+      (string/replace #"\.md$" "")))
 
 (defn- has-docs [f]
   (some #(or (is-doc %)
@@ -30,8 +31,8 @@
 
 (defn- fix-document-content [content]
   (-> content
-      (clojure.string/replace-first #"\A(?s)(?m)(^\{[^\}]+\})" "")
-      (clojure.string/trim-newline)))
+      (string/replace-first #"\A(?s)(?m)(^\{[^\}]+\})" "")
+      (string/trim-newline)))
 
 (defn- read-document-config [content]
   (when-let [doc-header (re-matches #"(?s)(?m)(^\{[^\}]+\}).*" content)]

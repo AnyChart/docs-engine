@@ -6,18 +6,19 @@
             [taoensso.timbre :as timbre :refer [info]]
             [net.cgrand.enlive-html :as html]
             [wiki.generator.analysis.core :as analyzer]
-            [wiki.generator.toc :as toc]))
+            [wiki.generator.toc :as toc]
+            [clojure.string :as string]))
 
 (defn- fix-url [url]
   (-> url
       (subs 1)
-      (clojure.string/replace #"index\.md$" "")))
+      (string/replace #"index\.md$" "")))
 
 (defn replace-vars [s vars]
   (reduce (fn [s [key value]]
-            (clojure.string/replace s
-                                    (re-pattern (str "\\{\\{" (name key) "\\}\\}"))
-                                    (str value)))
+            (string/replace s
+                            (re-pattern (str "\\{\\{" (name key) "\\}\\}"))
+                            (str value)))
           s vars))
 
 (defn- generate-struct-item

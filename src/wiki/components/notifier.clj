@@ -3,7 +3,8 @@
             [cheshire.core :refer [generate-string]]
             [org.httpkit.client :as http]
             [wiki.notification.slack :as slack]
-            [wiki.notification.skype :as skype]))
+            [wiki.notification.skype :as skype]
+            [clojure.string :as string]))
 
 
 (defrecord Notifier [config]
@@ -60,7 +61,7 @@
                   (when (pos? toc-error) (str "TOC errors: " toc-error))
                   (when (pos? conflicts-with-develop) (str "Conflicts with develop: " conflicts-with-develop))
                   (when (pos? broken-links-error) (str "404 errors: " broken-links-error))]
-        msg (clojure.string/join "\n" (filter some? msg-coll))]
+        msg (string/join "\n" (filter some? msg-coll))]
     (slack/complete-version-building notifier version queue-index)
     (if (= 0 direct-links canonical-links env-links http-links
            sample-not-available sample-parsing-error image-format-error conflicts-with-develop toc-error broken-links-error)

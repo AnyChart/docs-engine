@@ -1,5 +1,5 @@
 (ns wiki.web.redirects
-  (:require [clojure.string :as s :refer [split]]
+  (:require [clojure.string :as string :refer [split]]
             [ring.util.response :refer [redirect]]
             [toml.core :as toml]
             [taoensso.timbre :refer [info]]
@@ -7,7 +7,7 @@
 
 (defn parse-redirects [str-stata]
   (->> str-stata
-       clojure.string/trim
+       string/trim
        (re-seq #"([^>\s]*)\s*>>\s*([^>\s]*)\s*\n")
        (map #(drop 1 %))))
 
@@ -32,7 +32,7 @@
         uri (:uri request)
         version (get-version uri)]
     (if (and version (every? #(not= version %) ["_update_" "sitemap" "latest" "_redirects_"]))
-      (let [version-redirects (map (fn [coll] (map #(s/replace % "{VERSION}" version) coll)) redirects)
+      (let [version-redirects (map (fn [coll] (map #(string/replace % "{VERSION}" version) coll)) redirects)
             redirect-uri (second (first (filter #(= uri (first %)) version-redirects)))]
         (if redirect-uri
           (redirect redirect-uri)

@@ -2,7 +2,8 @@
   (:require [cheshire.core :refer [generate-string]]
             [org.httpkit.client :as http]
             [wiki.util.utils :as utils]
-            [wiki.config.core :as c]))
+            [wiki.config.core :as c]
+            [clojure.string :as string]))
 
 
 (defn- channel [notifier] (-> notifier :config :slack :channel))
@@ -34,12 +35,12 @@
                       :mrkdwn_in ["text", "pretext"]
                       :fields    (if (seq branches)
                                    [{:title "Branches"
-                                     :value (clojure.string/join ", " branches)
+                                     :value (string/join ", " branches)
                                      :short true}]
                                    [])}]
         removed-fields (when (seq removed-branches)
                          [{:title "Removed branches"
-                           :value (clojure.string/join ", " removed-branches)
+                           :value (string/join ", " removed-branches)
                            :short true}])]
     (notify-attach notifier (update-in attachments [0 :fields] concat removed-fields))))
 
@@ -50,12 +51,12 @@
                       :mrkdwn_in ["text", "pretext"]
                       :fields    (if (seq branches)
                                    [{:title "Branches"
-                                     :value (clojure.string/join ", " branches)
+                                     :value (string/join ", " branches)
                                      :short true}]
                                    [])}]
         removed-fields (when (seq removed-branches)
                          [{:title "Removed branches"
-                           :value (clojure.string/join ", " removed-branches)
+                           :value (string/join ", " removed-branches)
                            :short true}])]
     (notify-attach notifier (update-in attachments [0 :fields] concat removed-fields))))
 
@@ -67,7 +68,7 @@
                       :mrkdwn_in ["text", "pretext"]
                       :fields    (if (seq branches)
                                    [{:title "Branches"
-                                     :value (clojure.string/join ", " branches)
+                                     :value (string/join ", " branches)
                                      :short true}]
                                    [])}]]
     (notify-attach notifier attachments)))

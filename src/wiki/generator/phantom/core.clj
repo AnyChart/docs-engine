@@ -1,20 +1,20 @@
 (ns wiki.generator.phantom.core
   (:require [clojure.java.io :refer [file]]
-            [clojure.string :refer [lower-case]]
             [clojure.java.shell :refer [sh]]
             [wiki.generator.phantom.download :as download]
             [wiki.util.utils :as utils]
             [selmer.parser :refer [render-file]]
-            [taoensso.timbre :as timbre :refer [info]])
+            [taoensso.timbre :as timbre :refer [info]]
+            [clojure.string :as string])
   (:import [org.imgscalr Scalr Scalr$Method Scalr$Mode]
            [java.awt.image BufferedImageOp BufferedImage]
            [javax.imageio ImageIO]))
 
 
 (defn- fix-code [code]
-  (clojure.string/replace code
-                          (clojure.string/re-quote-replacement ".animation(true")
-                          ".animation(false"))
+  (string/replace code
+                  (string/re-quote-replacement ".animation(true")
+                  ".animation(false"))
 
 
 (defn generate-img [phantom-engine
