@@ -49,7 +49,8 @@
        "To start update versions, just push this button." [:br]
        "This action is used by github webhook."
        [:div [:a.btn.btn-success {:role "button"
-                                  :href "/_update_"} "Start updating versions"]]]
+                                  :href "/_update_"
+                                  :rel  "nofollow"} "Start updating versions"]]]
 
       [:p                                                   ;.alert.alert-primary {:role "alert"}
        [:p "Select a version and choose an action."]
@@ -58,9 +59,14 @@
          (for [version versions]
            [:option {:value (:key version)} (:key version)])]
 
-        [:a.btn.btn-secondary {:role "button" :href "/_admin_"} [:i.fas.fa-sync-alt]]
+        [:a.btn.btn-secondary {:role  "button"
+                               :href  "/_admin_"
+                               :title "Update page"
+                               :rel   "nofollow"} [:i.fas.fa-sync-alt]]
 
-        [:button.btn.btn-danger {:id "deleteButton" :type "button"} "Remove"]
+        [:button.btn.btn-danger {:id    "deleteButton"
+                                 :type  "button"
+                                 :title "Remove version"} "Remove"]
 
         [:div.btn-group
          [:button.btn.btn-primary.dropdown-toggle
@@ -68,23 +74,32 @@
            :type          "button"
            :aria-expanded "false"
            :aria-haspopup "true"
-           :data-toggle   "dropdown"}
+           :data-toggle   "dropdown"
+           :title         "Rebuild version"}
           "Rebuild"]
          [:div.dropdown-menu {:aria-labelledby "dropdownMenuButton"}
           [:a.dropdown-item {:id    "rebuildCommit"
                              :href  "#"
-                             :title "Rebuild according to commit message flags"} "commit message flags"]
+                             :title "Rebuild according to commit message flags"
+                             :rel   "nofollow"}
+           "commit message flags"]
           [:a.dropdown-item {:id    "rebuildFast"
                              :href  "#"
-                             :title "Rebuild without link checking"} "fast"]
+                             :title "Rebuild without link checking"
+                             :rel   "nofollow"}
+           "fast"]
           [:a.dropdown-item {:id    "rebuildLinkChecker"
                              :href  "#"
-                             :title "Rebuild with link checking"} "with link checking"]]]
+                             :title "Rebuild with link checking"
+                             :rel   "nofollow"}
+           "with link checking"]]]
 
         [:button.btn.btn-link {:id "showReportLink" :type "button"} "Show report"]]
 
        [:p
-        [:a.btn.btn-link {:role "button" :href "/_redirects_"}
+        [:a.btn.btn-link {:role "button"
+                          :href "/_redirects_"
+                          :rel  "nofollow"}
          "Show redirects"]]
        ]]
      ;(for [version versions]
