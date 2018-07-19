@@ -63,12 +63,15 @@
                       {}))))
 
 
-(defn need-check-links [branch]
-  (or (utils/released-version? (:name branch))
-      (= (:name branch) "develop")
-      (= (:name branch) "master")
-      (string/includes? (:message branch) "#links")
-      (string/includes? (:message branch) "#all")))
+(defn need-check-links [branch gen-params]
+  (cond
+    (and (= (:name branch) (:version gen-params)) (:fast gen-params)) false
+    (and (= (:name branch) (:version gen-params)) (:linkchecker gen-params)) true
+    :else (or (utils/released-version? (:name branch))
+              (= (:name branch) "develop")
+              (= (:name branch) "master")
+              (string/includes? (:message branch) "#links")
+              (string/includes? (:message branch) "#all"))))
 
 
 (defn generate-version
@@ -79,7 +82,8 @@
    {:keys [jdbc notifier offline-generator] :as generator}
    {:keys [data-dir] :as generator-config}
    queue-index
-   generate-images]
+   generate-images
+   gen-params]
   (try
     (do
       (info "building" branch)
@@ -132,7 +136,7 @@
               (generate-zip offline-generator {:id  version-id
                                                :key (:name branch)})
 
-              (if (need-check-links branch)
+              (if (need-check-links branch gen-params)
                 (analysis/check-broken-links (:name branch) report *broken-link-result)
                 (deliver *broken-link-result {:error-links report :check-broken-links-disabled true}))
 
@@ -165,38 +169,42 @@
 (defn generate
   [{:keys                                                                            [jdbc notifier offline-generator] :as generator
     {:keys [show-branches git-ssh data-dir reference-versions] :as generator-config} :config}
-   queue-index]
+   queue-index
+   gen-params]
   (try
-    (do
-      (let [repo-path (str data-dir "/repo/")
-            versions-path (str data-dir "/versions/")]
-        (fs/mkdirs versions-path)
-        (git/update-repo git-ssh repo-path)
-        (let [actual-branches (vgen/actual-branches show-branches git-ssh repo-path)
-              docs-versions (map :name actual-branches)
-              removed-branches (vgen/remove-branches jdbc (map :name actual-branches) data-dir)
-              branches (vgen/filter-for-rebuild jdbc actual-branches)
-              name-branches (map :name branches)
-              api-versions (api-versions/get-versions reference-versions)
-              last-version (last-version jdbc name-branches)]
-          (doall (pmap #(git/checkout git-ssh repo-path % (str versions-path %)) name-branches))
-          (notifications/start-building notifier name-branches removed-branches queue-index)
-          (info "api versions:" (pr-str api-versions))
-          (info "last version:" last-version)
-          ;(info "actual branches :" (pr-str actual-branches))
-          (let [result (doall (map #(generate-version %
-                                                      git-ssh
-                                                      api-versions
-                                                      docs-versions
-                                                      generator
-                                                      generator-config
-                                                      queue-index
-                                                      (= (:name %) last-version))
-                                   branches))]
-            (fs/delete-dir versions-path)
-            (if (some nil? result)
-              (notifications/complete-building-with-errors notifier name-branches queue-index)
-              (notifications/complete-building notifier name-branches removed-branches queue-index))))))
+    ;; remove branch if needs to rebuild it
+    (when-let [version (:version gen-params)]
+      (vdata/remove-branch-by-key jdbc version))
+    (let [repo-path (str data-dir "/repo/")
+          versions-path (str data-dir "/versions/")]
+      (fs/mkdirs versions-path)
+      (git/update-repo git-ssh repo-path)
+      (let [actual-branches (vgen/actual-branches show-branches git-ssh repo-path)
+            docs-versions (map :name actual-branches)
+            removed-branches (vgen/remove-branches jdbc (map :name actual-branches) data-dir)
+            branches (vgen/filter-for-rebuild jdbc actual-branches)
+            name-branches (map :name branches)
+            api-versions (api-versions/get-versions reference-versions)
+            last-version (last-version jdbc name-branches)]
+        (doall (pmap #(git/checkout git-ssh repo-path % (str versions-path %)) name-branches))
+        (notifications/start-building notifier name-branches removed-branches queue-index)
+        (info "api versions:" (pr-str api-versions))
+        (info "last version:" last-version)
+        ;(info "actual branches :" (pr-str actual-branches))
+        (let [result (doall (map #(generate-version %
+                                                    git-ssh
+                                                    api-versions
+                                                    docs-versions
+                                                    generator
+                                                    generator-config
+                                                    queue-index
+                                                    (= (:name %) last-version)
+                                                    gen-params)
+                                 branches))]
+          (fs/delete-dir versions-path)
+          (if (some nil? result)
+            (notifications/complete-building-with-errors notifier name-branches queue-index)
+            (notifications/complete-building notifier name-branches removed-branches queue-index)))))
     (catch Exception e
       (do (error e)
           (error (.getMessage e))

@@ -76,7 +76,7 @@
 (defn- request-update [request]
   (redisca/enqueue (redis request)
                    (-> request :component :config :queue)
-                   "generate"))
+                   {:cmd "generate"}))
 
 
 (defn- show-latest [request]
@@ -310,14 +310,26 @@
     (redirect "/_admin_")))
 
 
+(defn rebuild-version [request]
+  (let [params (-> request :params)]
+    (timbre/info "REBUILD version request:" params)
+    ;; just for not showing updated version in select on admin panel
+    (when-let [version (:version params)]
+      (vdata/remove-branch-by-key (jdbc request) version))
+    (redisca/enqueue (redis request)
+                     (-> request :component :config :queue)
+                     (assoc params :cmd "generate"))))
+
+
 (defroutes app-routes
            (route/resources "/")
            ;; management/admin routes
            (GET "/_admin_" [] admin-panel)
-           (GET "/_update_" [] request-update)
            (GET "/_redirects_" [] request-redirects)
+           (GET "/_update_" [] request-update)
            (POST "/_update_" [] request-update)
            (POST "/_delete_/:version" [] delete-version)
+           (POST "/_rebuild_" [] rebuild-version)
 
            (GET "/" [] show-landing)
            (GET "/sitemap" [] show-sitemap)

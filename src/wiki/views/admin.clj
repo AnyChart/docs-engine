@@ -1,6 +1,7 @@
 (ns wiki.views.admin
   (:require [garden.core :as garden]))
 
+
 (defn css []
   (garden/css
     {:pretty-print? false}
@@ -9,31 +10,31 @@
                       :display "inline-block"
                       :padding "4px 10px"}]
     [:select.custom-select {:width "200px"}]
-    [:.main {:width "600px"}]
-    [:.btn-danger :.btn-primary {:margin-left "10px"}]))
+    [:.main {:width "500px"}]
+    [:.btn-secondary :.btn-danger :.btn-primary :.btn-group {:margin-left "10px"}]))
 
 
 (defn page [versions]
+  ;(println versions)
   (hiccup.page/html5
     {:lang "en"}
     [:head
      [:meta {:charset "utf-8"}]
      [:meta {:name    "viewport"
              :content "width=device-width, initial-scale=1, shrink-to-fit=no"}]
-
      [:link {:crossorigin "anonymous"
              :integrity   "sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
              :href        "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
              :rel         "stylesheet"}]
-     [:style (css)]
-     ]
+     [:link {:crossorigin "anonymous"
+             :integrity   "sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ"
+             :href        "https://use.fontawesome.com/releases/v5.1.1/css/all.css",
+             :rel         "stylesheet"}]
+     [:style (css)]]
 
     [:body
      [:script {:src "/admin/main.js"}]
-     [:script {
-               ;:crossorigin "anonymous"
-               ;:integrity   "sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-               :src "https://code.jquery.com/jquery-3.2.1.min.js"}]
+     [:script {:src "https://code.jquery.com/jquery-3.2.1.min.js"}]
      [:script {:crossorigin "anonymous"
                :integrity   "sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
                :src         "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"}]
@@ -45,28 +46,46 @@
 
      [:div.main
       [:div.alert.alert-primary {:role "alert"}
-       "To start update versions, just push this button."
-       [:div [:button.btn.btn-success {:id   "updateButton"
-                                       :type "button"} "Start updating versions"]]]
+       "To start update versions, just push this button." [:br]
+       "This action is used by github webhook."
+       [:div [:a.btn.btn-success {:role "button"
+                                  :href "/_update_"} "Start updating versions"]]]
 
-      ;[:div [:a.btn.btn-success {:role "button"} "Start updating versions"]]
-
-      [:div                                                 ;.alert.alert-primary {:role "alert"}
-       [:p "Select a verson and choose an action.<br>If you want to regenerate a version, first you need to delete it.<br>Then you need to restart updating."]
+      [:p                                                   ;.alert.alert-primary {:role "alert"}
+       [:p "Select a version and choose an action."]
        [:div.form-group
         [:select.custom-select {:id "versionSelect"}
          (for [version versions]
            [:option {:value (:key version)} (:key version)])]
 
-        [:button.btn.btn-danger {:id "deleteButton" :type "button"}
-         "Delete version"]
+        [:a.btn.btn-secondary {:role "button" :href "/_admin_"} [:i.fas.fa-sync-alt]]
 
-        [:button.btn.btn-primary {:id "checkLinksButton" :type "button"}
-         "Check links"]
+        [:div.btn-group
+         [:button.btn.btn-primary.dropdown-toggle
+          {:id            "dropdownMenuButton"
+           :type          "button"
+           :aria-expanded "false"
+           :aria-haspopup "true"
+           :data-toggle   "dropdown"}
+          "Rebuild"]
+         [:div.dropdown-menu {:aria-labelledby "dropdownMenuButton"}
+          [:a.dropdown-item {:id    "rebuildCommit"
+                             :href  "#"
+                             :title "Rebuild according to commit message flags"} "commit message flags"]
+          [:a.dropdown-item {:id    "rebuildFast"
+                             :href  "#"
+                             :title "Rebuild without link checking"} "fast"]
+          [:a.dropdown-item {:id    "rebuildLinkChecker"
+                             :href  "#"
+                             :title "Rebuild with link checking"} "with link checking"]]]
 
         [:button.btn.btn-link {:id "showReportLink" :type "button"}
-         "Show report"]
-        ]]]
+         "Show report"]]
+
+       [:p
+        [:a.btn.btn-link {:role "button" :href "/_redirects_"}
+         "Show redirects"]]
+       ]]
      ;(for [version versions]
      ;  [:div
      ;   [:span.version-label
