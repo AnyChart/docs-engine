@@ -17,8 +17,8 @@ window.onload = (e) => {
         $('button').prop('disabled', true);
         $.ajax({
             type: "POST",
-            url: `/_delete_/${selectedVersion()}`,
-            data: {},
+            url: `/_delete_`,
+            data: {version: selectedVersion()},
             success: (data, textStatus, jqXHR) => {
                 window.location.href = "/_admin_";
             },

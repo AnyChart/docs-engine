@@ -10,7 +10,7 @@
                       :display "inline-block"
                       :padding "4px 10px"}]
     [:select.custom-select {:width "200px"}]
-    [:.main {:width "500px"}]
+    [:.main {:width "580px"}]
     [:.btn-secondary :.btn-danger :.btn-primary :.btn-group {:margin-left "10px"}]))
 
 
@@ -60,6 +60,8 @@
 
         [:a.btn.btn-secondary {:role "button" :href "/_admin_"} [:i.fas.fa-sync-alt]]
 
+        [:button.btn.btn-danger {:id "deleteButton" :type "button"} "Remove"]
+
         [:div.btn-group
          [:button.btn.btn-primary.dropdown-toggle
           {:id            "dropdownMenuButton"
@@ -79,8 +81,7 @@
                              :href  "#"
                              :title "Rebuild with link checking"} "with link checking"]]]
 
-        [:button.btn.btn-link {:id "showReportLink" :type "button"}
-         "Show report"]]
+        [:button.btn.btn-link {:id "showReportLink" :type "button"} "Show report"]]
 
        [:p
         [:a.btn.btn-link {:role "button" :href "/_redirects_"}

@@ -328,7 +328,7 @@
            (GET "/_redirects_" [] request-redirects)
            (GET "/_update_" [] request-update)
            (POST "/_update_" [] request-update)
-           (POST "/_delete_/:version" [] delete-version)
+           (POST "/_delete_" [] delete-version)
            (POST "/_rebuild_" [] rebuild-version)
 
            (GET "/" [] show-landing)
