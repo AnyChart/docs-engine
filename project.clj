@@ -7,7 +7,7 @@
                  [com.climate/claypoole "1.1.4"]
                  [toml "0.1.3"]
                  ;; templates
-                 [selmer "1.11.7"]
+                 [selmer "1.11.8"]
                  [hiccup "1.0.5"]
                  ;; html
                  [enlive "1.1.6"]
@@ -27,11 +27,11 @@
                  ;; databases
                  [com.taoensso/carmine "2.18.1"]
                  ;; there are some problems with new jdbc using sphinx
-                 [org.clojure/java.jdbc "0.7.6"]
+                 [org.clojure/java.jdbc "0.7.7"]
                  [mysql/mysql-connector-java "5.1.36"]
                  [postgresql/postgresql "9.3-1102.jdbc41"]
                  [clojure.jdbc/clojure.jdbc-c3p0 "0.3.3"]
-                 [honeysql "0.9.2"]
+                 [honeysql "0.9.3"]
                  ;; markdown
                  [markdown-clj "1.0.2"]
                  ;; filesystem
