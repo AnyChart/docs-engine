@@ -1,5 +1,7 @@
 (ns wiki.views.page404
-  (:require [hiccup.page]))
+  (:require [hiccup.page]
+            [wiki.views.common :as page]))
+
 
 (defn page []
   (hiccup.page/html5
@@ -7,6 +9,8 @@
     [:head
      [:title "Not found | AnyChart Documentation"]
      [:meta {:name "viewport" :content "width=device-width, initial-scale=1.0"}]
+     [:meta {:name "description" :content "404 Not found page"}]
+
      [:link {:rel "icon" :href "/i/anychart.ico" :type "image/x-icon"}]
      [:link {:rel "stylesheet" :type "text/css" :href "/main.css"}]
      [:link {:rel "stylesheet" :href "https://cdn.anychart.com/fonts/2.5.0/anychart.css"}]
@@ -29,21 +33,9 @@
       [:div.container-fluid
        [:div.row
         [:div.col-sm-24
-         [:a.navbar-brand {:rel "nofollow" :href "https://www.anychart.com"}
-          [:img {:alt "AnyChart" :src "/i/logo-empty.png"}]
-          [:div.chart-row
-           [:span.chart-col.green]
-           [:span.chart-col.orange]
-           [:span.chart-col.red]]]
-         [:a.brand.hidden-super-small " Documentation"]]
-        [:div.helpers.pull-right.hidden-mobile
-         [:div.questions.affix
-          [:a.text-support {:rel "nofollow" :href "http://support.anychart.com"}
-           [:div]]
-          [:span.hidden-super-small "Still have questions?"
-           [:br]
-           [:a {:rel "nofollow" :href "https://www.anychart.com/support/"}
-            "Contact support"]]]]]]]
+         (page/anychart-icon)
+         (page/anychart-label)]
+        (page/anychart-help)]]]
 
      [:div.wrapper.container-fluid
       [:div.row

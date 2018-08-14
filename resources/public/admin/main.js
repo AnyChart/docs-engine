@@ -12,7 +12,8 @@ const rebuildSuccessFn = (data, textStatus, jqXHR) => {
 };
 
 
-window.onload = (e) => {
+init = (e) => {
+    console.log("Admin panel load!");
     $('#deleteButton').click((e) => {
         $('button').prop('disabled', true);
         $.ajax({
@@ -66,3 +67,5 @@ window.onload = (e) => {
         window.location.href = `/${selectedVersion()}/report`
     });
 };
+
+init();

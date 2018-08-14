@@ -6455,6 +6455,11 @@ a.navbar-brand:hover .chart-row .chart-col.red {
   float: left;
   margin-right: 5px;
 }
+.brand-label a.documentation {
+  color: white;
+  cursor: pointer;
+  text-decoration: none;
+}
 .helpers {
   margin-right: 220px;
 }
@@ -7433,6 +7438,46 @@ div.container-fluid .row {
     line-height: 1;
     -webkit-font-smoothing: antialiased;
 }*/
+#article-content .admin-panel {
+  margin: 0 auto;
+  max-width: 600px;
+  padding: 20px;
+  border: 2px solid #ddd;
+}
+#article-content .admin-panel .update-versions-box {
+  padding: 10px 0;
+  background-color: #f3f3f3;
+  margin: 10px 0 20px;
+}
+#article-content .admin-panel .update-versions-box .text {
+  color: #333333;
+}
+#article-content .admin-panel .update-versions-box #updateVersionsButton {
+  color: white;
+  margin: 5px 0;
+}
+#article-content .admin-panel .other-buttons-box {
+  margin-top: 20px;
+}
+#article-content .admin-panel ul li:before {
+  content: none;
+}
+#article-content .admin-panel .version-label {
+  width: 200px;
+  display: inline-block;
+  padding: 4px 10px;
+}
+#article-content .admin-panel select.custom-select {
+  width: 200px;
+}
+#article-content .admin-panel #refreshButton {
+  font-size: 16px;
+}
+#article-content .admin-panel select,
+#article-content .admin-panel .btn-secondary,
+#article-content .admin-panel .btn-group {
+  margin-right: 10px;
+}
 @media (max-width: 1120px) {
   .hidden-tablet {
     display: none;
@@ -7440,7 +7485,7 @@ div.container-fluid .row {
 }
 @media (min-width: 1121px) {
   .hidden-tablet {
-    display: block  !important;
+    display: block !important;
   }
 }
 @media (max-width: 1120px) {
@@ -7460,7 +7505,7 @@ div.container-fluid .row {
 }
 @media (min-width: 861px) {
   .hidden-mobile {
-    display: block  !important;
+    display: block !important;
   }
 }
 @media (max-width: 860px) {

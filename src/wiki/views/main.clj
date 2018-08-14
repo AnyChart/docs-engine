@@ -1,10 +1,11 @@
 (ns wiki.views.main
   (:require [clojure.java.io :as io]
             [hiccup.core :as h]
-            [hiccup.page]
-            [clojure.string :as s]
+            [hiccup.page :as hiccup-page]
+            [clojure.string :as string]
             [clj-time.core :as t]
             [wiki.util.utils :as utils]
+            [wiki.views.common :as page]
             [wiki.config.core :as c]))
 
 
@@ -56,7 +57,7 @@
    [:meta {:property "article:publisher" :content "https://www.facebook.com/AnyCharts"}]
    [:meta {:property "fb:admins" :content "704106090"}]
    (when (seq (-> data :page :tags))
-     [:meta {:name "keywords" :content (s/join ", " (-> data :page :tags))}])
+     [:meta {:name "keywords" :content (string/join ", " (-> data :page :tags))}])
    [:meta {:content "c5fb5d43a81ea360" :name "yandex-verification"}]
    [:link {:rel "canonical" :href (canonical-page-url (:versions data) (:url data))}]
    [:link {:type "image/x-icon" :href "/i/anychart.ico" :rel "icon"}]
@@ -86,24 +87,9 @@
   [:header
    [:div.container-fluid
     [:div.row
-
      [:div.col-sm-24
-      [:a.navbar-brand {:title  "AnyChart Home"
-                        :target "_blank"
-                        :rel    "nofollow"
-                        :href   "https://www.anychart.com"}
-       ;[:img {:alt "AnyChart" :src "/i/logo-empty.png"}]
-       [:div.border-icon]
-       [:div.chart-row
-        [:span.chart-col.green]
-        [:span.chart-col.orange]
-        [:span.chart-col.red]]]
-      [:span.brand-label
-       [:a.brand {:title  "AnyChart Home"
-                  :target "_blank"
-                  :rel    "nofollow"
-                  :href   "https://www.anychart.com"} "AnyChart"]
-       [:span.hidden-extra-mobile " Documentation"]]
+      (page/anychart-icon)
+      (page/anychart-label)
 
       [:div.dropdown.pull-right.version-select.hidden-tablet
        [:button.btn.btn-blue.btn-sm {:data-toggle "dropdown" :type "button"}
@@ -120,18 +106,7 @@
       ;; without this chrome sometimes puts sidebar-switcher on new line
       [:div {:style "display: inline-block;"} ""]]
 
-     [:div.helpers.pull-right.hidden-tablet
-      [:div.questions.affix
-       [:a.text-support {:title "AnyChart Support"
-                         :rel   "nofollow"
-                         :href  "http://support.anychart.com"}
-        [:div]]
-       [:span.hidden-super-small "Still have questions?"
-        [:br]
-        [:a {:title "AnyChart Support"
-             :rel   "nofollow"
-             :href  "https://www.anychart.com/support/"}
-         "Contact support"]]]]]]])
+     (page/anychart-help)]]])
 
 
 (defn mobile-search [data]
@@ -282,7 +257,7 @@
 
 
 (defn page [data]
-  (hiccup.page/html5
+  (hiccup-page/html5
     {:lang "en"}
     (head data)
     (body data)))
