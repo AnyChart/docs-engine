@@ -1,12 +1,12 @@
 (ns wiki.views.main
-  (:require [clojure.java.io :as io]
+  (:require [wiki.util.utils :as utils]
+            [wiki.views.common :as page]
+            [wiki.config.core :as c]
+            [clojure.java.io :as io]
+            [clojure.string :as string]
             [hiccup.core :as h]
             [hiccup.page :as hiccup-page]
-            [clojure.string :as string]
-            [clj-time.core :as t]
-            [wiki.util.utils :as utils]
-            [wiki.views.common :as page]
-            [wiki.config.core :as c]))
+            [clj-time.core :as t]))
 
 
 (def samples-script (slurp (io/resource "templates/samples-update.selmer")))
@@ -80,6 +80,7 @@
    [:script {:scr "https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"}]
    "<![endif]-->"
    ;[:script#anychart_script {:async "true" :src (:anychart-url data)}]
+   page/head-tag-manager
    ])
 
 
@@ -226,6 +227,7 @@
 
 (defn body [data]
   [:body
+   page/body-tag-manager
    [:link {:rel "stylesheet" :type "text/css" :href (str "/main.css?v=" (:commit data))}]
    ;[:link {:rel "stylesheet" :type "text/css" :href (:anychart-css-url data)}]
    [:link {:rel "stylesheet" :type "text/css" :href "https://cdn.anychart.com/fonts/2.7.2/anychart.css"}]
