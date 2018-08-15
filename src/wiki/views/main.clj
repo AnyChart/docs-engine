@@ -46,6 +46,7 @@
 (defn head [data]
   [:head
    [:title (:title-prefix data)]
+   page/head-tag-manager
    [:meta {:name "viewport" :content "width=device-width, initial-scale=1.0"}]
    [:meta {:name "description" :content (:description data)}]
 
@@ -80,7 +81,6 @@
    [:script {:scr "https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"}]
    "<![endif]-->"
    ;[:script#anychart_script {:async "true" :src (:anychart-url data)}]
-   page/head-tag-manager
    ])
 
 

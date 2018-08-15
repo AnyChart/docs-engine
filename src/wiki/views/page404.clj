@@ -8,6 +8,7 @@
     {:lang "en"}
     [:head
      [:title "Not found | AnyChart Documentation"]
+     page/head-tag-manager
      [:meta {:name "viewport" :content "width=device-width, initial-scale=1.0"}]
      [:meta {:name "description" :content "404 Not found page"}]
 
@@ -28,7 +29,7 @@
      [:script {:id "main_script" :type "text/javascript" :src "/main.min.js" :async true}]]
 
     [:body
-
+     page/body-tag-manager
      [:header
       [:div.container-fluid
        [:div.row
