@@ -6380,13 +6380,13 @@ header .col-sm-24 {
   height: 100%;
 }
 a.navbar-brand {
+  display: flex;
   position: relative;
   float: left;
   font-size: 16px;
-  padding: 13px 12px 0 0;
+  padding: 13px 0px 0 0;
   color: #d5edff;
   height: 50px;
-  width: 40px;
 }
 a.navbar-brand > img {
   height: 28px;
@@ -6432,6 +6432,16 @@ a.navbar-brand .chart-row .chart-col.orange {
   background: #ff8207;
   height: 13px;
 }
+a.navbar-brand .brand {
+  font-size: 20px;
+  line-height: 28px;
+  color: #c9e8ff;
+  font-weight: normal;
+  text-decoration: none;
+  float: left;
+  margin-right: 5px;
+  margin-left: 12px;
+}
 a.navbar-brand:hover .chart-row .chart-col.green {
   height: 16px;
 }
@@ -6447,13 +6457,6 @@ a.navbar-brand:hover .chart-row .chart-col.red {
   padding: 13px 0;
   color: #ffffff;
   font-weight: 600;
-}
-.brand-label a.brand {
-  color: #c9e8ff;
-  font-weight: normal;
-  text-decoration: none;
-  float: left;
-  margin-right: 5px;
 }
 .brand-label a.documentation {
   color: white;

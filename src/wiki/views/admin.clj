@@ -166,12 +166,12 @@
 
           [:div..update-versions-box.row
            [:div.col-sm-15 [:div.text "To start update versions, just push this button." [:br]
-             "This action is used by GitHub webhook."]]
+                            "This action is used by GitHub webhook."]]
            ;[:br.visible-mobile]
            [:div.col-sm-9 [:a#updateVersionsButton.btn.btn-default.btn-success {:role "button"
-                                                                  :type "button"
-                                                                  :href "/_update_"
-                                                                  :rel  "nofollow"} "Start updating versions"]]]
+                                                                                :type "button"
+                                                                                :href "/_update_"
+                                                                                :rel  "nofollow"} "Start updating versions"]]]
 
           [:p "Select a version and choose an action."]
           [:form.form-inline

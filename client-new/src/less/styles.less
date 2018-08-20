@@ -46,13 +46,13 @@ header {
 }
 
 a.navbar-brand {
+  display: flex;
   position: relative;
   float: left;
   font-size: 16px;
-  padding: 13px 12px 0 0;
+  padding: 13px 0px 0 0;
   color: #d5edff;
   height: 50px;
-  width: 40px;
   & > img {
     height: 28px;
     width: 117px;
@@ -97,6 +97,16 @@ a.navbar-brand {
       }
     }
   }
+  .brand {
+    font-size: 20px;
+    line-height: 28px;
+    color: #c9e8ff;
+    font-weight: normal;
+    text-decoration: none;
+    float: left;
+    margin-right: 5px;
+    margin-left: 12px;
+  }
   &:hover .chart-row .chart-col {
     &.green {
       height: 16px;
@@ -116,13 +126,6 @@ a.navbar-brand {
   padding: 13px 0;
   color: #ffffff;
   font-weight: 600;
-  a.brand {
-    color: #c9e8ff;
-    font-weight: normal;
-    text-decoration: none;
-    float: left;
-    margin-right: 5px;
-  }
   a.documentation {
     color: white;
     cursor: pointer;

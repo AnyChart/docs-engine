@@ -37,15 +37,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
    [:div.chart-row
     [:span.chart-col.green]
     [:span.chart-col.orange]
-    [:span.chart-col.red]]])
+    [:span.chart-col.red]]
+   [:span.brand {:title  "AnyChart Home"
+                 :target "_blank"
+                 :rel    "nofollow"
+                 :href   "https://www.anychart.com"} "AnyChart"]])
 
 
 (defn anychart-label []
   [:span.brand-label
-   [:a.brand {:title  "AnyChart Home"
-              :target "_blank"
-              :rel    "nofollow"
-              :href   "https://www.anychart.com"} "AnyChart"]
    [:a.documentation.hidden-extra-mobile {:title "AnyChart Documentation"
                                           :href  "/"} " Documentation"]])
 
