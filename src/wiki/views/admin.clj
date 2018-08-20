@@ -129,7 +129,7 @@
   (hiccup-page/html5
     {:lang "en"}
     [:head
-     [:title "Not found | AnyChart Documentation"]
+     [:title "Admin Panel | AnyChart Documentation"]
      [:meta {:name "viewport" :content "width=device-width, initial-scale=1.0"}]
      [:link {:rel "icon" :href "/i/anychart.ico" :type "image/x-icon"}]
      [:link {:rel "stylesheet" :type "text/css" :href "/main.css"}]
