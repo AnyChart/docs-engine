@@ -13,7 +13,6 @@ const rebuildSuccessFn = (data, textStatus, jqXHR) => {
 
 
 init = (e) => {
-    console.log("Admin panel load!");
     $('#deleteButton').click((e) => {
         $('button').prop('disabled', true);
         $.ajax({
