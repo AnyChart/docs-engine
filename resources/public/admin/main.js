@@ -65,6 +65,11 @@ init = (e) => {
     $('#showReportLink').click((e) => {
         window.location.href = `/${selectedVersion()}/report`
     });
+
+    $('#githubLink').click((e) => {
+        e.preventDefault();
+        window.location.href = `https://github.com/AnyChart/docs.anychart.com/tree/${selectedVersion()}`
+    });
 };
 
 init();

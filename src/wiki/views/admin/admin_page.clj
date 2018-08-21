@@ -208,16 +208,15 @@
                              :href "/_redirects_"
                              :rel  "nofollow"}
             "Show redirects"]
-           [:a.btn.btn-link {:role "button"
+           [:a.btn.btn-link {:id   "githubLink"
+                             :role "button"
                              :href "https://github.com/AnyChart/docs.anychart.com"
                              :rel  "nofollow"}
             "GitHub Documentation"]
            [:a.btn.btn-link {:role "button"
                              :href "https://github.com/AnyChart/docs-engine"
                              :rel  "nofollow"}
-            "GitHub Docs Engine"]
-
-           ]
+            "GitHub Docs Engine"]]
           ]
          ]
         ]]]
