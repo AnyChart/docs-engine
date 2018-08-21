@@ -1,5 +1,5 @@
-(ns wiki.views.admin
-  (:require [wiki.views.common :as page]
+(ns wiki.views.admin.admin-page
+  (:require [wiki.views.common :as common]
             [garden.core :as garden]
             [hiccup.page :as hiccup-page]))
 
@@ -125,36 +125,18 @@
 ;; =====================================================================================================================
 ;; bootstrap 3
 ;; =====================================================================================================================
-(defn page [versions]
+(defn page [{:keys [commit] :as data} versions]
   (hiccup-page/html5
     {:lang "en"}
-    [:head
-     [:title "Admin Panel | AnyChart Documentation"]
-     [:meta {:name "viewport" :content "width=device-width, initial-scale=1.0"}]
-     [:link {:rel "icon" :href "/i/anychart.ico" :type "image/x-icon"}]
-     [:link {:rel "stylesheet" :type "text/css" :href "/main.css"}]
-     [:link {:rel "stylesheet" :href "https://cdn.anychart.com/fonts/2.5.0/anychart.css"}]
-     "<!--[if lt IE 9]>"
-     [:script {:scr "https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"}]
-     [:script {:scr "https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"}]
-     "<![endif]-->"
-     [:link {:rel "apple-touch-icon", :sizes "57x57", :href "/icons/57.png"}]
-     [:link {:rel "apple-touch-icon", :sizes "76x76", :href "/icons/76.png"}]
-     [:link {:rel "apple-touch-icon", :sizes "120x120", :href "/icons/120.png"}]
-     [:link {:rel "apple-touch-icon", :sizes "152x152", :href "/icons/152.png"}]
-     [:link {:rel "apple-touch-icon", :sizes "167x167", :href "/icons/167.png"}]
-     [:link {:rel "apple-touch-icon", :sizes "180x180", :href "/icons/180.png"}]
-     [:script {:type "text/javascript"} "window['version'] = 'latest';window['isUrlVersion']=false;"]
-     [:script {:id "main_script" :type "text/javascript" :src "/main.min.js" :async true}]]
-
+    (common/head data false)
     [:body
+     (common/styles-body commit)
      [:header
       [:div.container-fluid
        [:div.row
         [:div.col-sm-24
-         (page/anychart-icon)
-         (page/anychart-label)]
-        (page/anychart-help)]]]
+         (common/anychart-brand)]
+        (common/anychart-help)]]]
 
      [:div.wrapper.container-fluid
       [:div.row
@@ -239,6 +221,9 @@
           ]
          ]
         ]]]
+
+     [:script {:type "text/javascript"} "window['version'] = 'latest';window['isUrlVersion']=false;"]
+     [:script {:id "main_script" :type "text/javascript" :src (str "/main.min.js?v=" commit) :async true}]
      [:script {:src "https://code.jquery.com/jquery-3.2.1.min.js"}]
-     [:script {:src "/admin/main.js"}]
+     [:script {:src (str "/admin/main.js?v=" commit)}]
      ]))

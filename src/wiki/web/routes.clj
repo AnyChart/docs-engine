@@ -1,34 +1,39 @@
 (ns wiki.web.routes
-  (:require [selmer.parser :refer [render-file add-tag!]]
-            [compojure.core :refer [defroutes routes GET POST]]
-            [compojure.route :as route]
-            [ring.util.response :refer [redirect response content-type file-response header]]
-            [ring.util.request :refer [request-url]]
-            [ring.middleware.params :refer [wrap-params]]
-            [ring.middleware.keyword-params :refer [wrap-keyword-params]]
-            [ring.middleware.json :refer [wrap-json-response]]
-            [wiki.components.redis :as redisca]
-            [wiki.components.notifier :refer [notify-404]]
-            [wiki.data.versions :as versions-data]
-            [wiki.data.pages :as pages-data]
-            [wiki.data.folders :as folders-data]
-            [wiki.data.sitemap :as sitemap]
-            [wiki.data.search :as search]
-            [wiki.util.utils :as utils]
-            [wiki.web.tree :refer [tree-view tree-view-local]]
-            [wiki.web.redirects :refer [wrap-redirect]]
-            [criterium.core :refer [bench]]
-            [wiki.data.versions :as vdata]
-            [wiki.generator.analysis.page :as analysis-page]
-            [clojure.string :as string]
-            [wiki.views.main :as main-page]
-            [wiki.views.page404 :as page-404]
-            [wiki.web.helpers :refer :all]
-            [wiki.web.search :as web-search]
-            [wiki.views.admin :as admin-view]
-            [taoensso.timbre :as timbre])
-  (:import (com.googlecode.htmlcompressor.compressor HtmlCompressor ClosureJavaScriptCompressor)
-           (com.google.javascript.jscomp CompilationLevel)))
+  (:require
+    ;; components
+    [wiki.components.redis :as redisca]
+    [wiki.components.notifier :refer [notify-404]]
+    ;; data
+    [wiki.data.versions :as versions-data]
+    [wiki.data.pages :as pages-data]
+    [wiki.data.folders :as folders-data]
+    [wiki.data.sitemap :as sitemap]
+    [wiki.data.search :as search]
+    [wiki.data.versions :as vdata]
+    ;; wiki utils
+    [wiki.util.utils :as utils]
+    [wiki.generator.analysis.page :as analysis-page]
+    ;;web
+    [wiki.web.tree :refer [tree-view tree-view-local]]
+    [wiki.web.redirects :refer [wrap-redirect]]
+    [wiki.web.helpers :refer :all]
+    [wiki.web.search :as web-search]
+    ;; pages
+    [wiki.views.main.main-page :as main-page]
+    [wiki.views.page404.page404 :as page-404]
+    [wiki.views.admin.admin-page :as admin-view]
+    ;; utils
+    [selmer.parser :refer [render-file add-tag!]]
+    [compojure.core :refer [defroutes routes GET POST]]
+    [compojure.route :as route]
+    [ring.util.response :refer [redirect response content-type file-response header]]
+    [ring.util.request :refer [request-url]]
+    [ring.middleware.params :refer [wrap-params]]
+    [ring.middleware.keyword-params :refer [wrap-keyword-params]]
+    [ring.middleware.json :refer [wrap-json-response]]
+    [taoensso.timbre :as timbre]
+    [criterium.core :refer [bench]]
+    [clojure.string :as string]))
 
 
 (add-tag! :tree-view (fn [args context-map]
@@ -60,7 +65,9 @@
 
 
 (defn- show-404 [request]
-  (page-404/page))
+  (page-404/page {:title-prefix "Not found | AnyChart Documentation"
+                  :description  "404 Not found page"
+                  :commit       (:commit (config request))}))
 
 
 (defn- error-404 [request]
@@ -128,23 +135,16 @@
               :page                 page
               :versions             versions
               :is-ga-speed-insights (:is-ga-speed-insights request)
-              :commit               (:commit (config request))}
-        page (main-page/page data)
-        ;html-compressor (HtmlCompressor.)
-        ]
-    ;(.setRemoveIntertagSpaces html-compressor true)
-    ;(.setRemoveQuotes html-compressor true)
-    ;;(.setJavaScriptCompressor html-compressor (ClosureJavaScriptCompressor. CompilationLevel/SIMPLE_OPTIMIZATIONS))
-    ;;(.setCompressJavaScript html-compressor true)
-    ;(.compress html-compressor page)
-    page))
+              :commit               (:commit (config request))}]
+    (main-page/page data)))
 
 
 (defn- show-landing [request]
   (let [url ""
         versions (versions-data/get-page-versions (jdbc request) url)
         version (first versions)
-        page (pages-data/page-by-url (jdbc request) (:id version) url)]
+        ; page (pages-data/page-by-url (jdbc request) (:id version) url)
+        ]
     ;if page
     ;(show-page request version versions page false)
     (let [url "Quick_Start/Quick_Start"
@@ -300,7 +300,9 @@
 
 (defn admin-panel [request]
   (let [versions (vdata/versions-full-info (jdbc request))]
-    (admin-view/page versions)))
+    (admin-view/page {:title-prefix "Admin Panel | AnyChart Documentation\""
+                      :description  "Admin Panel page"
+                      :commit       (:commit (config request))} versions)))
 
 
 (defn delete-version [request]

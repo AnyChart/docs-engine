@@ -1,6 +1,7 @@
-(ns wiki.views.main
+(ns wiki.views.main.main-page
   (:require [wiki.util.utils :as utils]
-            [wiki.views.common :as page]
+            [wiki.views.common :as common]
+            [wiki.views.resources :as resources]
             [wiki.config.core :as c]
             [clojure.java.io :as io]
             [clojure.string :as string]
@@ -32,65 +33,12 @@
     (reduce str (map #(tree-view % (:version data) (:is-url-version data)) entries))))
 
 
-(defn version-that-has-this-page-url [versions page-url]
-  (first (filter #(.endsWith (:url %) page-url) versions)))
-
-
-(defn canonical-page-url [versions page-url]
-  (let [last-page-url-version (version-that-has-this-page-url versions page-url)]
-    (if (= (:key last-page-url-version) (:key (first versions)))
-      (str (c/domain) page-url)
-      (str (c/domain) (:key last-page-url-version) (when page-url (str "/" page-url))))))
-
-
-(defn head [data]
-  [:head
-   [:title (:title-prefix data)]
-   page/head-tag-manager
-   [:meta {:name "viewport" :content "width=device-width, initial-scale=1.0"}]
-   [:meta {:name "description" :content (:description data)}]
-
-   [:meta {:property "og:title" :content (:title-prefix data)}]
-   [:meta {:property "og:description" :content (:description data)}]
-   [:meta {:property "og:image" :content (str "http://static.anychart.com/docs/images/" (:image-url data) ".png")}]
-   [:meta {:property "og:type" :content "article"}]
-   [:meta {:property "og:site_name" :content "AnyChart Documentation"}]
-   [:meta {:property "article:publisher" :content "https://www.facebook.com/AnyCharts"}]
-   [:meta {:property "fb:admins" :content "704106090"}]
-   (when (seq (-> data :page :tags))
-     [:meta {:name "keywords" :content (string/join ", " (-> data :page :tags))}])
-   [:meta {:content "c5fb5d43a81ea360" :name "yandex-verification"}]
-   [:link {:rel "canonical" :href (canonical-page-url (:versions data) (:url data))}]
-   [:link {:type "image/x-icon" :href "/i/anychart.ico" :rel "icon"}]
-   "<!--[if IE]>"
-   [:link {:rel "stylesheet" :type "text/css" :href (str "/main.css?v=" (:commit data))}]
-   ;[:link {:rel "stylesheet" :type "text/css" :href (:anychart-css-url data)}]
-   ; http://cdn.anychart.com/fonts/2.7.5/demo.html
-   [:link {:rel "stylesheet" :type "text/css" :href "https://cdn.anychart.com/fonts/2.7.2/anychart.css"}]
-   [:link {:rel "stylesheet" :type "text/css" :href "https://fonts.googleapis.com/css?family=Open+Sans:400,600"}]
-   ;[:link {:rel "stylesheet" :type "text/css" :href "/lib/jquery-custom-content-scroller/jquery.mCustomScrollbar.min.css"}]
-   [:link {:rel "apple-touch-icon" :sizes "57x57" :href "/icons/57.png"}]
-   [:link {:rel "apple-touch-icon" :sizes "76x76" :href "/icons/76.png"}]
-   [:link {:rel "apple-touch-icon" :sizes "120x120" :href "/icons/120.png"}]
-   [:link {:rel "apple-touch-icon" :sizes "120x120" :href "/icons/152.png"}]
-   [:link {:rel "apple-touch-icon" :sizes "152x152" :href "/icons/167.png"}]
-   [:link {:rel "apple-touch-icon" :sizes "167x167" :href "/icons/180.png"}]
-   "<![endif]-->"
-   "<!--[if lt IE 9]>"
-   [:script {:scr "https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"}]
-   [:script {:scr "https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"}]
-   "<![endif]-->"
-   ;[:script#anychart_script {:async "true" :src (:anychart-url data)}]
-   ])
-
-
 (defn header [data]
   [:header
    [:div.container-fluid
     [:div.row
      [:div.col-sm-24
-      (page/anychart-icon)
-      (page/anychart-label)
+      (common/anychart-brand)
 
       [:div.dropdown.pull-right.version-select.hidden-tablet
        [:button.btn.btn-blue.btn-sm {:data-toggle "dropdown" :type "button"}
@@ -107,7 +55,7 @@
       ;; without this chrome sometimes puts sidebar-switcher on new line
       [:div {:style "display: inline-block;"} ""]]
 
-     (page/anychart-help)]]])
+     (common/anychart-help)]]])
 
 
 (defn mobile-search [data]
@@ -227,18 +175,8 @@
 
 (defn body [data]
   [:body
-   page/body-tag-manager
-   [:link {:rel "stylesheet" :type "text/css" :href (str "/main.css?v=" (:commit data))}]
-   ;[:link {:rel "stylesheet" :type "text/css" :href (:anychart-css-url data)}]
-   [:link {:rel "stylesheet" :type "text/css" :href "https://cdn.anychart.com/fonts/2.7.2/anychart.css"}]
-   [:link {:rel "stylesheet" :type "text/css" :href "https://fonts.googleapis.com/css?family=Open+Sans:400,600"}]
-   ;[:link {:rel "stylesheet" :type "text/css" :href "/lib/jquery-custom-content-scroller/jquery.mCustomScrollbar.min.css"}]
-   [:link {:rel "apple-touch-icon" :sizes "57x57" :href "/icons/57.png"}]
-   [:link {:rel "apple-touch-icon" :sizes "76x76" :href "/icons/76.png"}]
-   [:link {:rel "apple-touch-icon" :sizes "120x120" :href "/icons/120.png"}]
-   [:link {:rel "apple-touch-icon" :sizes "120x120" :href "/icons/152.png"}]
-   [:link {:rel "apple-touch-icon" :sizes "152x152" :href "/icons/167.png"}]
-   [:link {:rel "apple-touch-icon" :sizes "167x167" :href "/icons/180.png"}]
+   resources/body-tag-manager
+   (common/styles-body (:commit data))
    (header data)
    (mobile-search data)
    (main-content data)
@@ -261,5 +199,5 @@
 (defn page [data]
   (hiccup-page/html5
     {:lang "en"}
-    (head data)
+    (common/head data true)
     (body data)))
