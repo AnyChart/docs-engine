@@ -7,33 +7,33 @@
                  [com.climate/claypoole "1.1.4"]
                  [toml "0.1.3"]
                  ;; templates
-                 [selmer "1.11.8"]
+                 [selmer "1.12.1"]
                  [hiccup "1.0.5"]
                  ;; html
                  [enlive "1.1.6"]
-                 [org.apache.commons/commons-lang3 "3.7"]
+                 [org.apache.commons/commons-lang3 "3.8.1"]
                  [com.anychart/playground-samples-parser "0.2.5"]
                  [com.anychart/link-checker "0.2.10"]
                  [org.jsoup/jsoup "1.11.3"]
-                 [garden "1.3.5"]
+                 [garden "1.3.6"]
                  ;; web
                  [http-kit "2.3.0"]
                  [compojure "1.6.1"]
                  [ring/ring-json "0.4.0"]
-                 [ring/ring-core "1.6.3"]
+                 [ring/ring-core "1.7.0"]
                  [com.rpl/specter "1.1.1"]
                  ;; logging
                  [com.taoensso/timbre "4.10.0"]
                  ;; databases
-                 [com.taoensso/carmine "2.18.1"]
+                 [com.taoensso/carmine "2.19.0"]
                  ;; there are some problems with new jdbc using sphinx
-                 [org.clojure/java.jdbc "0.7.7"]
+                 [org.clojure/java.jdbc "0.7.8"]
                  [mysql/mysql-connector-java "5.1.36"]
                  [postgresql/postgresql "9.3-1102.jdbc41"]
                  [clojure.jdbc/clojure.jdbc-c3p0 "0.3.3"]
-                 [honeysql "0.9.3"]
+                 [honeysql "0.9.4"]
                  ;; markdown
-                 [markdown-clj "1.0.2"]
+                 [markdown-clj "1.0.3"]
                  ;; filesystem
                  [me.raynes/fs "1.4.6"]
                  [cpath-clj "0.1.2"]
