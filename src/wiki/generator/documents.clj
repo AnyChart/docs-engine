@@ -9,10 +9,12 @@
             [wiki.generator.toc :as toc]
             [clojure.string :as string]))
 
+
 (defn- fix-url [url]
   (-> url
       (subs 1)
       (string/replace #"index\.md$" "")))
+
 
 (defn replace-vars [s vars]
   (reduce (fn [s [key value]]
@@ -20,6 +22,7 @@
                             (re-pattern (str "\\{\\{" (name key) "\\}\\}"))
                             (str value)))
           s vars))
+
 
 (defn- generate-struct-item
   [notifier jdbc version samples base-path item api-versions generator-config generate-images report version-config]
@@ -54,6 +57,7 @@
                                            (str base-path "/" (:name item))
                                            % api-versions generator-config generate-images report version-config)
                     items))))))
+
 
 (defn generate [notifier jdbc version samples data api-versions
                 generator-config generate-images version-config]

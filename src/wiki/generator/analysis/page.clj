@@ -1,6 +1,7 @@
 (ns wiki.generator.analysis.page
   (:require [hiccup.page :as hiccup-page]))
 
+
 (defn drop-base-path [url version-key]
   (let [index (.indexOf url version-key)
         url (if (>= index 0)
