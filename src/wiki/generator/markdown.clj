@@ -85,7 +85,7 @@
          (catch Exception e (timbre/error "ERROR img gen: " e)))))
 
 
-(defn- sample-transformer [id-counter notifier page-url version samples generator-config generate-images page-report]
+(defn- sample-transformer [*id-counter *links notifier page-url version samples generator-config generate-images page-report]
   (fn [text state]
     [(if (or (:code state) (:codeblock state))
        text
@@ -98,13 +98,14 @@
                                                    #"(\d+%)" "\"$1\""))]
              (when (and (:generate-images generator-config)
                         generate-images
-                        (= 0 @id-counter))
+                        (= 0 @*id-counter))
                (generate-img generator-config sample-path page-url samples version))
+             (swap! *links update-in [:samples] conj {:path sample-path})
              (string/replace text
                              source
                              (build-sample-div notifier
                                                page-url
-                                               (swap! id-counter inc)
+                                               (swap! *id-counter inc)
                                                version samples
                                                sample-path custom-settings page-report)))
            (catch Exception e
@@ -119,21 +120,26 @@
      state]))
 
 
-(defn- add-api-links [text version api-versions api-default-version]
+(defn- add-api-links [text version api-versions api-default-version *links]
   (let [real-version (if (some #{version} api-versions)
-                       version api-default-version)]
+                       version
+                       api-default-version)]
     (string/replace text
                     #"\{api:([^}]+)\}([^{]+)\{api\}"
                     (fn [[_ link title]]
+                      (swap! *links update-in [:api] conj {:title title
+                                                           :url   link})
                       (str "<a class='method' target='_blank' href='//" (c/reference) "/" real-version "/" link "'>" title "</a>")))))
 
 
-(defn- add-pg-links [text version]
+(defn- add-pg-links [text version *links]
   (let [real-version (if (utils/released-version? version)
                        version "develop")]
     (string/replace text
                     #"\{pg:([^}]+)\}([^{]+)\{pg\}"
                     (fn [[_ link title]]
+                      (swap! *links update-in [:pg] conj {:title title
+                                                          :url   link})
                       (let [link (string/replace link #"<i>|</i>|<em>|</em>" "_")
                             link-parts (string/split link #"/")
                             project (first link-parts)
@@ -175,20 +181,30 @@
      state]))
 
 
-(defn to-html [notifier page-url source version samples api-versions
+(defn to-html [notifier
+               page-url
+               source
+               version
+               samples
+               api-versions
                {:keys [reference-default-version] :as generator-config}
-               generate-images page-report]
-  (let [{tags :tags html-without-tags :html} (get-tags source)
+               generate-images
+               page-report]
+  (let [*links (atom {:samples []
+                      :api     []
+                      :pg      []})
+        {tags :tags html-without-tags :html} (get-tags source)
         html (-> (md-to-html-string html-without-tags
                                     :heading-anchors true
                                     :reference-links? true
                                     :replacement-transformers (concat [(branch-name-transformer version)
                                                                        (image-checker notifier page-url version page-report)]
                                                                       transformer-vector
-                                                                      [(sample-transformer (atom 0) notifier page-url version samples
+                                                                      [(sample-transformer (atom 0) *links notifier page-url version samples
                                                                                            generator-config generate-images page-report)]))
-                 (add-api-links version api-versions reference-default-version)
-                 (add-pg-links version))
+                 (add-api-links version api-versions reference-default-version *links)
+                 (add-pg-links version *links))
         html-tags (if (empty? tags) html
                                     (add-tags html tags))]
+    ;; (println @*links)
     {:html html-tags :tags tags}))
