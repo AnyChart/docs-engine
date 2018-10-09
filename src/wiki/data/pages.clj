@@ -56,3 +56,15 @@
   (query jdbc (-> (select :url :full_name :content)
                   (from :pages)
                   (where [:= :version-id version-id]))))
+
+
+(defn links [jdbc version-name]
+  (let [data (query jdbc (-> (select :url :full_name :config)
+                             (from :pages)
+                             (where [:= :version_id
+                                     (-> (select :id)
+                                         (from :versions)
+                                         (where [:= :key version-name]))])))]
+    (map (fn [page]
+           (clojure.core/update page :config #(when % (pg->clj %))))
+         data)))

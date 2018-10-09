@@ -22,6 +22,8 @@
     [wiki.views.main.main-page :as main-page]
     [wiki.views.page404.page404 :as page-404]
     [wiki.views.admin.admin-page :as admin-view]
+    ;; handlers
+    [wiki.web.handlers.links-handler :as links-handler]
     ;; utils
     [selmer.parser :refer [render-file add-tag!]]
     [compojure.core :refer [defroutes routes GET POST]]
@@ -342,6 +344,9 @@
            (GET "/latest/" [] show-latest)
            (GET "/latest/search" [] show-latest-search)
            (GET "/latest/*" [] try-show-latest-page)
+
+           (POST "/links" [] links-handler/links)
+           (GET "/links" [] links-handler/links)
 
            (GET "/:version/check/*" [] (check-version-middleware try-show-page))
            (GET "/:version/search" [] (check-version-middleware search-page))

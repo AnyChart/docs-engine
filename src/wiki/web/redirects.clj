@@ -5,15 +5,18 @@
             [taoensso.timbre :refer [info]]
             [clojure.java.io :as io]))
 
+
 (defn parse-redirects [str-stata]
   (->> str-stata
        string/trim
        (re-seq #"([^>\s]*)\s*>>\s*([^>\s]*)\s*\n")
        (map #(drop 1 %))))
 
+
 (defn parse-config [str-data]
   (let [data (toml/read str-data :keywordize)]
     (update-in data [:redirect :redirects] parse-redirects)))
+
 
 (defn get-config [file-path]
   (when (.exists (io/file file-path))
@@ -27,6 +30,7 @@
         version (first (split uri #"/"))]
     version))
 
+
 (defn check-redirect [request handler]
   (let [redirects (-> request :component :redirects deref)
         uri (:uri request)
@@ -38,6 +42,7 @@
           (redirect redirect-uri)
           (handler request)))
       (handler request))))
+
 
 (defn wrap-redirect [handler]
   (fn [request] (check-redirect request handler)))
