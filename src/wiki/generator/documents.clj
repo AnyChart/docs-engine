@@ -30,22 +30,23 @@
   (if-let [content (:content item)]
     (let [page-url (fix-url (str base-path "/" (:name item)))
           *page-report (atom (analyzer/check-links content version-config))
-          {html :html tags :tags}
-          (md/to-html notifier
-                      page-url
-                      (replace-vars content (:vars version-config))
-                      (:key version)
-                      samples
-                      api-versions
-                      generator-config
-                      generate-images
-                      *page-report)]
+          {html  :html
+           tags  :tags
+           links :links} (md/to-html notifier
+                                     page-url
+                                     (replace-vars content (:vars version-config))
+                                     (:key version)
+                                     samples
+                                     api-versions
+                                     generator-config
+                                     generate-images
+                                     *page-report)]
       (pdata/add-page jdbc (:id version) page-url
                       (:title item)
                       (toc/add-toc html *page-report page-url)
                       (:last-modified item)
                       tags
-                      (:config item))
+                      (assoc (:config item) :links links))
       ;(prn "report: " (:title item) (:name item) @*page-report)
       (when (not-empty @*page-report)
         (swap! report conj (assoc @*page-report :page-url page-url))))

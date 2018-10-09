@@ -66,9 +66,9 @@
 
 (defn need-check-links [branch gen-params]
   (cond
-    (= (c/prefix) "local") false
     (and (= (:name branch) (:version gen-params)) (:fast gen-params)) false
     (and (= (:name branch) (:version gen-params)) (:linkchecker gen-params)) true
+    (= (c/prefix) "local") false
     :else (or (utils/released-version? (:name branch))
               ;(= (:name branch) "develop")
               (= (:name branch) "master")

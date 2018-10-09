@@ -100,7 +100,7 @@
                         generate-images
                         (= 0 @*id-counter))
                (generate-img generator-config sample-path page-url samples version))
-             (swap! *links update-in [:samples] conj {:path sample-path})
+             (swap! *links update-in [:samples] conj {:path (StringEscapeUtils/unescapeHtml4 sample-path)})
              (string/replace text
                              source
                              (build-sample-div notifier
@@ -138,13 +138,15 @@
     (string/replace text
                     #"\{pg:([^}]+)\}([^{]+)\{pg\}"
                     (fn [[_ link title]]
-                      (swap! *links update-in [:pg] conj {:title title
-                                                          :url   link})
                       (let [link (string/replace link #"<i>|</i>|<em>|</em>" "_")
                             link-parts (string/split link #"/")
                             project (first link-parts)
-                            link-url (string/join "/" (drop 1 link-parts))]
-                        (str "<a target='_blank' href='//" (c/playground) "/" project "/" real-version "/" link-url "'>" title "</a>"))))))
+                            link-url (string/join "/" (drop 1 link-parts))
+                            pg-url (str "//" (c/playground) "/" project "/" real-version "/" link-url)]
+                        (swap! *links update-in [:pg] conj {:title   title
+                                                            :project project
+                                                            :url     link-url})
+                        (str "<a target='_blank' href='" pg-url "'>" title "</a>"))))))
 
 
 (defn- add-tags [html tags]
@@ -207,4 +209,6 @@
         html-tags (if (empty? tags) html
                                     (add-tags html tags))]
     ;; (println @*links)
-    {:html html-tags :tags tags}))
+    {:html  html-tags
+     :tags  tags
+     :links @*links}))
