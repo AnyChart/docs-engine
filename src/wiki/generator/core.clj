@@ -12,6 +12,7 @@
             [wiki.data.versions :as vdata]
             [wiki.data.pages :as pages-data]
             [wiki.web.redirects :as redirects]
+            [wiki.config.core :as c]
             [wiki.util.utils :as utils]
             [playground-samples-parser.new.group-parser :as pgs]
             [wiki.components.offline-generator :refer [generate-zip]]
@@ -65,6 +66,7 @@
 
 (defn need-check-links [branch gen-params]
   (cond
+    (= (c/prefix) "local") false
     (and (= (:name branch) (:version gen-params)) (:fast gen-params)) false
     (and (= (:name branch) (:version gen-params)) (:linkchecker gen-params)) true
     :else (or (utils/released-version? (:name branch))
