@@ -23,7 +23,11 @@
     [wiki.views.page404.page404 :as page-404]
     [wiki.views.admin.admin-page :as admin-view]
     ;; handlers
-    [wiki.web.handlers.links-handler :as links-handler]
+    [wiki.web.handlers.links-handlers :as links-handlers]
+    [wiki.web.handlers.admin-handlers :as admin-handlers]
+    [wiki.web.handlers.report-handlers :as report-handlers]
+    [wiki.web.handlers.sitemap-handlers :as sitemap-handlers]
+    [wiki.web.handlers.zip-handlers :as zip-handlers]
     ;; utils
     [selmer.parser :refer [render-file add-tag!]]
     [compojure.core :refer [defroutes routes GET POST]]
@@ -80,12 +84,6 @@
         (notify-404 (notifier request) (str (request-url request) " from " referrer))
         (notify-404 (notifier request) (request-url request)))))
   (route/not-found (show-404 request)))
-
-
-(defn- request-update [request]
-  (redisca/enqueue (redis request)
-                   (-> request :component :config :queue)
-                   {:cmd "generate"}))
 
 
 (defn- show-latest [request]
@@ -160,25 +158,6 @@
             (show-page request version versions page false)))))))
 
 
-(defn download-zip [request version & [versions url is-url-version]]
-  (if-let [zip (versions-data/get-zip (jdbc request) (:id version))]
-    (-> zip
-        clojure.java.io/input-stream
-        response
-        (header "Content-Length" (alength zip))
-        (header "Content-Disposition" (str "attachment; filename=\"" (:key version) ".zip\""))
-        (header "Content-Type" "application/zip, application/octet-stream")
-        (header "Content-Description" "File Transfer")
-        (header "Content-Transfer-Encoding" "binary"))
-    (error-404 request)))
-
-
-(defn generate-zip [request version & [versions url is-url-version]]
-  (redisca/enqueue (redis request)
-                   (-> request :component :config :zip-queue)
-                   {:command "generate" :version version}))
-
-
 (defn- search-page [request version & [versions url is-url-version]]
   (if-let [query (-> request :params :q)]
     (let [page-data {:id            -1
@@ -195,28 +174,6 @@
 
 (defn- search-data [request version & [versions url is-url-version]]
   (response (web-search/search-results request version)))
-
-
-(defn- show-sitemap [request]
-  (-> (response (sitemap/generate-sitemap (jdbc request)))
-      (content-type "text/xml")))
-
-
-(defn- show-sitemap-version [request]
-  (let [version-name (-> request :params :version)]
-    (-> (response (sitemap/generate-sitemap-version (jdbc request) version-name))
-        (content-type "text/xml"))))
-
-
-(defn- request-redirects [request]
-  (let [redirects (-> request :component :redirects deref)]
-    (if (empty? redirects)
-      (response "Redirects empty")
-      (response
-        (->> redirects
-             (sort-by first)
-             (map #(str (first %) "\t >> \t" (second %)))
-             (string/join "\n"))))))
 
 
 (defn- show-page-data [request version versions url url-version & _]
@@ -286,81 +243,48 @@
             (error-404 request)))))))
 
 
-(defn report [request]
-  (let [version-key (-> request :route-params :version)
-        report (vdata/version-report (jdbc request) version-key)]
-    {:status  200
-     :headers {"Access-Control-Allow-Origin" "*"}
-     :body    report}))
-
-
-(defn report-page [request]
-  (let [version-key (-> request :route-params :version)
-        report (vdata/version-report (jdbc request) version-key)]
-    (analysis-page/page report version-key)))
-
-
-(defn admin-panel [request]
-  (let [versions (vdata/versions-full-info (jdbc request))]
-    (admin-view/page {:title-prefix "Admin Panel | AnyChart Documentation\""
-                      :description  "Admin Panel page"
-                      :commit       (:commit (config request))} versions)))
-
-
-(defn delete-version [request]
-  (let [version-key (-> request :params :version)]
-    (timbre/info "DELETE version request:" version-key)
-    (vdata/remove-branch-by-key (jdbc request) version-key)
-    (redirect "/_admin_")))
-
-
-(defn rebuild-version [request]
-  (let [params (-> request :params)]
-    (timbre/info "REBUILD version request:" params)
-    ;; just for not showing updated version in select on admin panel
-    (when-let [version (:version params)]
-      (vdata/remove-branch-by-key (jdbc request) version))
-    (redisca/enqueue (redis request)
-                     (-> request :component :config :queue)
-                     (assoc params :cmd "generate"))))
-
-
 (defroutes app-routes
            (route/resources "/")
            ;; management/admin routes
-           (GET "/_admin_" [] admin-panel)
-           (GET "/_redirects_" [] request-redirects)
-           (GET "/_update_" [] request-update)
-           (POST "/_update_" [] request-update)
-           (POST "/_delete_" [] delete-version)
-           (POST "/_rebuild_" [] rebuild-version)
+           (GET "/_admin_" [] admin-handlers/admin-page)
+           (GET "/_redirects_" [] admin-handlers/redirects-page)
+           (GET "/_update_" [] admin-handlers/update-versions)
+           (POST "/_update_" [] admin-handlers/update-versions)
+           (POST "/_delete_" [] admin-handlers/delete-version)
+           (POST "/_rebuild_" [] admin-handlers/rebuild-version)
 
            (GET "/" [] show-landing)
-           (GET "/sitemap" [] show-sitemap)
-           (GET "/sitemap.xml" [] show-sitemap)
-           (GET "/sitemap/:version" [] show-sitemap-version)
-           (GET "/sitemap.xml/:version" [] show-sitemap-version)
+
+           ;; sitemap
+           (GET "/sitemap" [] sitemap-handlers/show-sitemap)
+           (GET "/sitemap.xml" [] sitemap-handlers/show-sitemap)
+           (GET "/sitemap/:version" [] sitemap-handlers/show-sitemap-version)
+           (GET "/sitemap.xml/:version" [] sitemap-handlers/show-sitemap-version)
+
            (GET "/latest" [] show-latest)
            (GET "/latest/" [] show-latest)
            (GET "/latest/search" [] show-latest-search)
            (GET "/latest/*" [] try-show-latest-page)
 
-           (POST "/links" [] links-handler/links)
-           (GET "/links" [] links-handler/links)
+           ;; links requests
+           (POST "/links" [] links-handlers/links)
+           (GET "/links" [] links-handlers/links)
 
            (GET "/:version/check/*" [] (check-version-middleware try-show-page))
            (GET "/:version/search" [] (check-version-middleware search-page))
            (POST "/:version/search-data" [] (check-version-middleware search-data))
-           (GET "/:version/_generate-zip_" [] (check-version-middleware generate-zip))
-           (GET "/:version/download" [] (check-version-middleware download-zip))
-           (GET "/:version/report.json" [] report)
-           (GET "/:version/report" [] report-page)
+           (GET "/:version/_generate-zip_" [] (check-version-middleware zip-handlers/generate-zip))
+           (GET "/:version/download" [] (check-version-middleware zip-handlers/download-zip))
+
+           ;; report
+           (GET "/:version/report.json" [] report-handlers/report)
+           (GET "/:version/report" [] report-handlers/report-page)
 
            (GET "/check/*" [] (check-version-middleware try-show-page))
            (GET "/search" [] (check-version-middleware search-page))
            (POST "/search-data" [] (check-version-middleware search-data))
-           (GET "/_generate-zip_" [] (check-version-middleware generate-zip))
-           (GET "/download" [] (check-version-middleware download-zip))
+           (GET "/_generate-zip_" [] (check-version-middleware zip-handlers/generate-zip))
+           (GET "/download" [] (check-version-middleware zip-handlers/download-zip))
 
            (GET "/*-json" [] (check-version-middleware-by-url show-page-data))
            (GET "/*" [] (check-version-middleware-by-url show-page-middleware))

@@ -1,4 +1,4 @@
-(ns wiki.web.handlers.links-handler
+(ns wiki.web.handlers.links-handlers
   (:require [wiki.web.helpers :refer :all]
             [ring.util.response :refer [response]]
             [wiki.data.pages :as pages-data]
@@ -45,18 +45,18 @@
                             pages)
 
         articles-fn (fn [pages]
-                     (map (fn [page]
-                            {:title (utils/url->title (:url page))
-                             :url   (:url page)})
-                          pages))
+                      (map (fn [page]
+                             {:title (utils/url->title (:url page))
+                              :url   (:url page)})
+                           pages))
 
         articles-docs (articles-fn articles-docs)
         articles-api (articles-fn articles-api)
         articles-pg (articles-fn articles-pg)
 
         result {:articles-docs articles-docs
-                :articles-api articles-api
-                :articles-pg articles-pg}]
+                :articles-api  articles-api
+                :articles-pg   articles-pg}]
 
     (prn "Links request:")
     (prn "Version " version)
