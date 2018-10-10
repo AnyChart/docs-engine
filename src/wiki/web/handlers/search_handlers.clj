@@ -1,4 +1,4 @@
-(ns wiki.web.search
+(ns wiki.web.handlers.search-handlers
   (:require [wiki.data.search :as search]
             [wiki.web.helpers :refer :all]
             [wiki.util.utils :as utils]
@@ -6,7 +6,7 @@
             [clojure.string :as string]))
 
 
-(defn- format-search-result [result query version]
+(defn format-search-result [result query version]
   (let [words (string/split query #" ")
         url (:url result)
         title (reduce (fn [res q]

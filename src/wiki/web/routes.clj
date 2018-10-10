@@ -1,39 +1,30 @@
 (ns wiki.web.routes
   (:require
-    ;; components
-    [wiki.components.redis :as redisca]
-    [wiki.components.notifier :refer [notify-404]]
     ;; data
     [wiki.data.versions :as versions-data]
     [wiki.data.pages :as pages-data]
     [wiki.data.folders :as folders-data]
-    [wiki.data.sitemap :as sitemap]
-    [wiki.data.search :as search]
-    [wiki.data.versions :as vdata]
     ;; wiki utils
     [wiki.util.utils :as utils]
-    [wiki.generator.analysis.page :as analysis-page]
     ;;web
     [wiki.web.tree :refer [tree-view tree-view-local]]
     [wiki.web.redirects :refer [wrap-redirect]]
     [wiki.web.helpers :refer :all]
-    [wiki.web.search :as web-search]
     ;; pages
     [wiki.views.main.main-page :as main-page]
-    [wiki.views.page404.page404 :as page-404]
-    [wiki.views.admin.admin-page :as admin-view]
     ;; handlers
     [wiki.web.handlers.links-handlers :as links-handlers]
     [wiki.web.handlers.admin-handlers :as admin-handlers]
     [wiki.web.handlers.report-handlers :as report-handlers]
     [wiki.web.handlers.sitemap-handlers :as sitemap-handlers]
     [wiki.web.handlers.zip-handlers :as zip-handlers]
+    [wiki.web.handlers.search-handlers :as search-handlers]
+    [wiki.web.handlers.handers-404 :as handlers-404]
     ;; utils
     [selmer.parser :refer [render-file add-tag!]]
     [compojure.core :refer [defroutes routes GET POST]]
     [compojure.route :as route]
     [ring.util.response :refer [redirect response content-type file-response header]]
-    [ring.util.request :refer [request-url]]
     [ring.middleware.params :refer [wrap-params]]
     [ring.middleware.keyword-params :refer [wrap-keyword-params]]
     [ring.middleware.json :refer [wrap-json-response]]
@@ -68,22 +59,6 @@
                             (str res " | " part)
                             res))) "" title-parts)]
     (str title (when is-url-version (str " | ver. " version-name)))))
-
-
-(defn- show-404 [request]
-  (page-404/page {:title-prefix "Not found | AnyChart Documentation"
-                  :description  "404 Not found page"
-                  :commit       (:commit (config request))}))
-
-
-(defn- error-404 [request]
-  (let [referrer (get-in request [:headers "referer"])
-        ua (get-in request [:headers "user-agent"])]
-    (when (not (.contains ua "Slackbot"))
-      (if referrer
-        (notify-404 (notifier request) (str (request-url request) " from " referrer))
-        (notify-404 (notifier request) (request-url request)))))
-  (route/not-found (show-404 request)))
 
 
 (defn- show-latest [request]
@@ -159,21 +134,20 @@
 
 
 (defn- search-page [request version & [versions url is-url-version]]
-  (if-let [query (-> request :params :q)]
+  (when-let [query (-> request :params :q)]
     (let [page-data {:id            -1
                      :version_id    (:id version)
                      :url           ""
                      :full_name     "Search page"
-                     :content       (web-search/search-results-html request version query)
+                     :content       (search-handlers/search-results-html request version query)
                      :last_modified (quot (System/currentTimeMillis) 1000)
                      :tags          [],
                      :config        {}}]
-      (show-page request version versions page-data false))
-    (error-404 request)))
+      (show-page request version versions page-data false))))
 
 
 (defn- search-data [request version & [versions url is-url-version]]
-  (response (web-search/search-results request version)))
+  (response (search-handlers/search-results request version)))
 
 
 (defn- show-page-data [request version versions url url-version & _]
@@ -184,7 +158,7 @@
                :title-prefix   (title-prefix page (boolean url-version) (:key version))
                :versions       versions
                :is-url-version (boolean url-version)})
-    (error-404 request)))
+    (handlers-404/error-404 request)))
 
 
 (defn- check-version-middleware [app]
@@ -196,7 +170,7 @@
           version (if version-key url-version (first versions))]
       (if version
         (app request version versions page-url (boolean url-version))
-        (error-404 request)))))
+        (handlers-404/error-404 request)))))
 
 
 (defn- check-version-middleware-by-url [handler]
@@ -240,7 +214,7 @@
             (redirect (str (when url-version (str "/" (:key version)))
                            "/" (:url folder)
                            "/" (:default_page folder)) 301)
-            (error-404 request)))))))
+            (handlers-404/error-404 request)))))))
 
 
 (defroutes app-routes
@@ -288,7 +262,7 @@
 
            (GET "/*-json" [] (check-version-middleware-by-url show-page-data))
            (GET "/*" [] (check-version-middleware-by-url show-page-middleware))
-           (route/not-found show-404))
+           (route/not-found handlers-404/error-404))
 
 
 (defn wrap-google-analytics-optimize [handler]
