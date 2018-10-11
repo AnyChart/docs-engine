@@ -27,7 +27,7 @@
     [ring.util.response :refer [redirect response content-type file-response header]]
     [ring.middleware.params :refer [wrap-params]]
     [ring.middleware.keyword-params :refer [wrap-keyword-params]]
-    [ring.middleware.json :refer [wrap-json-response]]
+    [ring.middleware.json :refer [wrap-json-response wrap-json-params]]
     [taoensso.timbre :as timbre]
     [criterium.core :refer [bench]]
     [clojure.string :as string]))
@@ -276,5 +276,7 @@
 (def app (-> (routes app-routes)
              wrap-keyword-params
              wrap-params
+             wrap-json-params
              wrap-redirect
-             wrap-google-analytics-optimize))
+             wrap-google-analytics-optimize
+             wrap-json-response))

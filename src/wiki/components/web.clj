@@ -7,8 +7,10 @@
             [wiki.data.versions :as version-data]
             [wiki.components.redis :as redisc]))
 
+
 (defn- update-redirects [comp]
   (reset! (:redirects comp) (version-data/get-redirects (:jdbc comp))))
+
 
 (defn- message-processor [comp]
   (fn [{:keys [message attempt]}]
@@ -17,15 +19,15 @@
       (update-redirects comp))
     {:status :success}))
 
+
 (defn- component-middleware [component app]
   (fn [request]
     (app (assoc request :component component))))
 
+
 (defn- create-web-app [component]
-  (wrap-json-response
-    (wrap-json-body
-      (component-middleware component #'app)
-      {:keywords? true})))
+  (component-middleware component #'app))
+
 
 (defrecord Web [config web-server jdbc redis shpinx]
   component/Lifecycle
@@ -44,6 +46,7 @@
     (assoc this :web-server nil
                 :engine nil
                 :redirects nil)))
+
 
 (defn new-web [config]
   (map->Web {:config config}))
