@@ -2,7 +2,9 @@
   (:require [wiki.web.helpers :refer :all]
             [ring.util.response :refer [response]]
             [wiki.data.pages :as pages-data]
-            [wiki.util.utils :as utils]))
+            [wiki.util.utils :as utils]
+            [wiki.data.versions :as versions-data]
+            [taoensso.timbre :as timbre]))
 
 
 (defn has-intersection [v1 v2]
@@ -10,8 +12,12 @@
 
 
 (defn links [request]
-  (prn "Links request: " request)
   (let [version (-> request :params :version)
+        version (when (or (= version "latest")
+                          (= version "Release Candidate")
+                          (= version "rc"))
+                  (versions-data/default (jdbc request)))
+
         project (-> request :params :project)
         url (-> request :params :url)
         api-methods (-> request :params :api-methods)
@@ -65,10 +71,10 @@
                 :articles-api  articles-api
                 :articles-pg   articles-pg}]
 
-    (prn "Links request:")
-    (prn "Version " version)
-    (prn "Project " project)
-    (prn "URL " url)
-    (prn "api-methods " api-methods)
+    (timbre/info "Links request:")
+    (println "Version: " version)
+    (println "Project: " project)
+    (println "URL: " url)
+    (println "api-methods: " api-methods)
 
     (response result)))
