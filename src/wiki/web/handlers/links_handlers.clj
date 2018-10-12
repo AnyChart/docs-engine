@@ -18,9 +18,9 @@
 
         ;version "develop"
         ;project "docs"
-        ;url "samples/quick_start_pie"
-        ;;api-methods ["anychart#onDocumentReady" "anychart.data#loadJsonFile" "anychart.standalones#table" "anychart.core.ui.Table#hAlign" "anychart.core.ui.Table#contents" "anychart.core.ui.Table#getRow" "anychart.core.ui.table.Row#height" "anychart.charts.Resource#cellPadding" "anychart.core.ui.table.Row#cellPadding" "anychart.core.ui.Table#getCell" "anychart.core.ui.table.Cell#colSpan" "anychart.core.Text#useHtml" "anychart.core.ui.Table#cellBorder" "anychart.standalones.Table#container" "anychart.core.ui.Table#vAlign" "anychart.core.ui.Table#draw" "anychart#bullet" "anychart.core.Chart#background" "anychart.core.VisualBase#enabled" "anychart.core.Chart#padding" "anychart.charts.Bullet#layout" "anychart.charts.Bullet#axis" "anychart.core.Chart#title"]
-        ;api-methods ["anychart#onDocumentLoad" "anychart#pie" "anychart.charts.Pie#data" "anychart.core.Chart#title" "anychart.core.Chart#container" "anychart.core.Chart#draw"]
+        ;; url "samples/quick_start_pie"
+        ;url "samples/BCT_Area_Chart_02"
+        ;api-methods ["anychart#onDocumentReady" "anychart.data#set" "anychart.data.Set#mapAs" "anychart#area" "anychart.charts.Cartesian#interactivity" "anychart.core.utils.Interactivity#hoverMode" "anychart.charts.Cartesian#area" "anychart.core.cartesian.series.Base#name" "anychart.core.cartesian.series.Base#normal" "anychart.core.cartesian.series.Base#hovered" "anychart.core.cartesian.series.Base#selected" "anychart.charts.Venn#hatchFill" "anychart.charts.Cartesian#title" "anychart.charts.Cartesian#xAxis" "anychart.charts.Cartesian#yAxis" "anychart.charts.Cartesian#container" "anychart.charts.Cartesian#draw"]
 
         pages (pages-data/links (jdbc request) version)
 
@@ -36,6 +36,12 @@
                                  ;; check on API methods
                                  (has-intersection (map :url api-urls) api-methods)))
                              pages)
+        ;; remove links that already are in articles-docs
+        articles-api (remove (fn [page]
+                               (prn "Page: " page)
+                               (some #(= (:url page) (:url %)) articles-docs))
+                             articles-api)
+
 
         articles-pg (filter (fn [page]
                               (let [pg (-> page :config :links :pg)]
@@ -45,10 +51,11 @@
                             pages)
 
         articles-fn (fn [pages]
-                      (map (fn [page]
-                             {:title (utils/url->title (:url page))
-                              :url   (:url page)})
-                           pages))
+                      (->> pages
+                           (map (fn [page]
+                                  {:title (utils/url->title (:url page))
+                                   :url   (:url page)}))
+                           (sort-by :title)))
 
         articles-docs (articles-fn articles-docs)
         articles-api (articles-fn articles-api)
