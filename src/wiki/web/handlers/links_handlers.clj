@@ -13,10 +13,11 @@
 
 (defn links [request]
   (let [version (-> request :params :version)
-        version (when (or (= version "latest")
+        version (if (or (= version "latest")
                           (= version "Release Candidate")
                           (= version "rc"))
-                  (versions-data/default (jdbc request)))
+                  (versions-data/default (jdbc request))
+                  version)
 
         project (-> request :params :project)
         url (-> request :params :url)
