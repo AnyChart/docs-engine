@@ -14,8 +14,8 @@
 (defn links [request]
   (let [version (-> request :params :version)
         version (if (or (= version "latest")
-                          (= version "Release Candidate")
-                          (= version "rc"))
+                        (= version "Release Candidate")
+                        (= version "rc"))
                   (versions-data/default (jdbc request))
                   version)
 
