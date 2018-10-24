@@ -32,8 +32,9 @@
 
 
 (defn released-version? [version-key]
-  (or (re-matches #"^\d+\.\d+\.\d+$" version-key)
-      (re-matches #"^v\d+$" version-key)))
+  (or
+    ;; (re-matches #"^\d+\.\d+\.\d+$" version-key)
+    (re-matches #"^v\d+$" version-key)))
 
 
 (defn anychart-bundle-path [version-key]
