@@ -1,5 +1,6 @@
 (ns wiki.util.utils
-  (:require [clojure.string :as string])
+  (:require [clojure.string :as string]
+            [version-clj.core :refer [version-compare]])
   (:import (org.jsoup Jsoup)))
 
 
@@ -29,6 +30,18 @@
       (string/replace #" " "-")
       (string/replace #"_" "-")
       string/lower-case))
+
+
+(defn sort-versions
+  ([key versions]
+   (let [replace-fn (fn [version]
+                      ;; v8 -> 8.999.999
+                      (string/replace version #"v(\d+)" "$1.999.999"))
+         compare-fn (fn [v1 v2]
+                      (version-compare (replace-fn v2) (replace-fn v1)))]
+     (sort-by key compare-fn versions)))
+  ([versions]
+   (sort-versions identity versions)))
 
 
 (defn released-version? [version-key]

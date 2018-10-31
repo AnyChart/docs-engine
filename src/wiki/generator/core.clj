@@ -19,23 +19,15 @@
             [me.raynes.fs :as fs]
             [com.climate.claypoole :as cp]
             [taoensso.timbre :as timbre :refer [info error]]
-            [version-clj.core :as version-clj]
             [clojure.java.shell :refer [sh]]
             [clojure.string :as string]))
 
 
-(defn last-version? [jdbc branch-name]
-  (let [last-version (vdata/default jdbc)]
-    (and (utils/released-version? branch-name)
-         (or
-           (= 0 (version-clj/version-compare branch-name last-version))
-           (= 1 (version-clj/version-compare branch-name last-version))))))
-
-
 (defn last-version [jdbc branches]
   (let [versions (vdata/versions jdbc)]
-    (first (sort (comp - version-clj/version-compare)
-                 (concat versions branches)))))
+    (-> (concat versions branches)
+        utils/sort-versions
+        first)))
 
 
 (defn complete-config [jdbc version version-config branch-path]

@@ -1,6 +1,5 @@
 (ns wiki.data.versions
   (:require [wiki.components.jdbc :refer [query one insert! exec]]
-            [version-clj.core :refer [version-compare]]
             [honeysql.helpers :refer :all :as honey]
             [clojure.java.jdbc :as clj-jdbc]
             [cheshire.core :refer [generate-string parse-string]]
@@ -69,17 +68,18 @@
 
 
 (defn versions [jdbc]
-  (sort (comp - version-compare)
-        (map :key (query jdbc (-> (select :key)
-                                  (from :versions)
-                                  (where [:= :hidden false]))))))
+  (->> (query jdbc (-> (select :key)
+                       (from :versions)
+                       (where [:= :hidden false])))
+       (map :key)
+       utils/sort-versions))
 
 
 (defn versions-full-info [jdbc]
-  (sort (comp - #(version-compare (:key %1) (:key %2)))
-        (query jdbc (-> (select :id :key)
-                        (from :versions)
-                        (where [:= :hidden false])))))
+  (->> (query jdbc (-> (select :id :key)
+                       (from :versions)
+                       (where [:= :hidden false])))
+       (utils/sort-versions :key)))
 
 
 (defn outdated-versions-ids [jdbc actual-ids]
@@ -140,7 +140,7 @@
                                                   (join :pages [:= :versions.id :pages.version_id])
                                                   (where [:and [:or [:= :pages.url url] [:= :pages.url short-url]] [:= :versions.hidden false]])) :v]
                                              [:= :versions.id :v.id])))
-         sorted-versions (sort (comp - #(version-compare (:key %1) (:key %2))) versions)
+         sorted-versions (utils/sort-versions :key versions)
          url-versions (map #(assoc % :url (str "/" (:key %)
                                                (when (:url %)
                                                  (str "/" (utils/escape-url (:url %))))))
