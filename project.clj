@@ -3,11 +3,11 @@
                  [version-clj "0.1.2"]
                  ;; general
                  [com.stuartsierra/component "0.3.2"]
-                 [clj-time "0.15.0"]
+                 [clj-time "0.15.1"]
                  [com.climate/claypoole "1.1.4"]
                  [toml "0.1.3"]
                  ;; templates
-                 [selmer "1.12.2"]
+                 [selmer "1.12.3"]
                  [hiccup "1.0.5"]
                  ;; html
                  [enlive "1.1.6"]
@@ -20,7 +20,7 @@
                  [http-kit "2.3.0"]
                  [compojure "1.6.1"]
                  [ring/ring-json "0.4.0"]
-                 [ring/ring-core "1.7.0"]
+                 [ring/ring-core "1.7.1"]
                  [com.rpl/specter "1.1.1"]
                  ;; logging
                  [com.taoensso/timbre "4.10.0"]
@@ -33,7 +33,7 @@
                  [clojure.jdbc/clojure.jdbc-c3p0 "0.3.3"]
                  [honeysql "0.9.4"]
                  ;; markdown
-                 [markdown-clj "1.0.4"]
+                 [markdown-clj "1.0.5"]
                  ;; filesystem
                  [me.raynes/fs "1.4.6"]
                  [cpath-clj "0.1.2"]
