@@ -13,7 +13,7 @@
                  [enlive "1.1.6"]
                  [org.apache.commons/commons-lang3 "3.8.1"]
                  [com.anychart/playground-samples-parser "0.2.6"]
-                 [com.anychart/link-checker "0.3.0"]
+                 [com.anychart/link-checker "0.3.1"]
                  [org.jsoup/jsoup "1.11.3"]
                  [garden "1.3.6"]
                  ;; web
