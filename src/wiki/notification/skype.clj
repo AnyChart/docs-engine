@@ -4,7 +4,8 @@
             [cheshire.core :as json]
             [clojure.string :as s]
             [wiki.util.utils :as utils]
-            [wiki.config.core :as c]))
+            [wiki.config.core :as c])
+  (:import (org.apache.commons.lang3 StringEscapeUtils)))
 
 
 (defn- config [notifier] (-> notifier :config :skype))
@@ -95,7 +96,7 @@
   (prn (config notifier))
   (prn author commit-message version commit queue-index)
   (let [msg (str "[Docs " (c/prefix) "] #" queue-index " " (b version)
-                 " \"" commit-message "\" @" author " (" (subs commit 0 7) ") - "
+                 " \"" (StringEscapeUtils/escapeHtml4 commit-message) "\" @" author " (" (subs commit 0 7) ") - "
                  (-> "start" (font "#4183C4")) "\n")]
     (send-message (config notifier) msg)
     (send-release-message (config notifier) version msg)))
@@ -104,7 +105,7 @@
 (defn complete-version-building [notifier {author :author commit-message :message version :name commit :commit}
                                  queue-index report]
   (let [msg (str "[Docs " (c/prefix) "] #" queue-index " " (b version)
-                 " \"" commit-message "\" @" author " (" (subs commit 0 7) ") - "
+                 " \"" (StringEscapeUtils/escapeHtml4 commit-message) "\" @" author " (" (subs commit 0 7) ") - "
                  (-> "complete" (font "#36a64f"))
                  (when (:check-broken-links-disabled report) " (link-checker OFF)")
                  "\n")]
@@ -115,7 +116,7 @@
 (defn complete-version-building-with-warnings [notifier {author :author commit-message :message version :name commit :commit}
                                                queue-index report message]
   (let [msg (str "[Docs " (c/prefix) "] #" queue-index " " (b version)
-                 " \"" commit-message "\" @" author " (" (subs commit 0 7) ") - "
+                 " \"" (StringEscapeUtils/escapeHtml4 commit-message) "\" @" author " (" (subs commit 0 7) ") - "
                  (-> "complete with warnings" (font "#ff9800"))
                  (when (:check-broken-links-disabled report) " (link-checker OFF)")
                  "\n"
@@ -126,7 +127,7 @@
 
 (defn build-failed [notifier {author :author commit-message :message version :name commit :commit} queue-index & [e]]
   (let [msg (str "[Docs " (c/prefix) "] #" queue-index " " (b version)
-                 " \"" commit-message "\" @" author " (" (subs commit 0 7) ") - "
+                 " \"" (StringEscapeUtils/escapeHtml4 commit-message) "\" @" author " (" (subs commit 0 7) ") - "
                  (-> "failed" (font "#d00000") b) "\n"
                  (when e
                    (-> (utils/format-exception e) (font "#777777" 11) i)))]
