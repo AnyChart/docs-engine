@@ -87,6 +87,9 @@
 
 
 (defn start-version-building [notifier {author :author commit-message :message version :name commit :commit} queue-index]
+  (prn "start-version-building")
+  (prn notifier)
+  (prn author commit-message version commit queue-index)
   (let [msg (str "[Docs " (c/prefix) "] #" queue-index " " (b version)
                  " \"" commit-message "\" @" author " (" (subs commit 0 7) ") - "
                  (-> "start" (font "#4183C4")) "\n")]
