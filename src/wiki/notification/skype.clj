@@ -24,8 +24,6 @@
 
 
 (defn send-msg [chat-id access-token message]
-  (println "send-msg")
-  (println chat-id access-token message)
   (let [url (str "https://apis.skype.com/v2/conversations/" chat-id "/activities")
         data {:message {:content message}}
         headers {"Authorization" (str "Bearer " access-token)}
@@ -36,8 +34,6 @@
 (defn send-message [{:keys [id key chat-id]} message]
   (try
     (let [access-token (get-access-token id key)]
-      (println "send-message")
-      (println access-token)
       (send-msg chat-id access-token message))
     (catch Exception e
       (timbre/error "Skype send message error: " message))))
@@ -92,9 +88,6 @@
 
 
 (defn start-version-building [notifier {author :author commit-message :message version :name commit :commit} queue-index]
-  (prn "start-version-building")
-  (prn (config notifier))
-  (prn author commit-message version commit queue-index)
   (let [msg (str "[Docs " (c/prefix) "] #" queue-index " " (b version)
                  " \"" (StringEscapeUtils/escapeHtml4 commit-message) "\" @" author " (" (subs commit 0 7) ") - "
                  (-> "start" (font "#4183C4")) "\n")]
