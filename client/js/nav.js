@@ -23,7 +23,7 @@ function loadPage(link, needPushState) {
     $.get(link + "-json", function(res) {
         $("#page-content").html('<div class="row">' +
             '<div class="col-lg-17" id="article-content">' +
-            '<a class="btn btn-default btn-small github-fork pull-right hidden-xs" id="github-edit" href="https://github.com/AnyChart/docs.anychart.com">' +
+            '<a class="btn btn-default btn-small github-fork pull-right hidden-xs" id="github-edit" href="https://github.com/AnyChart/anychart-bible">' +
             '<span><i class="ac ac-net"></i></span> Improve this Doc' +
             '</a>'
             + res.page.content + '</div>' +

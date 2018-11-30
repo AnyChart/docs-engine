@@ -93,7 +93,7 @@
       ;; cause it's banned in Russia
       (= url "https://www.linkedin.com/company/386660") false
       ;; cause github's anchor without id="overview"
-      (= url "https://github.com/AnyChart/docs.anychart.com#overview") false
+      (= url "https://github.com/AnyChart/anychart-bible#overview") false
       ;; allow only current version urls for deep analysis
       (.startsWith url (str (c/domain) version-key "/")) true
       (.startsWith url (c/domain)) false

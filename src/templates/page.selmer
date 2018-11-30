@@ -13,7 +13,7 @@
     <meta property="fb:admins" content="704106090"/>
     {% if page.tags|not-empty %}<meta name="keywords" content="{{page.tags|join:", "}}">{% endif %}
     <meta name="yandex-verification" content="c5fb5d43a81ea360"/>
-    <link rel="canonical" href="https://docs.anychart.com{% if url|not-empty %}/{{url}}{% endif %}">
+    <link rel="canonical" href="https://bible.anychart.stg{% if url|not-empty %}/{{url}}{% endif %}">
     <link rel="icon" href="/i/anychart.ico" type="image/x-icon">
     <!--[if IE]>
     <link rel="stylesheet" type="text/css" href="/main.css"/>
@@ -179,7 +179,7 @@
         <section class="col-md-16 col-lg-18 col-lg-offset-6 col-md-offset-8" id="page-content">
             <div class="row">
                 <div class="col-lg-17" id="article-content">
-                    <a class="btn btn-default btn-small github-fork pull-right hidden-xs" id="github-edit" href="https://github.com/AnyChart/docs.anychart.com">
+                    <a class="btn btn-default btn-small github-fork pull-right hidden-xs" id="github-edit" href="https://github.com/AnyChart/anychart-bible">
                         <span><i class="ac ac-net"></i></span> Improve this Doc
                     </a>
                     {{page.content|safe}}

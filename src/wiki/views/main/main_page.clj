@@ -165,7 +165,7 @@
         [:div.icon.report2]
         [:span "Report issue"]]
 
-       [:a {:href   "https://github.com/AnyChart/docs.anychart.com#overview"
+       [:a {:href   "https://github.com/AnyChart/anychart-bible#overview"
             :rel    "nofollow"
             :target "_blank"
             :title  "Edit this page"}

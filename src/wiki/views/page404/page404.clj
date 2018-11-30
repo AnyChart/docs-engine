@@ -32,7 +32,7 @@ This is usually the result of a bad or outdated link. We apologize for any incon
             [:li "Start with "
              [:a {:href "/Quick_Start/Quick_Start"} "Quick Start"]]
             [:li "Search "
-             [:a {:href "/"} "docs.anychart.com"] ":"]]
+             [:a {:href "/"} "bible.anychart.stg"] ":"]]
            [:div.search404.inner-addon.hidden-mobile
             [:input.form-control.input-sm {:placeholder "What are you looking for?" :type "text"}]
             [:i.glyphicon.glyphicon-search]]]]]]]]

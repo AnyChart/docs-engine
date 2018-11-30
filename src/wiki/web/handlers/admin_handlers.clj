@@ -10,7 +10,7 @@
 
 (defn admin-page [request]
   (let [versions (vdata/versions-full-info (jdbc request))]
-    (admin-view/page {:title-prefix "Admin Panel | AnyChart Documentation\""
+    (admin-view/page {:title-prefix "Admin Panel | AnyChart Bible\""
                       :description  "Admin Panel page"
                       :commit       (:commit (config request))} versions)))
 

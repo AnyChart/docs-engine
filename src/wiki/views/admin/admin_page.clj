@@ -210,7 +210,7 @@
             "Show redirects"]
            [:a.btn.btn-link {:id   "githubLink"
                              :role "button"
-                             :href "https://github.com/AnyChart/docs.anychart.com"
+                             :href "https://github.com/AnyChart/anychart-bible"
                              :rel  "nofollow"}
             "GitHub Documentation"]
            [:a.btn.btn-link {:role "button"

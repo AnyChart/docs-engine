@@ -50,7 +50,7 @@
                           65)
         text (or (-> page :config :title)
                  (-> page :url utils/url->title))
-        title (str text " | AnyChart Documentation")
+        title (str text " | AnyChart Bible")
         title-parts (string/split title #" \| ")
         title (reduce (fn [res part]
                         (if (empty? res)

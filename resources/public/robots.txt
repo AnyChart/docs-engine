@@ -1,2 +1,2 @@
 User-agent: *
-Sitemap: https://docs.anychart.com/sitemap.xml
+Sitemap: https://bible.anychart.stg/sitemap.xml

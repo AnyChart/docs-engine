@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{{query}} search | AnyChart Documentation ver. {{version}}</title>
+    <title>{{query}} search | AnyChart Bible ver. {{version}}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:title" content="{{query}} search  | AnyChart Documentation ver. {{version}}"/>
+    <meta property="og:title" content="{{query}} search  | AnyChart Bible ver. {{version}}"/>
     <meta name="description" content="Search page"/>
     <meta property="og:description" content="Search page"/>
     <meta property="og:type" content="article"/>
-    <meta property="og:site_name" content="AnyChart Documentation"/>
+    <meta property="og:site_name" content="AnyChart Bible"/>
     <meta property="article:publisher" content="https://www.facebook.com/AnyCharts"/>
     <meta property="fb:admins" content="704106090"/>
     <meta property="og:locale" content="en_US"/>
@@ -57,7 +57,7 @@
                     </div>
                 </a>
 
-                <a class="brand hidden-super-small"> Documentation</a>
+                <a class="brand hidden-super-small"> Bible</a>
 
                 <div class="pull-right helpers hidden-830">
                     <div class="btn-group">
@@ -185,7 +185,7 @@
                 <div id="disqus_thread" class="col-lg-17" style="display: none;"></div>
                 <script>
                     var disqus_config = function () {
-                        this.page.url = "http://docs.anychart.com/{{version}}/{{url}}";
+                        this.page.url = "http://bible.anychart.stg/{{version}}/{{url}}";
                         this.page.identifier = "search";
                         this.page.title = "Search page";
                     };

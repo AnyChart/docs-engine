@@ -57,7 +57,7 @@
    (when description [:meta {:property "og:description" :content description}])
    (when image-url [:meta {:property "og:image" :content (str "http://static.anychart.com/docs/images/" image-url ".png")}])
    [:meta {:property "og:type" :content "article"}]
-   [:meta {:property "og:site_name" :content "AnyChart Documentation"}]
+   [:meta {:property "og:site_name" :content "AnyChart Bible"}]
    [:meta {:property "article:publisher" :content "https://www.facebook.com/AnyCharts"}]
    [:meta {:property "fb:admins" :content "704106090"}]
 
@@ -86,7 +86,7 @@
     ;  [:span.chart-col.green]
     ;  [:span.chart-col.orange]
     ;  [:span.chart-col.red]]]
-    ;[:a.brand.hidden-super-small " Documentation"]
+    ;[:a.brand.hidden-super-small " Bible"]
     [:a.navbar-brand {:title  "AnyChart Home"
                       :target "_blank"
                       :rel    "nofollow"
@@ -102,8 +102,8 @@
                    :rel    "nofollow"
                    :href   "https://www.anychart.com"} "AnyChart"]]
     [:span.brand-label
-     [:a.documentation.hidden-extra-mobile {:title "AnyChart Documentation"
-                                            :href  "/"} " Documentation"]]))
+     [:a.documentation.hidden-extra-mobile {:title "AnyChart Bible"
+                                            :href  "/"} " Bible"]]))
 
 
 (defn anychart-help []

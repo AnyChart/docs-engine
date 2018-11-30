@@ -68,7 +68,7 @@ init = (e) => {
 
     $('#githubLink').click((e) => {
         e.preventDefault();
-        window.location.href = `https://github.com/AnyChart/docs.anychart.com/tree/${selectedVersion()}`
+        window.location.href = `https://github.com/AnyChart/anychart-bible/tree/${selectedVersion()}`
     });
 };
 
