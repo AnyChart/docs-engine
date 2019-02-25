@@ -26,9 +26,9 @@ after_success:
 - chmod 400 ~/.ssh/id_rsa.pub
 - ssh-add ~/.ssh/id_rsa
 - scp target/uberjar/wiki-2.0-standalone.jar root@104.236.66.244:/apps/$APP/docs-2.0-standalone.jar
-- scp target/uberjar/wiki-2.0-standalone.jar root@104.131.17.78:/apps/$APP/docs-2.0-standalone.jar
+- scp target/uberjar/wiki-2.0-standalone.jar root@68.183.148.118:/apps/$APP/docs-2.0-standalone.jar
 - ssh root@104.236.66.244 "supervisorctl restart $APP"
-- ssh root@104.131.17.78 "supervisorctl restart $APP"
+- ssh root@68.183.148.118 "supervisorctl restart $APP"
 notifications:
   slack:
     secure: GlKpceHLcrwqZ/k3hhYyAkZEE/g6Hrv/I7XwEebXt3sCExalhHP8kDDtQdEJuDlo7juz7c8yN14PCb7QBOJoYs64YR1JhYz4BNGpp4BTdEs3W22rzGJEpmrJNIL2M4YeC5st0F8tmDTcgfL/lt2yiIjyZEXrxmkg0r1HW3OP8F8=
