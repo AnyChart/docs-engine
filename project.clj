@@ -1,4 +1,4 @@
-(defproject wiki "2.0"
+(defproject wiki "2.2"
   :dependencies [[org.clojure/clojure "1.9.0"]
                  [version-clj "0.1.2"]
                  ;; general
