@@ -127,8 +127,8 @@
 
               (vgen/remove-previous-versions jdbc version-id (:name branch))
 
-              (generate-zip offline-generator {:id  version-id
-                                               :key (:name branch)})
+              ;(generate-zip offline-generator {:id  version-id
+              ;                                 :key (:name branch)})
 
               (if (need-check-links branch gen-params)
                 (analysis/check-broken-links (:name branch) report *broken-link-result)
