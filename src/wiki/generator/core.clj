@@ -130,9 +130,9 @@
               ;(generate-zip offline-generator {:id  version-id
               ;                                 :key (:name branch)})
 
-              (if (need-check-links branch gen-params)
-                (analysis/check-broken-links (:name branch) report *broken-link-result)
-                (deliver *broken-link-result {:error-links report :check-broken-links-disabled true}))
+              ;(if (need-check-links branch gen-params)
+              ;  (analysis/check-broken-links (:name branch) report *broken-link-result)
+              ;  (deliver *broken-link-result {:error-links report :check-broken-links-disabled true}))
 
               (let [total-report @*broken-link-result
                     conflicts-with-develop (if (= "develop" (:name branch))
