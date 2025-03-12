@@ -1,4 +1,6 @@
 language: clojure
+jdk:
+  - openjdk8
 script: lein uberjar
 sudo: false
 branches:
