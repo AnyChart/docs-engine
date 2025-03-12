@@ -2,8 +2,7 @@
   (:require [com.stuartsierra.component :as component]
             [cheshire.core :refer [generate-string]]
             [org.httpkit.client :as http]
-            [wiki.notification.slack :as slack]
-            [wiki.notification.skype :as skype]
+            ;; [wiki.notification.discord :as discord]
             [clojure.string :as string]))
 
 
@@ -18,25 +17,23 @@
 
 
 (defn start-building [notifier branches removed-branches queue-index]
-  (slack/start-building notifier branches removed-branches queue-index)
-  ;(skype/start-building notifier branches removed-branches queue-index)
+  ;; (discord/start-building notifier branches removed-branches queue-index)
   )
 
 
 (defn complete-building [notifier branches removed-branches queue-index]
-  (slack/complete-building notifier branches removed-branches queue-index)
-  ;(skype/complete-building notifier branches removed-branches queue-index)
+  ;; (discord/complete-building notifier branches removed-branches queue-index)
   )
 
 
 (defn complete-building-with-errors [notifier branches queue-index & [e]]
-  (slack/complete-building-with-errors notifier branches queue-index e)
-  (skype/complete-building-with-errors notifier branches queue-index e))
+  ;; (discord/complete-building-with-errors notifier branches queue-index e)
+  )
 
 
 (defn start-version-building [notifier branch queue-index]
-  (slack/start-version-building notifier (:name branch) queue-index)
-  (skype/start-version-building notifier branch queue-index))
+  ;; (discord/start-version-building notifier branch queue-index)
+  )
 
 
 (defn complete-version-building [notifier {version :name :as branch} queue-index
@@ -62,29 +59,36 @@
                   (when (pos? conflicts-with-develop) (str "Conflicts with develop: " conflicts-with-develop))
                   (when (pos? broken-links-error) (str "404 errors: " broken-links-error))]
         msg (string/join "\n" (filter some? msg-coll))]
-    (slack/complete-version-building notifier version queue-index)
-    (if (= 0 direct-links canonical-links env-links http-links
-           sample-not-available sample-parsing-error image-format-error conflicts-with-develop toc-error broken-links-error)
-      (skype/complete-version-building notifier branch queue-index report)
-      (skype/complete-version-building-with-warnings notifier branch queue-index report msg))))
+    ;; (discord/complete-version-building notifier branch queue-index report)
+    ;; (if (= 0 direct-links canonical-links env-links http-links
+    ;;        sample-not-available sample-parsing-error image-format-error conflicts-with-develop toc-error broken-links-error)
+    ;;   ;; (discord/complete-version-building notifier branch queue-index report)
+    ;;   ;; (discord/complete-version-building-with-warnings notifier branch queue-index report msg)
+    ;;   )
+    )
+  )
 
 
 (defn build-failed [notifier branch queue-index & [e]]
-  (slack/build-failed notifier (:name branch) queue-index e)
-  (skype/build-failed notifier branch queue-index e))
+  ;; (discord/build-failed notifier branch queue-index e)
+)
 
 
 (defn sample-parsing-error [notifier version page-url]
-  (slack/sample-parsing-error notifier version page-url))
+  ;; (discord/sample-parsing-error notifier version page-url)
+)
 
 
 (defn image-format-error [notifier version page-url]
-  (slack/image-format-error notifier version page-url))
+  ;; (discord/image-format-error notifier version page-url)
+)
 
 
 (defn sample-not-available [notifier version page-url]
-  (slack/sample-not-available notifier version page-url))
+  ;; (discord/sample-not-available notifier version page-url)
+)
 
 
 (defn notify-404 [notifier path]
-  (slack/notify-404 notifier path))
+  ;; (discord/notify-404 notifier path)
+)

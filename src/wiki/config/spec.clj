@@ -10,26 +10,10 @@
                                            :config.redis.spec/db]))
 (s/def :config/redis (s/keys :req-un [:config.redis/spec]))
 
+(s/def :config.notifications.discord/webhook-url string?)
+(s/def :config.notifications/discord (s/keys :req-un [:config.notifications.discord/webhook-url]))
 
-(s/def :config.notifications.slack/channel string?)
-(s/def :config.notifications.slack/token string?)
-(s/def :config.notifications.slack/username string?)
-(s/def :config.notifications/slack (s/keys :req-un [:config.notifications.slack/channel
-                                                    :config.notifications.slack/token
-                                                    :config.notifications.slack/username]))
-
-
-(s/def :config.notifications.skype/id string?)
-(s/def :config.notifications.skype/chat-id string?)
-(s/def :config.notifications.skype/release-chat-id string?)
-(s/def :config.notifications.skype/key string?)
-(s/def :config.notifications/skype (s/keys :req-un [:config.notifications.skype/id
-                                                    :config.notifications.skype/chat-id
-                                                    :config.notifications.skype/key]
-                                           :opt-un [:config.notifications.skype/release-chat-id]))
-
-(s/def :config/notifications (s/keys :req-un [:config.notifications/skype
-                                              :config.notifications/slack]))
+(s/def :config/notifications (s/keys :req-un [:config.notifications/discord]))
 
 (s/def :config.indexer/queue string?)
 (s/def :config/indexer (s/keys :req-un [:config.indexer/queue]))
