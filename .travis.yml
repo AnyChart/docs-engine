@@ -35,7 +35,7 @@ after_success:
 notifications:
   webhooks:
     urls:
-      - ${webhook_url}
+      - $webhook_url
     on_start: always
     on_success: always
     on_failure: always
