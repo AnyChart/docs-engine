@@ -25,9 +25,7 @@ after_success:
 - if [ "$TRAVIS_BRANCH" == "staging" ]; then export APP="docs-stg"; fi
 - if [ "$TRAVIS_BRANCH" == "bible" ]; then export APP="bible-stg"; fi
 - echo "Deploying to $SERVER"
-- mv .travis/known_hosts ~/.ssh/known_hosts
 - mv .travis/id_rsa.pub ~/.ssh/id_rsa.pub
-- chmod 400 ~/.ssh/known_hosts
 - chmod 400 ~/.ssh/id_rsa
 - chmod 400 ~/.ssh/id_rsa.pub
 - ssh-add ~/.ssh/id_rsa
