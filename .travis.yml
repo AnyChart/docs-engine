@@ -8,6 +8,10 @@ branches:
   - master
   - staging
   - bible
+known_hosts:
+  - github.com
+  - 104.236.66.244
+  - 68.183.148.118
 cache:
   directories:
   - "$HOME/.m2"
