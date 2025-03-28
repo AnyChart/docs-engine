@@ -7391,6 +7391,7 @@ div.container-fluid .row {
   display: grid;
   place-content: center;
   grid-template-columns: repeat(auto-fit, 28px);
+  justify-content: space-evenly;
 }
 .footer .footer-inner .social-icons a.soc-network {
   display: inline-block;
@@ -7417,6 +7418,10 @@ div.container-fluid .row {
 .footer .footer-inner .social-icons a.soc-network .soc-network-icon.fb {
   font-size: 16px;
 }
+.footer .footer-inner .social-icons a.soc-network .soc-network-icon.fb .sn-mini-icon {
+  position: relative;
+  top: -1px;
+}
 .footer .footer-inner .social-icons a.soc-network .soc-network-icon.tw {
   font-size: 17px;
 }
@@ -7426,6 +7431,9 @@ div.container-fluid .row {
 .footer .footer-inner .social-icons a.soc-network .soc-network-icon.in .sn-mini-icon {
   position: relative;
   top: -1px;
+}
+.footer .footer-inner .social-icons a.soc-network .soc-network-icon.md {
+  font-size: 10px;
 }
 .footer .footer-inner p {
   padding: 14px 0 7px 0;

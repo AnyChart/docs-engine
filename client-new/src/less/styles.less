@@ -1110,6 +1110,7 @@ div.container-fluid .row {
       display: grid;
       place-content: center;
       grid-template-columns: repeat(auto-fit, 28px);
+      justify-content: space-evenly;
       a.soc-network {
         display: inline-block;
 
@@ -1131,6 +1132,11 @@ div.container-fluid .row {
           border: 1px solid #c3c3c3;
           &.fb {
             font-size: 16px;
+
+            .sn-mini-icon {
+              position: relative;
+              top: -1px;
+            }
           }
           &.tw {
             font-size: 17px;
@@ -1142,6 +1148,9 @@ div.container-fluid .row {
               position: relative;
               top: -1px;
             }
+          }
+          &.md {
+            font-size: 10px;
           }
         }
       }
