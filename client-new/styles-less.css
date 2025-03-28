@@ -7385,11 +7385,12 @@ div.container-fluid .row {
 .footer .footer-inner {
   margin: 0;
   padding: 14px 0 0;
+  text-align: center;
 }
 .footer .footer-inner .social-icons {
   display: grid;
   place-content: center;
-  grid-template-columns: repeat(auto-fit, minmax(28px, 1fr));
+  grid-template-columns: repeat(auto-fit, 28px);
 }
 .footer .footer-inner .social-icons a.soc-network {
   display: inline-block;
