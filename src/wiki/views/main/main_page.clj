@@ -109,26 +109,34 @@
        (tree data)]
       [:div.footer
        [:div.footer-inner
-        [:a.soc-network
-         {:title  "AnyChart Facebook"
-          :target "_blank"
-          :rel    "nofollow"
-          :href   "https://www.facebook.com/AnyCharts"}
-         [:span.soc-network-icon.fb [:i.sn-mini-icon.ac.ac-facebook]]]
-        [:a.soc-network
-         {:title  "AnyChart Twitter"
-          :target "_blank"
-          :rel    "nofollow"
-          :href   "https://x.com/AnyChart"}
-         [:span.soc-network-icon.tw [:i.sn-mini-icon.ac.ac-twitter-x]]]
-        [:a.soc-network
-         {:title  "AnyChart LinkedIn"
-          :target "_blank"
-          :rel    "nofollow"
-          :href   "https://www.linkedin.com/company/386660"}
-         [:span.soc-network-icon.in [:i.sn-mini-icon.ac.ac-linkedin]]]
+        [:div.social-icons
+          [:a.soc-network
+          {:title  "AnyChart Facebook"
+            :target "_blank"
+            :rel    "nofollow"
+            :href   "https://www.facebook.com/AnyCharts"}
+          [:span.soc-network-icon.fb [:i.sn-mini-icon.ac.ac-facebook]]]
+          [:a.soc-network
+          {:title  "X.com/AnyChart"
+            :target "_blank"
+            :rel    "nofollow"
+            :href   "https://x.com/AnyChart"}
+          [:span.soc-network-icon.tw [:i.sn-mini-icon.ac.ac-twitter-x]]]
+          [:a.soc-network
+          {:title  "AnyChart LinkedIn"
+            :target "_blank"
+            :rel    "nofollow"
+            :href   "https://www.linkedin.com/company/386660"}
+          [:span.soc-network-icon.in [:i.sn-mini-icon.ac.ac-linkedin]]]
+          [:a.soc-network
+          {:title  "AnyChart Medium"
+            :target "_blank"
+            :rel    "nofollow"
+            :href   "https://anychart.medium.com/"}
+          [:span.soc-network-icon.md [:i.sn-mini-icon.ac.ac-medium]]]
+        ]
         [:p (str "© " (t/year (t/now)) " ")
-         [:a {:href   "https://www.anychart.com"
+        [:a {:href   "https://www.anychart.com"
               :rel    "nofollow"
               :target "_blank"} "AnyChart.Com"] " All rights reserved."]]]]]
 
