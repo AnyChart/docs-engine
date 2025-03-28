@@ -119,8 +119,8 @@
          {:title  "AnyChart Twitter"
           :target "_blank"
           :rel    "nofollow"
-          :href   "https://twitter.com/AnyChart"}
-         [:span.soc-network-icon.tw [:i.sn-mini-icon.ac.ac-twitter]]]
+          :href   "https://x.com/AnyChart"}
+         [:span.soc-network-icon.tw [:i.sn-mini-icon.ac.ac-twitter-x]]]
         [:a.soc-network
          {:title  "AnyChart LinkedIn"
           :target "_blank"

@@ -15,7 +15,7 @@
     <link rel="icon" href="/i/anychart.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="/main.css"/>
     <link rel="stylesheet" type="text/css" href="{{anychart-css-url}}"/>
-    <link rel="stylesheet" href="https://cdn.anychart.com/fonts/2.7.2/anychart.css">
+    <link rel="stylesheet" href="https://cdn.anychart.com/releases/latest/fonts/css/anychart-font.min.css">
     <link rel="apple-touch-icon" sizes="57x57" href="/icons/57.png">
     <link rel="apple-touch-icon" sizes="76x76" href="/icons/76.png">
     <link rel="apple-touch-icon" sizes="120x120" href="/icons/120.png">
@@ -34,7 +34,7 @@
 <link rel="icon" href="/i/anychart.ico" type="image/x-icon">
 <link rel="stylesheet" type="text/css" href="/main.css"/>
 <link rel="stylesheet" type="text/css" href="{{anychart-css-url}}"/>
-<link rel="stylesheet" href="https://cdn.anychart.com/fonts/2.7.2/anychart.css">
+<link rel="stylesheet" href="https://cdn.anychart.com/releases/latest/fonts/css/anychart-font.min.css">
 <link rel="apple-touch-icon" sizes="57x57" href="/icons/57.png">
 <link rel="apple-touch-icon" sizes="76x76" href="/icons/76.png">
 <link rel="apple-touch-icon" sizes="120x120" href="/icons/120.png">
@@ -114,8 +114,8 @@
             <a href="https://www.facebook.com/AnyCharts" class="soc-network" target="_blank">
                 <span class="soc-network-icon fb"><i class="sn-mini-icon ac ac-facebook"></i></span>
             </a>
-            <a href="https://twitter.com/AnyChart" class="soc-network" target="_blank">
-                <span class="soc-network-icon tw"><i class="sn-mini-icon ac ac-twitter"></i></span>
+            <a href="https://x.com/AnyChart" class="soc-network" target="_blank">
+                <span class="soc-network-icon tw"><i class="sn-mini-icon ac ac-twitter-x"></i></span>
             </a>
             <a href="https://www.linkedin.com/company/386660" class="soc-network" target="_blank">
                 <span class="soc-network-icon in"><i class="sn-mini-icon ac ac-linkedin"></i></span>
@@ -143,8 +143,8 @@
                     <a href="https://www.facebook.com/AnyCharts" class="soc-network" target="_blank">
                         <span class="soc-network-icon fb"><i class="sn-mini-icon ac ac-facebook"></i></span>
                     </a>
-                    <a href="https://twitter.com/AnyChart" class="soc-network" target="_blank">
-                        <span class="soc-network-icon tw"><i class="sn-mini-icon ac ac-twitter"></i></span>
+                    <a href="https://x.com/AnyChart" class="soc-network" target="_blank">
+                        <span class="soc-network-icon tw"><i class="sn-mini-icon ac ac-twitter-x"></i></span>
                     </a>
                     <a href="https://www.linkedin.com/company/386660" class="soc-network" target="_blank">
                         <span class="soc-network-icon in"><i class="sn-mini-icon ac ac-linkedin"></i></span>
