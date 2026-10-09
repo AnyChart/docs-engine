@@ -56,7 +56,7 @@ init = (e) => {
             type: "POST", url: `/_rebuild_`,
             data: {
                 version: selectedVersion(),
-                linkChecker: true
+                linkchecker: true
             },
             success: rebuildSuccessFn, error: errorFn
         });

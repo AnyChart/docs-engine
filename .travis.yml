@@ -1,4 +1,6 @@
 language: clojure
+jdk:
+  - openjdk8
 script: lein uberjar
 sudo: false
 branches:
@@ -6,6 +8,11 @@ branches:
   - master
   - staging
   - bible
+addons:
+  ssh_known_hosts:
+    - github.com
+    - 104.236.66.244
+    - 68.183.148.118
 cache:
   directories:
   - "$HOME/.m2"
@@ -19,9 +26,7 @@ after_success:
 - if [ "$TRAVIS_BRANCH" == "staging" ]; then export APP="docs-stg"; fi
 - if [ "$TRAVIS_BRANCH" == "bible" ]; then export APP="bible-stg"; fi
 - echo "Deploying to $SERVER"
-- mv .travis/known_hosts ~/.ssh/known_hosts
 - mv .travis/id_rsa.pub ~/.ssh/id_rsa.pub
-- chmod 400 ~/.ssh/known_hosts
 - chmod 400 ~/.ssh/id_rsa
 - chmod 400 ~/.ssh/id_rsa.pub
 - ssh-add ~/.ssh/id_rsa
@@ -29,6 +34,12 @@ after_success:
 - scp target/uberjar/wiki-2.0-standalone.jar root@68.183.148.118:/apps/$APP/docs-2.0-standalone.jar
 - ssh root@104.236.66.244 "supervisorctl restart $APP"
 - ssh root@68.183.148.118 "supervisorctl restart $APP"
+
 notifications:
-  slack:
-    secure: GlKpceHLcrwqZ/k3hhYyAkZEE/g6Hrv/I7XwEebXt3sCExalhHP8kDDtQdEJuDlo7juz7c8yN14PCb7QBOJoYs64YR1JhYz4BNGpp4BTdEs3W22rzGJEpmrJNIL2M4YeC5st0F8tmDTcgfL/lt2yiIjyZEXrxmkg0r1HW3OP8F8=
+  webhooks:
+    urls:
+      - $webhook_url
+    on_start: always
+    on_success: always
+    on_failure: always
+    on_error: always

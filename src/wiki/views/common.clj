@@ -20,7 +20,7 @@
     [:link {:rel "stylesheet" :type "text/css" :href (str "/main.css?v=" commit)}]
     ;[:link {:rel "stylesheet" :type "text/css" :href (:anychart-css-url data)}]
     ; http://cdn.anychart.com/fonts/2.7.5/demo.html
-    [:link {:rel "stylesheet" :type "text/css" :href "https://cdn.anychart.com/fonts/2.7.2/anychart.css"}]
+    [:link {:rel "stylesheet" :type "text/css" :href "https://cdn.anychart.com/releases/latest/fonts/css/anychart-font.min.css"}]
     [:link {:rel "stylesheet" :type "text/css" :href "https://fonts.googleapis.com/css?family=Open+Sans:400,600"}]
     ;[:link {:rel "stylesheet" :type "text/css" :href "/lib/jquery-custom-content-scroller/jquery.mCustomScrollbar.min.css"}]
     [:link {:rel "apple-touch-icon" :sizes "57x57" :href "/icons/57.png"}]
